@@ -314,35 +314,63 @@ body {
   margin: 0 auto;
 }
 
-/* Landing Footer */
-.landing-footer {
-  background: var(--navy-blue);
-  padding: 32px 24px;
+/* Footer Container */
+.site-footer {
+  padding: 40px 0;
+  background-color: #264653;  /* Dark teal/navy */
+  color: #FFFFFF;
   margin-top: auto;
 }
 
-.footer-container {
-  max-width: 600px;
+.site-footer .container {
+  width: 100%;
+  max-width: 720px;
   margin: 0 auto;
-  text-align: center;
+  padding: 0 20px;
 }
 
-.footer-cta-text {
-  color: var(--white);
-  font-size: 20px;
-  font-weight: 600;
-  margin-bottom: 16px;
+/* Disclaimer Text */
+.site-footer .footer-disclaimer {
+  margin-bottom: 1.5rem;
+  padding: 0 20px;
 }
 
-.footer-cta {
-  max-width: 320px;
-  margin: 0 auto 32px;
-}
-
-.footer-disclaimer {
-  color: rgba(255, 255, 255, 0.7);
+.site-footer .footer-disclaimer p {
   font-size: 12px;
   line-height: 1.6;
+  opacity: 0.7;
+  margin: 0;
+}
+
+/* Policy Links */
+.footer-links {
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.footer-links a {
+  color: #FFFFFF;
+  opacity: 0.8;
+  font-size: 14px;
+  text-decoration: none;
+  transition: opacity 0.2s ease;
+}
+
+.footer-links a:hover {
+  opacity: 1;
+}
+
+.footer-links .divider {
+  margin: 0 0.75rem;
+  opacity: 0.5;
+}
+
+/* Copyright */
+.footer-copyright {
+  text-align: center;
+  font-size: 12px;
+  opacity: 0.6;
+  margin: 0;
 }
 
 /* Sticky CTA (Mobile) */
@@ -373,7 +401,7 @@ body {
 
 /* Add bottom padding on mobile for sticky CTA */
 @media (max-width: 1023px) {
-  .landing-footer {
+  .site-footer {
     padding-bottom: 100px;
   }
 }
@@ -482,8 +510,12 @@ body {
     padding: 64px 24px 80px;
   }
 
-  .landing-footer {
-    padding: 48px 24px;
+  .site-footer {
+    padding: 50px 0;
+  }
+
+  .site-footer .container {
+    padding: 0 24px;
   }
 
   /* Hide sticky CTA on desktop */
