@@ -78,18 +78,18 @@ async function submitToSupabase({ isRedFlagExit = false } = {}) {
     };
 
     // Insert into Supabase users table
-    const { data, error } = await supabase
+    // Note: Not using .select() to avoid triggering SELECT policies
+    const { error } = await supabase
       .from('users')
-      .insert([userRecord])
-      .select();
+      .insert([userRecord]);
 
     if (error) {
       console.error('Supabase insert error:', error);
       return null;
     }
 
-    console.log('Supabase submission successful:', data);
-    return data;
+    console.log('Supabase submission successful');
+    return true;
 
   } catch (error) {
     console.error('Error submitting to Supabase:', error);
