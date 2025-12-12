@@ -7,9 +7,8 @@ const CONFIG = {
   WEBHOOK_URL: 'https://hook.eu1.make.com/5uubblyocz70syh9xptkg248ycauy5pd',
 
   // Supabase configuration
-  // Find these at: https://app.supabase.com -> Your Project -> Settings -> API
-  SUPABASE_URL: 'YOUR_SUPABASE_PROJECT_URL',  // e.g., 'https://abcdefghijklmnop.supabase.co'
-  SUPABASE_ANON_KEY: 'YOUR_SUPABASE_ANON_KEY', // The 'anon' 'public' key (starts with eyJ...)
+  SUPABASE_URL: 'https://mwabljnngygkmahjgvps.supabase.co',
+  SUPABASE_ANON_KEY: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im13YWJsam5uZ3lna21haGpndnBzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU1MjQ3MzgsImV4cCI6MjA4MTEwMDczOH0.rbZYj1aXui_xZ0qkg7QONdHppnJghT2r0ycZwtr3a-E',
 
   // Avatar image path (fallback to SVG if PNG not available)
   AVATAR_PATH: 'assets/rebecca-avatar.png',
