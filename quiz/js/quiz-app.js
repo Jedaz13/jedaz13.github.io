@@ -77,11 +77,10 @@ async function submitToSupabase({ isRedFlagExit = false } = {}) {
       subscription_type: null
     };
 
-    // Insert into Supabase users table
-    // Note: Not using .select() to avoid triggering SELECT policies
-    const { error } = await supabase
-      .from('users')
-      .insert([userRecord]);
+    // Insert via RPC function to bypass RLS policies
+    const { error } = await supabase.rpc('insert_quiz_lead', {
+      user_data: userRecord
+    });
 
     if (error) {
       console.error('Supabase insert error:', error);
