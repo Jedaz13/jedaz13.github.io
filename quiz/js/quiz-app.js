@@ -5,12 +5,124 @@
 const CONFIG = {
   // Make.com webhook URL
   WEBHOOK_URL: 'https://hook.eu1.make.com/5uubblyocz70syh9xptkg248ycauy5pd',
+
+  // Supabase configuration
+  // Find these at: https://app.supabase.com -> Your Project -> Settings -> API
+  SUPABASE_URL: 'YOUR_SUPABASE_PROJECT_URL',  // e.g., 'https://abcdefghijklmnop.supabase.co'
+  SUPABASE_ANON_KEY: 'YOUR_SUPABASE_ANON_KEY', // The 'anon' 'public' key (starts with eyJ...)
+
   // Avatar image path (fallback to SVG if PNG not available)
   AVATAR_PATH: 'assets/rebecca-avatar.png',
   AVATAR_FALLBACK: 'assets/rebecca-avatar.svg',
   // Default typing delay in ms
   DEFAULT_DELAY: 1000
 };
+
+// Initialize Supabase client (only if credentials are configured)
+let supabase = null;
+if (CONFIG.SUPABASE_URL && CONFIG.SUPABASE_URL !== 'YOUR_SUPABASE_PROJECT_URL') {
+  supabase = window.supabase.createClient(CONFIG.SUPABASE_URL, CONFIG.SUPABASE_ANON_KEY);
+}
+
+/**
+ * Submit quiz data to Supabase users table
+ * @param {Object} options - Submission options
+ * @param {boolean} options.isRedFlagExit - Whether this is a red flag exit submission
+ * @returns {Promise<Object|null>} - Supabase response or null if failed/not configured
+ */
+async function submitToSupabase({ isRedFlagExit = false } = {}) {
+  // Skip if Supabase is not configured
+  if (!supabase) {
+    console.log('Supabase not configured - skipping database submission');
+    return null;
+  }
+
+  try {
+    // Build the user record matching your Supabase table structure
+    const userRecord = {
+      // Contact info
+      name: state.userName || null,
+      email: state.userEmail || null,
+
+      // Protocol info (0 for red flag exits)
+      protocol: isRedFlagExit ? 0 : (state.protocol?.protocol || null),
+      protocol_name: isRedFlagExit ? 'Red Flag Exit' : (state.protocol?.name || null),
+
+      // Stress and red flag status
+      has_stress_component: state.protocol?.hasStressComponent || false,
+      has_red_flags: isRedFlagExit || state.answers.had_red_flags || false,
+
+      // Red flag details (which red flags were triggered)
+      red_flag_details: buildRedFlagDetails(),
+
+      // Question answers mapped to your column names
+      primary_complaint: state.answers.q5_primary_complaint || null,        // Q5
+      symptom_frequency: state.answers.q6_frequency || null,                // Q6
+      relief_after_bm: state.answers.q7_stool_type || null,                 // Q7
+      frequency_during_flare: state.answers.q8_bloating_timing || null,     // Q8
+      stool_during_flare: state.answers.q9_pain_location || null,           // Q9
+      duration: state.answers.q10_duration || null,                         // Q10
+      diagnoses: state.answers.q11_diagnoses || state.answers.q11_diagnosis || [], // Q11 (array)
+      treatments_tried: state.answers.q12_treatments || state.answers.q12_tried || [], // Q12 (array)
+      stress_connection: state.answers.q13_stress_impact || null,           // Q13
+      mental_health_impact: state.answers.q14_anxiety_depression || null,   // Q14
+      sleep_quality: state.answers.q15_sleep_quality || null,               // Q15
+      life_impact_level: state.answers.q16_life_impact || null,             // Q16
+      hardest_part: state.answers.q17_hardest_part || null,                 // Q17 (free text)
+      dream_outcome: state.answers.q18_vision || null,                      // Q18 (free text)
+
+      // Default values for new users
+      role: 'member',
+      status: 'lead',
+      trial_start_date: null,
+      subscription_type: null
+    };
+
+    // Insert into Supabase users table
+    const { data, error } = await supabase
+      .from('users')
+      .insert([userRecord])
+      .select();
+
+    if (error) {
+      console.error('Supabase insert error:', error);
+      return null;
+    }
+
+    console.log('Supabase submission successful:', data);
+    return data;
+
+  } catch (error) {
+    console.error('Error submitting to Supabase:', error);
+    // Don't throw - we want the quiz to continue even if Supabase fails
+    return null;
+  }
+}
+
+/**
+ * Build red flag details object from quiz answers
+ * @returns {Object} - JSONB object with red flag information
+ */
+function buildRedFlagDetails() {
+  const redFlags = {};
+
+  // Check each red flag question (Q1-Q4)
+  if (state.answers.q1_weight_loss === 'yes') {
+    redFlags.unexplained_weight_loss = true;
+  }
+  if (state.answers.q2_blood === 'yes') {
+    redFlags.blood_in_stool = true;
+  }
+  if (state.answers.q3_family_history === 'yes') {
+    redFlags.family_history_gi_cancer = true;
+  }
+  if (state.answers.q4_colonoscopy === 'yes') {
+    redFlags.needs_colonoscopy = true;
+  }
+
+  // Return null if no red flags, otherwise return the object
+  return Object.keys(redFlags).length > 0 ? redFlags : null;
+}
 
 // Avatar fallback handler
 function getAvatarHTML() {
@@ -802,24 +914,33 @@ async function submitToWebhook() {
     submitted_at: new Date().toISOString()
   };
 
-  // Submit to Make.com webhook
-  try {
-    const response = await fetch(CONFIG.WEBHOOK_URL, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(payload)
-    });
+  // Submit to both Make.com webhook AND Supabase in parallel
+  // Both are wrapped in try/catch so if one fails, the other still works
+  await Promise.all([
+    // Make.com webhook submission
+    (async () => {
+      try {
+        const response = await fetch(CONFIG.WEBHOOK_URL, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(payload)
+        });
 
-    if (!response.ok) {
-      console.error('Webhook submission failed:', response.statusText);
-    } else {
-      console.log('Submission successful');
-    }
-  } catch (error) {
-    console.error('Error submitting to webhook:', error);
-  }
+        if (!response.ok) {
+          console.error('Webhook submission failed:', response.statusText);
+        } else {
+          console.log('Make.com submission successful');
+        }
+      } catch (error) {
+        console.error('Error submitting to webhook:', error);
+      }
+    })(),
+
+    // Supabase submission (will gracefully skip if not configured)
+    submitToSupabase({ isRedFlagExit: false })
+  ]);
 
   return submission;
 }
@@ -911,22 +1032,31 @@ async function submitRedFlagExit() {
     console.error('Failed to save to localStorage:', e);
   }
 
-  // Submit to Make.com webhook
-  try {
-    const response = await fetch(CONFIG.WEBHOOK_URL, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(payload)
-    });
+  // Submit to both Make.com webhook AND Supabase in parallel
+  // Both are wrapped in try/catch so if one fails, the other still works
+  await Promise.all([
+    // Make.com webhook submission
+    (async () => {
+      try {
+        const response = await fetch(CONFIG.WEBHOOK_URL, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(payload)
+        });
 
-    if (!response.ok) {
-      console.error('Webhook submission failed:', response.statusText);
-    } else {
-      console.log('Red flag exit submission successful');
-    }
-  } catch (error) {
-    console.error('Error submitting to webhook:', error);
-  }
+        if (!response.ok) {
+          console.error('Webhook submission failed:', response.statusText);
+        } else {
+          console.log('Make.com red flag exit submission successful');
+        }
+      } catch (error) {
+        console.error('Error submitting to webhook:', error);
+      }
+    })(),
+
+    // Supabase submission (with red flag exit flag)
+    submitToSupabase({ isRedFlagExit: true })
+  ]);
 }
