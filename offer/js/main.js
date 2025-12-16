@@ -91,38 +91,42 @@
 
   /**
    * Dynamic Protocol Hero Image
-   * Displays the appropriate hero image based on URL "protocol" parameter
+   * Displays the appropriate hero image based on URL "pattern" parameter
+   * Matches gut pattern names from quiz to corresponding images
    * Defaults to bloating image if no parameter or invalid value
    */
   function initProtocolHeroImage() {
     var urlParams = new URLSearchParams(window.location.search);
-    var protocol = urlParams.get('protocol');
+    var pattern = urlParams.get('pattern') || '';
 
-    // Protocol to image mapping with corresponding alt text
-    var protocolImages = {
+    // Normalize pattern for matching (lowercase, remove special chars)
+    var normalizedPattern = pattern.toLowerCase();
+
+    // Pattern images with corresponding alt text
+    var patternImages = {
+      'diarrhea': {
+        src: 'assets/Minimalist-Diarrhea.png',
+        alt: 'Minimalist illustration showing digestive calm - Diarrhea-Dominant Pattern'
+      },
+      'constipation': {
+        src: 'assets/Minimalist-constipation.png',
+        alt: 'Minimalist illustration showing gentle digestive awakening - Constipation-Dominant Pattern'
+      },
+      'mixed': {
+        src: 'assets/Minimalist-mixed.png',
+        alt: 'Minimalist illustration showing digestive balance - Mixed Pattern'
+      },
       'bloating': {
         src: 'assets/Minimalist-Bloating.png',
-        alt: 'Minimalist illustration showing digestive relief - Bloating Protocol'
-      },
-      'ibs-c': {
-        src: 'assets/Minimalist-constipation.png',
-        alt: 'Minimalist illustration showing gentle digestive awakening - Constipation Protocol'
-      },
-      'ibs-d': {
-        src: 'assets/Minimalist-Diarrhea.png',
-        alt: 'Minimalist illustration showing digestive calm - Diarrhea Protocol'
-      },
-      'ibs-m': {
-        src: 'assets/Minimalist-mixed.png',
-        alt: 'Minimalist illustration showing digestive balance - Mixed IBS Protocol'
+        alt: 'Minimalist illustration showing digestive relief - Bloating Pattern'
       },
       'post-sibo': {
         src: 'assets/Minimalist-Post-SIBO-recovert.png',
-        alt: 'Minimalist illustration showing digestive renewal - Post-SIBO Protocol'
+        alt: 'Minimalist illustration showing digestive renewal - Post-SIBO Recovery Pattern'
       },
       'gut-brain': {
         src: 'assets/Minimalist-gut-brain.png',
-        alt: 'Minimalist illustration showing gut-brain connection - Gut-Brain Protocol'
+        alt: 'Minimalist illustration showing gut-brain connection - Gut-Brain Pattern'
       }
     };
 
@@ -130,16 +134,35 @@
     var heroImage = document.getElementById('protocol-image');
     if (!heroImage) return;
 
-    // Determine which image to display (default to bloating if not found)
-    var imageData = protocolImages[protocol] || protocolImages['bloating'];
+    // Determine which image to display based on pattern keywords
+    var imageData = null;
+
+    // Check pattern for keywords to determine correct image
+    if (normalizedPattern.includes('diarrhea')) {
+      imageData = patternImages['diarrhea'];
+    } else if (normalizedPattern.includes('constipation')) {
+      imageData = patternImages['constipation'];
+    } else if (normalizedPattern.includes('mixed')) {
+      imageData = patternImages['mixed'];
+    } else if (normalizedPattern.includes('bloating')) {
+      imageData = patternImages['bloating'];
+    } else if (normalizedPattern.includes('post-sibo') || normalizedPattern.includes('sibo')) {
+      imageData = patternImages['post-sibo'];
+    } else if (normalizedPattern.includes('gut-brain') || normalizedPattern.includes('gut brain')) {
+      imageData = patternImages['gut-brain'];
+    } else {
+      // Default to bloating if no match
+      imageData = patternImages['bloating'];
+    }
 
     // Update the image src and alt attributes
     heroImage.src = imageData.src;
     heroImage.alt = imageData.alt;
 
-    // Debug: Log the selected protocol image
-    console.log('Protocol image:', {
-      protocol: protocol || 'default (bloating)',
+    // Debug: Log the selected pattern image
+    console.log('Pattern image:', {
+      pattern: pattern || 'default (bloating)',
+      normalizedPattern: normalizedPattern,
       src: imageData.src,
       alt: imageData.alt
     });
