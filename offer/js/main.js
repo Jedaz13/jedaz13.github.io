@@ -87,6 +87,29 @@
         el.style.display = 'block';
       });
     }
+
+    // Check if user is coming from members area (in-trial variant)
+    var source = urlParams.get('source');
+    var referrer = document.referrer;
+    var isInTrial = source === 'members' || referrer.includes('app.guthealingacademy.com');
+
+    if (isInTrial) {
+      // Update pricing section header for in-trial users
+      var pricingHeader = document.getElementById('pricing-header');
+      if (pricingHeader) {
+        pricingHeader.textContent = "Don't Lose Your Access";
+      }
+
+      var pricingIntro1 = document.getElementById('pricing-intro-1');
+      if (pricingIntro1) {
+        pricingIntro1.textContent = "Your trial is ending soon. Lock in your founding member rate now — and keep your personal practitioner, protocols, and progress.";
+      }
+
+      var pricingIntro2 = document.getElementById('pricing-intro-2');
+      if (pricingIntro2) {
+        pricingIntro2.textContent = "Cancel anytime, get your money back. We believe in our program that much.";
+      }
+    }
   }
 
   /**
