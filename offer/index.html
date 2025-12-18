@@ -1,6 +1,45 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <!-- Data Layer Initialization -->
+  <script>
+    window.dataLayer = window.dataLayer || [];
+
+    // Get URL parameters for quiz data
+    var urlParams = new URLSearchParams(window.location.search);
+    var gutPattern = urlParams.get('pattern') || '';
+    var triedBefore = urlParams.get('tried') || '';
+    var diagnosis = urlParams.get('diagnosis') || '';
+    var source = urlParams.get('source') || '';
+    var referrer = document.referrer;
+    var isInTrial = source === 'members' || referrer.includes('app.guthealingacademy.com');
+
+    // Parse previous treatments from 'tried' parameter
+    var previousTreatments = triedBefore ? triedBefore.toLowerCase().split(',').map(function(t) { return t.trim(); }) : [];
+    var previousDiagnoses = diagnosis ? [diagnosis.toLowerCase()] : [];
+
+    // Base page data
+    dataLayer.push({
+      'pageType': 'offer',
+      'pageName': document.title,
+      'pageUrl': window.location.href,
+      'pagePath': window.location.pathname,
+
+      // User data
+      'userId': '',
+      'userEmail': '',
+      'userStatus': isInTrial ? 'trial' : 'anonymous',
+      'trialDaysRemaining': null,
+
+      // Quiz/Protocol data from URL params
+      'gutPattern': gutPattern,
+      'hasStressComponent': null,
+      'symptomDuration': '',
+      'previousTreatments': previousTreatments,
+      'previousDiagnoses': previousDiagnoses
+    });
+  </script>
+
   <!-- Google Tag Manager -->
   <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
   new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],

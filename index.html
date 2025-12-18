@@ -1,6 +1,32 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <!-- Data Layer Initialization -->
+    <script>
+      window.dataLayer = window.dataLayer || [];
+
+      // Base page data
+      dataLayer.push({
+        'pageType': 'landing',
+        'pageName': document.title,
+        'pageUrl': window.location.href,
+        'pagePath': window.location.pathname,
+
+        // User data (populate when known)
+        'userId': '',
+        'userEmail': '',
+        'userStatus': 'anonymous',
+        'trialDaysRemaining': null,
+
+        // Quiz/Protocol data (populate after quiz)
+        'gutPattern': '',
+        'hasStressComponent': null,
+        'symptomDuration': '',
+        'previousTreatments': [],
+        'previousDiagnoses': []
+      });
+    </script>
+
     <!-- Google Tag Manager -->
     <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
     new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],

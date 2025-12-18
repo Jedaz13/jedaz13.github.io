@@ -17,6 +17,7 @@
     initSmoothScroll();
     initFaqAccordion();
     initLazyLoading();
+    initCheckoutTracking();
   }
 
   /**
@@ -406,6 +407,73 @@
         if (img.dataset.src) {
           img.src = img.dataset.src;
         }
+      });
+    }
+  }
+
+  /**
+   * Checkout Tracking
+   * Tracks begin_checkout events when users click pricing CTAs
+   */
+  function initCheckoutTracking() {
+    // Get URL params for user data
+    var urlParams = new URLSearchParams(window.location.search);
+    var gutPattern = urlParams.get('pattern') || '';
+    var source = urlParams.get('source') || '';
+    var referrer = document.referrer;
+    var isInTrial = source === 'members' || referrer.includes('app.guthealingacademy.com');
+
+    // Monthly pricing button
+    var monthlyBtn = document.querySelector('a[href*="28EbJ29epcng9S06mNgA801"]');
+    if (monthlyBtn) {
+      monthlyBtn.addEventListener('click', function() {
+        window.dataLayer = window.dataLayer || [];
+        dataLayer.push({
+          'event': 'begin_checkout',
+          'ecommerce': {
+            'currency': 'USD',
+            'value': 87.00,
+            'items': [{
+              'item_id': 'monthly_membership',
+              'item_name': 'Monthly Membership',
+              'item_category': 'subscription',
+              'price': 87.00,
+              'quantity': 1
+            }]
+          },
+          'checkoutType': 'monthly',
+          'userStatus': isInTrial ? 'trial' : 'anonymous',
+          'gutPattern': gutPattern,
+          'trialDaysRemaining': null
+        });
+        console.log('Checkout tracking: Monthly membership');
+      });
+    }
+
+    // 6-month pricing button
+    var sixMonthBtn = document.querySelector('a[href*="28EdRa8albjcd4c6mNgA800"]');
+    if (sixMonthBtn) {
+      sixMonthBtn.addEventListener('click', function() {
+        window.dataLayer = window.dataLayer || [];
+        dataLayer.push({
+          'event': 'begin_checkout',
+          'ecommerce': {
+            'currency': 'USD',
+            'value': 397.00,
+            'items': [{
+              'item_id': '6_month_membership',
+              'item_name': '6-Month Healing Journey',
+              'item_category': 'subscription',
+              'price': 397.00,
+              'quantity': 1
+            }]
+          },
+          'checkoutType': '6-month',
+          'userStatus': isInTrial ? 'trial' : 'anonymous',
+          'gutPattern': gutPattern,
+          'trialDaysRemaining': null
+        });
+        console.log('Checkout tracking: 6-month membership');
       });
     }
   }

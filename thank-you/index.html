@@ -1,6 +1,86 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <!-- Data Layer Initialization -->
+  <script>
+    window.dataLayer = window.dataLayer || [];
+
+    // Get URL parameters (Stripe can pass these)
+    var urlParams = new URLSearchParams(window.location.search);
+    var sessionId = urlParams.get('session_id') || '';
+    var gutPattern = urlParams.get('pattern') || '';
+    var planType = urlParams.get('plan') || '';
+
+    // Determine purchase details based on plan or referrer
+    var purchaseValue = 0;
+    var itemId = '';
+    var itemName = '';
+    var purchaseType = '';
+
+    // Try to detect plan from URL or referrer
+    if (planType === '6-month' || document.referrer.includes('28EdRa8albjcd4c6mNgA800')) {
+      purchaseValue = 397.00;
+      itemId = '6_month_membership';
+      itemName = '6-Month Healing Journey';
+      purchaseType = '6-month';
+    } else if (planType === 'monthly' || document.referrer.includes('28EbJ29epcng9S06mNgA801')) {
+      purchaseValue = 87.00;
+      itemId = 'monthly_membership';
+      itemName = 'Monthly Membership';
+      purchaseType = 'monthly';
+    }
+
+    // Base page data
+    dataLayer.push({
+      'pageType': 'thank-you',
+      'pageName': document.title,
+      'pageUrl': window.location.href,
+      'pagePath': window.location.pathname,
+
+      // User data
+      'userId': '',
+      'userEmail': '',
+      'userStatus': 'active',
+      'trialDaysRemaining': null,
+
+      // Quiz/Protocol data
+      'gutPattern': gutPattern,
+      'hasStressComponent': null,
+      'symptomDuration': '',
+      'previousTreatments': [],
+      'previousDiagnoses': []
+    });
+
+    // Fire purchase event if we have purchase data
+    if (purchaseValue > 0) {
+      dataLayer.push({
+        'event': 'purchase',
+        'ecommerce': {
+          'transaction_id': sessionId || 'txn_' + Date.now(),
+          'currency': 'USD',
+          'value': purchaseValue,
+          'tax': 0,
+          'items': [{
+            'item_id': itemId,
+            'item_name': itemName,
+            'item_category': 'subscription',
+            'price': purchaseValue,
+            'quantity': 1
+          }]
+        },
+        'purchaseType': purchaseType,
+        'userId': '',
+        'gutPattern': gutPattern,
+        'trialDaysUsed': null,
+        'discountApplied': purchaseType === '6-month',
+        'originalPrice': purchaseType === '6-month' ? 597.00 : 147.00,
+        'discountAmount': purchaseType === '6-month' ? 200.00 : 60.00
+      });
+
+      console.log('Purchase tracked:', purchaseType, purchaseValue);
+    }
+  </script>
+
   <!-- Google Tag Manager -->
   <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
   new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
