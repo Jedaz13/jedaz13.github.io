@@ -18,9 +18,9 @@ const CONFIG = {
 };
 
 // Initialize Supabase client (only if credentials are configured)
-let supabase = null;
+var supabaseClient = null;
 if (CONFIG.SUPABASE_URL && CONFIG.SUPABASE_URL !== 'YOUR_SUPABASE_PROJECT_URL') {
-  supabase = window.supabase.createClient(CONFIG.SUPABASE_URL, CONFIG.SUPABASE_ANON_KEY);
+  supabaseClient = window.supabase.createClient(CONFIG.SUPABASE_URL, CONFIG.SUPABASE_ANON_KEY);
 }
 
 /**
@@ -31,7 +31,7 @@ if (CONFIG.SUPABASE_URL && CONFIG.SUPABASE_URL !== 'YOUR_SUPABASE_PROJECT_URL') 
  */
 async function submitToSupabase({ isRedFlagExit = false } = {}) {
   // Skip if Supabase is not configured
-  if (!supabase) {
+  if (!supabaseClient) {
     console.log('Supabase not configured - skipping database submission');
     return null;
   }
@@ -78,7 +78,7 @@ async function submitToSupabase({ isRedFlagExit = false } = {}) {
     };
 
     // Insert via RPC function to bypass RLS policies
-    const { error } = await supabase.rpc('insert_quiz_lead', {
+    const { error } = await supabaseClient.rpc('insert_quiz_lead', {
       user_data: userRecord
     });
 
