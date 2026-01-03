@@ -54,18 +54,18 @@ async function submitToSupabase({ isRedFlagExit = false } = {}) {
       // Red flag details (which red flags were triggered)
       red_flag_details: buildRedFlagDetails(),
 
-      // Question answers mapped to your column names
+      // Question answers mapped to your column names (field names match quiz-content.js)
       primary_complaint: state.answers.q5_primary_complaint || null,        // Q5
       symptom_frequency: state.answers.q6_frequency || null,                // Q6
-      relief_after_bm: state.answers.q7_stool_type || null,                 // Q7
-      frequency_during_flare: state.answers.q8_bloating_timing || null,     // Q8
-      stool_during_flare: state.answers.q9_pain_location || null,           // Q9
+      relief_after_bm: state.answers.q7_bm_relief || null,                  // Q7
+      frequency_during_flare: state.answers.q8_frequency_change || null,    // Q8
+      stool_during_flare: state.answers.q9_stool_change || null,            // Q9
       duration: state.answers.q10_duration || null,                         // Q10
-      diagnoses: state.answers.q11_diagnoses || state.answers.q11_diagnosis || [], // Q11 (array)
-      treatments_tried: state.answers.q12_treatments || state.answers.q12_tried || [], // Q12 (array)
-      stress_connection: state.answers.q13_stress_impact || null,           // Q13
-      mental_health_impact: state.answers.q14_anxiety_depression || null,   // Q14
-      sleep_quality: state.answers.q15_sleep_quality || null,               // Q15
+      diagnoses: state.answers.q11_diagnosis || [],                         // Q11 (array)
+      treatments_tried: state.answers.q12_tried || [],                      // Q12 (array)
+      stress_connection: state.answers.q13_stress || null,                  // Q13
+      mental_health_impact: state.answers.q14_mental_health || null,        // Q14
+      sleep_quality: state.answers.q15_sleep || null,                       // Q15
       life_impact_level: state.answers.q16_life_impact || null,             // Q16
       hardest_part: state.answers.q17_hardest_part || null,                 // Q17 (free text)
       dream_outcome: state.answers.q18_vision || null,                      // Q18 (free text)
@@ -883,26 +883,26 @@ async function submitToWebhook() {
     q17_hardest_part: state.answers.q17_hardest_part || '',
     q18_vision: state.answers.q18_vision || '',
 
-    // All question answers separately
+    // All question answers separately (field names must match quiz-content.js)
     q1_weight_loss: state.answers.q1_weight_loss || '',
     q2_blood: state.answers.q2_blood || '',
     q3_family_history: state.answers.q3_family_history || '',
     q4_colonoscopy: state.answers.q4_colonoscopy || '',
     q5_primary_complaint: state.answers.q5_primary_complaint || '',
     q6_frequency: state.answers.q6_frequency || '',
-    q7_stool_type: state.answers.q7_stool_type || '',
-    q8_bloating_timing: state.answers.q8_bloating_timing || '',
-    q9_pain_location: state.answers.q9_pain_location || '',
+    q7_bm_relief: state.answers.q7_bm_relief || '',
+    q8_frequency_change: state.answers.q8_frequency_change || '',
+    q9_stool_change: state.answers.q9_stool_change || '',
     q10_duration: state.answers.q10_duration || '',
-    q11_diagnoses: Array.isArray(state.answers.q11_diagnoses)
-      ? state.answers.q11_diagnoses.join(', ')
-      : (state.answers.q11_diagnoses || ''),
-    q12_treatments: Array.isArray(state.answers.q12_treatments)
-      ? state.answers.q12_treatments.join(', ')
-      : (state.answers.q12_treatments || ''),
-    q13_stress_impact: state.answers.q13_stress_impact || '',
-    q14_anxiety_depression: state.answers.q14_anxiety_depression || '',
-    q15_sleep_quality: state.answers.q15_sleep_quality || '',
+    q11_diagnosis: Array.isArray(state.answers.q11_diagnosis)
+      ? state.answers.q11_diagnosis.join(', ')
+      : (state.answers.q11_diagnosis || ''),
+    q12_tried: Array.isArray(state.answers.q12_tried)
+      ? state.answers.q12_tried.join(', ')
+      : (state.answers.q12_tried || ''),
+    q13_stress: state.answers.q13_stress || '',
+    q14_mental_health: state.answers.q14_mental_health || '',
+    q15_sleep: state.answers.q15_sleep || '',
     q16_life_impact: state.answers.q16_life_impact || '',
 
     // Red flag status
@@ -994,26 +994,26 @@ async function submitRedFlagExit() {
     q17_hardest_part: state.answers.q17_hardest_part || '',
     q18_vision: state.answers.q18_vision || '',
 
-    // All question answers separately (partial for red flag exits)
+    // All question answers separately (partial for red flag exits, field names must match quiz-content.js)
     q1_weight_loss: state.answers.q1_weight_loss || '',
     q2_blood: state.answers.q2_blood || '',
     q3_family_history: state.answers.q3_family_history || '',
     q4_colonoscopy: state.answers.q4_colonoscopy || '',
     q5_primary_complaint: state.answers.q5_primary_complaint || '',
     q6_frequency: state.answers.q6_frequency || '',
-    q7_stool_type: state.answers.q7_stool_type || '',
-    q8_bloating_timing: state.answers.q8_bloating_timing || '',
-    q9_pain_location: state.answers.q9_pain_location || '',
+    q7_bm_relief: state.answers.q7_bm_relief || '',
+    q8_frequency_change: state.answers.q8_frequency_change || '',
+    q9_stool_change: state.answers.q9_stool_change || '',
     q10_duration: state.answers.q10_duration || '',
-    q11_diagnoses: Array.isArray(state.answers.q11_diagnoses)
-      ? state.answers.q11_diagnoses.join(', ')
-      : (state.answers.q11_diagnoses || ''),
-    q12_treatments: Array.isArray(state.answers.q12_treatments)
-      ? state.answers.q12_treatments.join(', ')
-      : (state.answers.q12_treatments || ''),
-    q13_stress_impact: state.answers.q13_stress_impact || '',
-    q14_anxiety_depression: state.answers.q14_anxiety_depression || '',
-    q15_sleep_quality: state.answers.q15_sleep_quality || '',
+    q11_diagnosis: Array.isArray(state.answers.q11_diagnosis)
+      ? state.answers.q11_diagnosis.join(', ')
+      : (state.answers.q11_diagnosis || ''),
+    q12_tried: Array.isArray(state.answers.q12_tried)
+      ? state.answers.q12_tried.join(', ')
+      : (state.answers.q12_tried || ''),
+    q13_stress: state.answers.q13_stress || '',
+    q14_mental_health: state.answers.q14_mental_health || '',
+    q15_sleep: state.answers.q15_sleep || '',
     q16_life_impact: state.answers.q16_life_impact || '',
 
     // Timestamp
