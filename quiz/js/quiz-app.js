@@ -858,6 +858,11 @@ function scrollToBottom() {
  * Submit the quiz data to Make.com webhook
  */
 async function submitToWebhook() {
+  console.log('🚀 submitToWebhook called');
+  console.log('📧 User email:', state.userEmail);
+  console.log('👤 User name:', state.userName);
+  console.log('📝 Answers:', state.answers);
+
   const submission = formatSubmissionData(
     state.answers,
     state.protocol,
@@ -914,10 +919,14 @@ async function submitToWebhook() {
 
   // Submit to both Make.com webhook AND Supabase in parallel
   // Both are wrapped in try/catch so if one fails, the other still works
+  console.log('📤 Submitting to webhook URL:', CONFIG.WEBHOOK_URL);
+  console.log('📦 Payload:', JSON.stringify(payload, null, 2));
+
   await Promise.all([
     // Make.com webhook submission
     (async () => {
       try {
+        console.log('🌐 Sending fetch request to Make.com...');
         const response = await fetch(CONFIG.WEBHOOK_URL, {
           method: 'POST',
           headers: {
@@ -926,13 +935,14 @@ async function submitToWebhook() {
           body: JSON.stringify(payload)
         });
 
+        console.log('📬 Response status:', response.status, response.statusText);
         if (!response.ok) {
-          console.error('Webhook submission failed:', response.statusText);
+          console.error('❌ Webhook submission failed:', response.statusText);
         } else {
-          console.log('Make.com submission successful');
+          console.log('✅ Make.com submission successful');
         }
       } catch (error) {
-        console.error('Error submitting to webhook:', error);
+        console.error('❌ Error submitting to webhook:', error);
       }
     })(),
 
@@ -946,8 +956,10 @@ async function submitToWebhook() {
 // Override the confirmation section to trigger form submission
 const originalProcessSection = processSection;
 processSection = async function(sectionKey) {
+  console.log('🔄 Processing section:', sectionKey);
   if (sectionKey === 'results_chunk1') {
     // Submit data before showing results (when "Get My Protocol" is clicked)
+    console.log('🎯 Triggering webhook submission for results_chunk1');
     await submitToWebhook();
   } else if (sectionKey === 'redirect_to_sales') {
     // Direct redirect - don't process as a section
