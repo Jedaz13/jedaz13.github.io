@@ -529,6 +529,16 @@ const quizContent = {
       content: "Based on your answers, you're showing a **{{protocol_name}}** pattern."
     },
     {
+      type: "message",
+      delay: 1000,
+      content: "I've just sent your **Week 1 Foundation Protocol** to **{{email}}**.\n\nCheck your inbox (and spam folder) for instructions on how to access it."
+    },
+    {
+      type: "message",
+      delay: 1000,
+      content: "While that's on its way, let me explain what this pattern means for you..."
+    },
+    {
       type: "buttons",
       options: [
         { text: "What does this mean for me?", value: "continue", next: "results_chunk2" }
