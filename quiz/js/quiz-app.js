@@ -345,9 +345,44 @@ document.addEventListener('DOMContentLoaded', () => {
   chatArea = document.getElementById('chatArea');
   inputContainer = document.getElementById('inputContainer');
 
+  // Mobile disclaimer toggle (tap to expand/collapse)
+  const disclaimerFooter = document.querySelector('.disclaimer-footer');
+  if (disclaimerFooter) {
+    disclaimerFooter.addEventListener('click', () => {
+      disclaimerFooter.classList.toggle('expanded');
+    });
+  }
+
+  // Monitor inputContainer for scroll indicator
+  const observer = new MutationObserver(() => {
+    checkInputContainerScroll();
+  });
+  observer.observe(inputContainer, { childList: true, subtree: true });
+
   // Start the quiz automatically
   startQuiz();
 });
+
+/**
+ * Check if inputContainer needs scroll indicator
+ */
+function checkInputContainerScroll() {
+  if (!inputContainer) return;
+
+  // Check if content overflows
+  const hasScroll = inputContainer.scrollHeight > inputContainer.clientHeight;
+  inputContainer.classList.toggle('has-scroll', hasScroll);
+
+  // Hide scroll indicator when scrolled to bottom
+  inputContainer.addEventListener('scroll', () => {
+    const isAtBottom = inputContainer.scrollHeight - inputContainer.scrollTop <= inputContainer.clientHeight + 20;
+    if (isAtBottom) {
+      inputContainer.classList.remove('has-scroll');
+    } else if (inputContainer.scrollHeight > inputContainer.clientHeight) {
+      inputContainer.classList.add('has-scroll');
+    }
+  }, { passive: true });
+}
 
 /**
  * Start the quiz

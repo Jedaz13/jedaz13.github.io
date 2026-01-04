@@ -350,10 +350,25 @@ body {
 /* The #inputContainer wrapper for all input types */
 #inputContainer {
   flex-shrink: 0;
-  max-height: 50vh;
-  max-height: 50dvh;
+  max-height: 60vh;
+  max-height: 60dvh;
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
+  position: relative;
+}
+
+/* Scroll indicator gradient for multi-select options */
+#inputContainer.has-scroll::after {
+  content: '';
+  position: sticky;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 40px;
+  background: linear-gradient(to top, var(--chat-bg) 0%, transparent 100%);
+  pointer-events: none;
+  display: block;
+  margin-top: -40px;
 }
 
 .input-container {
@@ -512,10 +527,49 @@ body {
     gap: 6px;
   }
 
-  /* Increase scrollable area on mobile */
+  /* Keep input container at 60% (3/5 of screen) on mobile */
   #inputContainer {
-    max-height: 55vh;
-    max-height: 55dvh;
+    max-height: 60vh;
+    max-height: 60dvh;
+  }
+
+  /* Push disclaimer below the fold - collapsed by default, tap to expand */
+  .disclaimer-footer {
+    cursor: pointer;
+    padding: 8px 16px;
+    transition: all 0.3s ease;
+    min-height: 36px;
+  }
+
+  .disclaimer-footer .disclaimer-header {
+    display: flex;
+    align-items: center;
+  }
+
+  .disclaimer-footer .disclaimer-header::after {
+    content: '▼';
+    margin-left: auto;
+    font-size: 10px;
+    opacity: 0.6;
+    transition: transform 0.3s ease;
+  }
+
+  .disclaimer-footer.expanded .disclaimer-header::after {
+    transform: rotate(180deg);
+  }
+
+  .disclaimer-footer .disclaimer-content p {
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition: max-height 0.3s ease, opacity 0.3s ease;
+    margin-top: 0;
+  }
+
+  .disclaimer-footer.expanded .disclaimer-content p {
+    max-height: 100px;
+    opacity: 1;
+    margin-top: 6px;
   }
 
   /* Smaller checkbox options on mobile */
