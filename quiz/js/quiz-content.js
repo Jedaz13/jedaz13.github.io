@@ -18,7 +18,7 @@ const quizContent = {
     {
       type: "message",
       delay: 1000,
-      content: "This takes about 5 minutes. Your answers stay confidential, and at the end, I'll personally review your responses and send you a protocol matched to your exact situation.\n\nReady to get started?"
+      content: "This takes about 5 minutes. Your answers stay confidential, and at the end, you'll get instant access to a protocol matched to your exact situation.\n\nReady to get started?"
     },
     {
       type: "buttons",
@@ -33,7 +33,7 @@ const quizContent = {
     {
       type: "message",
       delay: 1000,
-      content: "Of course!\n\nThis assessment uses the same diagnostic framework gastroenterologists use (called Rome IV criteria) to identify your symptom pattern.\n\nBased on your answers, we'll match you to one of 6 clinically-developed protocols - covering everything from bloating-dominant patterns to gut-brain connection issues.\n\nYou'll receive your personalized protocol within 24-48 hours, reviewed by our team.\n\nNo generic advice. No guessing."
+      content: "Of course!\n\nThis assessment uses the same diagnostic framework gastroenterologists use (called Rome IV criteria) to identify your symptom pattern.\n\nBased on your answers, we'll match you to one of 6 clinically-developed protocols - covering everything from bloating-dominant patterns to gut-brain connection issues.\n\nYou'll get immediate access to your personalized protocol — no waiting.\n\nNo generic advice. No guessing."
     },
     {
       type: "buttons",
@@ -506,12 +506,12 @@ const quizContent = {
     {
       type: "message",
       delay: 1000,
-      content: "Perfect. Over the next 24-48 hours:\n\n✓ I'll review your responses personally\n✓ Cross-reference what you've tried with what we recommend\n✓ Ensure your protocol accounts for your specific history"
+      content: "Your **Week 1 Foundation Protocol** is ready — developed by our practitioners specifically for your symptom pattern.\n\nThis is your starting point. As you follow it, you'll discover what works for YOUR body. Then, with your practitioner's guidance, we'll refine and adjust until you find what truly heals your gut."
     },
     {
       type: "message",
       delay: 1000,
-      content: "Your protocol will include:\n\n• Week 1 daily interventions matched to YOUR symptoms\n• The exact foods to focus on (and avoid) for your pattern\n• What to track so you can see progress\n\nJust a few more steps to finalize your personal protocol."
+      content: "Your foundation protocol includes:\n\n• Week 1 daily interventions matched to YOUR symptoms\n• Foods to focus on (and avoid) for your pattern\n• What to track so you can see what's working\n\nThis isn't a one-size-fits-all PDF. It's the beginning of a personalized journey — your practitioners will iterate with you until you heal."
     },
     {
       type: "buttons",
@@ -569,7 +569,7 @@ const quizContent = {
     {
       type: "message",
       delay: 1000,
-      content: "Done!\n\nThank you, {{name}}. Your assessment is with me now.\n\nCheck your inbox within 24-48 hours for your personalized gut healing protocol."
+      content: "Done!\n\nThank you, {{name}}. Your personalized gut healing protocol is ready.\n\nCheck your email for instructions on how to access it — it's waiting for you."
     },
     {
       type: "message",
