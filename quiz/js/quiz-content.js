@@ -128,7 +128,7 @@ const quizContent = {
       type: "buttons",
       options: [
         { text: "I understand - I'll return after seeing my doctor", value: "exit", next: "exit_message" },
-        { text: "I've already been evaluated and cleared", value: "continue", next: "part2_intro" }
+        { text: "I've already been evaluated and cleared", value: "continue", next: "part2_intro", setsEvaluatedCleared: true }
       ]
     }
   ],

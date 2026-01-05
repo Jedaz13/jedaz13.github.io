@@ -50,6 +50,7 @@ async function submitToSupabase({ isRedFlagExit = false } = {}) {
       // Stress and red flag status
       has_stress_component: state.protocol?.hasStressComponent || false,
       has_red_flags: isRedFlagExit || state.answers.had_red_flags || false,
+      red_flag_evaluated_cleared: state.answers.red_flag_evaluated_cleared || false,
 
       // Red flag details (which red flags were triggered)
       red_flag_details: buildRedFlagDetails(),
@@ -691,6 +692,11 @@ async function handleButtonSelection(value, next, options) {
     }
   }
 
+  // Track if user was already evaluated and cleared (red flag continuation)
+  if (selectedOption && selectedOption.setsEvaluatedCleared) {
+    state.answers.red_flag_evaluated_cleared = true;
+  }
+
   // Handle special navigation
   if (next) {
     // Reset processing flag to allow next section to run
@@ -942,6 +948,7 @@ async function submitToWebhook() {
 
     // Red flag status
     had_red_flags: state.answers.had_red_flags || false,
+    red_flag_evaluated_cleared: state.answers.red_flag_evaluated_cleared || false,
 
     // Timestamp
     submitted_at: new Date().toISOString()
