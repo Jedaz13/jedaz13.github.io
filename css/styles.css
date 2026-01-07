@@ -529,6 +529,496 @@ body {
   display: none !important;
 }
 
+/* ===== ABOUT PAGE ===== */
+.about-page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-cream);
+  animation: fadeIn 0.5s ease-out;
+}
+
+/* About Hero Section */
+.about-hero-section {
+  position: relative;
+  padding: 80px 20px;
+  text-align: center;
+  min-height: 400px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.about-hero-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  z-index: 1;
+}
+
+.about-hero-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    to bottom,
+    rgba(107, 144, 128, 0.85) 0%,
+    rgba(107, 144, 128, 0.9) 100%
+  );
+  z-index: 2;
+}
+
+.about-hero-container {
+  position: relative;
+  z-index: 3;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.about-hero-section h1 {
+  font-size: 28px;
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--white);
+  margin-bottom: 20px;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.about-hero-subheadline {
+  font-size: 18px;
+  color: rgba(255, 255, 255, 0.95);
+  line-height: 1.6;
+  max-width: 600px;
+  margin: 0 auto;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+/* Our Story Section */
+.our-story-section {
+  background: var(--white);
+  padding: 48px 20px;
+}
+
+.our-story-container {
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+.our-story-section h2 {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text-charcoal);
+  margin-bottom: 32px;
+  text-align: center;
+}
+
+.story-content p {
+  font-size: 16px;
+  line-height: 1.7;
+  color: var(--text-charcoal);
+  margin-bottom: 20px;
+}
+
+.story-content strong {
+  color: var(--primary-teal);
+}
+
+.story-quote {
+  font-size: 20px;
+  font-style: italic;
+  color: var(--primary-teal);
+  border-left: 4px solid var(--secondary-sage);
+  padding: 16px 24px;
+  margin: 32px 0;
+  background: var(--bg-cream);
+  border-radius: 0 8px 8px 0;
+}
+
+.founder-signature {
+  margin-top: 48px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.founder-photo {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  border: 4px solid var(--primary-teal);
+  object-fit: cover;
+}
+
+.story-signature {
+  font-size: 18px;
+  color: var(--text-charcoal);
+  margin: 0;
+}
+
+/* Practitioners Section */
+.practitioners-section {
+  background: var(--bg-cream);
+  padding: 48px 20px;
+}
+
+.practitioners-container {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.practitioners-section h2 {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text-charcoal);
+  margin-bottom: 16px;
+  text-align: center;
+}
+
+.practitioners-intro {
+  font-size: 16px;
+  line-height: 1.6;
+  color: rgba(45, 52, 54, 0.85);
+  text-align: center;
+  max-width: 700px;
+  margin: 0 auto 40px;
+}
+
+.practitioners-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.practitioner-card {
+  background: var(--white);
+  border-radius: 16px;
+  padding: 32px 24px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+}
+
+.practitioner-photo-wrapper {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.practitioner-photo {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  border: 4px solid var(--primary-teal);
+  object-fit: cover;
+}
+
+.practitioner-info {
+  text-align: center;
+}
+
+.practitioner-name {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text-charcoal);
+  margin-bottom: 8px;
+}
+
+.practitioner-title {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--primary-teal);
+  margin-bottom: 20px;
+}
+
+.practitioner-bio {
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--text-charcoal);
+  margin-bottom: 16px;
+  text-align: left;
+}
+
+.practitioner-quote {
+  font-size: 15px;
+  font-style: italic;
+  color: var(--primary-teal);
+  border-left: 3px solid var(--secondary-sage);
+  padding: 12px 16px;
+  margin-top: 20px;
+  background: var(--bg-cream);
+  border-radius: 0 8px 8px 0;
+  text-align: left;
+}
+
+/* Approach Section */
+.approach-section {
+  background: var(--white);
+  padding: 48px 20px;
+}
+
+.approach-container {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.approach-section h2 {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text-charcoal);
+  margin-bottom: 32px;
+  text-align: center;
+}
+
+.comparison-table {
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+}
+
+.comparison-header {
+  display: none;
+}
+
+.comparison-row {
+  display: flex;
+  flex-direction: column;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.comparison-row:last-child {
+  border-bottom: none;
+}
+
+.comparison-col {
+  padding: 16px 20px;
+  font-size: 15px;
+  line-height: 1.5;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.comparison-col.traditional-col {
+  background: #FFF5F5;
+  color: var(--text-charcoal);
+}
+
+.comparison-col.gha-col {
+  background: #F0FAF5;
+  color: var(--text-charcoal);
+}
+
+.comparison-icon {
+  flex-shrink: 0;
+  font-weight: 700;
+  font-size: 16px;
+}
+
+.comparison-icon.negative {
+  color: #E07A5F;
+}
+
+.comparison-icon.positive {
+  color: var(--primary-teal);
+}
+
+/* About CTA Section */
+.about-cta-section {
+  background: var(--primary-teal);
+  padding: 48px 20px;
+  text-align: center;
+}
+
+.about-cta-container {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.about-cta-section h2 {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--white);
+  margin-bottom: 16px;
+}
+
+.about-cta-text {
+  font-size: 16px;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.9);
+  margin-bottom: 32px;
+}
+
+.about-cta-button {
+  max-width: 320px;
+  margin: 0 auto 20px;
+}
+
+.secondary-link {
+  display: block;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 14px;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.secondary-link:hover {
+  color: var(--white);
+}
+
+/* ===== ABOUT PAGE RESPONSIVE - TABLET ===== */
+@media (min-width: 768px) {
+  .about-hero-section {
+    padding: 100px 24px;
+    min-height: 450px;
+  }
+
+  .about-hero-section h1 {
+    font-size: 36px;
+  }
+
+  .founder-signature {
+    flex-direction: row;
+    justify-content: center;
+    gap: 20px;
+  }
+
+  .founder-photo {
+    width: 80px;
+    height: 80px;
+  }
+
+  .our-story-section,
+  .practitioners-section,
+  .approach-section,
+  .about-cta-section {
+    padding: 64px 24px;
+  }
+
+  .our-story-section h2,
+  .practitioners-section h2,
+  .approach-section h2,
+  .about-cta-section h2 {
+    font-size: 28px;
+  }
+
+  .practitioner-card {
+    display: flex;
+    gap: 32px;
+    text-align: left;
+    padding: 32px;
+  }
+
+  .practitioner-photo-wrapper {
+    flex-shrink: 0;
+    margin-bottom: 0;
+  }
+
+  .practitioner-info {
+    text-align: left;
+  }
+
+  .comparison-header {
+    display: flex;
+  }
+
+  .comparison-header .comparison-col {
+    flex: 1;
+    font-weight: 700;
+    font-size: 16px;
+    text-align: center;
+    justify-content: center;
+  }
+
+  .comparison-header .traditional-col {
+    background: #FFE8E8;
+  }
+
+  .comparison-header .gha-col {
+    background: #D5F0E5;
+  }
+
+  .comparison-row {
+    flex-direction: row;
+  }
+
+  .comparison-col {
+    flex: 1;
+  }
+}
+
+/* ===== ABOUT PAGE RESPONSIVE - DESKTOP ===== */
+@media (min-width: 1024px) {
+  .about-hero-section {
+    padding: 120px 24px;
+    min-height: 500px;
+  }
+
+  .about-hero-section h1 {
+    font-size: 44px;
+  }
+
+  .about-hero-subheadline {
+    font-size: 20px;
+  }
+
+  .founder-photo {
+    width: 90px;
+    height: 90px;
+  }
+
+  .our-story-section,
+  .practitioners-section,
+  .approach-section,
+  .about-cta-section {
+    padding: 80px 24px;
+  }
+
+  .our-story-section h2,
+  .practitioners-section h2,
+  .approach-section h2,
+  .about-cta-section h2 {
+    font-size: 32px;
+  }
+
+  .story-content p {
+    font-size: 17px;
+  }
+
+  .practitioners-grid {
+    flex-direction: row;
+    gap: 32px;
+  }
+
+  .practitioner-card {
+    flex: 1;
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .practitioner-photo-wrapper {
+    margin-bottom: 24px;
+  }
+
+  .practitioner-info {
+    text-align: center;
+  }
+
+  .practitioner-bio,
+  .practitioner-quote {
+    text-align: left;
+  }
+
+  .comparison-col {
+    padding: 20px 24px;
+    font-size: 16px;
+  }
+}
+
 /* ===== ANIMATIONS ===== */
 .landing-page {
   animation: fadeIn 0.5s ease-out;
