@@ -540,12 +540,44 @@ body {
 
 /* About Hero Section */
 .about-hero-section {
-  background: var(--primary-teal);
-  padding: 60px 20px;
+  position: relative;
+  padding: 80px 20px;
   text-align: center;
+  min-height: 400px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.about-hero-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  z-index: 1;
+}
+
+.about-hero-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    to bottom,
+    rgba(107, 144, 128, 0.85) 0%,
+    rgba(107, 144, 128, 0.9) 100%
+  );
+  z-index: 2;
 }
 
 .about-hero-container {
+  position: relative;
+  z-index: 3;
   max-width: 800px;
   margin: 0 auto;
 }
@@ -556,14 +588,16 @@ body {
   line-height: 1.2;
   color: var(--white);
   margin-bottom: 20px;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .about-hero-subheadline {
   font-size: 18px;
-  color: rgba(255, 255, 255, 0.9);
+  color: rgba(255, 255, 255, 0.95);
   line-height: 1.6;
   max-width: 600px;
   margin: 0 auto;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 }
 
 /* Our Story Section */
@@ -607,10 +641,26 @@ body {
   border-radius: 0 8px 8px 0;
 }
 
+.founder-signature {
+  margin-top: 48px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.founder-photo {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  border: 4px solid var(--primary-teal);
+  object-fit: cover;
+}
+
 .story-signature {
-  margin-top: 40px;
   font-size: 18px;
   color: var(--text-charcoal);
+  margin: 0;
 }
 
 /* Practitioners Section */
@@ -823,11 +873,23 @@ body {
 /* ===== ABOUT PAGE RESPONSIVE - TABLET ===== */
 @media (min-width: 768px) {
   .about-hero-section {
-    padding: 80px 24px;
+    padding: 100px 24px;
+    min-height: 450px;
   }
 
   .about-hero-section h1 {
     font-size: 36px;
+  }
+
+  .founder-signature {
+    flex-direction: row;
+    justify-content: center;
+    gap: 20px;
+  }
+
+  .founder-photo {
+    width: 80px;
+    height: 80px;
   }
 
   .our-story-section,
@@ -892,7 +954,8 @@ body {
 /* ===== ABOUT PAGE RESPONSIVE - DESKTOP ===== */
 @media (min-width: 1024px) {
   .about-hero-section {
-    padding: 100px 24px;
+    padding: 120px 24px;
+    min-height: 500px;
   }
 
   .about-hero-section h1 {
@@ -901,6 +964,11 @@ body {
 
   .about-hero-subheadline {
     font-size: 20px;
+  }
+
+  .founder-photo {
+    width: 90px;
+    height: 90px;
   }
 
   .our-story-section,
