@@ -158,10 +158,167 @@
             .footer-nav {
                 display: none;
             }
+            .site-header {
+                display: none;
+            }
+        }
+
+        /* Site Header */
+        .site-header {
+            background: #FFFFFF;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+            padding: 0 20px;
+            position: relative;
+        }
+
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 60px;
+        }
+
+        .header-logo {
+            font-size: 18px;
+            font-weight: 700;
+            color: #264653;
+            text-decoration: none;
+        }
+
+        .header-logo:hover {
+            color: #6B9080;
+        }
+
+        .header-nav {
+            display: none;
+            gap: 24px;
+            align-items: center;
+        }
+
+        .header-nav a {
+            font-size: 14px;
+            font-weight: 500;
+            color: #2D3436;
+            text-decoration: none;
+        }
+
+        .header-nav a:hover {
+            color: #6B9080;
+        }
+
+        .header-nav .nav-login {
+            color: #6B9080;
+        }
+
+        .header-nav .nav-divider {
+            width: 1px;
+            height: 20px;
+            background: rgba(0, 0, 0, 0.1);
+        }
+
+        .mobile-menu-btn {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 8px;
+        }
+
+        .mobile-menu-btn span {
+            display: block;
+            width: 24px;
+            height: 2px;
+            background: #2D3436;
+        }
+
+        .mobile-menu {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: #FFFFFF;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            padding: 16px 20px;
+            z-index: 100;
+        }
+
+        .mobile-menu.active {
+            display: block;
+        }
+
+        .mobile-menu a {
+            display: block;
+            padding: 12px 0;
+            font-size: 16px;
+            font-weight: 500;
+            color: #2D3436;
+            text-decoration: none;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+        }
+
+        .mobile-menu a:last-child {
+            border-bottom: none;
+        }
+
+        .mobile-menu a:hover {
+            color: #6B9080;
+        }
+
+        .mobile-menu .nav-login {
+            color: #6B9080;
+        }
+
+        @media (min-width: 768px) {
+            .header-nav {
+                display: flex;
+            }
+
+            .mobile-menu-btn {
+                display: none;
+            }
+
+            .mobile-menu {
+                display: none !important;
+            }
+
+            .header-logo {
+                font-size: 20px;
+            }
         }
     </style>
 </head>
 <body>
+    <!-- Site Header -->
+    <header class="site-header">
+        <div class="header-container">
+            <a href="/" class="header-logo">Gut Healing Academy</a>
+            <nav class="header-nav">
+                <a href="/about/">About</a>
+                <a href="/legal/contact.html">Contact</a>
+                <div class="nav-divider"></div>
+                <a href="https://app.guthealingacademy.com/" class="nav-login">Members</a>
+                <a href="https://app.guthealingacademy.com/practitioner.html" class="nav-login">Practitioners</a>
+            </nav>
+            <button class="mobile-menu-btn" aria-label="Toggle menu" onclick="document.querySelector('.mobile-menu').classList.toggle('active')">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+        <div class="mobile-menu">
+            <a href="/about/">About</a>
+            <a href="/legal/contact.html">Contact</a>
+            <a href="https://app.guthealingacademy.com/" class="nav-login">Members Login</a>
+            <a href="https://app.guthealingacademy.com/practitioner.html" class="nav-login">Practitioners Login</a>
+        </div>
+    </header>
+
     <div class="container">
         <header>
             <div class="logo">Gut Healing Academy</div>
