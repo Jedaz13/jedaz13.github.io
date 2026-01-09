@@ -181,14 +181,19 @@
         }
 
         .header-logo {
-            font-size: 18px;
-            font-weight: 700;
-            color: #264653;
+            display: flex;
+            align-items: center;
             text-decoration: none;
+            transition: opacity 0.2s;
         }
 
         .header-logo:hover {
-            color: #6B9080;
+            opacity: 0.8;
+        }
+
+        .header-logo img {
+            height: 40px;
+            width: auto;
         }
 
         .header-nav {
@@ -287,9 +292,14 @@
                 display: none !important;
             }
 
-            .header-logo {
-                font-size: 20px;
+            .header-logo img {
+                height: 44px;
             }
+        }
+
+        .logo img {
+            height: 48px;
+            width: auto;
         }
     </style>
 </head>
@@ -297,7 +307,7 @@
     <!-- Site Header -->
     <header class="site-header">
         <div class="header-container">
-            <a href="/" class="header-logo">Gut Healing Academy</a>
+            <a href="/" class="header-logo"><img src="Logo.png" alt="Gut Healing Academy"></a>
             <nav class="header-nav">
                 <a href="/about/">About</a>
                 <a href="/legal/contact.html">Contact</a>
@@ -321,7 +331,7 @@
 
     <div class="container">
         <header>
-            <div class="logo">Gut Healing Academy</div>
+            <div class="logo"><img src="Logo.png" alt="Gut Healing Academy"></div>
             <h1>Terms of Service</h1>
             <p class="last-updated">Last Updated: December 11, 2025</p>
         </header>
