@@ -29,15 +29,27 @@
 }
 
 .header-logo {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  transition: opacity 0.2s;
+}
+
+.header-logo:hover {
+  opacity: 0.8;
+}
+
+.header-logo img {
+  height: 40px;
+  width: auto;
+}
+
+/* Text fallback for logo */
+.header-logo-text {
   font-size: 18px;
   font-weight: 700;
   color: var(--navy-blue);
   text-decoration: none;
-  transition: color 0.2s;
-}
-
-.header-logo:hover {
-  color: var(--primary-teal);
 }
 
 .header-nav {
@@ -140,8 +152,8 @@
     display: none !important;
   }
 
-  .header-logo {
-    font-size: 20px;
+  .header-logo img {
+    height: 44px;
   }
 }
 
