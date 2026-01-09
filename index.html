@@ -175,7 +175,7 @@
               <a href="/about/">About Us</a>
             </div>
 
-            <p class="footer-copyright">&copy; 2025 Gut Healing Academy. All rights reserved.</p>
+            <p class="footer-copyright">&copy; <span id="currentYear"></span> Gut Healing Academy. All rights reserved.</p>
 
             <div class="footer-login-links" style="margin-top: 1rem; font-size: 0.75rem; opacity: 0.6;">
               <a href="https://app.guthealingacademy.com/" style="color: inherit; text-decoration: none;">Members Area</a>
@@ -192,6 +192,9 @@
     <!-- Landing Page Scripts -->
     <script>
     document.addEventListener('DOMContentLoaded', () => {
+      // Set current year in footer
+      document.getElementById('currentYear').textContent = new Date().getFullYear();
+
       // Sticky CTA - Mobile only (under 1024px)
       const stickyCta = document.getElementById('stickyCta');
       const primaryCta = document.querySelector('.primary-cta');
