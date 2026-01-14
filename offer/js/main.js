@@ -18,6 +18,7 @@
     initFaqAccordion();
     initLazyLoading();
     initCheckoutTracking();
+    initQACountdown();
   }
 
   /**
@@ -478,6 +479,62 @@
         console.log('Checkout tracking: Annual membership trial');
       });
     }
+  }
+
+  /**
+   * Live Q&A Countdown
+   * Calculates and displays time until the next Live Q&A session
+   * Target: January 16th, 2026 at 4:00 PM GMT
+   */
+  function initQACountdown() {
+    var countdownEl = document.getElementById('qa-countdown');
+    if (!countdownEl) return;
+
+    // Set target date: January 16th, 2026, 4:00 PM GMT
+    // Note: Month is 0-indexed (0 = January)
+    var targetDate = new Date(Date.UTC(2026, 0, 16, 16, 0, 0));
+
+    function updateCountdown() {
+      var now = new Date();
+      var diff = targetDate - now;
+
+      // If the event has passed, hide the countdown
+      if (diff <= 0) {
+        countdownEl.textContent = 'Starting soon!';
+        return;
+      }
+
+      // Calculate time components
+      var days = Math.floor(diff / (1000 * 60 * 60 * 24));
+      var hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      var minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+
+      // Format the countdown text
+      var countdownText = '';
+      if (days > 0) {
+        countdownText = 'In ' + days + ' day' + (days === 1 ? '' : 's');
+        if (hours > 0) {
+          countdownText += ', ' + hours + ' hr' + (hours === 1 ? '' : 's');
+        }
+      } else if (hours > 0) {
+        countdownText = 'In ' + hours + ' hour' + (hours === 1 ? '' : 's');
+        if (minutes > 0) {
+          countdownText += ', ' + minutes + ' min';
+        }
+      } else if (minutes > 0) {
+        countdownText = 'In ' + minutes + ' minute' + (minutes === 1 ? '' : 's');
+      } else {
+        countdownText = 'Starting soon!';
+      }
+
+      countdownEl.textContent = countdownText;
+    }
+
+    // Initial update
+    updateCountdown();
+
+    // Update every minute
+    setInterval(updateCountdown, 60000);
   }
 
 })();
