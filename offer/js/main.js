@@ -423,8 +423,8 @@
     var referrer = document.referrer;
     var isInTrial = source === 'members' || referrer.includes('app.guthealingacademy.com');
 
-    // Monthly pricing button (match by CTA text)
-    var monthlyBtn = document.querySelector('a[href*="STRIPE_MONTHLY_TRIAL_LINK"]');
+    // Monthly pricing button ($1 trial → $47/month)
+    var monthlyBtn = document.querySelector('a[href*="bJe28seyJaf8d4ch1rgA802"]');
     if (monthlyBtn) {
       monthlyBtn.addEventListener('click', function() {
         window.dataLayer = window.dataLayer || [];
@@ -451,8 +451,8 @@
       });
     }
 
-    // Annual pricing button
-    var annualBtn = document.querySelector('a[href*="STRIPE_ANNUAL_TRIAL_LINK"]');
+    // Annual pricing button ($1 trial → $297/year)
+    var annualBtn = document.querySelector('a[href*="bJe5kEduF1IC1lu26xgA803"]');
     if (annualBtn) {
       annualBtn.addEventListener('click', function() {
         window.dataLayer = window.dataLayer || [];
