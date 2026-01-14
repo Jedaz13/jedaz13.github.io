@@ -1013,6 +1013,177 @@ strong {
 }
 
 /* =====================================================
+   Live Q&A Urgency Section
+   ===================================================== */
+.live-qa-section {
+  padding: 32px 0;
+  background-color: var(--color-background);
+}
+
+.live-qa-card {
+  background: linear-gradient(135deg, rgba(107, 144, 128, 0.08) 0%, rgba(164, 195, 178, 0.15) 100%);
+  border: 2px solid var(--color-primary);
+  border-radius: var(--radius-xl);
+  padding: 24px;
+  position: relative;
+  overflow: hidden;
+}
+
+.live-qa-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--color-primary), var(--color-secondary));
+}
+
+.live-qa-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.live-qa-icon {
+  font-size: 24px;
+}
+
+.live-qa-header h3 {
+  font-size: 1.125rem;
+  margin-bottom: 0;
+  color: var(--color-trust);
+}
+
+.live-qa-content {
+  margin-bottom: 16px;
+}
+
+.live-qa-date {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 12px;
+}
+
+.live-qa-date strong {
+  font-size: 1.125rem;
+  color: var(--color-text);
+}
+
+.live-qa-countdown {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background-color: var(--color-urgency);
+  color: var(--color-white);
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 600;
+  width: fit-content;
+}
+
+.live-qa-countdown::before {
+  content: '⏰';
+  font-size: 12px;
+}
+
+.live-qa-topic {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 12px;
+}
+
+.topic-label {
+  font-size: 13px;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.topic-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--color-primary);
+  font-style: italic;
+}
+
+.live-qa-host {
+  font-size: 15px;
+  color: var(--color-text-light);
+}
+
+.live-qa-access {
+  background-color: var(--color-white);
+  border-radius: var(--radius);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.live-qa-access p {
+  margin: 0;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.trial-badge,
+.full-badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.trial-badge {
+  background-color: rgba(107, 144, 128, 0.15);
+  color: var(--color-primary);
+}
+
+.full-badge {
+  background-color: var(--color-primary);
+  color: var(--color-white);
+}
+
+/* Desktop styles for Live Q&A */
+@media (min-width: 768px) {
+  .live-qa-section {
+    padding: 48px 0;
+  }
+
+  .live-qa-card {
+    padding: 32px;
+  }
+
+  .live-qa-date {
+    flex-direction: row;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .live-qa-topic {
+    flex-direction: row;
+    align-items: baseline;
+    gap: 8px;
+  }
+
+  .live-qa-access {
+    flex-direction: row;
+    justify-content: center;
+    gap: 32px;
+  }
+}
+
+/* =====================================================
    Section 10: Pricing
    ===================================================== */
 .pricing {
