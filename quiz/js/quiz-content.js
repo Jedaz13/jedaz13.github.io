@@ -473,7 +473,7 @@ const quizContent = {
     {
       type: "message",
       delay: 1000,
-      content: "I have a clear picture now of what's going on.\n\nBased on everything you've shared, I'm going to match you to one of our 6 clinically-developed protocols - specific to YOUR symptom pattern.\n\nThis isn't generic advice. It's a week-by-week plan built for exactly what you're dealing with."
+      content: "I have a clear picture now of what's going on.\n\nBased on everything you've shared, I'm going to match you to one of our 6 clinically-developed protocols - specific to YOUR symptom pattern.\n\nThis isn't generic advice. It's a personalized plan built for exactly what you're dealing with — and we'll adjust it as you progress."
     },
     {
       type: "question",
@@ -506,12 +506,12 @@ const quizContent = {
     {
       type: "message",
       delay: 1000,
-      content: "Your **Week 1 Foundation Protocol** is ready — developed by our practitioners specifically for your symptom pattern.\n\nThis is your starting point. As you follow it, you'll discover what works for YOUR body. Then, with your practitioner's guidance, we'll refine and adjust until you find what truly heals your gut."
+      content: "Your **Personalized Protocol** is ready — developed by our practitioners specifically for your symptom pattern.\n\nThis is your starting point. As you follow it, you'll discover what works for YOUR body. Then, with your practitioner's guidance, we'll refine and adjust until you find what truly heals your gut."
     },
     {
       type: "message",
       delay: 1000,
-      content: "Your foundation protocol includes:\n\n• Week 1 daily interventions matched to YOUR symptoms\n• Foods to focus on (and avoid) for your pattern\n• What to track so you can see what's working\n\nThis isn't a one-size-fits-all PDF. It's the beginning of a personalized journey — your practitioners will iterate with you until you heal."
+      content: "Your personalized protocol includes:\n\n• Daily interventions matched to YOUR symptoms\n• Foods to focus on (and avoid) for your pattern\n• What to track so you can see what's working\n• Ongoing adjustments with your practitioner as you progress\n\nThis isn't a one-size-fits-all PDF. It's the beginning of a personalized journey — your practitioners will iterate with you until you heal."
     },
     {
       type: "buttons",
@@ -531,7 +531,7 @@ const quizContent = {
     {
       type: "message",
       delay: 1000,
-      content: "I've just sent your **Week 1 Foundation Protocol** to **{{email}}**.\n\nCheck your inbox (and spam folder) for instructions on how to access it."
+      content: "I've just sent your **Personalized Protocol** to **{{email}}**.\n\nCheck your inbox (and spam folder) for instructions on how to access it."
     },
     {
       type: "message",

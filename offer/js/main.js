@@ -423,8 +423,8 @@
     var referrer = document.referrer;
     var isInTrial = source === 'members' || referrer.includes('app.guthealingacademy.com');
 
-    // Monthly pricing button
-    var monthlyBtn = document.querySelector('a[href*="28EbJ29epcng9S06mNgA801"]');
+    // Monthly pricing button (match by CTA text)
+    var monthlyBtn = document.querySelector('a[href*="STRIPE_MONTHLY_TRIAL_LINK"]');
     if (monthlyBtn) {
       monthlyBtn.addEventListener('click', function() {
         window.dataLayer = window.dataLayer || [];
@@ -432,12 +432,13 @@
           'event': 'begin_checkout',
           'ecommerce': {
             'currency': 'USD',
-            'value': 87.00,
+            'value': 1.00,
             'items': [{
-              'item_id': 'monthly_membership',
-              'item_name': 'Monthly Membership',
+              'item_id': 'monthly_membership_trial',
+              'item_name': 'Monthly Membership ($1 Trial)',
               'item_category': 'subscription',
-              'price': 87.00,
+              'price': 47.00,
+              'trial_price': 1.00,
               'quantity': 1
             }]
           },
@@ -446,34 +447,35 @@
           'gutPattern': gutPattern,
           'trialDaysRemaining': null
         });
-        console.log('Checkout tracking: Monthly membership');
+        console.log('Checkout tracking: Monthly membership trial');
       });
     }
 
-    // 6-month pricing button
-    var sixMonthBtn = document.querySelector('a[href*="28EdRa8albjcd4c6mNgA800"]');
-    if (sixMonthBtn) {
-      sixMonthBtn.addEventListener('click', function() {
+    // Annual pricing button
+    var annualBtn = document.querySelector('a[href*="STRIPE_ANNUAL_TRIAL_LINK"]');
+    if (annualBtn) {
+      annualBtn.addEventListener('click', function() {
         window.dataLayer = window.dataLayer || [];
         dataLayer.push({
           'event': 'begin_checkout',
           'ecommerce': {
             'currency': 'USD',
-            'value': 397.00,
+            'value': 1.00,
             'items': [{
-              'item_id': '6_month_membership',
-              'item_name': '6-Month Healing Journey',
+              'item_id': 'annual_membership_trial',
+              'item_name': 'Annual Membership ($1 Trial)',
               'item_category': 'subscription',
-              'price': 397.00,
+              'price': 297.00,
+              'trial_price': 1.00,
               'quantity': 1
             }]
           },
-          'checkoutType': '6-month',
+          'checkoutType': 'annual',
           'userStatus': isInTrial ? 'trial' : 'anonymous',
           'gutPattern': gutPattern,
           'trialDaysRemaining': null
         });
-        console.log('Checkout tracking: 6-month membership');
+        console.log('Checkout tracking: Annual membership trial');
       });
     }
   }
