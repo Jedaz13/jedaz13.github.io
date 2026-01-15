@@ -9,16 +9,30 @@
     var urlParams = new URLSearchParams(window.location.search);
     var sessionId = urlParams.get('session_id') || '';
     var gutPattern = urlParams.get('pattern') || '';
+    var planType = urlParams.get('plan') || '';
 
-    // Trial purchase data
-    var purchaseValue = 1.00;
-    var itemId = 'trial_membership';
-    var itemName = '7-Day Trial';
-    var purchaseType = 'trial';
+    // Determine purchase details based on plan
+    var purchaseValue = 0;
+    var itemId = '';
+    var itemName = '';
+    var purchaseType = '';
+
+    if (planType === 'annual' || planType === 'yearly') {
+      purchaseValue = 297.00;
+      itemId = 'annual_membership';
+      itemName = 'Annual Membership';
+      purchaseType = 'annual';
+    } else {
+      // Default to monthly
+      purchaseValue = 47.00;
+      itemId = 'monthly_membership';
+      itemName = 'Monthly Membership';
+      purchaseType = 'monthly';
+    }
 
     // Base page data
     dataLayer.push({
-      'pageType': 'thank-you',
+      'pageType': 'thank-you-member',
       'pageName': document.title,
       'pageUrl': window.location.href,
       'pagePath': window.location.pathname,
@@ -26,8 +40,8 @@
       // User data
       'userId': '',
       'userEmail': '',
-      'userStatus': 'trial',
-      'trialDaysRemaining': 7,
+      'userStatus': 'active',
+      'trialDaysRemaining': null,
 
       // Quiz/Protocol data
       'gutPattern': gutPattern,
@@ -56,11 +70,11 @@
       'purchaseType': purchaseType,
       'userId': '',
       'gutPattern': gutPattern,
-      'trialDaysUsed': 0,
+      'trialDaysUsed': null,
       'discountApplied': false
     });
 
-    console.log('Trial purchase tracked:', purchaseType, purchaseValue);
+    console.log('Full membership purchase tracked:', purchaseType, purchaseValue);
   </script>
 
   <!-- Google Tag Manager -->
@@ -73,9 +87,9 @@
 
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Welcome to the Gut Healing Academy! Your journey to digestive freedom starts now.">
+  <meta name="description" content="Welcome to Full Membership at Gut Healing Academy! You now have complete access.">
   <meta name="robots" content="noindex, nofollow">
-  <title>Welcome to Gut Healing Academy!</title>
+  <title>Welcome to Full Membership - Gut Healing Academy</title>
   <link rel="icon" type="image/png" href="../assets/favicon.png">
   <link rel="stylesheet" href="css/styles.css">
 </head>
@@ -119,70 +133,65 @@
       </div>
 
       <!-- Welcome Message -->
-      <h1>Welcome to the Gut Healing Academy!</h1>
-      <p class="subtitle">Your journey to digestive freedom starts now.</p>
+      <h1>Welcome to Full Membership!</h1>
+      <p class="subtitle">You now have complete access to the Gut Healing Academy.</p>
 
       <!-- Confirmation Message -->
       <div class="confirmation-box">
         <p><strong>&#10003; Payment Confirmed</strong></p>
-        <p>You'll receive a confirmation email within the next few minutes with your receipt and important details.</p>
+        <p>Your membership is now active. A receipt has been sent to your email.</p>
       </div>
 
-      <!-- Next Steps -->
+      <!-- Full Access Features -->
+      <div class="access-box">
+        <h3>You Now Have Full Access To:</h3>
+        <ul class="access-list">
+          <li>&#10003; Your personalized gut healing protocol</li>
+          <li>&#10003; Daily symptom tracking with pattern recognition</li>
+          <li>&#10003; Message your practitioner directly (24-48hr response)</li>
+          <li>&#10003; Weekly Live Q&A sessions &mdash; ask questions live</li>
+          <li>&#10003; Complete recordings library</li>
+          <li>&#10003; All learning materials and resources</li>
+          <li>&#10003; Ongoing protocol adjustments based on your progress</li>
+        </ul>
+      </div>
+
+      <!-- What's Next -->
       <div class="next-steps">
-        <h2>Here's What Happens Next:</h2>
+        <h2>What's Next?</h2>
 
         <div class="step">
           <div class="step-number">1</div>
           <div class="step-content">
-            <h3>Create Your Account</h3>
-            <p>Set up your account to access your personalized protocol and member resources.</p>
-            <a href="https://app.guthealingacademy.com/signup" class="btn btn-primary btn-large">Create My Account &rarr;</a>
+            <h3>Go to your dashboard</h3>
           </div>
         </div>
 
         <div class="step">
           <div class="step-number">2</div>
           <div class="step-content">
-            <h3>Access Your Personalized Protocol</h3>
-            <p>Your customized gut healing protocol is ready and waiting in your account.</p>
+            <h3>Check "My Protocol" for your personalized plan</h3>
           </div>
         </div>
 
         <div class="step">
           <div class="step-number">3</div>
           <div class="step-content">
-            <h3>Start Your Healing Journey</h3>
-            <p>Begin tracking your symptoms and following your personalized protocol.</p>
+            <h3>Start tracking your symptoms today</h3>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-number">4</div>
+          <div class="step-content">
+            <h3>Message your practitioner with any questions</h3>
           </div>
         </div>
       </div>
 
-      <!-- What's Included in Trial -->
-      <div class="access-box">
-        <h3>Your 7-Day Trial Includes:</h3>
-        <ul class="access-list">
-          <li>&#10003; Your personalized gut healing protocol</li>
-          <li>&#10003; Daily symptom tracking tools</li>
-          <li>&#10003; Watch weekly Live Q&A sessions with our practitioners</li>
-          <li>&#10003; Access to Q&A session recordings</li>
-        </ul>
-      </div>
-
-      <!-- Upgrade Benefits -->
-      <div class="upgrade-box">
-        <h3>Upgrade anytime to unlock:</h3>
-        <ul class="upgrade-list">
-          <li>Message your practitioner directly</li>
-          <li>Submit questions for Live Q&A</li>
-          <li>Access complete learning materials library</li>
-          <li>Get ongoing protocol adjustments</li>
-        </ul>
-      </div>
-
       <!-- Primary CTA -->
       <div class="primary-cta">
-        <a href="https://app.guthealingacademy.com/signup" class="btn btn-primary btn-large">Get Started Now &rarr;</a>
+        <a href="https://app.guthealingacademy.com" class="btn btn-primary btn-large">Go to My Dashboard &rarr;</a>
         <p class="help-text">Questions? Email us at <a href="mailto:hello@guthealingacademy.com">hello@guthealingacademy.com</a></p>
       </div>
     </div>
