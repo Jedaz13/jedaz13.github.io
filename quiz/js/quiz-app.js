@@ -205,8 +205,8 @@ function updateProgress(sectionKey) {
 }
 
 /**
- * Show calculating overlay with rotating messages
- * @returns {Promise} Resolves after 8 seconds
+ * Show enhanced calculating overlay with personalized data
+ * @returns {Promise} Resolves after 10 seconds
  */
 function showCalculatingScreen() {
   return new Promise((resolve) => {
@@ -214,12 +214,73 @@ function showCalculatingScreen() {
     const progressEl = document.getElementById('quizProgress');
     if (progressEl) progressEl.style.display = 'none';
 
+    // Get personalized data
+    const primaryComplaint = state.answers.q5_primary_complaint || 'digestive issues';
+    const diagnoses = formatDiagnoses(state.answers.q11_diagnosis);
+    const protocolName = state.protocol ? state.protocol.name : 'Personalized Gut Healing';
+
+    // Testimonials matched to patterns
+    const testimonials = {
+      bloating: { name: 'Suzy', quote: 'The bloating that made me look 6 months pregnant? Gone within 3 weeks of following my protocol.' },
+      constipation: { name: 'Amanda', quote: 'After years of struggling, I finally have regular, comfortable digestion. It changed everything.' },
+      diarrhea: { name: 'Cheryl', quote: 'I can finally leave the house without mapping every bathroom. The urgency is completely manageable now.' },
+      mixed: { name: 'Cheryl', quote: 'The unpredictability was the worst part. Now I actually know what to expect from my body.' },
+      pain: { name: 'Amanda', quote: 'The cramping that used to double me over? I barely notice it anymore.' },
+      gas: { name: 'Suzy', quote: 'I used to avoid social situations. Now I can actually enjoy dinner with friends again.' },
+      reflux: { name: 'Amanda', quote: 'No more burning, no more sleeping propped up. I can eat without fear.' }
+    };
+    const testimonial = testimonials[primaryComplaint] || testimonials.bloating;
+
+    // Generate believable number for social proof
+    const baseNumbers = { bloating: 2847, constipation: 1923, diarrhea: 1456, mixed: 987, pain: 1234, gas: 876, reflux: 1567 };
+    const reliefNumber = (baseNumbers[primaryComplaint] || 1200) + Math.floor(Math.random() * 200);
+
     // Create overlay
     const overlay = document.createElement('div');
     overlay.className = 'calculating-overlay';
     overlay.innerHTML = `
-      <div class="calculating-spinner"></div>
-      <div class="calculating-message">${CALCULATING_MESSAGES[0]}</div>
+      <div class="calculating-content">
+        <div class="calculating-spinner"></div>
+        <div class="calculating-stage" id="calc-stage-1">
+          <p class="calculating-message">Analyzing your symptom pattern...</p>
+          <div class="calculating-highlight">
+            <span class="highlight-label">Primary concern:</span>
+            <span class="highlight-value">${formatComplaintLabel(primaryComplaint)}</span>
+          </div>
+        </div>
+        <div class="calculating-stage hidden" id="calc-stage-2">
+          <p class="calculating-message">Reviewing your health history...</p>
+          ${diagnoses ? `<div class="calculating-highlight"><span class="highlight-label">Conditions:</span><span class="highlight-value">${diagnoses}</span></div>` : ''}
+        </div>
+        <div class="calculating-stage hidden" id="calc-stage-3">
+          <p class="calculating-message">Cross-referencing protocol database...</p>
+          <div class="calculating-progress-bar"><div class="calculating-progress-fill"></div></div>
+          <p class="calculating-submessage">Matching against 6 specialized protocols...</p>
+        </div>
+        <div class="calculating-stage hidden" id="calc-stage-4">
+          <p class="calculating-message">Finalizing your personalized protocol...</p>
+          <div class="protocol-reveal">
+            <span class="reveal-label">Best match:</span>
+            <span class="reveal-value">${protocolName}</span>
+          </div>
+        </div>
+        <div class="calculating-stage hidden" id="calc-stage-5">
+          <div class="calculating-testimonial">
+            <p class="testimonial-intro">Women with similar patterns report:</p>
+            <div class="testimonial-card-mini">
+              <p class="testimonial-quote">"${testimonial.quote}"</p>
+              <p class="testimonial-name">— ${testimonial.name}</p>
+            </div>
+          </div>
+        </div>
+        <div class="calculating-stage hidden" id="calc-stage-6">
+          <div class="social-proof-final">
+            <p class="proof-number">${reliefNumber.toLocaleString()}</p>
+            <p class="proof-text">women with ${protocolName} pattern have found relief</p>
+          </div>
+          <p class="calculating-redirect">Redirecting to your protocol...</p>
+        </div>
+      </div>
     `;
     document.body.appendChild(overlay);
 
@@ -228,24 +289,54 @@ function showCalculatingScreen() {
       overlay.classList.add('visible');
     });
 
-    // Rotate messages every 2 seconds
-    let messageIndex = 0;
-    const messageEl = overlay.querySelector('.calculating-message');
-    const messageInterval = setInterval(() => {
-      messageIndex = (messageIndex + 1) % CALCULATING_MESSAGES.length;
-      messageEl.textContent = CALCULATING_MESSAGES[messageIndex];
-    }, 2000);
+    // Stage timing sequence
+    const stages = [
+      { id: 'calc-stage-1', delay: 0 },
+      { id: 'calc-stage-2', delay: 2000 },
+      { id: 'calc-stage-3', delay: 4000 },
+      { id: 'calc-stage-4', delay: 6000 },
+      { id: 'calc-stage-5', delay: 8000 },
+      { id: 'calc-stage-6', delay: 9500 }
+    ];
 
-    // Remove after 8 seconds
+    stages.forEach(stage => {
+      setTimeout(() => {
+        // Hide all stages
+        overlay.querySelectorAll('.calculating-stage').forEach(el => el.classList.add('hidden'));
+        // Show current stage
+        const currentStage = overlay.querySelector(`#${stage.id}`);
+        if (currentStage) {
+          currentStage.classList.remove('hidden');
+          currentStage.classList.add('fade-in');
+        }
+      }, stage.delay);
+    });
+
+    // Complete after 11 seconds
     setTimeout(() => {
-      clearInterval(messageInterval);
       overlay.classList.remove('visible');
       setTimeout(() => {
         overlay.remove();
         resolve();
       }, 300);
-    }, 8000);
+    }, 11000);
   });
+}
+
+/**
+ * Format primary complaint to readable label
+ */
+function formatComplaintLabel(complaint) {
+  const labels = {
+    bloating: 'Bloating & distension',
+    constipation: 'Constipation',
+    diarrhea: 'Diarrhea & urgency',
+    mixed: 'Alternating patterns',
+    pain: 'Pain & cramping',
+    gas: 'Gas & discomfort',
+    reflux: 'Heartburn & reflux'
+  };
+  return labels[complaint] || complaint;
 }
 
 // Diagnosis value to display text mapping
@@ -690,6 +781,27 @@ function renderMultiSelect(options) {
   const container = document.createElement('div');
   container.className = 'options-container multi-select';
 
+  // Add scroll indicator if more than 4 options
+  if (options.length > 4) {
+    const scrollIndicator = document.createElement('div');
+    scrollIndicator.className = 'scroll-indicator';
+    scrollIndicator.innerHTML = `
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M7 10l5 5 5-5"/>
+      </svg>
+      <span>Scroll for more options</span>
+    `;
+    container.appendChild(scrollIndicator);
+
+    // Hide scroll indicator when user scrolls
+    inputContainer.addEventListener('scroll', function hideIndicator() {
+      if (inputContainer.scrollTop > 20) {
+        scrollIndicator.style.display = 'none';
+        inputContainer.removeEventListener('scroll', hideIndicator);
+      }
+    }, { passive: true });
+  }
+
   options.forEach(option => {
     const label = document.createElement('label');
     label.className = 'checkbox-option';
@@ -698,8 +810,12 @@ function renderMultiSelect(options) {
       <span>${option.text}</span>
     `;
 
+    // Handle clicks on the entire card
     label.addEventListener('click', (e) => {
-      if (e.target.tagName !== 'INPUT') {
+      // Prevent double-triggering if clicking directly on checkbox
+      if (e.target.tagName === 'INPUT') {
+        e.stopPropagation();
+      } else {
         const checkbox = label.querySelector('input');
         checkbox.checked = !checkbox.checked;
       }
@@ -1008,12 +1124,12 @@ async function handleTreatmentsCheck() {
   const treatmentCount = Array.isArray(treatments) ? treatments.filter(t => t !== 'nothing').length : 0;
 
   if (treatmentCount >= 3) {
-    // Show validation message then continue to part4
+    // Show validation message then continue to testimonial
     await processSection('q12_validation_persistent');
   }
-  // Always continue to part4_intro after (whether validation shown or not)
+  // Show testimonial interlude before part 4
   state.isProcessing = false;
-  await processSection('part4_intro');
+  await processSection('testimonial_interlude');
 }
 
 /**
@@ -1052,6 +1168,31 @@ function convertMarkdown(text) {
 }
 
 /**
+ * Generate dynamic social proof message based on primary complaint
+ * @returns {string} - Personalized social proof message
+ */
+function getSocialProofMessage() {
+  const complaint = state.answers.q5_primary_complaint;
+
+  // Base numbers that seem believable (varies by complaint type)
+  const socialProofData = {
+    bloating: { count: 847, label: 'bloating-dominant patterns' },
+    constipation: { count: 623, label: 'constipation patterns' },
+    diarrhea: { count: 456, label: 'diarrhea and urgency patterns' },
+    mixed: { count: 387, label: 'mixed/alternating patterns' },
+    pain: { count: 534, label: 'pain-dominant patterns' },
+    gas: { count: 376, label: 'gas and discomfort patterns' },
+    reflux: { count: 467, label: 'reflux patterns' }
+  };
+
+  const data = socialProofData[complaint] || { count: 500, label: 'similar patterns' };
+  // Add small random variation to make it feel real-time
+  const count = data.count + Math.floor(Math.random() * 50);
+
+  return `That's one of the most common patterns I see. In fact, I've helped <strong>${count}+ women</strong> with ${data.label} just like yours.\n\nYou're definitely not alone in this.`;
+}
+
+/**
  * Replace template variables in text
  * @param {string} text - Text with {{variable}} placeholders
  * @returns {string} - Text with variables replaced
@@ -1063,7 +1204,8 @@ function replaceVariables(text) {
     .replace(/\{\{email\}\}/g, state.userEmail || '')
     .replace(/\{\{protocol_name\}\}/g, state.protocol ? state.protocol.name : '')
     .replace(/\{\{chunk2_message\}\}/g, getResultsChunk2Message())
-    .replace(/\{\{q18_vision\}\}/g, state.answers.q18_vision || '');
+    .replace(/\{\{q18_vision\}\}/g, state.answers.q18_vision || '')
+    .replace(/\{\{social_proof_message\}\}/g, getSocialProofMessage());
 
   // Convert markdown to HTML
   return convertMarkdown(result);
@@ -1178,8 +1320,14 @@ processSection = async function(sectionKey) {
   // Update progress indicator
   updateProgress(sectionKey);
 
-  if (sectionKey === 'results_chunk1') {
-    // Show calculating screen first (8 seconds)
+  if (sectionKey === 'show_calculating_redirect') {
+    // New flow: submit data, show calculating screen, then redirect to offer page
+    await submitToWebhook();
+    await showCalculatingScreen();
+    redirectToSalesPage();
+    return; // Don't process any section content
+  } else if (sectionKey === 'results_chunk1') {
+    // Legacy: Show calculating screen first (8 seconds)
     await showCalculatingScreen();
     // Submit data before showing results (when "Get My Protocol" is clicked)
     await submitToWebhook();
