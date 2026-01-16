@@ -289,14 +289,14 @@ function showCalculatingScreen() {
       overlay.classList.add('visible');
     });
 
-    // Stage timing sequence
+    // Stage timing sequence (slowed down for readability)
     const stages = [
-      { id: 'calc-stage-1', delay: 0 },
-      { id: 'calc-stage-2', delay: 2000 },
-      { id: 'calc-stage-3', delay: 4000 },
-      { id: 'calc-stage-4', delay: 6000 },
-      { id: 'calc-stage-5', delay: 8000 },
-      { id: 'calc-stage-6', delay: 9500 }
+      { id: 'calc-stage-1', delay: 0 },      // Symptom pattern - show for 3.5s
+      { id: 'calc-stage-2', delay: 3500 },   // Health history - show for 3.5s
+      { id: 'calc-stage-3', delay: 7000 },   // Cross-referencing - show for 4s
+      { id: 'calc-stage-4', delay: 11000 },  // Protocol reveal - show for 4s
+      { id: 'calc-stage-5', delay: 15000 },  // Testimonial - show for 4s
+      { id: 'calc-stage-6', delay: 19000 }   // Social proof + redirect - show for 2s
     ];
 
     stages.forEach(stage => {
@@ -312,14 +312,14 @@ function showCalculatingScreen() {
       }, stage.delay);
     });
 
-    // Complete after 11 seconds
+    // Complete after 21 seconds total
     setTimeout(() => {
       overlay.classList.remove('visible');
       setTimeout(() => {
         overlay.remove();
         resolve();
       }, 300);
-    }, 11000);
+    }, 21000);
   });
 }
 
@@ -630,6 +630,24 @@ function resetQuiz() {
 }
 
 /**
+ * Update URL with current section for tracking
+ * @param {string} sectionKey - Current section key
+ */
+function updateUrlWithSection(sectionKey) {
+  // Skip updating for internal/conditional sections
+  const skipSections = ['check_', 'show_', 'redirect_', 'exit_', 'email_already'];
+  if (skipSections.some(skip => sectionKey.startsWith(skip))) return;
+
+  try {
+    const url = new URL(window.location.href);
+    url.searchParams.set('section', sectionKey);
+    history.replaceState({ section: sectionKey }, '', url.toString());
+  } catch (e) {
+    console.warn('Could not update URL:', e);
+  }
+}
+
+/**
  * Process a section of the quiz content
  * @param {string} sectionKey - Key of the section in quizContent
  */
@@ -638,6 +656,9 @@ async function processSection(sectionKey) {
   state.isProcessing = true;
   state.currentSection = sectionKey;
   state.currentStepIndex = 0;
+
+  // Update URL for tracking (helps identify drop-off points)
+  updateUrlWithSection(sectionKey);
 
   const section = quizContent[sectionKey];
   if (!section) {
@@ -831,20 +852,20 @@ function renderMultiSelect(options) {
   inputContainer.appendChild(container);
   scrollToBottom();
 
-  // Check for actual scroll overflow after rendering
+  // Check for actual scroll overflow after rendering (check the container, not inputContainer)
   requestAnimationFrame(() => {
-    const hasOverflow = inputContainer.scrollHeight > inputContainer.clientHeight;
+    const hasOverflow = container.scrollHeight > container.clientHeight;
     if (hasOverflow) {
       scrollIndicator.style.display = 'flex';
 
-      // Hide scroll indicator when user scrolls
+      // Hide scroll indicator when user scrolls the container
       const hideOnScroll = () => {
-        if (inputContainer.scrollTop > 20) {
+        if (container.scrollTop > 20) {
           scrollIndicator.style.display = 'none';
-          inputContainer.removeEventListener('scroll', hideOnScroll);
+          container.removeEventListener('scroll', hideOnScroll);
         }
       };
-      inputContainer.addEventListener('scroll', hideOnScroll, { passive: true });
+      container.addEventListener('scroll', hideOnScroll, { passive: true });
     }
   });
 
