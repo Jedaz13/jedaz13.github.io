@@ -440,9 +440,45 @@ p:last-child {
   background-color: var(--bg-cream);
 }
 
+/* Trial Banner */
+.trial-banner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: linear-gradient(135deg, var(--primary-teal) 0%, #5a7d70 100%);
+  color: var(--white);
+  padding: 12px 16px;
+  border-radius: var(--radius);
+  margin-bottom: 24px;
+  font-size: 14px;
+}
+
+.trial-icon {
+  font-size: 18px;
+}
+
 .pricing-header {
   text-align: center;
+  margin-bottom: 8px;
+}
+
+.pricing-subheader {
+  text-align: center;
+  color: var(--text-secondary);
+  font-size: 15px;
   margin-bottom: 24px;
+}
+
+/* Payment Note */
+.payment-note {
+  text-align: center;
+  color: var(--text-secondary);
+  font-size: 14px;
+  margin-top: 20px;
+  padding: 12px;
+  background: rgba(107, 144, 128, 0.08);
+  border-radius: var(--radius);
 }
 
 .pricing-cards {
@@ -513,12 +549,18 @@ p:last-child {
 }
 
 .card-details {
-  margin-bottom: 16px;
+  margin-bottom: 20px;
 }
 
 .card-details p {
-  margin-bottom: 4px;
+  margin-bottom: 6px;
   font-size: 14px;
+}
+
+.plan-total {
+  font-size: 16px !important;
+  font-weight: 600;
+  color: var(--text-charcoal);
 }
 
 .after-trial {
