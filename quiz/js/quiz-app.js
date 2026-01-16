@@ -398,6 +398,9 @@ function redirectToSalesPage() {
   // Build URL with all the new parameter names as specified
   const offerUrl = new URL(SALES_PAGE_URL);
 
+  // Source tracking for A/B testing
+  offerUrl.searchParams.set('source', 'chat-rebecca');
+
   // Add all parameters (only non-empty values)
   if (state.userName) {
     offerUrl.searchParams.set('name', state.userName);
