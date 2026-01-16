@@ -781,48 +781,42 @@ function renderMultiSelect(options) {
   const container = document.createElement('div');
   container.className = 'options-container multi-select';
 
-  // Add scroll indicator if more than 4 options
-  if (options.length > 4) {
-    const scrollIndicator = document.createElement('div');
-    scrollIndicator.className = 'scroll-indicator';
-    scrollIndicator.innerHTML = `
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <path d="M7 10l5 5 5-5"/>
-      </svg>
-      <span>Scroll for more options</span>
-    `;
-    container.appendChild(scrollIndicator);
-
-    // Hide scroll indicator when user scrolls
-    inputContainer.addEventListener('scroll', function hideIndicator() {
-      if (inputContainer.scrollTop > 20) {
-        scrollIndicator.style.display = 'none';
-        inputContainer.removeEventListener('scroll', hideIndicator);
-      }
-    }, { passive: true });
-  }
+  // Create scroll indicator (will be shown/hidden based on actual overflow)
+  const scrollIndicator = document.createElement('div');
+  scrollIndicator.className = 'scroll-indicator';
+  scrollIndicator.style.display = 'none'; // Hidden by default
+  scrollIndicator.innerHTML = `
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M7 10l5 5 5-5"/>
+    </svg>
+    <span>Scroll for more options</span>
+  `;
+  container.appendChild(scrollIndicator);
 
   options.forEach(option => {
-    const label = document.createElement('label');
-    label.className = 'checkbox-option';
-    label.innerHTML = `
+    const optionDiv = document.createElement('div');
+    optionDiv.className = 'checkbox-option';
+    optionDiv.innerHTML = `
       <input type="checkbox" value="${option.value}">
       <span>${option.text}</span>
     `;
 
-    // Handle clicks on the entire card
-    label.addEventListener('click', (e) => {
-      // Prevent double-triggering if clicking directly on checkbox
-      if (e.target.tagName === 'INPUT') {
-        e.stopPropagation();
-      } else {
-        const checkbox = label.querySelector('input');
-        checkbox.checked = !checkbox.checked;
-      }
-      label.classList.toggle('checked', label.querySelector('input').checked);
+    const checkbox = optionDiv.querySelector('input');
+
+    // Handle clicks on the entire card (not using label to avoid double-toggle)
+    optionDiv.addEventListener('click', (e) => {
+      // Toggle checkbox
+      checkbox.checked = !checkbox.checked;
+      optionDiv.classList.toggle('checked', checkbox.checked);
     });
 
-    container.appendChild(label);
+    // Prevent checkbox click from bubbling (would cause double toggle)
+    checkbox.addEventListener('click', (e) => {
+      e.stopPropagation();
+      optionDiv.classList.toggle('checked', checkbox.checked);
+    });
+
+    container.appendChild(optionDiv);
   });
 
   const continueBtn = document.createElement('button');
@@ -833,6 +827,23 @@ function renderMultiSelect(options) {
   inputContainer.innerHTML = '';
   inputContainer.appendChild(container);
   scrollToBottom();
+
+  // Check for actual scroll overflow after rendering
+  requestAnimationFrame(() => {
+    const hasOverflow = inputContainer.scrollHeight > inputContainer.clientHeight;
+    if (hasOverflow) {
+      scrollIndicator.style.display = 'flex';
+
+      // Hide scroll indicator when user scrolls
+      const hideOnScroll = () => {
+        if (inputContainer.scrollTop > 20) {
+          scrollIndicator.style.display = 'none';
+          inputContainer.removeEventListener('scroll', hideOnScroll);
+        }
+      };
+      inputContainer.addEventListener('scroll', hideOnScroll, { passive: true });
+    }
+  });
 
   return continueBtn;
 }
@@ -1174,22 +1185,20 @@ function convertMarkdown(text) {
 function getSocialProofMessage() {
   const complaint = state.answers.q5_primary_complaint;
 
-  // Base numbers that seem believable (varies by complaint type)
-  const socialProofData = {
-    bloating: { count: 847, label: 'bloating-dominant patterns' },
-    constipation: { count: 623, label: 'constipation patterns' },
-    diarrhea: { count: 456, label: 'diarrhea and urgency patterns' },
-    mixed: { count: 387, label: 'mixed/alternating patterns' },
-    pain: { count: 534, label: 'pain-dominant patterns' },
-    gas: { count: 376, label: 'gas and discomfort patterns' },
-    reflux: { count: 467, label: 'reflux patterns' }
+  // Complaint-specific empathy messages (no false claims about numbers)
+  const empathyMessages = {
+    bloating: "bloating and distension is one of the most common patterns we see at Gut Healing Academy",
+    constipation: "constipation is one of the most frustrating patterns we work with at Gut Healing Academy",
+    diarrhea: "urgency and unpredictable digestion is something our practitioners specialize in",
+    mixed: "alternating patterns like yours are actually very common — and often misunderstood",
+    pain: "pain-dominant patterns like yours need a careful, personalized approach",
+    gas: "gas and discomfort patterns like yours are more common than you'd think",
+    reflux: "reflux patterns often have root causes that get overlooked"
   };
 
-  const data = socialProofData[complaint] || { count: 500, label: 'similar patterns' };
-  // Add small random variation to make it feel real-time
-  const count = data.count + Math.floor(Math.random() * 50);
+  const message = empathyMessages[complaint] || "patterns like yours are something our practitioners work with regularly";
 
-  return `That's one of the most common patterns I see. In fact, I've helped <strong>${count}+ women</strong> with ${data.label} just like yours.\n\nYou're definitely not alone in this.`;
+  return `That's really helpful to know. Actually, ${message}.\n\nYou're definitely not alone in this.`;
 }
 
 /**
