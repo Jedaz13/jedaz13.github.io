@@ -9,6 +9,9 @@ const CONFIG = {
   AUTO_ADVANCE_DELAY: 400 // ms after single-select
 };
 
+// Questions per section for progress calculation
+const QUESTIONS_PER_SECTION = [4, 5, 3, 3, 3]; // Safety, Symptoms, History, GutBrain, Impact
+
 // Application State
 const state = {
   currentSectionIndex: 0,
@@ -19,11 +22,14 @@ const state = {
     email: ''
   },
   hasRedFlags: false,
-  history: [] // For back navigation
+  history: [], // For back navigation
+  showingSafetyIntro: false
 };
 
 // DOM Elements
 let quizContainer;
+let welcomeScreen;
+let quizUI;
 let headerEl;
 let progressEl;
 let contentEl;
@@ -31,6 +37,8 @@ let contentEl;
 // Initialize application
 document.addEventListener('DOMContentLoaded', () => {
   quizContainer = document.getElementById('quizContainer');
+  welcomeScreen = document.getElementById('welcomeScreen');
+  quizUI = document.getElementById('quizUI');
   headerEl = document.getElementById('quizHeader');
   progressEl = document.getElementById('progressContainer');
   contentEl = document.getElementById('contentArea');
@@ -38,9 +46,54 @@ document.addEventListener('DOMContentLoaded', () => {
   // Track Meta Pixel PageView
   trackPixelEvent('PageView');
 
-  // Start quiz
-  renderQuestion();
+  // Set up start button
+  const startBtn = document.getElementById('startQuizBtn');
+  if (startBtn) {
+    startBtn.addEventListener('click', startQuiz);
+  }
 });
+
+/**
+ * Start the quiz - transition from welcome to safety intro
+ */
+function startQuiz() {
+  // Hide welcome screen, show quiz UI
+  welcomeScreen.classList.add('hidden');
+  quizUI.classList.remove('hidden');
+
+  // Show safety intro screen first
+  showSafetyIntro();
+}
+
+/**
+ * Show the safety section intro screen
+ */
+function showSafetyIntro() {
+  state.showingSafetyIntro = true;
+
+  // Update section label
+  document.getElementById('sectionLabel').textContent = 'SAFETY SCREENING';
+
+  // Initialize progress bar at 0%
+  updateProgressBar();
+
+  // Render safety intro content
+  contentEl.innerHTML = `
+    <div class="section-intro">
+      <div class="section-intro-content">
+        <h2>First, a few quick health questions</h2>
+        <p>These help us make sure this assessment is right for you &mdash; and that you don't need to see a doctor first.</p>
+        <p class="reassurance">Most people breeze through these in under a minute.</p>
+        <button class="btn-primary" id="startSafetyBtn">Continue &rarr;</button>
+      </div>
+    </div>
+  `;
+
+  document.getElementById('startSafetyBtn').addEventListener('click', () => {
+    state.showingSafetyIntro = false;
+    renderQuestion();
+  });
+}
 
 /**
  * Get current section and question
@@ -52,28 +105,41 @@ function getCurrentPosition() {
 }
 
 /**
- * Update progress bar
+ * Update progress bar with gradual fill
  */
-function updateProgress() {
-  const totalSections = quizContent.sections.length;
+function updateProgressBar() {
   const segments = progressEl.querySelectorAll('.progress-segment');
   const dots = progressEl.querySelectorAll('.progress-dot');
 
+  // Calculate progress within current section
+  const questionsInSection = QUESTIONS_PER_SECTION[state.currentSectionIndex] || 1;
+  // Progress is based on completed questions (currentQuestionIndex represents the question we're about to show)
+  const sectionProgress = state.currentQuestionIndex / questionsInSection;
+
   segments.forEach((segment, index) => {
+    const fill = segment.querySelector('.segment-fill');
+
     segment.classList.remove('completed', 'current');
+
     if (index < state.currentSectionIndex) {
+      // Completed sections - fully filled
       segment.classList.add('completed');
+      if (fill) fill.style.width = '100%';
     } else if (index === state.currentSectionIndex) {
+      // Current section - partially filled
       segment.classList.add('current');
+      if (fill) fill.style.width = `${sectionProgress * 100}%`;
+    } else {
+      // Future sections - empty
+      if (fill) fill.style.width = '0%';
     }
   });
 
+  // Update dots
   dots.forEach((dot, index) => {
-    dot.classList.remove('completed', 'current');
+    dot.classList.remove('active');
     if (index < state.currentSectionIndex) {
-      dot.classList.add('completed');
-    } else if (index === state.currentSectionIndex) {
-      dot.classList.add('current');
+      dot.classList.add('active');
     }
   });
 }
@@ -134,7 +200,7 @@ function renderQuestion() {
   }
 
   // Update UI elements
-  updateProgress();
+  updateProgressBar();
   updateSectionLabel();
   updateBackButton();
 
@@ -184,8 +250,8 @@ function renderSingleSelect(container, question) {
       button.classList.add('selected');
     }
 
-    button.addEventListener('click', () => {
-      handleSingleSelect(question, option, optionsDiv);
+    button.addEventListener('click', (e) => {
+      handleSingleSelect(question, option, optionsDiv, e.target);
     });
 
     optionsDiv.appendChild(button);
@@ -197,12 +263,12 @@ function renderSingleSelect(container, question) {
 /**
  * Handle single-select option click
  */
-function handleSingleSelect(question, option, optionsDiv) {
+function handleSingleSelect(question, option, optionsDiv, clickedBtn) {
   // Update visual selection
   optionsDiv.querySelectorAll('.option-button').forEach(btn => {
     btn.classList.remove('selected');
   });
-  event.target.classList.add('selected');
+  clickedBtn.classList.add('selected');
 
   // Store answer
   state.answers[question.id] = option.value;
@@ -426,8 +492,6 @@ function showRedFlagWarning() {
  * Show email capture screen
  */
 function showEmailCapture() {
-  const { section } = getCurrentPosition();
-
   // Update header
   document.getElementById('sectionLabel').textContent = '';
 

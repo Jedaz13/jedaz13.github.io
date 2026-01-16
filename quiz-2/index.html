@@ -22,7 +22,7 @@
     t.src=v;s=b.getElementsByTagName(e)[0];
     s.parentNode.insertBefore(t,s)}(window, document,'script',
     'https://connect.facebook.net/en_US/fbevents.js');
-    fbq('init', '1088554satisfies609476230');
+    fbq('init', '1088554609476230');
   </script>
   <noscript><img height="1" width="1" style="display:none"
     src="https://www.facebook.com/tr?id=1088554609476230&ev=PageView&noscript=1"
@@ -31,30 +31,78 @@
 </head>
 <body>
   <div class="quiz-container" id="quizContainer">
-    <!-- Header -->
-    <div class="quiz-header" id="quizHeader">
-      <button class="back-button" id="backButton" onclick="handleBack()" disabled>
-        &#8592;
-      </button>
-      <span class="section-label" id="sectionLabel">SAFETY SCREENING</span>
+    <!-- Welcome Screen (shown first) -->
+    <div class="welcome-screen" id="welcomeScreen">
+      <div class="welcome-content">
+        <img src="/assets/logo.png" alt="Gut Healing Academy" class="welcome-logo" onerror="this.style.display='none'" />
+
+        <h1>Your Personalized Gut Health Assessment</h1>
+
+        <p class="welcome-description">
+          This 5-minute assessment will help us understand your unique situation
+          and match you to the right protocol.
+        </p>
+
+        <div class="welcome-points">
+          <p>We'll ask about:</p>
+          <ul>
+            <li>Your current symptoms</li>
+            <li>What you've already tried</li>
+            <li>How this affects your daily life</li>
+          </ul>
+        </div>
+
+        <button class="btn-primary btn-large" id="startQuizBtn">
+          Let's Get Started &rarr;
+        </button>
+
+        <p class="privacy-note">
+          <span class="lock-icon">&#128274;</span> Your answers stay completely confidential
+        </p>
+      </div>
     </div>
 
-    <!-- Progress Bar -->
-    <div class="progress-container" id="progressContainer">
-      <div class="progress-segment current"></div>
-      <div class="progress-dot"></div>
-      <div class="progress-segment"></div>
-      <div class="progress-dot"></div>
-      <div class="progress-segment"></div>
-      <div class="progress-dot"></div>
-      <div class="progress-segment"></div>
-      <div class="progress-dot"></div>
-      <div class="progress-segment"></div>
-    </div>
+    <!-- Quiz UI (hidden initially) -->
+    <div class="quiz-ui hidden" id="quizUI">
+      <!-- Header -->
+      <div class="quiz-header" id="quizHeader">
+        <button class="back-button" id="backButton" onclick="handleBack()" disabled>
+          &#8592;
+        </button>
+        <span class="section-label" id="sectionLabel">SAFETY SCREENING</span>
+      </div>
 
-    <!-- Content Area -->
-    <div id="contentArea">
-      <!-- Question content will be rendered here -->
+      <!-- Progress Bar with fill elements -->
+      <div class="progress-container" id="progressContainer">
+        <div class="progress-segment" data-section="0">
+          <div class="segment-fill"></div>
+        </div>
+        <div class="progress-dot" data-section="0"></div>
+
+        <div class="progress-segment" data-section="1">
+          <div class="segment-fill"></div>
+        </div>
+        <div class="progress-dot" data-section="1"></div>
+
+        <div class="progress-segment" data-section="2">
+          <div class="segment-fill"></div>
+        </div>
+        <div class="progress-dot" data-section="2"></div>
+
+        <div class="progress-segment" data-section="3">
+          <div class="segment-fill"></div>
+        </div>
+        <div class="progress-dot" data-section="3"></div>
+
+        <div class="progress-segment" data-section="4">
+          <div class="segment-fill"></div>
+        </div>
+      </div>
+
+      <!-- Content Area -->
+      <div id="contentArea">
+        <!-- Question content will be rendered here -->
+      </div>
     </div>
   </div>
 
