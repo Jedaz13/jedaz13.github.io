@@ -47,6 +47,22 @@
 
     <!-- CHAT PAGE -->
     <div class="chat-page active" id="chatPage">
+        <!-- Progress Indicator -->
+        <div class="quiz-progress" id="quizProgress" style="display: none;">
+            <div class="progress-header">
+                <span class="progress-text">Part <span id="currentPart">1</span> of 5: <span id="partName">Safety Screening</span></span>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-segments">
+                    <div class="progress-segment" data-part="1"></div>
+                    <div class="progress-segment" data-part="2"></div>
+                    <div class="progress-segment" data-part="3"></div>
+                    <div class="progress-segment" data-part="4"></div>
+                    <div class="progress-segment" data-part="5"></div>
+                </div>
+            </div>
+        </div>
+
         <!-- Chat Header -->
         <header class="chat-header">
             <img src="assets/rebecca-avatar.png" alt="Rebecca Taylor" class="header-avatar" onerror="this.onerror=null; this.src='assets/rebecca-avatar.svg';">
