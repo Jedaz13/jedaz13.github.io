@@ -48,6 +48,7 @@
     // Initialize all functionality
     populatePersonalizedContent();
     populateAssessmentSection();
+    populateSocialProof();
     setupStripeLinks();
     initStickyCTA();
     initTimelineAnimation();
@@ -96,6 +97,36 @@
     gas: 'Gas & discomfort',
     reflux: 'Heartburn & reflux'
   };
+
+  /**
+   * Testimonials matched to complaint patterns
+   */
+  const TESTIMONIALS = {
+    bloating: { name: 'Suzy', quote: 'The bloating that made me look 6 months pregnant? Gone within 3 weeks of following my protocol.', pattern: 'Bloating Pattern' },
+    constipation: { name: 'Amanda', quote: 'After years of struggling, I finally have regular, comfortable digestion. It changed everything.', pattern: 'Constipation Pattern' },
+    diarrhea: { name: 'Cheryl', quote: 'I can finally leave the house without mapping every bathroom. The urgency is completely manageable now.', pattern: 'Urgency Pattern' },
+    mixed: { name: 'Cheryl', quote: 'The unpredictability was the worst part. Now I actually know what to expect from my body.', pattern: 'Mixed Pattern' },
+    pain: { name: 'Amanda', quote: 'The cramping that used to double me over? I barely notice it anymore.', pattern: 'Pain Pattern' },
+    gas: { name: 'Suzy', quote: 'I used to avoid social situations. Now I can actually enjoy dinner with friends again.', pattern: 'Gas Pattern' },
+    reflux: { name: 'Amanda', quote: 'No more burning, no more sleeping propped up. I can eat without fear.', pattern: 'Reflux Pattern' }
+  };
+
+  /**
+   * Populate social proof section with matched testimonial
+   */
+  function populateSocialProof() {
+    const complaint = userData.primary_complaint || 'bloating';
+    const testimonial = TESTIMONIALS[complaint] || TESTIMONIALS.bloating;
+
+    // Update testimonial
+    const quoteEl = document.querySelector('.social-proof-section .testimonial-quote');
+    const nameEl = document.querySelector('.social-proof-section .author-name');
+    const patternEl = document.querySelector('.social-proof-section .author-pattern');
+
+    if (quoteEl) quoteEl.textContent = '"' + testimonial.quote + '"';
+    if (nameEl) nameEl.textContent = '— ' + testimonial.name;
+    if (patternEl) patternEl.textContent = testimonial.pattern;
+  }
 
   /**
    * Populate the assessment revealed section

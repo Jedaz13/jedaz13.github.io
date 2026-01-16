@@ -655,6 +655,9 @@ body {
 .options-container.multi-select {
   padding-bottom: 12px;
   position: relative;
+  max-height: 320px; /* Show ~4 options then scroll */
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 .option-button {
