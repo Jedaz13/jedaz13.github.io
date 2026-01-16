@@ -206,7 +206,30 @@ const quizContent = {
         { text: "Gas that makes me avoid being around people", value: "gas" },
         { text: "Heartburn or reflux that burns no matter what I eat", value: "reflux" }
       ],
-      next: "q6_frequency"
+      next: "q5_validation"
+    }
+  ],
+
+  // Validation message after primary complaint
+  q5_validation: [
+    {
+      type: "message",
+      delay: 600,
+      content: "That's one of the most common patterns I see. You're definitely not alone in this."
+    },
+    {
+      type: "question",
+      id: "q6_frequency",
+      delay: 800,
+      content: "How often does this happen?",
+      inputType: "single",
+      options: [
+        { text: "Every single day - it's my baseline now", value: "daily" },
+        { text: "Several times a week - I'm always bracing for it", value: "several_weekly" },
+        { text: "Weekly - bad days are predictable", value: "weekly" },
+        { text: "A few times a month - flares come and go", value: "monthly" }
+      ],
+      next: "q7_bm_relief"
     }
   ],
 
@@ -274,6 +297,24 @@ const quizContent = {
         { text: "It alternates - I never know which it'll be", value: "alternates" },
         { text: "It stays about the same", value: "same" }
       ],
+      next: "email_capture_early"
+    }
+  ],
+
+  // EARLY EMAIL CAPTURE (after Part 2)
+  email_capture_early: [
+    {
+      type: "message",
+      delay: 1000,
+      content: "I'm already seeing a clear pattern here.\n\nBefore we continue, let me save your progress so you don't lose it."
+    },
+    {
+      type: "question",
+      id: "email_early",
+      delay: 800,
+      content: "What's the best email for your results?",
+      inputType: "email",
+      placeholder: "your@email.com",
       next: "part3_intro"
     }
   ],
@@ -298,7 +339,33 @@ const quizContent = {
         { text: "3-5 years - I've tried many things", value: "3-5_years" },
         { text: "5+ years - I've tried everything", value: "5+_years" }
       ],
-      next: "q11_diagnosis"
+      next: "check_duration"
+    }
+  ],
+
+  // Validation message for 3+ years duration
+  q10_validation_long: [
+    {
+      type: "message",
+      delay: 600,
+      content: "After dealing with this for so long, you've probably tried a lot. That actually helps us - you've already ruled out what doesn't work for YOUR body."
+    },
+    {
+      type: "question",
+      id: "q11_diagnosis",
+      delay: 800,
+      content: "Have you received any diagnosis? Select all that apply.",
+      inputType: "multi",
+      options: [
+        { text: "IBS (Irritable Bowel Syndrome)", value: "ibs" },
+        { text: "SIBO (Small Intestinal Bacterial Overgrowth)", value: "sibo" },
+        { text: "IBD (Crohn's or Ulcerative Colitis)", value: "ibd" },
+        { text: "GERD / Acid Reflux", value: "gerd" },
+        { text: "Food intolerances or sensitivities", value: "food_intolerance" },
+        { text: "No formal diagnosis - doctors say tests look \"normal\"", value: "no_diagnosis" },
+        { text: "Other", value: "other" }
+      ],
+      next: "q12_tried"
     }
   ],
 
@@ -341,7 +408,16 @@ const quizContent = {
         { text: "Strict elimination diets", value: "elimination" },
         { text: "Nothing yet - I'm just starting to look for answers", value: "nothing" }
       ],
-      next: "part4_intro"
+      next: "check_treatments_tried"
+    }
+  ],
+
+  // Validation message for 3+ treatments tried (triggered conditionally by quiz-app.js)
+  q12_validation_persistent: [
+    {
+      type: "message",
+      delay: 600,
+      content: "You've been through a lot. That persistence tells me you're serious about finding real answers."
     }
   ],
 
@@ -468,7 +544,7 @@ const quizContent = {
     }
   ],
 
-  // EMAIL CAPTURE
+  // EMAIL CAPTURE (checks if email already captured early)
   email_capture: [
     {
       type: "message",
@@ -482,10 +558,11 @@ const quizContent = {
       content: "What's your first name?",
       inputType: "name",
       placeholder: "Your first name",
-      next: "get_email"
+      next: "check_email_captured"
     }
   ],
 
+  // Show only if email not captured early
   get_email: [
     {
       type: "message",
@@ -499,6 +576,15 @@ const quizContent = {
       inputType: "email",
       placeholder: "your@email.com",
       next: "final_message"
+    }
+  ],
+
+  // If email already captured, just confirm and move on
+  email_already_captured: [
+    {
+      type: "message",
+      delay: 800,
+      content: "Great to meet you, {{name}}! I already have your email saved from earlier."
     }
   ],
 

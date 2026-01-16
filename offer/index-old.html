@@ -1,0 +1,830 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Data Layer Initialization -->
+  <script>
+    window.dataLayer = window.dataLayer || [];
+
+    // Get URL parameters for quiz data
+    var urlParams = new URLSearchParams(window.location.search);
+    var gutPattern = urlParams.get('pattern') || '';
+    var triedBefore = urlParams.get('tried') || '';
+    var diagnosis = urlParams.get('diagnosis') || '';
+    var source = urlParams.get('source') || '';
+    var referrer = document.referrer;
+    var isInTrial = source === 'members' || referrer.includes('app.guthealingacademy.com');
+
+    // Parse previous treatments from 'tried' parameter
+    var previousTreatments = triedBefore ? triedBefore.toLowerCase().split(',').map(function(t) { return t.trim(); }) : [];
+    var previousDiagnoses = diagnosis ? [diagnosis.toLowerCase()] : [];
+
+    // Base page data
+    dataLayer.push({
+      'pageType': 'offer',
+      'pageName': document.title,
+      'pageUrl': window.location.href,
+      'pagePath': window.location.pathname,
+
+      // User data
+      'userId': '',
+      'userEmail': '',
+      'userStatus': isInTrial ? 'trial' : 'anonymous',
+      'trialDaysRemaining': null,
+
+      // Quiz/Protocol data from URL params
+      'gutPattern': gutPattern,
+      'hasStressComponent': null,
+      'symptomDuration': '',
+      'previousTreatments': previousTreatments,
+      'previousDiagnoses': previousDiagnoses
+    });
+  </script>
+
+  <!-- Google Tag Manager -->
+  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+  new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+  j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+  'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+  })(window,document,'script','dataLayer','GTM-KQ3LKTBL');</script>
+  <!-- End Google Tag Manager -->
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Your personalized gut healing protocol is ready. Join the Gut Healing Academy for practitioner-guided support, structured protocols, and a community of women who understand.">
+  <title>Your Results Are Ready | Gut Healing Academy</title>
+  <link rel="icon" type="image/png" href="assets/favicon.png">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <!-- Google Tag Manager (noscript) -->
+  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KQ3LKTBL"
+  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+  <!-- End Google Tag Manager (noscript) -->
+
+  <!-- Site Header -->
+  <header class="site-header">
+    <div class="header-container">
+      <a href="/" class="header-logo"><img src="assets/Logo.png" alt="Gut Healing Academy"></a>
+      <nav class="header-nav">
+        <a href="/about/">About</a>
+        <a href="/legal/contact.html">Contact</a>
+        <div class="nav-divider"></div>
+        <a href="https://app.guthealingacademy.com/" class="nav-login">Members Area</a>
+      </nav>
+      <button class="mobile-menu-btn" aria-label="Toggle menu" onclick="document.querySelector('.mobile-menu').classList.toggle('active')">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+    <div class="mobile-menu">
+      <a href="/about/">About</a>
+      <a href="/legal/contact.html">Contact</a>
+      <a href="https://app.guthealingacademy.com/" class="nav-login">Members Area</a>
+    </div>
+  </header>
+
+  <main>
+    <!-- Section 1: Personalized Results Header -->
+    <section class="hero-section" id="hero-section">
+      <div class="container">
+        <h1><span class="user-name">Friend</span>, Your Assessment Is Complete</h1>
+
+        <!-- Dynamic Protocol Hero Image -->
+        <div class="protocol-hero-image">
+          <img
+            id="protocol-image"
+            src="assets/Minimalist-Bloating.png"
+            alt="Minimalist illustration showing digestive relief - Bloating Protocol"
+            loading="lazy"
+            width="600"
+            height="400"
+          >
+        </div>
+
+        <p class="gut-pattern-label"><strong>Your Gut Pattern:</strong> <span class="gut-pattern">Mixed Pattern</span></p>
+
+        <div class="hero-intro">
+          <p><strong>Based on your answers, here's what we found:</strong></p>
+          <p>You're dealing with a <strong><span class="gut-pattern">Mixed Pattern</span></strong> — one of the most frustrating patterns because symptoms can swing between extremes, making it hard to identify what's actually triggering your discomfort.</p>
+        </div>
+
+        <div class="diagnosis-section">
+          <p>You've been diagnosed with <strong><span class="diagnosis-text"></span></strong> and you've already tried <strong><span class="tried-before">herbal antimicrobials and elimination diets</span></strong>. That tells me you're not lacking effort — you're lacking the right guidance for YOUR specific pattern.</p>
+        </div>
+
+        <p class="user-goal-quote">Your goal was: "<span class="user-goal">No more pain</span>"</p>
+
+        <div class="hero-highlights">
+          <p><strong>Here's the good news:</strong> 87% of women with your specific pattern see meaningful improvement within 6-8 weeks when following the right protocol.</p>
+          <p><strong>Here's what you need to know:</strong> Without addressing the root cause, these symptoms typically get worse over time — not better. The gut doesn't heal itself through guesswork.</p>
+        </div>
+
+        <p class="protocol-ready"><strong>Your personalized protocol is ready.</strong></p>
+        <p style="text-align: center; color: var(--color-text-light); margin-bottom: 1.5rem;">Your customized Gut Healing Protocol is ready now — tailored specifically to your <span class="gut-pattern">Mixed Pattern</span> pattern and what you've already tried.</p>
+
+        <div class="hero-cta">
+          <a href="#how-it-works" class="btn btn-primary">See What's Included →</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 2: Cohort Urgency Banner -->
+    <div class="urgency-banner">
+      <h3>🎯 Try It for Just $1</h3>
+      <p>Get 7 days of full access — then $47/month or $297/year</p>
+      <p>Founding member pricing — limited time</p>
+    </div>
+
+    <!-- Section 3: Agitation & Validation -->
+    <section class="agitation-section" id="agitation">
+      <div class="container">
+        <h2>You've Tried Everything. Nothing Worked. It's Not Your Fault.</h2>
+
+        <div class="agitation-content">
+          <p>Let me guess your story — because I've heard it hundreds of times:</p>
+          <p>You've spent years playing detective with your own body. Cutting out gluten. Then dairy. Then FODMAPs. Then seemingly everything enjoyable.</p>
+          <p>You've bought the expensive probiotics that promised miracles. The digestive enzymes. The "gut reset" powders. Your bathroom cabinet looks like a pharmacy, and your bank account feels it.</p>
+          <p>You've sat in doctors' offices, describing symptoms that consume your daily life, only to hear: <em>"Your tests look normal. Have you tried managing your stress?"</em></p>
+          <p>You've Googled symptoms at 2 AM, terrified you're missing something serious, drowning in conflicting advice from people who aren't practitioners.</p>
+          <p class="worst-part"><strong>And the worst part?</strong></p>
+          <p>Every failed attempt makes you trust yourself — and solutions — a little less.</p>
+          <p>You start to wonder: <em>Maybe this is just how my body is now. Maybe I need to accept this.</em></p>
+        </div>
+
+        <div class="validation-message">
+          <h3><span class="user-name">Friend</span>, I need you to hear something:</h3>
+          <p><strong>Your symptoms are real. Your suffering is valid. And you are not too complicated to help.</strong></p>
+          <p>The problem isn't you. The problem is that you've been given fragmented solutions for a problem that requires comprehensive support.</p>
+
+          <div class="validation-highlight">
+            <p>An ebook can't answer your questions at 10 PM when you're anxious about tomorrow's lunch meeting.</p>
+            <p>An app can't interpret WHY you bloated after a meal that should have been "safe."</p>
+            <p>A one-off nutritionist visit can't adjust your protocol when you hit a plateau three weeks in.</p>
+          </div>
+
+          <div class="need-list">
+            <h4>What you actually need is what you've never had:</h4>
+            <ul>
+              <li>Personalized practitioner guidance — not generic advice</li>
+              <li>Structured protocols — not random tips from the internet</li>
+              <li>Ongoing support — not occasional appointments with weeks of guessing in between</li>
+            </ul>
+          </div>
+
+          <p class="built-for-you">That's exactly what we built.</p>
+        </div>
+
+        <div class="section-cta">
+          <a href="#solution" class="btn btn-primary">Show Me How It Works →</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 4: Introducing the Solution -->
+    <section class="solution-section" id="solution">
+      <div class="container">
+        <h1>The Gut Healing Academy</h1>
+        <p class="solution-tagline"><strong>A Complete Support System for Women Ready to End Digestive Suffering — Once and For All</strong></p>
+
+        <!-- Gut Healing Academy Hero Image -->
+        <div class="academy-hero-image">
+          <img
+            src="assets/Gut-healing-academy-hero-image.png"
+            alt="Women in the Gut Healing Academy community supporting each other"
+            loading="lazy"
+            width="720"
+            height="400"
+          >
+        </div>
+
+        <h3>Why This Works When Everything Else Failed</h3>
+        <p class="solution-intro">The Gut Healing Academy combines three things you've never had together:</p>
+
+        <div class="differentiator">
+          <h4>1. Personalized Practitioner Support</h4>
+          <p>Not generic advice. Not AI chatbots. Real registered dietitians and clinical nutritionists who review YOUR case, answer YOUR questions, and adjust YOUR protocol based on YOUR responses.</p>
+        </div>
+
+        <div class="differentiator">
+          <h4>2. Structured, Evidence-Based Protocols</h4>
+          <p>Not random tips from Facebook groups. Week-by-week roadmaps based on clinical research, designed for your specific symptom pattern, that tell you exactly what to do — and when.</p>
+        </div>
+
+        <div class="differentiator">
+          <h4>3. Community of Women Who Actually Understand</h4>
+          <p>Not well-meaning friends who say "just eat more fiber." Women dealing with the same symptoms, following the same structured protocols, supporting each other through the hard days.</p>
+        </div>
+
+        <p class="solution-summary"><strong>One membership. Everything you need. No more piecing together solutions alone.</strong></p>
+      </div>
+    </section>
+
+    <!-- Section 5: How It Works -->
+    <section class="how-it-works" id="how-it-works">
+      <div class="container">
+        <h2>Here's Exactly What Happens When You Join</h2>
+
+        <div class="step">
+          <div class="step-header">
+            <h3>Step 1: Your Personalized Protocol</h3>
+            <span class="step-timing">Instant access</span>
+          </div>
+          <p>Based on your assessment answers, you get immediate access to your personalized Gut Healing Protocol — designed by our practitioners for YOUR specific symptom pattern, history, and lifestyle.</p>
+          <p>This isn't a generic "elimination diet" printout you could find free online. It's your starting point — and as you progress, your practitioners will refine and adjust your protocol based on what's working for YOU.</p>
+          <ul class="step-features">
+            <li>Tailored to YOUR primary symptoms — <span class="gut-pattern">Mixed Pattern</span></li>
+            <li>Considers what you've already tried — so you don't repeat past failures</li>
+            <li>Adjusts based on your responses each week</li>
+          </ul>
+        </div>
+
+        <div class="protocol-preview">
+          <img src="assets/tracking-mockup.png" alt="Protocol Preview: Weekly tracking sections with checkboxes, food lists, and progress indicators" class="protocol-preview-image">
+        </div>
+
+        <div class="step">
+          <div class="step-header">
+            <h3>Step 2: Weekly Check-Ins & Protocol Adjustments</h3>
+          </div>
+          <p>Every week, you log your symptoms and meals using our simple tracking system. Our practitioners review your progress personally — not an algorithm, a real person who knows your case.</p>
+          <p><strong>If something isn't working?</strong> We adjust your protocol.<br>
+          <strong>If you hit a plateau?</strong> We troubleshoot together.<br>
+          <strong>If you're unsure about a reaction?</strong> You have someone to ask.</p>
+          <p>You're never left guessing. You're never stuck alone wondering <em>"is this normal?"</em></p>
+        </div>
+
+        <div class="step">
+          <div class="step-header">
+            <h3>Step 3: Unlimited Practitioner Messaging</h3>
+          </div>
+          <p>Questions don't wait for business hours. That's why you have unlimited access to message our practitioner team anytime — day or night.</p>
+          <p><em>"Can I eat this at my friend's dinner party tonight?"</em><br>
+          <em>"Is this reaction normal or should I be concerned?"</em><br>
+          <em>"I'm traveling next week — how do I stay on track?"</em></p>
+          <p>Just ask. We respond within 24-48 hours (often much faster). No extra charge. No "saving up" questions for your next appointment.</p>
+        </div>
+
+        <div class="step">
+          <div class="step-header">
+            <h3>Step 4: Weekly Live Q&A Sessions</h3>
+          </div>
+          <p>Every week, our practitioners host a live Q&A session where you can get real-time answers to your questions. Hear what's working for other members. Learn from cases similar to yours.</p>
+          <ul class="step-features">
+            <li>Weekly live session with Paulina or Rebecca</li>
+            <li>Ask questions directly or just listen and learn</li>
+            <li>Full recordings available if you can't attend live</li>
+          </ul>
+          <p>These sessions often surface insights you didn't know you needed — watching others troubleshoot their protocols helps you troubleshoot yours.</p>
+        </div>
+
+        <div class="step">
+          <div class="step-header">
+            <h3>Step 5: Peer Community (Matched by Symptom Type)</h3>
+          </div>
+          <p>You'll be connected with other members dealing with similar symptoms. Not random people giving random advice — fellow members on structured protocols, sharing what's working and supporting each other.</p>
+          <ul class="step-features">
+            <li>Matched with peers based on your gut pattern</li>
+            <li>Moderated community (dangerous advice gets removed)</li>
+            <li>The support of people who truly understand your daily reality</li>
+          </ul>
+          <p>Because sometimes you just need to talk to someone who <em>gets it</em>.</p>
+        </div>
+
+        <div class="section-cta">
+          <a href="#pricing" class="btn btn-primary">Join the Academy →</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 6: Why Long-Term Support -->
+    <section class="why-six-months" id="why-six-months">
+      <div class="container">
+        <h2>Why Gut Healing Takes Time (And Why That's Good News)</h2>
+        <p>Here's what our practitioners know from years of clinical experience:</p>
+
+        <div class="timeline">
+          <div class="timeline-item">
+            <h4>Weeks 1-2: Initial Adjustments</h4>
+            <p>Your body starts responding to the protocol. Some symptoms may temporarily shift as your gut adapts. This is normal — and we guide you through it.</p>
+          </div>
+          <div class="timeline-item">
+            <h4>Weeks 3-4: First Signs of Improvement</h4>
+            <p>Most members notice reduced bloating, more predictable digestion, or better energy. You start to feel hopeful again.</p>
+          </div>
+          <div class="timeline-item">
+            <h4>Months 2-3: Real Progress</h4>
+            <p>Patterns stabilize. You start identifying YOUR specific triggers with confidence. The guesswork ends.</p>
+          </div>
+          <div class="timeline-item">
+            <h4>Months 4-12: Lasting Change</h4>
+            <p>Your gut microbiome rebalances. You learn to maintain results without constant restriction. Freedom returns — and stays.</p>
+          </div>
+        </div>
+
+        <div class="truth-statement">
+          <p><strong>The truth:</strong> Quick fixes don't exist for gut health. Anyone promising results in 7 days is lying to you.</p>
+          <p>Real healing takes time — but a year from now, you can be completely free from the symptoms that control your life today.</p>
+          <p>Or you can be exactly where you are now. Still guessing. Still suffering. Still hoping the next thing will finally work.</p>
+          <p><strong>That's why our annual option is the best value.</strong> It's not about locking you in — it's about giving your gut the runway it actually needs to heal.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 7: Testimonials -->
+    <section class="testimonials" id="testimonials">
+      <div class="container">
+        <h2>Real Results From Women Like You</h2>
+
+        <div class="testimonial-cards">
+          <!-- Testimonial 1: Suzy -->
+          <article class="testimonial-card">
+            <div class="testimonial-header">
+              <div class="testimonial-photo">
+                <img src="assets/suzy.png" alt="Suzy - Gut Healing Academy member" loading="lazy" width="80" height="80">
+              </div>
+              <div class="testimonial-info">
+                <h4>— Suzy</h4>
+                <div class="testimonial-stars">★★★★★</div>
+              </div>
+            </div>
+            <blockquote>"My symptoms were complex and my gut history was complicated. After following the protocol, I'm seeing significant improvement. I finally know my triggers and how to eat to feel my best."</blockquote>
+          </article>
+
+          <!-- Testimonial 2: Amanda -->
+          <article class="testimonial-card">
+            <div class="testimonial-header">
+              <div class="testimonial-photo">
+                <img src="assets/amanda.png" alt="Amanda - Gut Healing Academy member" loading="lazy" width="80" height="80">
+              </div>
+              <div class="testimonial-info">
+                <h4>— Amanda</h4>
+                <div class="testimonial-stars">★★★★★</div>
+              </div>
+            </div>
+            <blockquote>"After years of being a yo-yo dieter, I finally found something that works. With Becca's knowledge of nutrition, I know I'm on track to keep the results."</blockquote>
+          </article>
+
+          <!-- Testimonial 3: Cheryl -->
+          <article class="testimonial-card">
+            <div class="testimonial-header">
+              <div class="testimonial-photo">
+                <img src="assets/cheryl.png" alt="Cheryl - Gut Healing Academy member" loading="lazy" width="80" height="80">
+              </div>
+              <div class="testimonial-info">
+                <h4>— Cheryl</h4>
+                <div class="testimonial-stars">★★★★★</div>
+              </div>
+            </div>
+            <blockquote>"I was constantly battling bloating, low energy, and unpredictable digestion. With the protocol, I uncovered things I never knew were affecting me. For the first time in years, I feel lighter and truly in control."</blockquote>
+          </article>
+        </div>
+
+        <p class="testimonial-disclaimer">Individual results vary based on adherence and personal factors.</p>
+      </div>
+    </section>
+
+    <!-- Section 8: Meet Your Practitioners -->
+    <section class="practitioners" id="practitioners">
+      <div class="container">
+        <h2>Your Dedicated Practitioner Team</h2>
+        <p class="practitioners-intro">You're not getting advice from random "wellness coaches." You're getting guidance from credentialed, experienced practitioners who specialize exclusively in gut health.</p>
+
+        <div class="practitioner-cards-wrapper">
+          <article class="practitioner-card">
+            <div class="practitioner-image">
+              <img src="assets/paulina.png" alt="Paulina Andrzejewska, Clinical Dietitian and Low FODMAP Specialist" loading="lazy">
+            </div>
+            <div class="practitioner-info">
+              <h3>MSc Paulina Andrzejewska</h3>
+              <p class="practitioner-title">Clinical Dietitian | Low FODMAP Specialist | Gut Microbiome Expert</p>
+              <p class="practitioner-bio">Paulina is the author of <em>"SIBO and IBS Under Control: A Practical Guide"</em> published by the Polish Medical Publishing House. She holds a Master's degree from Nicolaus Copernicus University and is certified by <strong>Monash University (Australia) as a Low FODMAP Diet Specialist</strong> — the gold standard in IBS dietary therapy.</p>
+              <p class="practitioner-bio">For years, she has helped women with digestive disorders regain comfort, confidence, and quality of life through her private practice.</p>
+              <blockquote class="practitioner-quote">"My greatest passion is the gut microbiome and its profound impact on our health and emotional well-being. I focus on diet therapy that addresses root causes — not just symptoms."</blockquote>
+            </div>
+          </article>
+
+          <article class="practitioner-card">
+            <div class="practitioner-image">
+              <img src="assets/rebecca.png" alt="Rebecca Taylor, Registered Clinical Nutritionist" loading="lazy">
+            </div>
+            <div class="practitioner-info">
+              <h3>Rebecca Taylor</h3>
+              <p class="practitioner-title">Registered Clinical Nutritionist (BSc, MS, RNutr)</p>
+              <p class="practitioner-bio">With years of clinical experience helping women overcome chronic digestive issues, Rebecca developed a practical, evidence-based approach that addresses root causes — not just manages symptoms.</p>
+              <blockquote class="practitioner-quote">"When your gut thrives, so do you. This isn't about restriction — it's about understanding what YOUR body needs to function optimally."</blockquote>
+            </div>
+          </article>
+        </div>
+
+        <div class="specialist-network">
+          <h4>Plus: Access to Our Expanding Specialist Network</h4>
+          <p>Beyond Paulina and Rebecca, you have access to our growing network of gut health specialists — including additional dietitians, gastroenterologists, and mental health professionals who understand the gut-brain connection.</p>
+          <p>Because gut healing isn't just about food. Stress, anxiety, sleep, and emotional patterns all play a role. When you need support beyond nutrition, we have practitioners who can help.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 9: What's Included -->
+    <section class="included" id="included">
+      <div class="container">
+        <h2>Everything Included In Your Membership</h2>
+
+        <ul class="feature-list">
+          <li>
+            <span class="check-icon">✓</span>
+            <strong>Personalized gut healing protocol</strong> based on YOUR assessment results
+          </li>
+          <li>
+            <span class="check-icon">✓</span>
+            <strong>Weekly check-ins</strong> with protocol adjustments as needed
+          </li>
+          <li>
+            <span class="check-icon">✓</span>
+            <strong>Unlimited practitioner messaging</strong> (24-48hr response time)
+          </li>
+          <li>
+            <span class="check-icon">✓</span>
+            <strong>Weekly live Q&A session</strong> with recordings
+          </li>
+          <li>
+            <span class="check-icon">✓</span>
+            <strong>Peer community</strong> matched by symptom type
+          </li>
+          <li>
+            <span class="check-icon">✓</span>
+            <strong>Access to specialist network</strong> (dietitians, mental health, GI support)
+          </li>
+          <li>
+            <span class="check-icon">✓</span>
+            <strong>Symptom tracking tools</strong> with pattern recognition
+          </li>
+          <li>
+            <span class="check-icon">✓</span>
+            <strong>Complete resource library</strong> (meal plans, recipes, guides, shopping lists)
+          </li>
+        </ul>
+
+        <div class="total-value">
+          <p><strong>Total value if purchased separately: $2,400+/year</strong></p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Live Q&A Urgency Section -->
+    <section class="live-qa-section" id="live-qa">
+      <div class="container">
+        <div class="live-qa-card">
+          <div class="live-qa-header">
+            <span class="live-qa-icon">🎥</span>
+            <h3>Next Live Q&A Session</h3>
+          </div>
+
+          <div class="live-qa-content">
+            <div class="live-qa-date">
+              <strong>January 16th, 4:00 PM GMT</strong>
+              <span class="live-qa-countdown" id="qa-countdown"></span>
+            </div>
+
+            <div class="live-qa-topic">
+              <span class="topic-label">Topic:</span>
+              <span class="topic-title">"Why Cutting Foods for Bloating Often Backfires"</span>
+            </div>
+
+            <div class="live-qa-host">
+              <span>Hosted by <strong>Rebecca Taylor, RNutr</strong></span>
+            </div>
+          </div>
+
+          <div class="live-qa-access">
+            <p><span class="trial-badge">Trial</span> Join live but can't ask questions</p>
+            <p><span class="full-badge">Full Member</span> Join live & ask questions</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 10: Pricing -->
+    <section class="pricing" id="pricing">
+      <div class="container">
+        <h2 id="pricing-header">Start Your $1 Trial Today</h2>
+        <p class="pricing-intro" id="pricing-intro-1">Your $1 unlocks 7 days of full access — your personalized protocol, practitioner messaging, the community, everything. If you love it, your membership continues automatically. If not, cancel anytime during your trial.</p>
+        <p class="pricing-intro" id="pricing-intro-2">No risk. No commitment. Just results.</p>
+
+        <!-- Trial Explanation Box -->
+        <div class="pricing-urgency-box">
+          <h3>🎯 How Your $1 Trial Works</h3>
+          <p>Start with $1 → Get 7 days of full access → If you love it, your membership continues at your chosen rate. Cancel anytime during trial for a full refund.</p>
+        </div>
+
+        <p class="pricing-subtitle">Choose your plan — your $1 trial includes full access to everything:</p>
+
+        <div class="pricing-cards">
+          <!-- Monthly Card -->
+          <article class="pricing-card">
+            <h3>Monthly Membership</h3>
+            <p class="price-original">$97/month</p>
+            <p class="price-current">$47<span class="price-period">/month</span></p>
+            <p class="price-savings">after 7-day trial • Founding member rate</p>
+            <p class="price-note">Try for $1 first</p>
+            <ul class="pricing-features">
+              <li>Cancel anytime</li>
+              <li>No long-term commitment</li>
+              <li>Full access to everything</li>
+            </ul>
+            <a href="https://buy.stripe.com/bJe28seyJaf8d4ch1rgA802" class="btn btn-primary btn-block">Start $1 Trial → $47/mo</a>
+          </article>
+
+          <!-- Annual Card (Featured) -->
+          <article class="pricing-card pricing-card-featured">
+            <span class="badge">BEST VALUE</span>
+            <h3>Annual Membership</h3>
+            <p class="price-original">$397/year</p>
+            <p class="price-current">$297<span class="price-period">/year</span></p>
+            <p class="price-savings">after 7-day trial • That's $24.75/month — Save 47%</p>
+            <p class="price-note">Try for $1 first</p>
+            <ul class="pricing-features">
+              <li>Best value for lasting results</li>
+              <li>Lock in lowest rate for a full year</li>
+              <li>Priority practitioner access</li>
+            </ul>
+            <a href="https://buy.stripe.com/bJe5kEduF1IC1lu26xgA803" class="btn btn-primary btn-block">Start $1 Trial → $297/yr</a>
+          </article>
+        </div>
+
+        <!-- Rate Warning -->
+        <div class="rate-warning">
+          <h4>⚠️ Founding Member Pricing Won't Last</h4>
+          <ul>
+            <li>Current rates: $47/month or $297/year (founding member pricing)</li>
+            <li>Price increases to $97/month (or $397/year) after founding period</li>
+            <li>Cancel anytime during your 7-day trial — no questions asked</li>
+          </ul>
+          <p>Start your $1 trial now and lock in your founding member rate</p>
+        </div>
+
+        <!-- Cost Comparison -->
+        <div class="cost-comparison">
+          <h3>Compare the Real Cost</h3>
+          <table>
+            <tr>
+              <th>What most women spend</th>
+              <td>Cost</td>
+            </tr>
+            <tr>
+              <th>Single functional medicine consultation</th>
+              <td>$300-500</td>
+            </tr>
+            <tr>
+              <th>4 private dietitian sessions</th>
+              <td>$400-800</td>
+            </tr>
+            <tr>
+              <th><strong>Typical annual spend on gut health</strong></th>
+              <td><strong>$2,000-4,000</strong></td>
+            </tr>
+            <tr class="highlight-row">
+              <th>Gut Healing Academy (full year)</th>
+              <td>$297 total</td>
+            </tr>
+          </table>
+          <p style="text-align: center; font-size: 14px; color: var(--color-text-light); margin-top: 1rem; margin-bottom: 0;"><em>That's less than ONE private functional medicine appointment — for a full year of personalized support.</em></p>
+        </div>
+
+        <div class="section-cta" style="margin-top: 2rem;">
+          <a href="#pricing" class="btn btn-primary">Start My $1 Trial →</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 11: Guarantee -->
+    <section class="guarantee" id="guarantee">
+      <div class="container">
+        <div class="guarantee-content">
+          <!-- Guarantee Badge -->
+          <div class="guarantee-badge">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+              <polyline points="9 12 11 14 15 10"></polyline>
+            </svg>
+            <span>6-Month Guarantee</span>
+          </div>
+
+          <h2>The Gut Freedom Guarantee</h2>
+
+          <div class="guarantee-intro">
+            <p>We know you've been burned before. Programs that promise everything and deliver generic PDFs. Practitioners who took your money and dismissed your concerns.</p>
+            <p><strong>That's why we stand behind our work — for a full 6 months.</strong></p>
+          </div>
+
+          <div class="guarantee-promise">
+            <h4>Here's our promise:</h4>
+            <p>We believe in this program completely.</p>
+            <p><strong>If it's not working for you — for any reason — cancel anytime and get your money back.</strong> No complicated process, no hoops to jump through.</p>
+            <p>Just email us and we'll process your refund within 48 hours.</p>
+            <p>That's it. We only want members who are getting real results.</p>
+          </div>
+
+          <p class="guarantee-highlight">You have nothing to lose and digestive freedom to gain.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 12: FAQ -->
+    <section class="faq" id="faq">
+      <div class="container">
+        <h2>Questions You Might Have</h2>
+
+        <div class="faq-list">
+          <div class="faq-item">
+            <button class="faq-question" aria-expanded="false">
+              <span>"Will this work for MY specific condition?"</span>
+              <span class="faq-icon" aria-hidden="true">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+              </span>
+            </button>
+            <div class="faq-answer">
+              <div class="faq-answer-content">
+                <p>Our protocols are designed for IBS, SIBO, chronic bloating, and functional digestive disorders. If you have IBD (Crohn's or Ulcerative Colitis), we can support your diet and symptom management alongside your gastroenterologist — but we're not a replacement for medical treatment.</p>
+                <p>That's exactly why we use the assessment: to determine if we're the right fit for YOU before you commit.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <button class="faq-question" aria-expanded="false">
+              <span>"How is this different from seeing a local nutritionist?"</span>
+              <span class="faq-icon" aria-hidden="true">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+              </span>
+            </button>
+            <div class="faq-answer">
+              <div class="faq-answer-content">
+                <p>Three key differences:</p>
+                <p><strong>Ongoing support vs. occasional appointments</strong> — You don't wait weeks between sessions wondering if you're doing it right. You can message us anytime.</p>
+                <p><strong>Specialized gut health expertise</strong> — Our practitioners focus exclusively on digestive issues. This is all they do.</p>
+                <p><strong>Community support</strong> — You're not alone in this. Sometimes that makes all the difference.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <button class="faq-question" aria-expanded="false">
+              <span>"What if I need to ask a lot of questions?"</span>
+              <span class="faq-icon" aria-hidden="true">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+              </span>
+            </button>
+            <div class="faq-answer">
+              <div class="faq-answer-content">
+                <p>Good — that's what we're here for. Unlimited messaging means unlimited questions. We'd rather you ask "too many" than struggle in silence.</p>
+                <p>We do ask for patience with 24-48 hour response times, as our practitioners give each question thoughtful attention rather than rushed replies.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <button class="faq-question" aria-expanded="false">
+              <span>"How long until I see results?"</span>
+              <span class="faq-icon" aria-hidden="true">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+              </span>
+            </button>
+            <div class="faq-answer">
+              <div class="faq-answer-content">
+                <p>Most members notice initial improvements within 2-4 weeks. Significant, lasting change typically happens in the 3-6 month range — which is why we offer the 6-month option and back it with a 6-month guarantee.</p>
+                <p>Gut healing isn't instant. But it IS possible with consistent, guided effort.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <button class="faq-question" aria-expanded="false">
+              <span>"What if I've already tried low FODMAP / elimination diets?"</span>
+              <span class="faq-icon" aria-hidden="true">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+              </span>
+            </button>
+            <div class="faq-answer">
+              <div class="faq-answer-content">
+                <p>Perfect — then you know what doesn't work on its own. Our protocols go beyond basic elimination. We look at WHY you're reacting, address root causes like bacterial imbalances, and personalize the approach based on what you've already tried.</p>
+                <p>No repeating past failures.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <button class="faq-question" aria-expanded="false">
+              <span>"What happens during the $1 trial?"</span>
+              <span class="faq-icon" aria-hidden="true">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+              </span>
+            </button>
+            <div class="faq-answer">
+              <div class="faq-answer-content">
+                <p>Your $1 unlocks 7 days of full access to everything: your personalized protocol, practitioner messaging, the community, and the resource library. This is real practitioner support — not an app.</p>
+                <p>If you decide it's not for you, simply cancel before your trial ends and we'll refund your $1. If you love it (and we think you will), your membership continues automatically at your chosen rate ($47/month or $297/year).</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <button class="faq-question" aria-expanded="false">
+              <span>"Is this medical advice?"</span>
+              <span class="faq-icon" aria-hidden="true">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+              </span>
+            </button>
+            <div class="faq-answer">
+              <div class="faq-answer-content">
+                <p>No. The Gut Healing Academy provides educational support and nutritional guidance from qualified dietitians and nutritionists. We do not diagnose, treat, or prescribe.</p>
+                <p>We work alongside your medical team, not in place of them. If you have concerning symptoms, we'll encourage you to see your doctor — and we can help you communicate effectively with them.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 13: Final CTA / Emotional Close -->
+    <section class="final-cta" id="final-cta">
+      <div class="container">
+        <h2><span class="user-name">Friend</span>, You've Suffered Long Enough</h2>
+
+        <div class="final-cta-content">
+          <p>Every day you wait is another day of bloating, bathroom anxiety, and missed experiences.</p>
+          <p>Every week that passes is another week of guessing what to eat, hoping today will be different.</p>
+          <p>Every month is another month your gut stays out of balance — making the problem harder to fix.</p>
+
+          <div class="deserve-list">
+            <p><strong>You deserve to eat without fear.</strong></p>
+            <p>To travel without mapping every bathroom.</p>
+            <p>To say yes to dinner invitations without anxiety.</p>
+            <p>To finally feel like yourself again.</p>
+          </div>
+
+          <p><strong>Your personalized protocol is ready.</strong></p>
+          <p>Your practitioners are waiting.</p>
+          <p>The community is here.</p>
+
+          <p class="final-question">The only question is: <strong>Are you ready to stop suffering?</strong></p>
+        </div>
+
+        <!-- Final Urgency Box -->
+        <div class="final-urgency-box">
+          <h3>🎯 Start for Just $1</h3>
+          <p>7 days of full access — then $47/month or $297/year</p>
+          <p>Founding member pricing — limited time</p>
+        </div>
+
+        <div class="final-cta-button">
+          <a href="#pricing" class="btn btn-primary btn-large">Yes — Start My $1 Trial →</a>
+        </div>
+
+        <div class="trust-signals">
+          <p>✓ Instant protocol access</p>
+          <p>✓ $47/month or $297/year after trial (founding member rate)</p>
+          <p>✓ Cancel anytime during trial for full refund</p>
+          <p>✓ Real practitioner support starts immediately</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Section 14: Footer -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-disclaimer">
+        <p>This program is for educational purposes only and does not constitute medical advice, diagnosis, or treatment. It is not a substitute for professional medical consultation. If you are experiencing severe symptoms, unexplained weight loss, blood in stool, or any symptoms that concern you, please consult a qualified healthcare provider immediately. The Gut Healing Academy does not provide medical diagnoses or treatment recommendations. Results vary based on individual factors and adherence to the program.</p>
+      </div>
+
+      <div class="footer-links">
+        <a href="https://www.guthealingacademy.com/legal/index.html">Privacy Policy</a>
+        <span class="divider">|</span>
+        <a href="https://www.guthealingacademy.com/legal/terms.html">Terms of Service</a>
+        <span class="divider">|</span>
+        <a href="https://www.guthealingacademy.com/legal/disclaimer.html">Medical Disclaimer</a>
+        <span class="divider">|</span>
+        <a href="https://www.guthealingacademy.com/legal/contact.htm">Contact Us</a>
+      </div>
+
+      <p class="footer-copyright">&copy; 2025 Gut Healing Academy. All rights reserved.</p>
+
+      <div class="footer-login-links" style="margin-top: 1rem; font-size: 0.75rem; opacity: 0.6;">
+        <a href="https://app.guthealingacademy.com/" style="color: inherit; text-decoration: none;">Members Area</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Sticky Mobile CTA -->
+  <div class="sticky-cta" id="sticky-cta">
+    <div class="sticky-cta-info">
+      <span class="sticky-cta-spots"><strong>$1 Trial</strong> — 7 days full access</span>
+      <span class="sticky-cta-expiry">Then $47/mo or $297/yr</span>
+    </div>
+    <a href="#pricing" class="btn btn-primary">Start $1 Trial →</a>
+  </div>
+
+  <script src="js/main.js"></script>
+</body>
+</html>

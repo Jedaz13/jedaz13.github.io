@@ -134,8 +134,119 @@ function getAvatarHTML() {
 // Sales page redirect URL
 const SALES_PAGE_URL = 'https://www.guthealingacademy.com/offer/';
 
+// Quiz progress parts mapping
+const QUIZ_PARTS = {
+  1: { name: 'Safety Screening', sections: ['part1_intro', 'q2_blood', 'q3_family_history', 'q4_colonoscopy'] },
+  2: { name: 'Symptom Pattern', sections: ['part2_intro', 'q6_frequency', 'q7_bm_relief', 'q8_frequency_change', 'q9_stool_change'] },
+  3: { name: 'Your History', sections: ['part3_intro', 'q11_diagnosis', 'q12_tried'] },
+  4: { name: 'Gut-Brain Connection', sections: ['part4_intro', 'q14_mental_health', 'q15_sleep'] },
+  5: { name: 'Life Impact', sections: ['part5_intro', 'q17_hardest_part', 'q17_response', 'email_capture', 'get_email', 'final_message'] }
+};
+
+// Calculating messages for loading screen
+const CALCULATING_MESSAGES = [
+  "Analyzing your symptom pattern...",
+  "Reviewing your health history...",
+  "Matching to protocol database...",
+  "Finalizing your personalized protocol..."
+];
+
 // Redirect timer reference
 let redirectTimer = null;
+
+/**
+ * Update the progress indicator based on current section
+ * @param {string} sectionKey - Current section key
+ */
+function updateProgress(sectionKey) {
+  const progressEl = document.getElementById('quizProgress');
+  const currentPartEl = document.getElementById('currentPart');
+  const partNameEl = document.getElementById('partName');
+
+  if (!progressEl) return;
+
+  // Don't show progress for intro, more_info, red_flag_warning, exit sections, or results
+  const hiddenSections = ['intro', 'more_info', 'red_flag_warning', 'exit_message', 'exit_get_email', 'exit_final', 'results_chunk1', 'results_chunk2', 'results_chunk3', 'redirect_to_sales', 'confirmation'];
+  if (hiddenSections.includes(sectionKey)) {
+    progressEl.style.display = 'none';
+    return;
+  }
+
+  // Show progress bar
+  progressEl.style.display = 'block';
+
+  // Find current part based on section
+  let currentPart = 1;
+  for (const [partNum, partData] of Object.entries(QUIZ_PARTS)) {
+    if (partData.sections.includes(sectionKey)) {
+      currentPart = parseInt(partNum);
+      break;
+    }
+  }
+
+  // Update text
+  if (currentPartEl) currentPartEl.textContent = currentPart;
+  if (partNameEl && QUIZ_PARTS[currentPart]) {
+    partNameEl.textContent = QUIZ_PARTS[currentPart].name;
+  }
+
+  // Update segments
+  const segments = document.querySelectorAll('.progress-segment');
+  segments.forEach((segment, index) => {
+    const partNum = index + 1;
+    segment.classList.remove('active', 'completed');
+
+    if (partNum < currentPart) {
+      segment.classList.add('completed');
+    } else if (partNum === currentPart) {
+      segment.classList.add('active');
+    }
+  });
+}
+
+/**
+ * Show calculating overlay with rotating messages
+ * @returns {Promise} Resolves after 8 seconds
+ */
+function showCalculatingScreen() {
+  return new Promise((resolve) => {
+    // Hide progress bar
+    const progressEl = document.getElementById('quizProgress');
+    if (progressEl) progressEl.style.display = 'none';
+
+    // Create overlay
+    const overlay = document.createElement('div');
+    overlay.className = 'calculating-overlay';
+    overlay.innerHTML = `
+      <div class="calculating-spinner"></div>
+      <div class="calculating-message">${CALCULATING_MESSAGES[0]}</div>
+    `;
+    document.body.appendChild(overlay);
+
+    // Fade in
+    requestAnimationFrame(() => {
+      overlay.classList.add('visible');
+    });
+
+    // Rotate messages every 2 seconds
+    let messageIndex = 0;
+    const messageEl = overlay.querySelector('.calculating-message');
+    const messageInterval = setInterval(() => {
+      messageIndex = (messageIndex + 1) % CALCULATING_MESSAGES.length;
+      messageEl.textContent = CALCULATING_MESSAGES[messageIndex];
+    }, 2000);
+
+    // Remove after 8 seconds
+    setTimeout(() => {
+      clearInterval(messageInterval);
+      overlay.classList.remove('visible');
+      setTimeout(() => {
+        overlay.remove();
+        resolve();
+      }, 300);
+    }, 8000);
+  });
+}
 
 // Diagnosis value to display text mapping
 const DIAGNOSIS_MAP = {
@@ -284,29 +395,40 @@ function redirectToSalesPage() {
     redirectTimer = null;
   }
 
-  // Collect quiz data for URL parameters
-  const quizData = {
-    name: state.userName || '',
-    pattern: state.protocol ? state.protocol.name : '',
-    goal: state.answers.q18_vision || '',
-    tried: formatTreatmentsForUrl(state.answers.q12_tried),
-    diagnosis: formatDiagnosesForUrl(state.answers.q11_diagnosis)
-  };
+  // Build URL with all the new parameter names as specified
+  const offerUrl = new URL(SALES_PAGE_URL);
 
-  // Build URL with parameters (only include non-empty values)
-  const params = new URLSearchParams();
-  Object.entries(quizData).forEach(([key, value]) => {
-    if (value) {
-      params.append(key, value);
-    }
-  });
+  // Add all parameters (only non-empty values)
+  if (state.userName) {
+    offerUrl.searchParams.set('name', state.userName);
+  }
+  if (state.userEmail) {
+    offerUrl.searchParams.set('email', state.userEmail);
+  }
+  if (state.protocol && state.protocol.name) {
+    offerUrl.searchParams.set('protocol_name', state.protocol.name);
+  }
+  if (state.answers.q5_primary_complaint) {
+    offerUrl.searchParams.set('primary_complaint', state.answers.q5_primary_complaint);
+  }
+  if (state.answers.q18_vision) {
+    offerUrl.searchParams.set('q18_vision', state.answers.q18_vision);
+  }
 
-  const salesPageURL = params.toString()
-    ? `${SALES_PAGE_URL}?${params.toString()}`
-    : SALES_PAGE_URL;
+  // Diagnoses as comma-separated string
+  const diagnoses = formatDiagnosesForUrl(state.answers.q11_diagnosis);
+  if (diagnoses) {
+    offerUrl.searchParams.set('diagnoses', diagnoses);
+  }
+
+  // Treatments tried as comma-separated string
+  const treatments = formatTreatmentsForUrl(state.answers.q12_tried);
+  if (treatments) {
+    offerUrl.searchParams.set('treatments_tried', treatments);
+  }
 
   // Redirect to sales page (use window.top for iframe embedding)
-  window.top.location.href = salesPageURL;
+  window.top.location.href = offerUrl.toString();
 }
 
 /**
@@ -736,6 +858,12 @@ function waitForResponse(step) {
         // Handle special navigation
         if (step.next === 'check_red_flags') {
           await handleRedFlagCheck();
+        } else if (step.next === 'check_duration') {
+          await handleDurationCheck();
+        } else if (step.next === 'check_treatments_tried') {
+          await handleTreatmentsCheck();
+        } else if (step.next === 'check_email_captured') {
+          await handleEmailCapturedCheck();
         } else if (step.next) {
           setTimeout(() => {
             processSection(step.next);
@@ -773,7 +901,10 @@ function waitForResponse(step) {
         // Store answer
         state.answers[step.id] = selected;
 
-        if (step.next) {
+        // Handle special navigation for multi-select
+        if (step.next === 'check_treatments_tried') {
+          handleTreatmentsCheck();
+        } else if (step.next) {
           setTimeout(() => {
             processSection(step.next);
           }, 300);
@@ -806,7 +937,7 @@ function waitForResponse(step) {
         // Store name/email in state
         if (step.id === 'name' || step.id === 'exit_name') {
           state.userName = value;
-        } else if (step.id === 'email' || step.id === 'exit_email') {
+        } else if (step.id === 'email' || step.id === 'exit_email' || step.id === 'email_early') {
           state.userEmail = value;
         }
 
@@ -817,7 +948,10 @@ function waitForResponse(step) {
           state.protocol = addStressComponent(state.answers, state.protocol);
         }
 
-        if (step.next) {
+        // Handle special navigation for text inputs
+        if (step.next === 'check_email_captured') {
+          await handleEmailCapturedCheck();
+        } else if (step.next) {
           setTimeout(() => {
             processSection(step.next);
           }, 300);
@@ -847,6 +981,59 @@ async function handleRedFlagCheck() {
     await processSection('red_flag_warning');
   } else {
     await processSection('part2_intro');
+  }
+}
+
+/**
+ * Handle duration check - show validation for 3+ years
+ */
+async function handleDurationCheck() {
+  state.isProcessing = false;
+  const duration = state.answers.q10_duration;
+  const longDurations = ['1-3_years', '3-5_years', '5+_years'];
+
+  if (longDurations.includes(duration)) {
+    await processSection('q10_validation_long');
+  } else {
+    await processSection('q11_diagnosis');
+  }
+}
+
+/**
+ * Handle treatments tried check - show validation for 3+ items
+ */
+async function handleTreatmentsCheck() {
+  state.isProcessing = false;
+  const treatments = state.answers.q12_tried;
+  const treatmentCount = Array.isArray(treatments) ? treatments.filter(t => t !== 'nothing').length : 0;
+
+  if (treatmentCount >= 3) {
+    // Show validation message then continue to part4
+    await processSection('q12_validation_persistent');
+  }
+  // Always continue to part4_intro after (whether validation shown or not)
+  state.isProcessing = false;
+  await processSection('part4_intro');
+}
+
+/**
+ * Handle email capture check - skip email if already captured
+ */
+async function handleEmailCapturedCheck() {
+  state.isProcessing = false;
+
+  // Check if email was already captured early
+  if (state.userEmail) {
+    // Email already captured, show confirmation and continue to final_message
+    await processSection('email_already_captured');
+    // Determine protocol before final message
+    state.protocol = determineProtocol(state.answers);
+    state.protocol = addStressComponent(state.answers, state.protocol);
+    state.isProcessing = false;
+    await processSection('final_message');
+  } else {
+    // No email yet, ask for it
+    await processSection('get_email');
   }
 }
 
@@ -988,7 +1175,12 @@ async function submitToWebhook() {
 // Override the confirmation section to trigger form submission
 const originalProcessSection = processSection;
 processSection = async function(sectionKey) {
+  // Update progress indicator
+  updateProgress(sectionKey);
+
   if (sectionKey === 'results_chunk1') {
+    // Show calculating screen first (8 seconds)
+    await showCalculatingScreen();
     // Submit data before showing results (when "Get My Protocol" is clicked)
     await submitToWebhook();
   } else if (sectionKey === 'redirect_to_sales') {
