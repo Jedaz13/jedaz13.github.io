@@ -7,10 +7,11 @@
   'use strict';
 
   // Stripe payment links (with ?prefilled_email= support)
+  // All plans include $1 7-day trial
   const STRIPE_LINKS = {
-    trial: 'https://buy.stripe.com/cNifZigGRdrkaW45iJgA807',
-    fourMonth: 'https://buy.stripe.com/bJe4gAaitaf8aW4dPfgA806',
-    annual: 'https://buy.stripe.com/3cIaEY2Q172W3tCfXngA805'
+    monthly: 'https://buy.stripe.com/bJe28seyJaf8d4ch1rgA802',    // $1 trial then $47/month
+    fourMonth: 'https://buy.stripe.com/cNifZigGRdrkaW45iJgA807',  // $1 trial then $149/4mo
+    annual: 'https://buy.stripe.com/bJe5kEduF1IC1lu26xgA803'      // $1 trial then $297/year
   };
 
   // Parse URL parameters
@@ -163,23 +164,23 @@
     const email = userData.email;
     const emailParam = email ? `?prefilled_email=${encodeURIComponent(email)}` : '';
 
-    // Build URLs
+    // Build URLs - all plans have $1 7-day trial
     const urls = {
-      trial: STRIPE_LINKS.trial + emailParam,
+      monthly: STRIPE_LINKS.monthly + emailParam,
       fourMonth: STRIPE_LINKS.fourMonth + emailParam,
       annual: STRIPE_LINKS.annual + emailParam
     };
 
     // Attach to buttons
-    const btnTrial = document.getElementById('btn-trial');
+    const btnMonthly = document.getElementById('btn-monthly');
     const btn4Month = document.getElementById('btn-4month');
     const btnAnnual = document.getElementById('btn-annual');
     const btnSticky = document.getElementById('btn-sticky');
 
-    if (btnTrial) {
-      btnTrial.href = urls.trial;
-      btnTrial.addEventListener('click', function() {
-        trackCheckout('trial', 1.00);
+    if (btnMonthly) {
+      btnMonthly.href = urls.monthly;
+      btnMonthly.addEventListener('click', function() {
+        trackCheckout('monthly', 47.00);
       });
     }
 
@@ -197,10 +198,11 @@
       });
     }
 
+    // Sticky CTA defaults to 4-month (most popular)
     if (btnSticky) {
-      btnSticky.href = urls.trial;
+      btnSticky.href = urls.fourMonth;
       btnSticky.addEventListener('click', function() {
-        trackCheckout('trial_sticky', 1.00);
+        trackCheckout('4month_sticky', 149.00);
       });
     }
   }
