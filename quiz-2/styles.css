@@ -1,0 +1,499 @@
+/* Survey-Style Quiz Styles */
+/* Clean, minimal design for A/B testing */
+
+:root {
+  --bg-primary: #FAFAFA;
+  --bg-card: #FFFFFF;
+  --text-primary: #2D3436;
+  --text-secondary: #636E72;
+  --accent: #4A7C6F;
+  --accent-light: #E8F0EE;
+  --border: #E0E0E0;
+  --border-hover: #4A7C6F;
+  --error: #E07A5F;
+  --warning-bg: #FFF8E7;
+  --warning-border: #F0C36D;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  line-height: 1.5;
+  min-height: 100vh;
+}
+
+/* Main Container */
+.quiz-container {
+  max-width: 540px;
+  margin: 0 auto;
+  padding: 20px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Header with back button and section label */
+.quiz-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  padding: 16px 0;
+  margin-bottom: 8px;
+}
+
+.back-button {
+  position: absolute;
+  left: 0;
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  cursor: pointer;
+  padding: 8px;
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.2s ease;
+}
+
+.back-button:hover {
+  color: var(--text-primary);
+}
+
+.back-button:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.section-label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--accent);
+  text-align: center;
+}
+
+/* Progress Bar */
+.progress-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 20px 0;
+}
+
+.progress-segment {
+  height: 4px;
+  width: 48px;
+  border-radius: 2px;
+  background: var(--border);
+  transition: background 0.3s ease;
+  position: relative;
+}
+
+.progress-segment.completed {
+  background: var(--accent);
+}
+
+.progress-segment.current {
+  background: var(--accent);
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+.progress-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--border);
+  transition: background 0.3s ease;
+}
+
+.progress-dot.completed,
+.progress-dot.current {
+  background: var(--accent);
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
+
+/* Question Container */
+.question-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.question-text {
+  font-size: 22px;
+  font-weight: 500;
+  line-height: 1.4;
+  text-align: center;
+  margin: 32px 0;
+  color: var(--text-primary);
+}
+
+/* Options Container */
+.options-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 16px;
+}
+
+/* Option Buttons */
+.option-button {
+  width: 100%;
+  padding: 18px 24px;
+  background: var(--bg-card);
+  border: 2px solid var(--border);
+  border-radius: 30px;
+  font-size: 16px;
+  font-weight: 400;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: var(--text-primary);
+}
+
+.option-button:hover {
+  border-color: var(--accent);
+  background: var(--accent-light);
+}
+
+.option-button.selected {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: white;
+}
+
+/* Multi-select styling */
+.option-button.multi-select {
+  position: relative;
+}
+
+.option-button.multi-select.selected::before {
+  content: '\2713  ';
+  font-weight: bold;
+}
+
+/* Continue Button */
+.continue-button {
+  width: 100%;
+  padding: 18px 24px;
+  margin-top: 24px;
+  background: var(--accent);
+  border: none;
+  border-radius: 30px;
+  font-size: 16px;
+  font-weight: 600;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: white;
+}
+
+.continue-button:hover:not(:disabled) {
+  background: #3d6a5f;
+  transform: translateY(-1px);
+}
+
+.continue-button:disabled {
+  background: var(--border);
+  cursor: not-allowed;
+  color: var(--text-secondary);
+}
+
+/* Text Input */
+.text-input-container {
+  margin-top: 16px;
+}
+
+.text-input {
+  width: 100%;
+  padding: 16px 20px;
+  border: 2px solid var(--border);
+  border-radius: 16px;
+  font-size: 16px;
+  font-family: inherit;
+  resize: none;
+  min-height: 120px;
+  transition: border-color 0.2s ease;
+}
+
+.text-input:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+.text-input::placeholder {
+  color: var(--text-secondary);
+}
+
+.char-count {
+  text-align: right;
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin-top: 8px;
+}
+
+/* Email & Name Input */
+.capture-container {
+  text-align: center;
+  animation: fadeIn 0.3s ease;
+}
+
+.capture-label {
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.capture-title {
+  font-size: 22px;
+  font-weight: 500;
+  margin-bottom: 24px;
+  color: var(--text-primary);
+}
+
+.capture-input {
+  width: 100%;
+  padding: 18px 24px;
+  border: 2px solid var(--border);
+  border-radius: 30px;
+  font-size: 16px;
+  font-family: inherit;
+  text-align: center;
+  transition: border-color 0.2s ease;
+}
+
+.capture-input:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+.capture-input::placeholder {
+  color: var(--text-secondary);
+}
+
+/* Warning Screen */
+.warning-screen {
+  text-align: center;
+  padding: 40px 20px;
+  animation: fadeIn 0.3s ease;
+}
+
+.warning-icon {
+  font-size: 48px;
+  margin-bottom: 24px;
+}
+
+.warning-screen h2 {
+  font-size: 24px;
+  font-weight: 600;
+  margin-bottom: 16px;
+  color: var(--text-primary);
+}
+
+.warning-screen p {
+  font-size: 16px;
+  color: var(--text-secondary);
+  margin-bottom: 16px;
+  line-height: 1.6;
+}
+
+.warning-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 32px;
+}
+
+.btn-secondary {
+  width: 100%;
+  padding: 16px 24px;
+  background: var(--bg-card);
+  border: 2px solid var(--border);
+  border-radius: 30px;
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: var(--text-primary);
+}
+
+.btn-secondary:hover {
+  border-color: var(--accent);
+  background: var(--accent-light);
+}
+
+.btn-primary {
+  width: 100%;
+  padding: 16px 24px;
+  background: var(--accent);
+  border: none;
+  border-radius: 30px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: white;
+}
+
+.btn-primary:hover {
+  background: #3d6a5f;
+}
+
+/* Loading Screen */
+.loading-screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+  animation: fadeIn 0.3s ease;
+}
+
+.spinner {
+  width: 48px;
+  height: 48px;
+  border: 3px solid var(--border);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 24px;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.loading-text {
+  font-size: 16px;
+  color: var(--text-secondary);
+  text-align: center;
+}
+
+/* Error State */
+.error-message {
+  color: var(--error);
+  font-size: 14px;
+  margin-top: 8px;
+  text-align: center;
+}
+
+/* Scroll indicator for long option lists */
+.options-container.has-scroll::after {
+  content: '';
+  position: fixed;
+  bottom: 100px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 40px;
+  height: 40px;
+  background: rgba(255,255,255,0.9);
+  border-radius: 50%;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.options-container.has-scroll::before {
+  content: '\2193';
+  position: fixed;
+  bottom: 108px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 20px;
+  color: var(--accent);
+  z-index: 10;
+  animation: bounce 1.5s ease-in-out infinite;
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateX(-50%) translateY(0); }
+  50% { transform: translateX(-50%) translateY(5px); }
+}
+
+/* Hidden state */
+.hidden {
+  display: none !important;
+}
+
+/* Mobile Responsive */
+@media (max-width: 600px) {
+  .quiz-container {
+    padding: 16px;
+  }
+
+  .question-text {
+    font-size: 18px;
+    margin: 24px 0;
+  }
+
+  .option-button {
+    padding: 16px 20px;
+    font-size: 15px;
+  }
+
+  .progress-segment {
+    width: 36px;
+  }
+
+  /* Prevent iOS zoom on input focus */
+  input, textarea {
+    font-size: 16px;
+  }
+
+  .capture-input {
+    padding: 16px 20px;
+  }
+
+  .continue-button {
+    padding: 16px 20px;
+  }
+
+  .text-input {
+    min-height: 100px;
+  }
+}
+
+/* Tablet and up */
+@media (min-width: 768px) {
+  .quiz-container {
+    padding: 40px 20px;
+  }
+
+  .question-text {
+    font-size: 26px;
+  }
+
+  .progress-segment {
+    width: 60px;
+  }
+}
