@@ -210,12 +210,12 @@ const quizContent = {
     }
   ],
 
-  // Validation message after primary complaint
+  // Validation message after primary complaint (uses {{social_proof_message}} placeholder)
   q5_validation: [
     {
       type: "message",
       delay: 600,
-      content: "That's one of the most common patterns I see. You're definitely not alone in this."
+      content: "{{social_proof_message}}"
     },
     {
       type: "question",
@@ -421,6 +421,31 @@ const quizContent = {
     }
   ],
 
+  // TESTIMONIAL INTERLUDE (after Part 3, before Part 4)
+  testimonial_interlude: [
+    {
+      type: "message",
+      delay: 800,
+      content: "Before we continue, I want to share something.\n\nLast month, I worked with a woman named Sarah who had been dealing with bloating and unpredictable digestion for 7 years."
+    },
+    {
+      type: "message",
+      delay: 1200,
+      content: "She'd tried everything you can imagine - low FODMAP, probiotics, elimination diets. Nothing stuck.\n\nWithin 3 weeks of following her personalized protocol, she told me: \"For the first time in years, I wore a fitted dress to dinner and didn't think about my stomach once.\""
+    },
+    {
+      type: "message",
+      delay: 1000,
+      content: "That's what's possible when you stop guessing and start following a plan matched to YOUR pattern.\n\nLet's keep going - I want to make sure your protocol is just as dialed in."
+    },
+    {
+      type: "buttons",
+      options: [
+        { text: "Continue", value: "continue", next: "part4_intro" }
+      ]
+    }
+  ],
+
   // PART 4: GUT-BRAIN CONNECTION
   part4_intro: [
     {
@@ -602,61 +627,7 @@ const quizContent = {
     {
       type: "buttons",
       options: [
-        { text: "Get My Protocol", value: "submit", next: "results_chunk1" }
-      ]
-    }
-  ],
-
-  // RESULTS FLOW - 3 chunks before redirect to sales page
-  results_chunk1: [
-    {
-      type: "message",
-      delay: 1200,
-      content: "Based on your answers, you're showing a **{{protocol_name}}** pattern."
-    },
-    {
-      type: "message",
-      delay: 1000,
-      content: "I've just sent your **Personalized Protocol** to **{{email}}**.\n\nCheck your inbox (and spam folder) for instructions on how to access it."
-    },
-    {
-      type: "message",
-      delay: 1000,
-      content: "While that's on its way, let me explain what this pattern means for you..."
-    },
-    {
-      type: "buttons",
-      options: [
-        { text: "What does this mean for me?", value: "continue", next: "results_chunk2" }
-      ]
-    }
-  ],
-
-  results_chunk2: [
-    {
-      type: "message",
-      delay: 1200,
-      content: "{{chunk2_message}}"
-    },
-    {
-      type: "buttons",
-      options: [
-        { text: "How does this actually help me?", value: "continue", next: "results_chunk3" }
-      ]
-    }
-  ],
-
-  results_chunk3: [
-    {
-      type: "message",
-      delay: 1200,
-      content: "Your goal was: \"*{{q18_vision}}*\"\n\nBased on your **{{protocol_name}}** pattern and what you've already tried, I know exactly which approach will finally work for you.\n\nLet me show you how we'll get you there."
-    },
-    {
-      type: "buttons",
-      isRedirectButton: true,
-      options: [
-        { text: "See How It Helps You →", value: "redirect", next: "redirect_to_sales" }
+        { text: "Get My Protocol →", value: "submit", next: "show_calculating_redirect" }
       ]
     }
   ],

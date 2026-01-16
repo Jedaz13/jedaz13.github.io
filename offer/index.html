@@ -36,24 +36,49 @@
       </div>
     </section>
 
-    <!-- Section 2: Healing Timeline -->
+    <!-- Section 2: Assessment Revealed -->
+    <section class="assessment-section" id="assessment-section">
+      <div class="container">
+        <div class="assessment-card">
+          <h3>Your Assessment Revealed:</h3>
+          <div class="assessment-items">
+            <div class="assessment-item">
+              <span class="assessment-label">Primary Pattern</span>
+              <span class="assessment-value primary-complaint-display">Digestive discomfort</span>
+            </div>
+            <div class="assessment-item" id="diagnoses-item" style="display: none;">
+              <span class="assessment-label">Previous Diagnoses</span>
+              <span class="assessment-value diagnoses-display"></span>
+            </div>
+            <div class="assessment-item" id="treatments-item" style="display: none;">
+              <span class="assessment-label">Treatments Tried</span>
+              <span class="assessment-value treatments-display"></span>
+            </div>
+          </div>
+          <p class="assessment-note">This is why your protocol is personalized — not generic advice.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 3: Healing Timeline (Animated) -->
     <section class="timeline-section">
       <div class="container">
-        <div class="timeline">
+        <div class="timeline" id="healing-timeline">
           <div class="timeline-track">
-            <div class="timeline-progress"></div>
+            <div class="timeline-progress" id="timeline-progress"></div>
           </div>
           <div class="timeline-points">
-            <div class="timeline-point active">
+            <div class="timeline-point" data-step="1">
               <div class="point-marker"></div>
               <span class="point-label">Today</span>
+              <span class="point-desc">Start your protocol</span>
             </div>
-            <div class="timeline-point">
+            <div class="timeline-point" data-step="2">
               <div class="point-marker"></div>
               <span class="point-label">Week 2-3</span>
               <span class="point-desc">First improvements typically noticed</span>
             </div>
-            <div class="timeline-point">
+            <div class="timeline-point" data-step="3">
               <div class="point-marker"></div>
               <span class="point-label">Week 6-8</span>
               <span class="point-desc">87% report significant relief</span>
@@ -89,7 +114,7 @@
             </li>
             <li>
               <span class="check-icon">&#10003;</span>
-              <span>Direct messaging with Rebecca (Clinical Nutritionist)</span>
+              <span>Direct messaging with your Registered Practitioner</span>
             </li>
             <li>
               <span class="check-icon">&#10003;</span>

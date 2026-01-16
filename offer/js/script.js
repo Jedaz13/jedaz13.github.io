@@ -46,8 +46,10 @@
 
     // Initialize all functionality
     populatePersonalizedContent();
+    populateAssessmentSection();
     setupStripeLinks();
     initStickyCTA();
+    initTimelineAnimation();
   });
 
   /**
@@ -79,6 +81,79 @@
         goalSection.style.display = 'block';
       }
     }
+  }
+
+  /**
+   * Complaint labels for display
+   */
+  const COMPLAINT_LABELS = {
+    bloating: 'Bloating & distension',
+    constipation: 'Constipation',
+    diarrhea: 'Diarrhea & urgency',
+    mixed: 'Alternating patterns',
+    pain: 'Pain & cramping',
+    gas: 'Gas & discomfort',
+    reflux: 'Heartburn & reflux'
+  };
+
+  /**
+   * Populate the assessment revealed section
+   */
+  function populateAssessmentSection() {
+    // Primary complaint display
+    const complaintDisplay = document.querySelector('.primary-complaint-display');
+    if (complaintDisplay && userData.primary_complaint) {
+      complaintDisplay.textContent = COMPLAINT_LABELS[userData.primary_complaint] || userData.primary_complaint;
+    }
+
+    // Diagnoses display
+    const diagnosesItem = document.getElementById('diagnoses-item');
+    const diagnosesDisplay = document.querySelector('.diagnoses-display');
+    if (diagnosesItem && diagnosesDisplay && userData.diagnoses && userData.diagnoses.trim() !== '') {
+      diagnosesDisplay.textContent = userData.diagnoses;
+      diagnosesItem.style.display = 'flex';
+    }
+
+    // Treatments display
+    const treatmentsItem = document.getElementById('treatments-item');
+    const treatmentsDisplay = document.querySelector('.treatments-display');
+    if (treatmentsItem && treatmentsDisplay && userData.treatments_tried && userData.treatments_tried.trim() !== '') {
+      treatmentsDisplay.textContent = userData.treatments_tried;
+      treatmentsItem.style.display = 'flex';
+    }
+  }
+
+  /**
+   * Initialize the animated timeline
+   */
+  function initTimelineAnimation() {
+    const timeline = document.getElementById('healing-timeline');
+    const progressBar = document.getElementById('timeline-progress');
+    const timelinePoints = document.querySelectorAll('.timeline-point');
+
+    if (!timeline || !progressBar) return;
+
+    // Use Intersection Observer to trigger animation when timeline comes into view
+    const observer = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          // Start the animation
+          progressBar.classList.add('animated');
+
+          // Animate points sequentially
+          timelinePoints.forEach(function(point, index) {
+            setTimeout(function() {
+              point.classList.add('active');
+            }, 300 + (index * 600)); // Stagger by 600ms
+          });
+
+          // Unobserve after animation starts
+          observer.unobserve(timeline);
+        }
+      });
+    }, { threshold: 0.5 });
+
+    observer.observe(timeline);
   }
 
   /**
