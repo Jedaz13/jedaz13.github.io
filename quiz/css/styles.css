@@ -649,15 +649,33 @@ body {
   padding: 12px 0 12px 40px;
   max-width: 85%;
   align-self: flex-end;
+  max-height: 320px; /* Show ~4-5 options then scroll */
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Subtle scrollbar for options */
+.options-container::-webkit-scrollbar {
+  width: 4px;
+}
+
+.options-container::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.options-container::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.15);
+  border-radius: 2px;
+}
+
+.options-container::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.25);
 }
 
 /* Multi-select options need scrolling support for many options */
 .options-container.multi-select {
   padding-bottom: 12px;
   position: relative;
-  max-height: 320px; /* Show ~4 options then scroll */
-  overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
 }
 
 .option-button {
