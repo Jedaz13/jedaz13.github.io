@@ -673,10 +673,9 @@ body {
   padding: 12px 0 12px 40px;
   max-width: 85%;
   align-self: flex-end;
-  max-height: 180px; /* Show ~3 options then scroll */
+  max-height: 190px; /* Show ~3 options then scroll */
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
-  position: relative;
   /* Hide scrollbar but keep functionality */
   scrollbar-width: none; /* Firefox */
   -ms-overflow-style: none; /* IE/Edge */
@@ -687,24 +686,15 @@ body {
   display: none;
 }
 
-/* Scroll fade overlay - indicates more content below */
-.options-container.has-more-below::after {
-  content: '';
-  position: sticky;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 50px;
-  background: linear-gradient(to top, var(--chat-bg) 0%, rgba(236, 229, 221, 0.8) 40%, transparent 100%);
-  pointer-events: none;
-  margin-top: -50px;
-  flex-shrink: 0;
+/* Fade effect at bottom when more content available */
+.options-container.has-more-below {
+  -webkit-mask-image: linear-gradient(to bottom, black 0%, black 70%, transparent 100%);
+  mask-image: linear-gradient(to bottom, black 0%, black 70%, transparent 100%);
 }
 
 /* Multi-select options need scrolling support for many options */
 .options-container.multi-select {
   padding-bottom: 12px;
-  position: relative;
 }
 
 .option-button {
@@ -823,25 +813,9 @@ body {
 /* The #inputContainer wrapper for all input types */
 #inputContainer {
   flex-shrink: 0;
-  max-height: 60vh;
-  max-height: 60dvh;
-  overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
-  position: relative;
-}
-
-/* Scroll indicator gradient for multi-select options */
-#inputContainer.has-scroll::after {
-  content: '';
-  position: sticky;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 40px;
-  background: linear-gradient(to top, var(--chat-bg) 0%, transparent 100%);
-  pointer-events: none;
-  display: block;
-  margin-top: -40px;
+  max-height: 50vh;
+  max-height: 50dvh;
+  overflow-y: visible;
 }
 
 .input-container {
@@ -1000,10 +974,10 @@ body {
     gap: 6px;
   }
 
-  /* Keep input container at 60% (3/5 of screen) on mobile */
+  /* Adjust input container height on mobile */
   #inputContainer {
-    max-height: 60vh;
-    max-height: 60dvh;
+    max-height: 50vh;
+    max-height: 50dvh;
   }
 
   /* Push disclaimer below the fold - collapsed by default, tap to expand */
