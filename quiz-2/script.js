@@ -9,6 +9,38 @@ const CONFIG = {
   AUTO_ADVANCE_DELAY: 400 // ms after single-select
 };
 
+/**
+ * Push quiz step event to GTM dataLayer
+ * @param {string} sectionName - Tracking section name
+ */
+function trackQuizStep(sectionName) {
+  window.dataLayer = window.dataLayer || [];
+  window.dataLayer.push({
+    'event': 'quiz_step',
+    'quiz_section': sectionName,
+    'quiz_source': CONFIG.SOURCE_TRACKING
+  });
+
+  console.log('GTM dataLayer push:', { event: 'quiz_step', quiz_section: sectionName });
+}
+
+/**
+ * Get tracking section name based on current position
+ * @returns {string} - GTM tracking name
+ */
+function getTrackingSectionName() {
+  const sectionNames = ['safety', 'symptoms', 'history', 'gut_brain', 'impact'];
+  const sectionPrefix = ['part1', 'part2', 'part3', 'part4', 'part5'];
+
+  const section = quizContent.sections[state.currentSectionIndex];
+  if (!section) return 'unknown';
+
+  const prefix = sectionPrefix[state.currentSectionIndex] || `part${state.currentSectionIndex + 1}`;
+
+  // Return section intro or question number
+  return `${prefix}_q${state.currentQuestionIndex + 1}`;
+}
+
 // Questions per section for progress calculation
 const QUESTIONS_PER_SECTION = [4, 5, 3, 3, 3]; // Safety, Symptoms, History, GutBrain, Impact
 
@@ -57,6 +89,9 @@ document.addEventListener('DOMContentLoaded', () => {
  * Start the quiz - transition from welcome to safety intro
  */
 function startQuiz() {
+  // Track quiz start
+  trackQuizStep('intro');
+
   // Hide welcome screen, show quiz UI
   welcomeScreen.classList.add('hidden');
   quizUI.classList.remove('hidden');
@@ -70,6 +105,9 @@ function startQuiz() {
  */
 function showSafetyIntro() {
   state.showingSafetyIntro = true;
+
+  // Track safety intro
+  trackQuizStep('part1_intro');
 
   // Update section label
   document.getElementById('sectionLabel').textContent = 'SAFETY SCREENING';
@@ -198,6 +236,9 @@ function renderQuestion() {
     console.error('Invalid position:', state.currentSectionIndex, state.currentQuestionIndex);
     return;
   }
+
+  // Track the current question step
+  trackQuizStep(getTrackingSectionName());
 
   // Update UI elements
   updateProgressBar();
@@ -457,6 +498,9 @@ function advanceQuestion() {
  * Show red flag warning screen
  */
 function showRedFlagWarning() {
+  // Track red flag warning
+  trackQuizStep('part1_red_flag_warning');
+
   // Hide progress
   progressEl.classList.add('hidden');
   headerEl.querySelector('.section-label').textContent = '';
@@ -492,6 +536,9 @@ function showRedFlagWarning() {
  * Show email capture screen
  */
 function showEmailCapture() {
+  // Track email capture
+  trackQuizStep('part2_email_capture');
+
   // Update header
   document.getElementById('sectionLabel').textContent = '';
 
@@ -546,6 +593,9 @@ function showEmailCapture() {
  * Show name capture screen
  */
 function showNameCapture() {
+  // Track name capture
+  trackQuizStep('part5_name_capture');
+
   // Update header
   document.getElementById('sectionLabel').textContent = '';
 
@@ -585,6 +635,9 @@ function showNameCapture() {
  * Show loading/calculating screen
  */
 function showLoadingScreen() {
+  // Track results/calculating
+  trackQuizStep('results_calculating');
+
   // Hide header and progress
   headerEl.classList.add('hidden');
   progressEl.classList.add('hidden');
@@ -656,6 +709,9 @@ function calculateProtocol() {
  * Redirect to offer page with tracking params
  */
 function redirectToOffer() {
+  // Track offer redirect
+  trackQuizStep('offer_redirect');
+
   const params = new URLSearchParams();
 
   // Source tracking - THIS IS IMPORTANT

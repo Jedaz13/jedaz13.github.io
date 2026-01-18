@@ -654,6 +654,97 @@ function resetQuiz() {
 }
 
 /**
+ * Map internal section keys to GTM tracking names
+ * @param {string} sectionKey - Internal section key
+ * @returns {string} - GTM tracking name
+ */
+function getTrackingSectionName(sectionKey) {
+  // Map section keys to tracking names
+  const trackingMap = {
+    // Intro
+    'intro': 'intro',
+    'more_info': 'intro_more_info',
+
+    // Part 1: Safety Screening
+    'part1_intro': 'part1_intro',
+    'q1_weight_loss': 'part1_q1',
+    'q2_blood': 'part1_q2',
+    'q3_family_history': 'part1_q3',
+    'q4_colonoscopy': 'part1_q4',
+    'red_flag_warning': 'part1_red_flag_warning',
+
+    // Part 2: Symptom Pattern
+    'part2_intro': 'part2_intro',
+    'q5_primary_complaint': 'part2_q1',
+    'q5_validation': 'part2_q1_validation',
+    'q6_frequency': 'part2_q2',
+    'q7_bm_relief': 'part2_q3',
+    'q8_frequency_change': 'part2_q4',
+    'q9_stool_change': 'part2_q5',
+    'email_capture_early': 'part2_email_capture',
+
+    // Part 3: History
+    'part3_intro': 'part3_intro',
+    'q10_duration': 'part3_q1',
+    'q10_validation_long': 'part3_q1_validation',
+    'q11_diagnosis': 'part3_q2',
+    'q12_tried': 'part3_q3',
+    'q12_validation_persistent': 'part3_q3_validation',
+    'testimonial_interlude': 'part3_testimonial',
+
+    // Part 4: Gut-Brain Connection
+    'part4_intro': 'part4_intro',
+    'q13_stress': 'part4_q1',
+    'q14_mental_health': 'part4_q2',
+    'q15_sleep': 'part4_q3',
+
+    // Part 5: Life Impact
+    'part5_intro': 'part5_intro',
+    'q16_life_impact': 'part5_q1',
+    'q17_hardest_part': 'part5_q2',
+    'q17_response': 'part5_q2_response',
+    'q18_vision': 'part5_q3',
+    'email_capture': 'part5_email_capture',
+    'get_email': 'part5_get_email',
+    'email_already_captured': 'part5_email_already',
+    'name_capture': 'part5_name_capture',
+    'final_message': 'part5_final',
+
+    // Results & Completion
+    'confirmation': 'results',
+    'show_calculating_redirect': 'results_calculating',
+    'results_chunk1': 'results',
+    'results_chunk2': 'results',
+    'results_chunk3': 'results',
+    'redirect_to_sales': 'offer_redirect',
+
+    // Exit flow
+    'exit_message': 'exit_message',
+    'exit_get_email': 'exit_email',
+    'exit_final': 'exit_final'
+  };
+
+  return trackingMap[sectionKey] || sectionKey;
+}
+
+/**
+ * Push quiz step event to GTM dataLayer
+ * @param {string} sectionKey - Internal section key
+ */
+function trackQuizStep(sectionKey) {
+  const trackingName = getTrackingSectionName(sectionKey);
+
+  window.dataLayer = window.dataLayer || [];
+  window.dataLayer.push({
+    'event': 'quiz_step',
+    'quiz_section': trackingName,
+    'quiz_source': 'chat-rebecca'
+  });
+
+  console.log('GTM dataLayer push:', { event: 'quiz_step', quiz_section: trackingName });
+}
+
+/**
  * Update URL with current section for tracking
  * @param {string} sectionKey - Current section key
  */
@@ -669,6 +760,9 @@ function updateUrlWithSection(sectionKey) {
   } catch (e) {
     console.warn('Could not update URL:', e);
   }
+
+  // Track quiz step in GTM dataLayer
+  trackQuizStep(sectionKey);
 }
 
 /**
