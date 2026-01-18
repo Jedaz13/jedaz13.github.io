@@ -1,45 +1,14 @@
-// Survey-Style Quiz Application
-// Clean, minimal quiz for A/B testing
+// Survey-Style Quiz Application 2.0
+// Complete quiz funnel with interstitials, practitioner intros, and testimonials
 
 // Configuration
 const CONFIG = {
   OFFER_URL: '/offer/',
-  SOURCE_TRACKING: 'survey-clean',
-  LOADING_DURATION: 4000, // 4 seconds
-  AUTO_ADVANCE_DELAY: 400 // ms after single-select
+  SOURCE_TRACKING: 'quiz-2',
+  LOADING_DURATION: 5500, // 5.5 seconds for loading animation
+  AUTO_ADVANCE_DELAY: 400, // ms after single-select
+  LOADING_MESSAGE_INTERVAL: 1500 // ms between loading messages
 };
-
-/**
- * Push quiz step event to GTM dataLayer
- * @param {string} sectionName - Tracking section name
- */
-function trackQuizStep(sectionName) {
-  window.dataLayer = window.dataLayer || [];
-  window.dataLayer.push({
-    'event': 'quiz_step',
-    'quiz_section': sectionName,
-    'quiz_source': CONFIG.SOURCE_TRACKING
-  });
-
-  console.log('GTM dataLayer push:', { event: 'quiz_step', quiz_section: sectionName });
-}
-
-/**
- * Get tracking section name based on current position
- * @returns {string} - GTM tracking name
- */
-function getTrackingSectionName() {
-  const sectionNames = ['safety', 'symptoms', 'history', 'gut_brain', 'impact'];
-  const sectionPrefix = ['part1', 'part2', 'part3', 'part4', 'part5'];
-
-  const section = quizContent.sections[state.currentSectionIndex];
-  if (!section) return 'unknown';
-
-  const prefix = sectionPrefix[state.currentSectionIndex] || `part${state.currentSectionIndex + 1}`;
-
-  // Return section intro or question number
-  return `${prefix}_q${state.currentQuestionIndex + 1}`;
-}
 
 // Questions per section for progress calculation
 const QUESTIONS_PER_SECTION = [4, 5, 3, 3, 3]; // Safety, Symptoms, History, GutBrain, Impact
@@ -54,8 +23,13 @@ const state = {
     email: ''
   },
   hasRedFlags: false,
+  redFlagsBypassed: false,
+  calculatedProtocol: null,
+  hasGutBrainOverlay: false,
   history: [], // For back navigation
-  showingSafetyIntro: false
+  currentInterstitial: null, // Track which interstitial is showing
+  quizStartedAt: null,
+  quizCompletedAt: null
 };
 
 // DOM Elements
@@ -86,17 +60,37 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 /**
- * Start the quiz - transition from welcome to safety intro
+ * Push quiz step event to GTM dataLayer
+ */
+function trackQuizStep(sectionName) {
+  window.dataLayer = window.dataLayer || [];
+  window.dataLayer.push({
+    'event': 'quiz_step',
+    'quiz_section': sectionName,
+    'quiz_source': CONFIG.SOURCE_TRACKING
+  });
+  console.log('GTM dataLayer push:', { event: 'quiz_step', quiz_section: sectionName });
+}
+
+/**
+ * Get tracking section name based on current position
+ */
+function getTrackingSectionName() {
+  const sectionPrefix = ['part1', 'part2', 'part3', 'part4', 'part5'];
+  const prefix = sectionPrefix[state.currentSectionIndex] || `part${state.currentSectionIndex + 1}`;
+  return `${prefix}_q${state.currentQuestionIndex + 1}`;
+}
+
+/**
+ * Start the quiz
  */
 function startQuiz() {
-  // Track quiz start
+  state.quizStartedAt = new Date().toISOString();
   trackQuizStep('intro');
 
-  // Hide welcome screen, show quiz UI
   welcomeScreen.classList.add('hidden');
   quizUI.classList.remove('hidden');
 
-  // Show safety intro screen first
   showSafetyIntro();
 }
 
@@ -104,23 +98,15 @@ function startQuiz() {
  * Show the safety section intro screen
  */
 function showSafetyIntro() {
-  state.showingSafetyIntro = true;
-
-  // Track safety intro
   trackQuizStep('part1_intro');
-
-  // Update section label
   document.getElementById('sectionLabel').textContent = 'SAFETY SCREENING';
-
-  // Initialize progress bar at 0%
   updateProgressBar();
 
-  // Render safety intro content
   contentEl.innerHTML = `
     <div class="section-intro">
       <div class="section-intro-content">
         <h2>First, a few quick health questions</h2>
-        <p>These help us make sure this assessment is right for you &mdash; and that you don't need to see a doctor first.</p>
+        <p>These help us make sure this assessment is right for you — and that you don't need to see a doctor first.</p>
         <p class="reassurance">Most people breeze through these in under a minute.</p>
         <button class="btn-primary" id="startSafetyBtn">Continue &rarr;</button>
       </div>
@@ -128,7 +114,6 @@ function showSafetyIntro() {
   `;
 
   document.getElementById('startSafetyBtn').addEventListener('click', () => {
-    state.showingSafetyIntro = false;
     renderQuestion();
   });
 }
@@ -149,31 +134,24 @@ function updateProgressBar() {
   const segments = progressEl.querySelectorAll('.progress-segment');
   const dots = progressEl.querySelectorAll('.progress-dot');
 
-  // Calculate progress within current section
   const questionsInSection = QUESTIONS_PER_SECTION[state.currentSectionIndex] || 1;
-  // Progress is based on completed questions (currentQuestionIndex represents the question we're about to show)
   const sectionProgress = state.currentQuestionIndex / questionsInSection;
 
   segments.forEach((segment, index) => {
     const fill = segment.querySelector('.segment-fill');
-
     segment.classList.remove('completed', 'current');
 
     if (index < state.currentSectionIndex) {
-      // Completed sections - fully filled
       segment.classList.add('completed');
       if (fill) fill.style.width = '100%';
     } else if (index === state.currentSectionIndex) {
-      // Current section - partially filled
       segment.classList.add('current');
       if (fill) fill.style.width = `${sectionProgress * 100}%`;
     } else {
-      // Future sections - empty
       if (fill) fill.style.width = '0%';
     }
   });
 
-  // Update dots
   dots.forEach((dot, index) => {
     dot.classList.remove('active');
     if (index < state.currentSectionIndex) {
@@ -210,8 +188,18 @@ function handleBack() {
   if (state.history.length === 0) return;
 
   const prev = state.history.pop();
-  state.currentSectionIndex = prev.sectionIndex;
-  state.currentQuestionIndex = prev.questionIndex;
+
+  if (prev.type === 'interstitial') {
+    // Skip interstitials on back navigation
+    if (state.history.length > 0) {
+      const prevPrev = state.history.pop();
+      state.currentSectionIndex = prevPrev.sectionIndex;
+      state.currentQuestionIndex = prevPrev.questionIndex;
+    }
+  } else {
+    state.currentSectionIndex = prev.sectionIndex;
+    state.currentQuestionIndex = prev.questionIndex;
+  }
 
   renderQuestion();
 }
@@ -219,8 +207,9 @@ function handleBack() {
 /**
  * Save current position to history
  */
-function saveToHistory() {
+function saveToHistory(type = 'question') {
   state.history.push({
+    type,
     sectionIndex: state.currentSectionIndex,
     questionIndex: state.currentQuestionIndex
   });
@@ -237,28 +226,25 @@ function renderQuestion() {
     return;
   }
 
-  // Track the current question step
-  trackQuizStep(getTrackingSectionName());
+  // Show header and progress
+  headerEl.classList.remove('hidden');
+  progressEl.classList.remove('hidden');
 
-  // Update UI elements
+  trackQuizStep(getTrackingSectionName());
   updateProgressBar();
   updateSectionLabel();
   updateBackButton();
 
-  // Clear content area
   contentEl.innerHTML = '';
 
-  // Create question container
   const container = document.createElement('div');
   container.className = 'question-container';
 
-  // Add question text
   const questionText = document.createElement('h2');
   questionText.className = 'question-text';
   questionText.textContent = question.text;
   container.appendChild(questionText);
 
-  // Render input based on type
   switch (question.type) {
     case 'single':
       renderSingleSelect(container, question);
@@ -286,7 +272,6 @@ function renderSingleSelect(container, question) {
     button.className = 'option-button';
     button.textContent = option.text;
 
-    // Check if already selected
     if (state.answers[question.id] === option.value) {
       button.classList.add('selected');
     }
@@ -305,21 +290,17 @@ function renderSingleSelect(container, question) {
  * Handle single-select option click
  */
 function handleSingleSelect(question, option, optionsDiv, clickedBtn) {
-  // Update visual selection
   optionsDiv.querySelectorAll('.option-button').forEach(btn => {
     btn.classList.remove('selected');
   });
   clickedBtn.classList.add('selected');
 
-  // Store answer
   state.answers[question.id] = option.value;
 
-  // Check for red flags
   if (option.redFlag) {
     state.hasRedFlags = true;
   }
 
-  // Auto-advance after delay
   setTimeout(() => {
     advanceQuestion();
   }, CONFIG.AUTO_ADVANCE_DELAY);
@@ -353,7 +334,6 @@ function renderMultiSelect(container, question) {
     optionsDiv.appendChild(button);
   });
 
-  // Continue button
   const continueBtn = document.createElement('button');
   continueBtn.className = 'continue-button';
   continueBtn.textContent = 'Continue';
@@ -402,76 +382,108 @@ function renderTextInput(container, question) {
   textarea.className = 'text-input';
   textarea.placeholder = question.placeholder || 'Type your response...';
   textarea.value = state.answers[question.id] || '';
+  textarea.maxLength = 500;
 
   const charCount = document.createElement('div');
   charCount.className = 'char-count';
-  charCount.textContent = `${textarea.value.length} characters`;
+  charCount.textContent = `${textarea.value.length}/500 characters`;
 
   textarea.addEventListener('input', () => {
-    charCount.textContent = `${textarea.value.length} characters`;
-    updateTextContinueButton(question.id, textarea.value.trim());
+    charCount.textContent = `${textarea.value.length}/500 characters`;
+    updateTextContinueButtons(question.id, textarea.value.trim(), question.optional);
   });
 
   inputDiv.appendChild(textarea);
   inputDiv.appendChild(charCount);
 
-  // Continue button
+  // Button container
+  const btnContainer = document.createElement('div');
+  btnContainer.style.display = 'flex';
+  btnContainer.style.flexDirection = 'column';
+  btnContainer.style.gap = '12px';
+
   const continueBtn = document.createElement('button');
   continueBtn.className = 'continue-button';
-  continueBtn.textContent = 'Continue';
-  continueBtn.disabled = (state.answers[question.id] || '').length < 10;
   continueBtn.id = 'textContinueBtn';
+
+  const currentValue = state.answers[question.id] || '';
+  if (question.optional) {
+    continueBtn.textContent = currentValue.length >= 10 ? 'Continue' : 'Skip';
+    continueBtn.disabled = false;
+  } else {
+    continueBtn.textContent = 'Continue';
+    continueBtn.disabled = currentValue.length < 10;
+  }
 
   continueBtn.addEventListener('click', () => {
     const value = textarea.value.trim();
-    if (value.length >= 10) {
+    if (value.length >= 10 || question.optional) {
       state.answers[question.id] = value;
       advanceQuestion();
     }
   });
 
+  btnContainer.appendChild(continueBtn);
   container.appendChild(inputDiv);
-  container.appendChild(continueBtn);
+  container.appendChild(btnContainer);
 
-  // Focus textarea
   setTimeout(() => textarea.focus(), 100);
 }
 
 /**
  * Update text input continue button state
  */
-function updateTextContinueButton(questionId, value) {
+function updateTextContinueButtons(questionId, value, isOptional) {
   const continueBtn = document.getElementById('textContinueBtn');
   if (continueBtn) {
-    continueBtn.disabled = value.length < 10;
+    if (isOptional) {
+      continueBtn.textContent = value.length >= 10 ? 'Continue' : 'Skip';
+      continueBtn.disabled = false;
+    } else {
+      continueBtn.disabled = value.length < 10;
+    }
   }
 }
 
 /**
- * Advance to next question
+ * Advance to next question or show interstitial
  */
 function advanceQuestion() {
   saveToHistory();
 
   const { section } = getCurrentPosition();
 
-  // Check if we need to show red flag warning after section 1
+  // After safety section (Q4) - show practitioner intro or red flag warning
   if (section.id === 'safety' && state.currentQuestionIndex === section.questions.length - 1) {
     if (state.hasRedFlags) {
       showRedFlagWarning();
-      return;
+    } else {
+      showPractitionerIntro();
     }
-  }
-
-  // Check if we need to capture email after section 2
-  if (section.id === 'symptoms' && state.currentQuestionIndex === section.questions.length - 1) {
-    showEmailCapture();
     return;
   }
 
-  // Check if we need to capture name after section 5
+  // After symptoms section (Q9) - show protocol preview
+  if (section.id === 'symptoms' && state.currentQuestionIndex === section.questions.length - 1) {
+    showProtocolPreview();
+    return;
+  }
+
+  // After history section (Q12) - show validation screen
+  if (section.id === 'history' && state.currentQuestionIndex === section.questions.length - 1) {
+    showValidationScreen();
+    return;
+  }
+
+  // After gut-brain Q13 - show Amanda testimonial
+  if (section.id === 'gutbrain' && state.currentQuestionIndex === 0) {
+    showTestimonialAmanda();
+    return;
+  }
+
+  // After impact section - show loading and results
   if (section.id === 'impact' && state.currentQuestionIndex === section.questions.length - 1) {
-    showNameCapture();
+    showFinalCalculation();
     return;
   }
 
@@ -491,64 +503,211 @@ function advanceQuestion() {
   }
 
   // Quiz complete
-  showLoadingScreen();
+  showFinalCalculation();
 }
 
 /**
- * Show red flag warning screen
+ * Show practitioner intro (Rebecca) - no red flags
  */
-function showRedFlagWarning() {
-  // Track red flag warning
-  trackQuizStep('part1_red_flag_warning');
+function showPractitionerIntro() {
+  saveToHistory('interstitial');
+  trackQuizStep('part1_practitioner_intro');
 
-  // Hide progress
+  const rebecca = quizContent.practitioners.rebecca;
+
+  // Hide progress temporarily for cleaner look
   progressEl.classList.add('hidden');
-  headerEl.querySelector('.section-label').textContent = '';
+  document.getElementById('sectionLabel').textContent = '';
 
   contentEl.innerHTML = `
-    <div class="warning-screen">
-      <div class="warning-icon">&#9888;</div>
-      <h2>Before we continue</h2>
-      <p>Based on your answers, we recommend speaking with a doctor before starting any gut protocol.</p>
-      <p>This doesn't mean something is wrong - it just means your symptoms deserve professional evaluation first.</p>
-      <div class="warning-actions">
-        <button class="btn-secondary" id="exitBtn">I'll return after seeing my doctor</button>
-        <button class="btn-primary" id="continueBtn">I've already been evaluated and cleared</button>
-      </div>
+    <div class="practitioner-intro">
+      <img src="${rebecca.photo}" alt="${rebecca.name}" class="practitioner-photo" onerror="this.style.display='none'" />
+      <h2>Great news — you're a good fit for our protocols</h2>
+      ${rebecca.introMessage.split('\n\n').map(p => `<p>${p}</p>`).join('')}
+      <div class="practitioner-credentials">${rebecca.credentials} — ${rebecca.title}</div>
+      <button class="btn-primary" id="continueFromIntroBtn">Continue to Symptom Assessment &rarr;</button>
     </div>
   `;
 
-  document.getElementById('exitBtn').addEventListener('click', () => {
-    // Could redirect to a thank you page or show exit message
-    window.location.href = '/';
-  });
-
-  document.getElementById('continueBtn').addEventListener('click', () => {
-    state.answers.red_flag_evaluated_cleared = true;
+  document.getElementById('continueFromIntroBtn').addEventListener('click', () => {
     progressEl.classList.remove('hidden');
-    state.currentSectionIndex++;
+    state.currentSectionIndex = 1; // Move to symptoms section
     state.currentQuestionIndex = 0;
     renderQuestion();
   });
 }
 
 /**
+ * Show red flag warning screen
+ */
+function showRedFlagWarning() {
+  saveToHistory('interstitial');
+  trackQuizStep('part1_red_flag_warning');
+
+  const rebecca = quizContent.practitioners.rebecca;
+
+  progressEl.classList.add('hidden');
+  document.getElementById('sectionLabel').textContent = '';
+
+  contentEl.innerHTML = `
+    <div class="warning-screen">
+      <div class="warning-icon">&#9888;</div>
+      <h2>Before we continue</h2>
+      <p>Based on your answers, I recommend speaking with a gastroenterologist before starting any gut protocol.</p>
+      <p>This doesn't mean something is wrong — it just means your symptoms deserve proper evaluation first.</p>
+
+      <div class="warning-practitioner-card">
+        <img src="${rebecca.photo}" alt="${rebecca.name}" onerror="this.style.display='none'" />
+        <p>${rebecca.redFlagMessage}</p>
+      </div>
+
+      <div class="warning-actions">
+        <button class="btn-secondary" id="exitBtn">I'll return after seeing my doctor</button>
+        <button class="btn-primary" id="continueAnywayBtn">I've already been evaluated and cleared</button>
+      </div>
+    </div>
+  `;
+
+  document.getElementById('exitBtn').addEventListener('click', () => {
+    window.location.href = '/';
+  });
+
+  document.getElementById('continueAnywayBtn').addEventListener('click', () => {
+    state.redFlagsBypassed = true;
+    state.answers.red_flag_evaluated_cleared = true;
+    progressEl.classList.remove('hidden');
+    state.currentSectionIndex = 1;
+    state.currentQuestionIndex = 0;
+    renderQuestion();
+  });
+}
+
+/**
+ * Calculate protocol based on answers
+ */
+function calculateProtocol() {
+  const data = state.answers;
+  const diagnoses = data.q11_diagnosis || [];
+  const tried = data.q12_tried || [];
+
+  // Priority 1: Post-SIBO (requires both diagnosis AND treatment history)
+  if (diagnoses.includes('sibo') && tried.includes('sibo_antibiotics')) {
+    return 'rebuild';
+  }
+
+  // Priority 2: Primary complaint mapping
+  const complaint = data.q5_primary_complaint;
+
+  if (complaint === 'bloating' || complaint === 'gas') {
+    return 'bloat_reset';
+  }
+
+  if (complaint === 'constipation') {
+    return 'regularity';
+  }
+
+  if (complaint === 'diarrhea') {
+    return 'calm_gut';
+  }
+
+  if (complaint === 'mixed' || data.q9_stool_change === 'alternates') {
+    return 'stability';
+  }
+
+  if (complaint === 'pain') {
+    if (data.q8_frequency_change === 'more') return 'calm_gut';
+    if (data.q8_frequency_change === 'less') return 'regularity';
+    if (data.q8_frequency_change === 'both') return 'stability';
+    return 'bloat_reset';
+  }
+
+  if (complaint === 'reflux') {
+    return 'bloat_reset';
+  }
+
+  return 'bloat_reset';
+}
+
+/**
+ * Check if gut-brain overlay applies
+ */
+function checkGutBrainOverlay() {
+  const data = state.answers;
+  return (
+    data.q13_stress === 'significant' ||
+    data.q14_mental_health === 'yes' ||
+    (data.q13_stress === 'some' && data.q14_mental_health === 'sometimes')
+  );
+}
+
+/**
+ * Show protocol preview after symptoms section
+ */
+function showProtocolPreview() {
+  saveToHistory('interstitial');
+  trackQuizStep('part2_protocol_preview');
+
+  // Calculate preliminary protocol
+  state.calculatedProtocol = calculateProtocol();
+  const protocol = quizContent.protocols[state.calculatedProtocol];
+
+  progressEl.classList.add('hidden');
+  document.getElementById('sectionLabel').textContent = '';
+
+  // Show loading first
+  contentEl.innerHTML = `
+    <div class="loading-screen">
+      <div class="spinner"></div>
+      <p class="loading-text">Analyzing your symptom pattern...</p>
+    </div>
+  `;
+
+  setTimeout(() => {
+    contentEl.innerHTML = `
+      <div class="protocol-preview">
+        <div class="check-icon">&#10003;</div>
+        <h2>Based on your symptoms, you're likely a match for:</h2>
+
+        <div class="protocol-card">
+          <div class="protocol-name">${protocol.name}</div>
+          <div class="protocol-tagline">${protocol.tagline}</div>
+        </div>
+
+        <p class="explanation">
+          But identifying a protocol is just the first step. To customize this for YOUR body — and skip what hasn't worked for you before — we need to understand your history.
+        </p>
+        <p class="explanation">
+          The next few questions help us personalize your protocol so you're not starting from scratch.
+        </p>
+
+        <button class="btn-primary" id="continueFromPreviewBtn">Continue &rarr;</button>
+      </div>
+    `;
+
+    document.getElementById('continueFromPreviewBtn').addEventListener('click', () => {
+      showEmailCapture();
+    });
+  }, 2000);
+}
+
+/**
  * Show email capture screen
  */
 function showEmailCapture() {
-  // Track email capture
-  trackQuizStep('part2_email_capture');
+  saveToHistory('interstitial');
+  trackQuizStep('email_capture');
 
-  // Update header
+  progressEl.classList.add('hidden');
   document.getElementById('sectionLabel').textContent = '';
 
   contentEl.innerHTML = `
     <div class="capture-container">
-      <p class="capture-label">Save your progress</p>
-      <h2 class="capture-title">Where should we send your results?</h2>
+      <p class="capture-label">SAVE YOUR PROGRESS</p>
+      <h2 class="capture-title">Where should we send your personalized results?</h2>
       <input type="email" class="capture-input" id="emailInput" placeholder="your@email.com" />
       <div class="error-message hidden" id="emailError">Please enter a valid email address</div>
-      <button class="continue-button" id="emailContinueBtn" disabled>Continue</button>
+      <p class="privacy-text">We'll send your protocol results and keep you updated on your gut healing journey. Unsubscribe anytime.</p>
+      <button class="continue-button" id="emailContinueBtn" disabled>Send My Results &rarr;</button>
     </div>
   `;
 
@@ -566,20 +725,22 @@ function showEmailCapture() {
     if (isValidEmail(emailInput.value)) {
       state.userData.email = emailInput.value.trim();
 
-      // Track Lead event
       trackPixelEvent('Lead', {
         content_name: CONFIG.SOURCE_TRACKING,
         content_category: 'quiz'
       });
 
-      // Move to next section
-      state.currentSectionIndex++;
+      // Fire webhook for email capture
+      sendWebhook('quiz_email_captured');
+
+      // Move to history section
+      progressEl.classList.remove('hidden');
+      state.currentSectionIndex = 2; // History section
       state.currentQuestionIndex = 0;
       renderQuestion();
     }
   });
 
-  // Allow Enter key
   emailInput.addEventListener('keypress', (e) => {
     if (e.key === 'Enter' && !continueBtn.disabled) {
       continueBtn.click();
@@ -590,134 +751,316 @@ function showEmailCapture() {
 }
 
 /**
- * Show name capture screen
+ * Format treatment list for validation screen
  */
-function showNameCapture() {
-  // Track name capture
-  trackQuizStep('part5_name_capture');
+function formatTriedList(tried) {
+  const labels = quizContent.treatmentLabels;
+  const items = tried
+    .filter(t => t !== 'nothing')
+    .map(t => labels[t])
+    .filter(Boolean);
 
-  // Update header
-  document.getElementById('sectionLabel').textContent = '';
+  if (items.length === 0) return '';
+  if (items.length === 1) return items[0];
+  if (items.length === 2) return `${items[0]} and ${items[1]}`;
 
-  contentEl.innerHTML = `
-    <div class="capture-container">
-      <h2 class="capture-title">What should we call you?</h2>
-      <input type="text" class="capture-input" id="nameInput" placeholder="Your first name" />
-      <button class="continue-button" id="nameContinueBtn" disabled>Continue</button>
-    </div>
-  `;
-
-  const nameInput = document.getElementById('nameInput');
-  const continueBtn = document.getElementById('nameContinueBtn');
-
-  nameInput.addEventListener('input', () => {
-    continueBtn.disabled = nameInput.value.trim().length < 1;
-  });
-
-  continueBtn.addEventListener('click', () => {
-    if (nameInput.value.trim().length >= 1) {
-      state.userData.name = nameInput.value.trim();
-      showLoadingScreen();
-    }
-  });
-
-  // Allow Enter key
-  nameInput.addEventListener('keypress', (e) => {
-    if (e.key === 'Enter' && !continueBtn.disabled) {
-      continueBtn.click();
-    }
-  });
-
-  setTimeout(() => nameInput.focus(), 100);
+  const last = items.pop();
+  return `${items.join(', ')}, and ${last}`;
 }
 
 /**
- * Show loading/calculating screen
+ * Show validation screen after history section
  */
-function showLoadingScreen() {
-  // Track results/calculating
+function showValidationScreen() {
+  saveToHistory('interstitial');
+  trackQuizStep('part3_validation');
+
+  const paulina = quizContent.practitioners.paulina;
+  const duration = state.answers.q10_duration;
+  const diagnoses = state.answers.q11_diagnosis || [];
+  const tried = state.answers.q12_tried || [];
+
+  progressEl.classList.add('hidden');
+  document.getElementById('sectionLabel').textContent = '';
+
+  // Build dynamic content sections
+  let validationSections = [];
+
+  // Duration acknowledgment
+  const durationText = quizContent.durationAcknowledgments[duration] || quizContent.durationAcknowledgments['1-3_years'];
+  validationSections.push(`<div class="validation-section">${durationText}</div>`);
+
+  // Diagnosis validation
+  if (diagnoses.includes('no_diagnosis')) {
+    validationSections.push(`
+      <div class="validation-section">
+        <strong>"Normal" test results</strong> don't mean your symptoms aren't real. Standard blood work and imaging often miss functional gut issues entirely. You're not imagining this — your body is telling you something, even if tests don't show it.
+      </div>
+    `);
+  } else if (diagnoses.length > 0 && !diagnoses.includes('other')) {
+    const diagLabels = diagnoses.map(d => {
+      const labels = { ibs: 'IBS', sibo: 'SIBO', ibd: 'IBD', gerd: 'GERD', food_intolerance: 'food intolerances' };
+      return labels[d] || d;
+    }).join(', ');
+    validationSections.push(`
+      <div class="validation-section">
+        You've been diagnosed with ${diagLabels}. Having a name for what you're experiencing is a start — but a diagnosis alone doesn't give you a day-by-day plan for feeling better.
+      </div>
+    `);
+  }
+
+  // What they've tried
+  if (!tried.includes('nothing') && tried.length > 0) {
+    const triedList = formatTriedList(tried);
+    validationSections.push(`
+      <div class="validation-section">
+        You've already put in serious work. <strong>${triedList}</strong> — you weren't doing it wrong. These approaches help some people, but without tracking your individual response and having someone adjust based on YOUR data, it's like navigating without a map.
+      </div>
+    `);
+  }
+
+  // How GHA is different
+  validationSections.push(`
+    <div class="validation-section">
+      At Gut Healing Academy, our practitioners review your weekly tracking and adapt your protocol based on how YOUR body responds. No more guessing if something is working.
+    </div>
+  `);
+
+  contentEl.innerHTML = `
+    <div class="validation-screen">
+      <h2>Here's what I'm seeing...</h2>
+
+      ${validationSections.join('')}
+
+      <div class="practitioner-mini-card">
+        <img src="${paulina.photo}" alt="${paulina.name}" onerror="this.style.display='none'" />
+        <div class="practitioner-info">
+          <div class="practitioner-name">${paulina.name}, ${paulina.credentials}</div>
+          <div class="practitioner-title">${paulina.title}</div>
+          <div class="practitioner-quote">"${paulina.validationQuote}"</div>
+        </div>
+      </div>
+
+      <button class="btn-primary" id="continueFromValidationBtn">Continue &rarr;</button>
+    </div>
+  `;
+
+  document.getElementById('continueFromValidationBtn').addEventListener('click', () => {
+    showTestimonialSuzy();
+  });
+}
+
+/**
+ * Show Suzy testimonial
+ */
+function showTestimonialSuzy() {
+  saveToHistory('interstitial');
+  trackQuizStep('testimonial_suzy');
+
+  const suzy = quizContent.testimonials.suzy;
+
+  progressEl.classList.add('hidden');
+  document.getElementById('sectionLabel').textContent = '';
+
+  contentEl.innerHTML = `
+    <div class="testimonial-container">
+      <p class="testimonial-label">FROM OUR COMMUNITY</p>
+
+      <div class="testimonial-card">
+        <img src="${suzy.photo}" alt="${suzy.name}" class="testimonial-photo" onerror="this.style.display='none'" />
+        <p class="testimonial-quote">"${suzy.quote}"</p>
+        <p class="testimonial-name">${suzy.name}</p>
+        <div class="star-rating">${'★'.repeat(suzy.stars)}</div>
+      </div>
+
+      <p class="testimonial-disclaimer">Individual results may vary based on adherence and personal factors.</p>
+
+      <button class="btn-primary" id="continueFromSuzyBtn">Continue &rarr;</button>
+    </div>
+  `;
+
+  document.getElementById('continueFromSuzyBtn').addEventListener('click', () => {
+    progressEl.classList.remove('hidden');
+    state.currentSectionIndex = 3; // Gut-brain section
+    state.currentQuestionIndex = 0;
+    renderQuestion();
+  });
+}
+
+/**
+ * Show Amanda testimonial (after Q13)
+ */
+function showTestimonialAmanda() {
+  saveToHistory('interstitial');
+  trackQuizStep('testimonial_amanda');
+
+  const amanda = quizContent.testimonials.amanda;
+
+  progressEl.classList.add('hidden');
+  document.getElementById('sectionLabel').textContent = '';
+
+  contentEl.innerHTML = `
+    <div class="testimonial-container">
+      <p class="testimonial-context">${amanda.contextLine}</p>
+
+      <div class="testimonial-card">
+        <img src="${amanda.photo}" alt="${amanda.name}" class="testimonial-photo" onerror="this.style.display='none'" />
+        <p class="testimonial-quote">"${amanda.quote}"</p>
+        <p class="testimonial-name">${amanda.name}</p>
+        <div class="star-rating">${'★'.repeat(amanda.stars)}</div>
+      </div>
+
+      <p class="testimonial-disclaimer">Individual results may vary based on adherence and personal factors.</p>
+
+      <button class="btn-primary" id="continueFromAmandaBtn">Continue &rarr;</button>
+    </div>
+  `;
+
+  document.getElementById('continueFromAmandaBtn').addEventListener('click', () => {
+    progressEl.classList.remove('hidden');
+    state.currentQuestionIndex = 1; // Move to Q14
+    renderQuestion();
+  });
+}
+
+/**
+ * Show final calculation animation
+ */
+function showFinalCalculation() {
+  state.quizCompletedAt = new Date().toISOString();
+  saveToHistory('interstitial');
   trackQuizStep('results_calculating');
+
+  // Final protocol calculation
+  state.calculatedProtocol = calculateProtocol();
+  state.hasGutBrainOverlay = checkGutBrainOverlay();
 
   // Hide header and progress
   headerEl.classList.add('hidden');
   progressEl.classList.add('hidden');
 
+  const messages = quizContent.loadingMessages;
+  let messageIndex = 0;
+
   contentEl.innerHTML = `
     <div class="loading-screen">
       <div class="spinner"></div>
-      <p class="loading-text">Analyzing your responses...</p>
+      <p class="loading-text">${messages[0]}</p>
     </div>
   `;
 
-  // Track CompleteRegistration
-  const protocol = calculateProtocol();
+  const loadingText = contentEl.querySelector('.loading-text');
+
+  // Rotate messages
+  const messageInterval = setInterval(() => {
+    messageIndex++;
+    if (messageIndex < messages.length) {
+      loadingText.style.opacity = '0';
+      setTimeout(() => {
+        loadingText.textContent = messages[messageIndex];
+        loadingText.style.opacity = '1';
+      }, 300);
+    }
+  }, CONFIG.LOADING_MESSAGE_INTERVAL);
+
+  // Track completion
   trackPixelEvent('CompleteRegistration', {
     content_name: CONFIG.SOURCE_TRACKING,
-    status: protocol
+    status: state.calculatedProtocol
   });
 
-  // Redirect after delay
+  // Send completion webhook
+  sendWebhook('quiz_completed');
+
+  // Show results after loading
   setTimeout(() => {
-    redirectToOffer();
+    clearInterval(messageInterval);
+    showResults();
   }, CONFIG.LOADING_DURATION);
 }
 
 /**
- * Calculate protocol based on answers
+ * Show results screen
  */
-function calculateProtocol() {
-  const data = state.answers;
-  const diagnoses = data.q11_diagnosis || [];
-  const tried = data.q12_tried || [];
+function showResults() {
+  trackQuizStep('results_shown');
 
-  // SIBO history takes priority
-  if (diagnoses.includes('sibo') || tried.includes('sibo_antibiotics')) {
-    if (data.q13_stress === 'significant') {
-      return 'Post-SIBO Recovery (with Gut-Brain support)';
-    }
-    return 'Post-SIBO Recovery';
-  }
+  const protocol = quizContent.protocols[state.calculatedProtocol];
+  const cheryl = quizContent.testimonials.cheryl;
 
-  // Gut-brain dominant
-  if (data.q13_stress === 'significant' && data.q14_mental_health === 'yes') {
-    return 'Gut-Brain Dominant';
-  }
+  // Build personalization factors
+  const complaint = quizContent.complaintLabels[state.answers.q5_primary_complaint] || 'Gut symptoms';
+  const duration = state.answers.q10_duration ? state.answers.q10_duration.replace(/_/g, ' ').replace('-', '-') : 'ongoing';
+  const tried = state.answers.q12_tried || [];
+  const triedList = tried.includes('nothing') ? 'Just starting' : formatTriedList(tried);
 
-  // Primary symptom based
-  switch (data.q5_primary_complaint) {
-    case 'bloating':
-    case 'gas':
-      return 'Bloating-Dominant';
-    case 'constipation':
-      return 'IBS-C (Constipation-Dominant)';
-    case 'diarrhea':
-      return 'IBS-D (Diarrhea-Dominant)';
-    case 'mixed':
-      return 'IBS-M (Mixed Pattern)';
-    case 'reflux':
-      return 'GERD / Reflux Pattern';
-    case 'pain':
-      if (data.q9_stool_change === 'hard') return 'IBS-C (Constipation-Dominant)';
-      if (data.q9_stool_change === 'loose') return 'IBS-D (Diarrhea-Dominant)';
-      return 'IBS-M (Mixed Pattern)';
-    default:
-      return 'Personalized Gut Healing';
+  let personalizationHtml = `
+    <ul>
+      <li>Your primary symptom: <strong>${complaint}</strong></li>
+      <li>Duration: <strong>${duration}</strong> of gut issues</li>
+  `;
+  if (triedList && triedList !== 'Just starting') {
+    personalizationHtml += `<li>What you've tried: <strong>${triedList}</strong></li>`;
   }
+  if (state.hasGutBrainOverlay) {
+    personalizationHtml += `<li>Stress connection: <strong>Significant impact identified</strong></li>`;
+  }
+  personalizationHtml += '</ul>';
+
+  contentEl.innerHTML = `
+    <div class="results-screen">
+      <div class="check-icon">&#10003;</div>
+
+      <h1>Your Personalized Protocol is Ready</h1>
+
+      <div class="results-protocol-card">
+        <div class="protocol-name">${protocol.name}</div>
+        ${state.hasGutBrainOverlay ? `<div class="gut-brain-badge">${quizContent.gutBrainOverlay.name}</div>` : ''}
+        <div class="protocol-tagline">${protocol.tagline}</div>
+      </div>
+
+      <div class="personalization-factors">
+        <h3>Your protocol has been customized based on:</h3>
+        ${personalizationHtml}
+      </div>
+
+      <div class="whats-included">
+        ${quizContent.whatsIncluded.map(item => `
+          <div class="included-item">
+            <span class="check-mark">&#10003;</span>
+            <span>${item}</span>
+          </div>
+        `).join('')}
+      </div>
+
+      <div class="testimonial-compact">
+        <img src="${cheryl.photo}" alt="${cheryl.name}" onerror="this.style.display='none'" />
+        <div class="testimonial-text">
+          <p class="testimonial-quote">"${cheryl.quote}" — ${cheryl.name}</p>
+          <div class="star-rating">${'★'.repeat(cheryl.stars)}</div>
+        </div>
+      </div>
+
+      <button class="btn-primary btn-large" id="seeMyPlanBtn">See My Complete Plan &rarr;</button>
+      <p class="results-cta-note">See pricing and what's included</p>
+    </div>
+  `;
+
+  document.getElementById('seeMyPlanBtn').addEventListener('click', () => {
+    redirectToOffer();
+  });
 }
 
 /**
  * Redirect to offer page with tracking params
  */
 function redirectToOffer() {
-  // Track offer redirect
   trackQuizStep('offer_redirect');
 
   const params = new URLSearchParams();
 
-  // Source tracking - THIS IS IMPORTANT
   params.set('source', CONFIG.SOURCE_TRACKING);
 
-  // User data
   if (state.userData.name) {
     params.set('name', state.userData.name);
   }
@@ -725,15 +1068,15 @@ function redirectToOffer() {
     params.set('email', state.userData.email);
   }
 
-  // Protocol
-  params.set('protocol_name', calculateProtocol());
+  params.set('protocol', state.calculatedProtocol);
+  params.set('protocol_name', quizContent.protocols[state.calculatedProtocol].name);
+  params.set('gut_brain', state.hasGutBrainOverlay ? 'true' : 'false');
 
-  // Key answers
   if (state.answers.q5_primary_complaint) {
     params.set('primary_complaint', state.answers.q5_primary_complaint);
   }
-  if (state.answers.q18_vision) {
-    params.set('q18_vision', state.answers.q18_vision);
+  if (state.answers.q10_duration) {
+    params.set('duration', state.answers.q10_duration);
   }
   if (state.answers.q11_diagnosis) {
     params.set('diagnoses', state.answers.q11_diagnosis.join(','));
@@ -741,11 +1084,67 @@ function redirectToOffer() {
   if (state.answers.q12_tried) {
     params.set('treatments', state.answers.q12_tried.join(','));
   }
-  if (state.answers.q10_duration) {
-    params.set('duration', state.answers.q10_duration);
+  if (state.answers.q13_stress) {
+    params.set('stress_level', state.answers.q13_stress);
+  }
+  if (state.answers.q16_life_impact) {
+    params.set('life_impact', state.answers.q16_life_impact);
+  }
+  if (state.answers.q18_vision) {
+    params.set('vision', encodeURIComponent(state.answers.q18_vision.substring(0, 200)));
   }
 
   window.location.href = `${CONFIG.OFFER_URL}?${params.toString()}`;
+}
+
+/**
+ * Send webhook to Make.com
+ */
+function sendWebhook(eventType) {
+  const payload = {
+    event: eventType,
+    timestamp: new Date().toISOString(),
+    email: state.userData.email,
+    source: CONFIG.SOURCE_TRACKING
+  };
+
+  if (eventType === 'quiz_email_captured') {
+    payload.partial_data = {
+      has_red_flags: state.hasRedFlags,
+      primary_complaint: state.answers.q5_primary_complaint,
+      frequency: state.answers.q6_frequency,
+      preliminary_protocol: state.calculatedProtocol
+    };
+  }
+
+  if (eventType === 'quiz_completed') {
+    payload.results = {
+      protocol: state.calculatedProtocol,
+      has_gut_brain_overlay: state.hasGutBrainOverlay,
+      duration: state.answers.q10_duration,
+      diagnoses: state.answers.q11_diagnosis || [],
+      tried_treatments: state.answers.q12_tried || [],
+      stress_level: state.answers.q13_stress,
+      mental_health_impact: state.answers.q14_mental_health,
+      life_impact: state.answers.q16_life_impact,
+      hardest_part: state.answers.q17_hardest_part || '',
+      vision: state.answers.q18_vision || ''
+    };
+    payload.metadata = {
+      quiz_duration_seconds: Math.round((new Date(state.quizCompletedAt) - new Date(state.quizStartedAt)) / 1000),
+      red_flags_bypassed: state.redFlagsBypassed
+    };
+  }
+
+  // Log for debugging (webhook URL would go here)
+  console.log('Webhook payload:', payload);
+
+  // Actual webhook call would be:
+  // fetch('YOUR_MAKE_WEBHOOK_URL', {
+  //   method: 'POST',
+  //   headers: { 'Content-Type': 'application/json' },
+  //   body: JSON.stringify(payload)
+  // }).catch(console.error);
 }
 
 /**
