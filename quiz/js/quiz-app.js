@@ -14,8 +14,36 @@ const CONFIG = {
   AVATAR_PATH: 'assets/rebecca-avatar.png',
   AVATAR_FALLBACK: 'assets/rebecca-avatar.svg',
   // Default typing delay in ms
-  DEFAULT_DELAY: 1000
+  DEFAULT_DELAY: 1000,
+  // Reading speed configuration (words per minute)
+  // Average adult reading speed: 200-250 wpm
+  // For comfortable comprehension: ~180 wpm
+  READING_SPEED_WPM: 180,
+  // Minimum reading delay in ms
+  MIN_READING_DELAY: 800,
+  // Maximum reading delay in ms
+  MAX_READING_DELAY: 5000
 };
+
+/**
+ * Calculate reading time for a message based on word count
+ * Average adult reads 200-250 wpm; we use 180 wpm for comfortable comprehension
+ * @param {string} text - The message text
+ * @returns {number} - Delay in milliseconds
+ */
+function calculateReadingDelay(text) {
+  if (!text) return CONFIG.MIN_READING_DELAY;
+
+  // Strip HTML tags for accurate word count
+  const plainText = text.replace(/<[^>]*>/g, '').replace(/\{\{[^}]*\}\}/g, '');
+  const wordCount = plainText.trim().split(/\s+/).filter(word => word.length > 0).length;
+
+  // Calculate delay: (words / wpm) * 60 * 1000 = ms
+  const readingTime = (wordCount / CONFIG.READING_SPEED_WPM) * 60 * 1000;
+
+  // Clamp between min and max
+  return Math.max(CONFIG.MIN_READING_DELAY, Math.min(CONFIG.MAX_READING_DELAY, readingTime));
+}
 
 // Initialize Supabase client (only if credentials are configured)
 var supabaseClient = null;
@@ -134,13 +162,13 @@ function getAvatarHTML() {
 // Sales page redirect URL
 const SALES_PAGE_URL = 'https://www.guthealingacademy.com/offer/';
 
-// Quiz progress parts mapping
+// Quiz progress parts mapping (includes all sections for accurate progress tracking)
 const QUIZ_PARTS = {
   1: { name: 'Safety Screening', sections: ['part1_intro', 'q2_blood', 'q3_family_history', 'q4_colonoscopy'] },
-  2: { name: 'Symptom Pattern', sections: ['part2_intro', 'q6_frequency', 'q7_bm_relief', 'q8_frequency_change', 'q9_stool_change'] },
-  3: { name: 'Your History', sections: ['part3_intro', 'q11_diagnosis', 'q12_tried'] },
+  2: { name: 'Symptom Pattern', sections: ['part2_intro', 'q5_validation', 'q6_frequency', 'q7_bm_relief', 'q8_frequency_change', 'q9_stool_change', 'email_capture_early'] },
+  3: { name: 'Your History', sections: ['part3_intro', 'q10_validation_long', 'q11_diagnosis', 'q12_tried', 'q12_validation_persistent', 'testimonial_interlude'] },
   4: { name: 'Gut-Brain Connection', sections: ['part4_intro', 'q14_mental_health', 'q15_sleep'] },
-  5: { name: 'Life Impact', sections: ['part5_intro', 'q17_hardest_part', 'q17_response', 'email_capture', 'get_email', 'final_message'] }
+  5: { name: 'Life Impact', sections: ['part5_intro', 'q17_hardest_part', 'q17_response', 'email_capture', 'get_email', 'email_already_captured', 'final_message', 'confirmation', 'show_calculating_redirect'] }
 };
 
 // Calculating messages for loading screen
@@ -165,8 +193,8 @@ function updateProgress(sectionKey) {
 
   if (!progressEl) return;
 
-  // Don't show progress for intro, more_info, red_flag_warning, exit sections, or results
-  const hiddenSections = ['intro', 'more_info', 'red_flag_warning', 'exit_message', 'exit_get_email', 'exit_final', 'results_chunk1', 'results_chunk2', 'results_chunk3', 'redirect_to_sales', 'confirmation'];
+  // Only hide progress for intro, more_info, and exit/red flag sections
+  const hiddenSections = ['intro', 'more_info', 'red_flag_warning', 'exit_message', 'exit_get_email', 'exit_final'];
   if (hiddenSections.includes(sectionKey)) {
     progressEl.style.display = 'none';
     return;
@@ -175,14 +203,34 @@ function updateProgress(sectionKey) {
   // Show progress bar
   progressEl.style.display = 'block';
 
-  // Find current part based on section
-  let currentPart = 1;
-  for (const [partNum, partData] of Object.entries(QUIZ_PARTS)) {
-    if (partData.sections.includes(sectionKey)) {
-      currentPart = parseInt(partNum);
-      break;
+  // Sections that show completed progress (Part 5 at 100%)
+  const completedSections = ['results_chunk1', 'results_chunk2', 'results_chunk3', 'redirect_to_sales'];
+  const isCompleted = completedSections.includes(sectionKey);
+
+  // Find current part and section index based on section key
+  let currentPart = isCompleted ? 5 : 1;
+  let sectionIndex = 0;
+  let totalSections = 1;
+
+  if (!isCompleted) {
+    for (const [partNum, partData] of Object.entries(QUIZ_PARTS)) {
+      const idx = partData.sections.indexOf(sectionKey);
+      if (idx !== -1) {
+        currentPart = parseInt(partNum);
+        sectionIndex = idx;
+        totalSections = partData.sections.length;
+        break;
+      }
     }
+  } else {
+    // For completed sections, use Part 5's last section
+    sectionIndex = QUIZ_PARTS[5].sections.length - 1;
+    totalSections = QUIZ_PARTS[5].sections.length;
   }
+
+  // Calculate progress percentage within current part
+  // Start at some % after entering the part, reach 100% at last section
+  const progressPercent = Math.round(((sectionIndex + 1) / totalSections) * 100);
 
   // Update text
   if (currentPartEl) currentPartEl.textContent = currentPart;
@@ -190,16 +238,19 @@ function updateProgress(sectionKey) {
     partNameEl.textContent = QUIZ_PARTS[currentPart].name;
   }
 
-  // Update segments
+  // Update segments with progressive fill
   const segments = document.querySelectorAll('.progress-segment');
   segments.forEach((segment, index) => {
     const partNum = index + 1;
     segment.classList.remove('active', 'completed');
+    segment.style.setProperty('--progress', '0%');
 
     if (partNum < currentPart) {
       segment.classList.add('completed');
+      segment.style.setProperty('--progress', '100%');
     } else if (partNum === currentPart) {
       segment.classList.add('active');
+      segment.style.setProperty('--progress', `${progressPercent}%`);
     }
   });
 }
@@ -671,7 +722,12 @@ async function processSection(sectionKey) {
   for (let i = 0; i < section.length; i++) {
     state.currentStepIndex = i;
     const step = section[i];
-    await processStep(step);
+    // Check if this is the last message step before a user input step or end of section
+    const nextStep = section[i + 1];
+    const isLastStep = !nextStep;
+    const isBeforeUserInput = nextStep && (nextStep.type === 'question' || nextStep.type === 'buttons');
+    const skipReadingDelay = step.type === 'message' && (isLastStep || isBeforeUserInput);
+    await processStep(step, skipReadingDelay);
   }
 
   state.isProcessing = false;
@@ -680,14 +736,22 @@ async function processSection(sectionKey) {
 /**
  * Process a single step (message, question, or buttons)
  * @param {Object} step - Step object from quizContent
+ * @param {boolean} isLastInSection - Whether this is the last step in the section
  */
-async function processStep(step) {
+async function processStep(step, isLastInSection = false) {
   const delay = step.delay || CONFIG.DEFAULT_DELAY;
 
   switch (step.type) {
     case 'message':
       await showTypingIndicator(delay);
-      addMessage(replaceVariables(step.content), 'rebecca', step.isWarning);
+      const messageContent = replaceVariables(step.content);
+      addMessage(messageContent, 'rebecca', step.isWarning);
+
+      // Add reading delay for consecutive messages (not for last message before user input)
+      if (!isLastInSection) {
+        const readingDelay = calculateReadingDelay(messageContent);
+        await new Promise(resolve => setTimeout(resolve, readingDelay));
+      }
       break;
 
     case 'question':
@@ -795,6 +859,24 @@ function renderButtons(options, onClickCallback) {
   inputEl.innerHTML = '';
   inputEl.appendChild(container);
   scrollToBottom();
+
+  // Check for scroll overflow and add gradient indicator
+  requestAnimationFrame(() => {
+    checkOptionsScroll(container);
+    // Listen for scroll to update the gradient overlay
+    container.addEventListener('scroll', () => checkOptionsScroll(container), { passive: true });
+  });
+}
+
+/**
+ * Check if options container has scroll and update gradient overlay
+ * @param {HTMLElement} container - Options container element
+ */
+function checkOptionsScroll(container) {
+  if (!container) return;
+  const hasMoreBelow = container.scrollHeight > container.clientHeight &&
+    (container.scrollTop + container.clientHeight) < (container.scrollHeight - 10);
+  container.classList.toggle('has-more-below', hasMoreBelow);
 }
 
 /**
@@ -804,18 +886,6 @@ function renderButtons(options, onClickCallback) {
 function renderMultiSelect(options) {
   const container = document.createElement('div');
   container.className = 'options-container multi-select';
-
-  // Create scroll indicator (will be shown/hidden based on actual overflow)
-  const scrollIndicator = document.createElement('div');
-  scrollIndicator.className = 'scroll-indicator';
-  scrollIndicator.style.display = 'none'; // Hidden by default
-  scrollIndicator.innerHTML = `
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-      <path d="M7 10l5 5 5-5"/>
-    </svg>
-    <span>Scroll for more options</span>
-  `;
-  container.appendChild(scrollIndicator);
 
   options.forEach(option => {
     const optionDiv = document.createElement('div');
@@ -852,21 +922,11 @@ function renderMultiSelect(options) {
   inputContainer.appendChild(container);
   scrollToBottom();
 
-  // Check for actual scroll overflow after rendering (check the container, not inputContainer)
+  // Check for scroll overflow and add gradient indicator
   requestAnimationFrame(() => {
-    const hasOverflow = container.scrollHeight > container.clientHeight;
-    if (hasOverflow) {
-      scrollIndicator.style.display = 'flex';
-
-      // Hide scroll indicator when user scrolls the container
-      const hideOnScroll = () => {
-        if (container.scrollTop > 20) {
-          scrollIndicator.style.display = 'none';
-          container.removeEventListener('scroll', hideOnScroll);
-        }
-      };
-      container.addEventListener('scroll', hideOnScroll, { passive: true });
-    }
+    checkOptionsScroll(container);
+    // Listen for scroll to update the gradient overlay
+    container.addEventListener('scroll', () => checkOptionsScroll(container), { passive: true });
   });
 
   return continueBtn;
