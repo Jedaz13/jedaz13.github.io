@@ -162,13 +162,13 @@ function getAvatarHTML() {
 // Sales page redirect URL
 const SALES_PAGE_URL = 'https://www.guthealingacademy.com/offer/';
 
-// Quiz progress parts mapping
+// Quiz progress parts mapping (includes all sections for accurate progress tracking)
 const QUIZ_PARTS = {
   1: { name: 'Safety Screening', sections: ['part1_intro', 'q2_blood', 'q3_family_history', 'q4_colonoscopy'] },
-  2: { name: 'Symptom Pattern', sections: ['part2_intro', 'q6_frequency', 'q7_bm_relief', 'q8_frequency_change', 'q9_stool_change', 'email_capture_early'] },
-  3: { name: 'Your History', sections: ['part3_intro', 'q11_diagnosis', 'q12_tried'] },
+  2: { name: 'Symptom Pattern', sections: ['part2_intro', 'q5_validation', 'q6_frequency', 'q7_bm_relief', 'q8_frequency_change', 'q9_stool_change', 'email_capture_early'] },
+  3: { name: 'Your History', sections: ['part3_intro', 'q10_validation_long', 'q11_diagnosis', 'q12_tried', 'q12_validation_persistent', 'testimonial_interlude'] },
   4: { name: 'Gut-Brain Connection', sections: ['part4_intro', 'q14_mental_health', 'q15_sleep'] },
-  5: { name: 'Life Impact', sections: ['part5_intro', 'q17_hardest_part', 'q17_response', 'email_capture', 'get_email', 'final_message'] }
+  5: { name: 'Life Impact', sections: ['part5_intro', 'q17_hardest_part', 'q17_response', 'email_capture', 'get_email', 'email_already_captured', 'final_message', 'confirmation', 'show_calculating_redirect'] }
 };
 
 // Calculating messages for loading screen
@@ -193,8 +193,8 @@ function updateProgress(sectionKey) {
 
   if (!progressEl) return;
 
-  // Don't show progress for intro, more_info, red_flag_warning, exit sections, or results
-  const hiddenSections = ['intro', 'more_info', 'red_flag_warning', 'exit_message', 'exit_get_email', 'exit_final', 'results_chunk1', 'results_chunk2', 'results_chunk3', 'redirect_to_sales', 'confirmation'];
+  // Only hide progress for intro, more_info, and exit/red flag sections
+  const hiddenSections = ['intro', 'more_info', 'red_flag_warning', 'exit_message', 'exit_get_email', 'exit_final'];
   if (hiddenSections.includes(sectionKey)) {
     progressEl.style.display = 'none';
     return;
@@ -203,14 +203,34 @@ function updateProgress(sectionKey) {
   // Show progress bar
   progressEl.style.display = 'block';
 
-  // Find current part based on section
-  let currentPart = 1;
-  for (const [partNum, partData] of Object.entries(QUIZ_PARTS)) {
-    if (partData.sections.includes(sectionKey)) {
-      currentPart = parseInt(partNum);
-      break;
+  // Sections that show completed progress (Part 5 at 100%)
+  const completedSections = ['results_chunk1', 'results_chunk2', 'results_chunk3', 'redirect_to_sales'];
+  const isCompleted = completedSections.includes(sectionKey);
+
+  // Find current part and section index based on section key
+  let currentPart = isCompleted ? 5 : 1;
+  let sectionIndex = 0;
+  let totalSections = 1;
+
+  if (!isCompleted) {
+    for (const [partNum, partData] of Object.entries(QUIZ_PARTS)) {
+      const idx = partData.sections.indexOf(sectionKey);
+      if (idx !== -1) {
+        currentPart = parseInt(partNum);
+        sectionIndex = idx;
+        totalSections = partData.sections.length;
+        break;
+      }
     }
+  } else {
+    // For completed sections, use Part 5's last section
+    sectionIndex = QUIZ_PARTS[5].sections.length - 1;
+    totalSections = QUIZ_PARTS[5].sections.length;
   }
+
+  // Calculate progress percentage within current part
+  // Start at some % after entering the part, reach 100% at last section
+  const progressPercent = Math.round(((sectionIndex + 1) / totalSections) * 100);
 
   // Update text
   if (currentPartEl) currentPartEl.textContent = currentPart;
@@ -218,16 +238,19 @@ function updateProgress(sectionKey) {
     partNameEl.textContent = QUIZ_PARTS[currentPart].name;
   }
 
-  // Update segments
+  // Update segments with progressive fill
   const segments = document.querySelectorAll('.progress-segment');
   segments.forEach((segment, index) => {
     const partNum = index + 1;
     segment.classList.remove('active', 'completed');
+    segment.style.setProperty('--progress', '0%');
 
     if (partNum < currentPart) {
       segment.classList.add('completed');
+      segment.style.setProperty('--progress', '100%');
     } else if (partNum === currentPart) {
       segment.classList.add('active');
+      segment.style.setProperty('--progress', `${progressPercent}%`);
     }
   });
 }

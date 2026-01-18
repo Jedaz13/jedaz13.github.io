@@ -213,10 +213,34 @@ body {
   background: #E0E0E0;
   border-radius: 3px;
   transition: background 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Progressive fill within active segment */
+.progress-segment::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: var(--progress, 0%);
+  background: var(--primary-green);
+  border-radius: 3px;
+  transition: width 0.4s ease;
+}
+
+.progress-segment.active::after {
+  width: var(--progress, 0%);
+}
+
+.progress-segment.completed::after {
+  width: 100%;
+  background: var(--header-bg);
 }
 
 .progress-segment.active {
-  background: var(--primary-green);
+  background: #E0E0E0;
 }
 
 .progress-segment.completed {
