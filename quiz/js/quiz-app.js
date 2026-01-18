@@ -16,18 +16,17 @@ const CONFIG = {
   // Default typing delay in ms
   DEFAULT_DELAY: 1000,
   // Reading speed configuration (words per minute)
-  // Average adult reading speed: 200-250 wpm
-  // For comfortable comprehension: ~180 wpm
-  READING_SPEED_WPM: 180,
-  // Minimum reading delay in ms
-  MIN_READING_DELAY: 800,
-  // Maximum reading delay in ms
-  MAX_READING_DELAY: 5000
+  // Using faster speed to keep engagement high
+  READING_SPEED_WPM: 300,
+  // Minimum reading delay in ms (quick pause between messages)
+  MIN_READING_DELAY: 400,
+  // Maximum reading delay in ms (cap for long messages)
+  MAX_READING_DELAY: 2500
 };
 
 /**
  * Calculate reading time for a message based on word count
- * Average adult reads 200-250 wpm; we use 180 wpm for comfortable comprehension
+ * Using 300 wpm for faster pacing to maintain engagement
  * @param {string} text - The message text
  * @returns {number} - Delay in milliseconds
  */
