@@ -1338,57 +1338,95 @@ async function submitToSupabase() {
 }
 
 /**
+ * Get protocol number from protocol key
+ */
+function getProtocolNumber(protocolKey) {
+  const protocolNumbers = {
+    bloat_reset: 1,
+    regularity: 2,
+    calm_gut: 3,
+    stability: 4,
+    rebuild: 5
+  };
+  return protocolNumbers[protocolKey] || 1;
+}
+
+/**
  * Send webhook to Make.com and submit to Supabase
+ * Format matches original quiz for Make.com compatibility
  */
 async function sendWebhook(eventType) {
+  const protocol = state.calculatedProtocol ? quizContent.protocols[state.calculatedProtocol] : null;
+  const protocolNumber = state.calculatedProtocol ? getProtocolNumber(state.calculatedProtocol) : 0;
+
+  // Build payload matching original quiz format (flat structure)
   const payload = {
-    event: eventType,
-    timestamp: new Date().toISOString(),
-    name: state.userData.name,
-    email: state.userData.email,
-    source: CONFIG.SOURCE_TRACKING
+    // Contact info
+    name: state.userData.name || '',
+    email: state.userData.email || '',
+
+    // Protocol info
+    protocol_number: protocolNumber,
+    protocol_name: protocol ? protocol.name : '',
+    protocol_description: protocol ? protocol.tagline : '',
+
+    // Stress/gut-brain component
+    has_stress_component: state.hasGutBrainOverlay || false,
+
+    // Quiz-3 specific fields
+    goal_selection: state.answers.goal_selection || '',
+    journey_stage: state.answers.journey_stage || '',
+
+    // Open-ended responses (Q17 & Q18)
+    q17_hardest_part: state.answers.q17_hardest_part || '',
+    q18_vision: state.answers.q18_vision || '',
+
+    // Safety screening (Q1-Q4)
+    q1_weight_loss: state.answers.q1_weight_loss || '',
+    q2_blood: state.answers.q2_blood || '',
+    q3_family_history: state.answers.q3_family_history || '',
+    q4_colonoscopy: state.answers.q4_colonoscopy || '',
+
+    // Symptom questions (Q5-Q9)
+    q5_primary_complaint: state.answers.q5_primary_complaint || '',
+    q6_frequency: state.answers.q6_frequency || '',
+    q7_bm_relief: state.answers.q7_bm_relief || '',
+    q8_frequency_change: state.answers.q8_frequency_change || '',
+    q9_stool_change: state.answers.q9_stool_change || '',
+
+    // History (Q10-Q12)
+    q10_duration: state.answers.q10_duration || '',
+    q11_diagnosis: Array.isArray(state.answers.q11_diagnosis)
+      ? state.answers.q11_diagnosis.join(', ')
+      : (state.answers.q11_diagnosis || ''),
+    q12_tried: Array.isArray(state.answers.q12_tried)
+      ? state.answers.q12_tried.join(', ')
+      : (state.answers.q12_tried || ''),
+
+    // Gut-brain & lifestyle (Q13-Q16)
+    q13_stress: state.answers.q13_stress || '',
+    q14_mental_health: state.answers.q14_mental_health || '',
+    q15_sleep: state.answers.q15_sleep || '',
+    q16_life_impact: state.answers.q16_life_impact || '',
+
+    // Red flag status
+    had_red_flags: state.hasRedFlags || false,
+    red_flag_evaluated_cleared: state.answers.red_flag_evaluated_cleared || false,
+
+    // Source tracking
+    source: CONFIG.SOURCE_TRACKING,
+
+    // Timestamp
+    submitted_at: new Date().toISOString()
   };
 
+  // Add event-specific data
   if (eventType === 'quiz_email_captured') {
-    payload.partial_data = {
-      has_red_flags: state.hasRedFlags,
-      goal_selection: state.answers.goal_selection || null,
-      journey_stage: state.answers.journey_stage || null,
-      primary_complaint: state.answers.q5_primary_complaint,
-      primary_complaint_label: quizContent.complaintLabels[state.answers.q5_primary_complaint] || '',
-      frequency: state.answers.q6_frequency,
-      preliminary_protocol: state.calculatedProtocol,
-      preliminary_protocol_name: state.calculatedProtocol ? quizContent.protocols[state.calculatedProtocol].name : ''
-    };
+    payload.submission_type = 'email_capture';
   }
 
   if (eventType === 'quiz_completed') {
-    const tried = state.answers.q12_tried || [];
-    const triedFormatted = formatTriedList(tried);
-
-    payload.results = {
-      protocol: state.calculatedProtocol,
-      protocol_name: quizContent.protocols[state.calculatedProtocol].name,
-      protocol_tagline: quizContent.protocols[state.calculatedProtocol].tagline,
-      has_gut_brain_overlay: state.hasGutBrainOverlay,
-      goal_selection: state.answers.goal_selection || null,
-      journey_stage: state.answers.journey_stage || null,
-      primary_complaint: state.answers.q5_primary_complaint,
-      primary_complaint_label: quizContent.complaintLabels[state.answers.q5_primary_complaint] || '',
-      duration: state.answers.q10_duration,
-      diagnoses: state.answers.q11_diagnosis || [],
-      tried_treatments: tried,
-      tried_treatments_formatted: triedFormatted,
-      stress_level: state.answers.q13_stress,
-      mental_health_impact: state.answers.q14_mental_health,
-      life_impact: state.answers.q16_life_impact,
-      hardest_part: state.answers.q17_hardest_part || '',
-      vision: state.answers.q18_vision || ''
-    };
-    payload.metadata = {
-      quiz_duration_seconds: Math.round((new Date(state.quizCompletedAt) - new Date(state.quizStartedAt)) / 1000),
-      red_flags_bypassed: state.redFlagsBypassed
-    };
+    payload.submission_type = 'quiz_completed';
 
     // Submit to Supabase on quiz completion
     submitToSupabase();
