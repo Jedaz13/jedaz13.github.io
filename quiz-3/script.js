@@ -1298,7 +1298,8 @@ async function submitToSupabase() {
       goal_selection: state.answers.goal_selection || null,
       journey_stage: state.answers.journey_stage || null,
       // Standard quiz fields
-      protocol: state.calculatedProtocol ? quizContent.protocols[state.calculatedProtocol].name : null,
+      protocol: state.calculatedProtocol ? getProtocolNumber(state.calculatedProtocol) : null,
+      protocol_name: state.calculatedProtocol ? quizContent.protocols[state.calculatedProtocol].name : null,
       has_stress_component: state.hasGutBrainOverlay || false,
       has_red_flags: state.hasRedFlags || false,
       red_flag_evaluated_cleared: state.answers.red_flag_evaluated_cleared || false,
