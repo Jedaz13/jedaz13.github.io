@@ -8,11 +8,30 @@ const CONFIG = {
   LOADING_DURATION: 5500, // 5.5 seconds for loading animation
   AUTO_ADVANCE_DELAY: 400, // ms after single-select
   LOADING_MESSAGE_INTERVAL: 1500, // ms between loading messages
+  TEXT_MIN_CHARS: 10, // Minimum characters for text input
   // Make.com webhook URL
   WEBHOOK_URL: 'https://hook.eu1.make.com/5uubblyocz70syh9xptkg248ycauy5pd',
   // Supabase configuration
   SUPABASE_URL: 'https://mwabljnngygkmahjgvps.supabase.co',
   SUPABASE_ANON_KEY: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im13YWJsam5uZ3lna21haGpndnBzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU1MjQ3MzgsImV4cCI6MjA4MTEwMDczOH0.rbZYj1aXui_xZ0qkg7QONdHppnJghT2r0ycZwtr3a-E'
+};
+
+// Encouragement messages for text input
+const ENCOURAGEMENT = {
+  keepGoing: [
+    { emoji: '✍️', text: 'Keep going...' },
+    { emoji: '💭', text: 'Keep going...' },
+    { emoji: '📝', text: 'Keep going...' },
+    { emoji: '💬', text: 'Keep going...' },
+    { emoji: '✨', text: 'Keep going...' }
+  ],
+  success: [
+    { emoji: '💚', text: 'Perfect! Thank you for sharing' },
+    { emoji: '🌟', text: 'Great insight!' },
+    { emoji: '✅', text: 'That helps us understand you better' },
+    { emoji: '💪', text: 'Wonderful, keep going if you\'d like' },
+    { emoji: '🙌', text: 'Thanks for being open with us' }
+  ]
 };
 
 // Initialize Supabase client
@@ -40,7 +59,9 @@ const state = {
   history: [], // For back navigation
   currentInterstitial: null, // Track which interstitial is showing
   quizStartedAt: null,
-  quizCompletedAt: null
+  quizCompletedAt: null,
+  encouragementIndex: 0, // Track current encouragement message
+  stickyButtonObserver: null // IntersectionObserver for sticky button
 };
 
 // DOM Elements
@@ -198,6 +219,9 @@ function updateBackButton() {
 function handleBack() {
   if (state.history.length === 0) return;
 
+  // Cleanup sticky button before navigating
+  cleanupStickyButton();
+
   const prev = state.history.pop();
 
   if (prev.type === 'interstitial') {
@@ -230,6 +254,9 @@ function saveToHistory(type = 'question') {
  * Render the current question
  */
 function renderQuestion() {
+  // Cleanup any existing sticky button
+  cleanupStickyButton();
+
   const { section, question } = getCurrentPosition();
 
   if (!section || !question) {
@@ -383,9 +410,12 @@ function updateContinueButtonState(questionId, optionsDiv) {
 }
 
 /**
- * Render text input
+ * Render text input with encouragement and sticky button
  */
 function renderTextInput(container, question) {
+  // Reset encouragement index for fresh question
+  state.encouragementIndex = Math.floor(Math.random() * ENCOURAGEMENT.keepGoing.length);
+
   const inputDiv = document.createElement('div');
   inputDiv.className = 'text-input-container';
 
@@ -399,16 +429,26 @@ function renderTextInput(container, question) {
   charCount.className = 'char-count';
   charCount.textContent = `${textarea.value.length}/500 characters`;
 
+  // Encouragement element
+  const encouragement = document.createElement('div');
+  encouragement.className = 'text-encouragement';
+  encouragement.id = 'textEncouragement';
+  updateEncouragementDisplay(encouragement, textarea.value.length, question.optional);
+
   textarea.addEventListener('input', () => {
-    charCount.textContent = `${textarea.value.length}/500 characters`;
+    const len = textarea.value.length;
+    charCount.textContent = `${len}/500 characters`;
+    updateEncouragementDisplay(encouragement, len, question.optional);
     updateTextContinueButtons(question.id, textarea.value.trim(), question.optional);
   });
 
   inputDiv.appendChild(textarea);
   inputDiv.appendChild(charCount);
+  inputDiv.appendChild(encouragement);
 
   // Button container
   const btnContainer = document.createElement('div');
+  btnContainer.className = 'button-container';
   btnContainer.style.display = 'flex';
   btnContainer.style.flexDirection = 'column';
   btnContainer.style.gap = '12px';
@@ -419,41 +459,214 @@ function renderTextInput(container, question) {
 
   const currentValue = state.answers[question.id] || '';
   if (question.optional) {
-    continueBtn.textContent = currentValue.length >= 10 ? 'Continue' : 'Skip';
+    continueBtn.textContent = currentValue.length >= CONFIG.TEXT_MIN_CHARS ? 'Continue' : 'Skip';
     continueBtn.disabled = false;
   } else {
     continueBtn.textContent = 'Continue';
-    continueBtn.disabled = currentValue.length < 10;
+    continueBtn.disabled = currentValue.length < CONFIG.TEXT_MIN_CHARS;
   }
 
-  continueBtn.addEventListener('click', () => {
+  const handleContinue = () => {
     const value = textarea.value.trim();
-    if (value.length >= 10 || question.optional) {
+    if (value.length >= CONFIG.TEXT_MIN_CHARS || question.optional) {
       state.answers[question.id] = value;
+      cleanupStickyButton();
       advanceQuestion();
     }
-  });
+  };
+
+  continueBtn.addEventListener('click', handleContinue);
 
   btnContainer.appendChild(continueBtn);
   container.appendChild(inputDiv);
   container.appendChild(btnContainer);
 
+  // Setup sticky button for mobile
+  setupStickyButton(continueBtn, handleContinue, question.optional, currentValue.length);
+
   setTimeout(() => textarea.focus(), 100);
 }
 
 /**
- * Update text input continue button state
+ * Update encouragement display based on character count
+ */
+function updateEncouragementDisplay(element, charCount, isOptional) {
+  if (charCount === 0) {
+    element.innerHTML = '';
+    element.classList.remove('success');
+    return;
+  }
+
+  if (charCount < CONFIG.TEXT_MIN_CHARS) {
+    // Show "keep going" with rotating emojis
+    const msg = ENCOURAGEMENT.keepGoing[state.encouragementIndex % ENCOURAGEMENT.keepGoing.length];
+    element.innerHTML = `<span class="emoji">${msg.emoji}</span> <span>${msg.text}</span>`;
+    element.classList.remove('success');
+
+    // Change emoji every few characters
+    if (charCount % 3 === 0) {
+      state.encouragementIndex++;
+    }
+  } else {
+    // Show success message
+    const successIndex = Math.floor(Math.random() * ENCOURAGEMENT.success.length);
+    const msg = ENCOURAGEMENT.success[successIndex];
+    element.innerHTML = `<span class="emoji">${msg.emoji}</span> <span>${msg.text}</span>`;
+    element.classList.add('success');
+  }
+}
+
+/**
+ * Setup sticky continue button for mobile
+ */
+function setupStickyButton(originalBtn, clickHandler, isOptional, currentLength) {
+  // Only on mobile
+  if (window.innerWidth >= 768) return;
+
+  // Clean up any existing observer
+  cleanupStickyButton();
+
+  // Create sticky wrapper
+  const stickyWrapper = document.createElement('div');
+  stickyWrapper.className = 'sticky-continue-wrapper';
+  stickyWrapper.id = 'stickyButtonWrapper';
+
+  const stickyBtn = document.createElement('button');
+  stickyBtn.className = 'continue-button';
+  stickyBtn.id = 'stickyTextContinueBtn';
+
+  if (isOptional) {
+    stickyBtn.textContent = currentLength >= CONFIG.TEXT_MIN_CHARS ? 'Continue' : 'Skip';
+    stickyBtn.disabled = false;
+  } else {
+    stickyBtn.textContent = 'Continue';
+    stickyBtn.disabled = currentLength < CONFIG.TEXT_MIN_CHARS;
+  }
+
+  stickyBtn.addEventListener('click', clickHandler);
+  stickyWrapper.appendChild(stickyBtn);
+  document.body.appendChild(stickyWrapper);
+
+  // Add padding class to container
+  const questionContainer = document.querySelector('.question-container');
+  if (questionContainer) {
+    questionContainer.classList.add('has-sticky-btn');
+  }
+
+  // Observe original button visibility
+  state.stickyButtonObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (!entry.isIntersecting) {
+        stickyWrapper.classList.add('visible');
+      } else {
+        stickyWrapper.classList.remove('visible');
+      }
+    });
+  }, {
+    threshold: 0,
+    rootMargin: '-50px 0px 0px 0px'
+  });
+
+  state.stickyButtonObserver.observe(originalBtn);
+}
+
+/**
+ * Cleanup sticky button
+ */
+function cleanupStickyButton() {
+  if (state.stickyButtonObserver) {
+    state.stickyButtonObserver.disconnect();
+    state.stickyButtonObserver = null;
+  }
+
+  const existingSticky = document.getElementById('stickyButtonWrapper');
+  if (existingSticky) {
+    existingSticky.remove();
+  }
+
+  const questionContainer = document.querySelector('.question-container');
+  if (questionContainer) {
+    questionContainer.classList.remove('has-sticky-btn');
+  }
+
+  // Also remove from validation/interstitial screens
+  const contentArea = document.querySelector('.validation-screen, .practitioner-intro, .testimonial-container');
+  if (contentArea) {
+    contentArea.classList.remove('has-sticky-btn');
+  }
+}
+
+/**
+ * Setup sticky button for interstitial screens (simpler version for Continue buttons)
+ */
+function setupInterstitialStickyButton(buttonId, containerId) {
+  // Only on mobile
+  if (window.innerWidth >= 768) return;
+
+  // Delay to allow DOM to render
+  setTimeout(() => {
+    const originalBtn = document.getElementById(buttonId);
+    if (!originalBtn) return;
+
+    // Clean up any existing
+    cleanupStickyButton();
+
+    // Create sticky wrapper
+    const stickyWrapper = document.createElement('div');
+    stickyWrapper.className = 'sticky-continue-wrapper';
+    stickyWrapper.id = 'stickyButtonWrapper';
+
+    const stickyBtn = document.createElement('button');
+    stickyBtn.className = 'btn-primary';
+    stickyBtn.textContent = originalBtn.textContent;
+    stickyBtn.addEventListener('click', () => originalBtn.click());
+
+    stickyWrapper.appendChild(stickyBtn);
+    document.body.appendChild(stickyWrapper);
+
+    // Add padding to container
+    const container = document.getElementById(containerId) || document.querySelector('.validation-screen, .practitioner-intro, .testimonial-container');
+    if (container) {
+      container.style.paddingBottom = '100px';
+    }
+
+    // Observe original button
+    state.stickyButtonObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) {
+          stickyWrapper.classList.add('visible');
+        } else {
+          stickyWrapper.classList.remove('visible');
+        }
+      });
+    }, {
+      threshold: 0,
+      rootMargin: '-50px 0px 0px 0px'
+    });
+
+    state.stickyButtonObserver.observe(originalBtn);
+  }, 100);
+}
+
+/**
+ * Update text input continue button state (both regular and sticky)
  */
 function updateTextContinueButtons(questionId, value, isOptional) {
   const continueBtn = document.getElementById('textContinueBtn');
-  if (continueBtn) {
+  const stickyBtn = document.getElementById('stickyTextContinueBtn');
+
+  const updateBtn = (btn) => {
+    if (!btn) return;
     if (isOptional) {
-      continueBtn.textContent = value.length >= 10 ? 'Continue' : 'Skip';
-      continueBtn.disabled = false;
+      btn.textContent = value.length >= CONFIG.TEXT_MIN_CHARS ? 'Continue' : 'Skip';
+      btn.disabled = false;
     } else {
-      continueBtn.disabled = value.length < 10;
+      btn.disabled = value.length < CONFIG.TEXT_MIN_CHARS;
     }
-  }
+  };
+
+  updateBtn(continueBtn);
+  updateBtn(stickyBtn);
 }
 
 /**
@@ -872,11 +1085,15 @@ function showValidationScreen() {
 
   document.getElementById('continueFromValidationBtn').addEventListener('click', () => {
     // Go directly to gut-brain questions (no testimonial between text blocks)
+    cleanupStickyButton();
     progressEl.classList.remove('hidden');
     state.currentSectionIndex = 3; // Gut-brain section
     state.currentQuestionIndex = 0;
     renderQuestion();
   });
+
+  // Setup sticky button for mobile
+  setupInterstitialStickyButton('continueFromValidationBtn');
 }
 
 /**
