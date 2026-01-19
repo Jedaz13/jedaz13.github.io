@@ -475,8 +475,15 @@ function advanceQuestion() {
     return;
   }
 
-  // After gut-brain Q13 - show Amanda testimonial
+  // After gut-brain Q13 - show Amanda testimonial only if stress affects gut
+  // Skip testimonial if user selected "Honestly, I haven't noticed a pattern" (none)
   if (section.id === 'gutbrain' && state.currentQuestionIndex === 0) {
+    if (state.answers.q13_stress === 'none') {
+      // Skip Amanda testimonial, go directly to Q14
+      state.currentQuestionIndex = 1;
+      renderQuestion();
+      return;
+    }
     showTestimonialAmanda();
     return;
   }
@@ -691,7 +698,7 @@ function showProtocolPreview() {
 }
 
 /**
- * Show email capture screen
+ * Show email capture screen (with name)
  */
 function showEmailCapture() {
   saveToHistory('interstitial');
@@ -704,6 +711,7 @@ function showEmailCapture() {
     <div class="capture-container">
       <p class="capture-label">SAVE YOUR PROGRESS</p>
       <h2 class="capture-title">Where should we send your personalized results?</h2>
+      <input type="text" class="capture-input" id="nameInput" placeholder="Your first name" style="margin-bottom: 12px;" />
       <input type="email" class="capture-input" id="emailInput" placeholder="your@email.com" />
       <div class="error-message hidden" id="emailError">Please enter a valid email address</div>
       <p class="privacy-text">We'll send your protocol results and keep you updated on your gut healing journey. Unsubscribe anytime.</p>
@@ -711,18 +719,24 @@ function showEmailCapture() {
     </div>
   `;
 
+  const nameInput = document.getElementById('nameInput');
   const emailInput = document.getElementById('emailInput');
   const continueBtn = document.getElementById('emailContinueBtn');
   const errorEl = document.getElementById('emailError');
 
-  emailInput.addEventListener('input', () => {
-    const isValid = isValidEmail(emailInput.value);
-    continueBtn.disabled = !isValid;
-    errorEl.classList.toggle('hidden', isValid || emailInput.value.length === 0);
-  });
+  function validateForm() {
+    const nameValid = nameInput.value.trim().length >= 2;
+    const emailValid = isValidEmail(emailInput.value);
+    continueBtn.disabled = !(nameValid && emailValid);
+    errorEl.classList.toggle('hidden', emailValid || emailInput.value.length === 0);
+  }
+
+  nameInput.addEventListener('input', validateForm);
+  emailInput.addEventListener('input', validateForm);
 
   continueBtn.addEventListener('click', () => {
-    if (isValidEmail(emailInput.value)) {
+    if (nameInput.value.trim().length >= 2 && isValidEmail(emailInput.value)) {
+      state.userData.name = nameInput.value.trim();
       state.userData.email = emailInput.value.trim();
 
       trackPixelEvent('Lead', {
@@ -747,7 +761,7 @@ function showEmailCapture() {
     }
   });
 
-  setTimeout(() => emailInput.focus(), 100);
+  setTimeout(() => nameInput.focus(), 100);
 }
 
 /**
@@ -846,7 +860,11 @@ function showValidationScreen() {
   `;
 
   document.getElementById('continueFromValidationBtn').addEventListener('click', () => {
-    showTestimonialSuzy();
+    // Go directly to gut-brain questions (no testimonial between text blocks)
+    progressEl.classList.remove('hidden');
+    state.currentSectionIndex = 3; // Gut-brain section
+    state.currentQuestionIndex = 0;
+    renderQuestion();
   });
 }
 
@@ -1074,6 +1092,7 @@ function redirectToOffer() {
 
   if (state.answers.q5_primary_complaint) {
     params.set('primary_complaint', state.answers.q5_primary_complaint);
+    params.set('primary_complaint_label', quizContent.complaintLabels[state.answers.q5_primary_complaint] || '');
   }
   if (state.answers.q10_duration) {
     params.set('duration', state.answers.q10_duration);
@@ -1083,6 +1102,11 @@ function redirectToOffer() {
   }
   if (state.answers.q12_tried) {
     params.set('treatments', state.answers.q12_tried.join(','));
+    // Add formatted version for display
+    const triedFormatted = formatTriedList(state.answers.q12_tried);
+    if (triedFormatted) {
+      params.set('treatments_formatted', triedFormatted);
+    }
   }
   if (state.answers.q13_stress) {
     params.set('stress_level', state.answers.q13_stress);
@@ -1104,6 +1128,7 @@ function sendWebhook(eventType) {
   const payload = {
     event: eventType,
     timestamp: new Date().toISOString(),
+    name: state.userData.name,
     email: state.userData.email,
     source: CONFIG.SOURCE_TRACKING
   };
@@ -1112,18 +1137,28 @@ function sendWebhook(eventType) {
     payload.partial_data = {
       has_red_flags: state.hasRedFlags,
       primary_complaint: state.answers.q5_primary_complaint,
+      primary_complaint_label: quizContent.complaintLabels[state.answers.q5_primary_complaint] || '',
       frequency: state.answers.q6_frequency,
-      preliminary_protocol: state.calculatedProtocol
+      preliminary_protocol: state.calculatedProtocol,
+      preliminary_protocol_name: state.calculatedProtocol ? quizContent.protocols[state.calculatedProtocol].name : ''
     };
   }
 
   if (eventType === 'quiz_completed') {
+    const tried = state.answers.q12_tried || [];
+    const triedFormatted = formatTriedList(tried);
+
     payload.results = {
       protocol: state.calculatedProtocol,
+      protocol_name: quizContent.protocols[state.calculatedProtocol].name,
+      protocol_tagline: quizContent.protocols[state.calculatedProtocol].tagline,
       has_gut_brain_overlay: state.hasGutBrainOverlay,
+      primary_complaint: state.answers.q5_primary_complaint,
+      primary_complaint_label: quizContent.complaintLabels[state.answers.q5_primary_complaint] || '',
       duration: state.answers.q10_duration,
       diagnoses: state.answers.q11_diagnosis || [],
-      tried_treatments: state.answers.q12_tried || [],
+      tried_treatments: tried,
+      tried_treatments_formatted: triedFormatted,
       stress_level: state.answers.q13_stress,
       mental_health_impact: state.answers.q14_mental_health,
       life_impact: state.answers.q16_life_impact,
