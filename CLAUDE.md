@@ -94,6 +94,31 @@ When making changes, test:
 
 ## Modifications
 
+### Creating New Pages
+
+**IMPORTANT: All new HTML pages MUST include Google Tag Manager.**
+
+GTM Container ID: `GTM-KQ3LKTBL`
+
+Add this in `<head>` (right after opening `<head>` tag):
+```html
+<!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-KQ3LKTBL');</script>
+<!-- End Google Tag Manager -->
+```
+
+Add this immediately after opening `<body>` tag:
+```html
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KQ3LKTBL"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
+```
+
 ### Updating CTA Link
 
 To change the quiz URL, update all CTA links in `index.html`:
