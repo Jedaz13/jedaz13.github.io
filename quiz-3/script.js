@@ -1,5 +1,5 @@
-// Survey-Style Quiz Application 2.0
-// Complete quiz funnel with interstitials, practitioner intros, and testimonials
+// Survey-Style Quiz Application 3.0
+// Goal-first intro variant with interstitials, practitioner intros, and testimonials
 
 // Configuration
 const CONFIG = {
@@ -7,8 +7,19 @@ const CONFIG = {
   SOURCE_TRACKING: 'quiz-3',
   LOADING_DURATION: 5500, // 5.5 seconds for loading animation
   AUTO_ADVANCE_DELAY: 400, // ms after single-select
-  LOADING_MESSAGE_INTERVAL: 1500 // ms between loading messages
+  LOADING_MESSAGE_INTERVAL: 1500, // ms between loading messages
+  // Make.com webhook URL
+  WEBHOOK_URL: 'https://hook.eu1.make.com/5uubblyocz70syh9xptkg248ycauy5pd',
+  // Supabase configuration
+  SUPABASE_URL: 'https://mwabljnngygkmahjgvps.supabase.co',
+  SUPABASE_ANON_KEY: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im13YWJsam5uZ3lna21haGpndnBzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU1MjQ3MzgsImV4cCI6MjA4MTEwMDczOH0.rbZYj1aXui_xZ0qkg7QONdHppnJghT2r0ycZwtr3a-E'
 };
+
+// Initialize Supabase client
+var supabaseClient = null;
+if (typeof window.supabase !== 'undefined' && CONFIG.SUPABASE_URL) {
+  supabaseClient = window.supabase.createClient(CONFIG.SUPABASE_URL, CONFIG.SUPABASE_ANON_KEY);
+}
 
 // Questions per section for progress calculation
 // YOUR GOALS (3 intro screens), Safety, Symptoms, History, GutBrain, Impact
@@ -54,20 +65,11 @@ document.addEventListener('DOMContentLoaded', () => {
   progressEl = document.getElementById('progressContainer');
   contentEl = document.getElementById('contentArea');
 
-  // Debug: Check if elements are found
-  console.log('contentEl:', contentEl);
-  console.log('quizUI:', quizUI);
-
   // Track Meta Pixel PageView
   trackPixelEvent('PageView');
 
   // Quiz-3: Auto-start - skip welcome screen and go directly to first question
-  if (contentEl) {
-    startQuiz();
-  } else {
-    console.error('contentArea not found!');
-    document.body.innerHTML += '<p style="color:red;font-size:20px;text-align:center;margin-top:50px;">Error: contentArea not found</p>';
-  }
+  startQuiz();
 });
 
 /**
@@ -110,9 +112,6 @@ function startQuiz() {
  * Show intro screen 1 - Goal Selection
  */
 function showIntroGoalScreen() {
-  console.log('showIntroGoalScreen called');
-  console.log('contentEl in showIntroGoalScreen:', contentEl);
-
   trackQuizStep('intro_goal');
   state.currentSectionIndex = 0;
   state.currentQuestionIndex = 0;
@@ -134,9 +133,7 @@ function showIntroGoalScreen() {
     </div>
   `;
 
-  console.log('Setting innerHTML with:', htmlContent.substring(0, 100));
   contentEl.innerHTML = htmlContent;
-  console.log('contentEl.innerHTML after set:', contentEl.innerHTML.substring(0, 100));
 
   // Add click handlers for options
   contentEl.querySelectorAll('.intro-option').forEach(btn => {
@@ -1284,9 +1281,66 @@ function redirectToOffer() {
 }
 
 /**
- * Send webhook to Make.com
+ * Submit quiz data to Supabase users table
  */
-function sendWebhook(eventType) {
+async function submitToSupabase() {
+  if (!supabaseClient) {
+    console.log('Supabase not configured - skipping database submission');
+    return null;
+  }
+
+  try {
+    const userRecord = {
+      name: state.userData.name || null,
+      email: state.userData.email || null,
+      quiz_source: CONFIG.SOURCE_TRACKING,
+      // Quiz-3 specific fields
+      goal_selection: state.answers.goal_selection || null,
+      journey_stage: state.answers.journey_stage || null,
+      // Standard quiz fields
+      protocol: state.calculatedProtocol ? quizContent.protocols[state.calculatedProtocol].name : null,
+      has_stress_component: state.hasGutBrainOverlay || false,
+      has_red_flags: state.hasRedFlags || false,
+      red_flag_evaluated_cleared: state.answers.red_flag_evaluated_cleared || false,
+      primary_complaint: state.answers.q5_primary_complaint || null,
+      symptom_frequency: state.answers.q6_frequency || null,
+      relief_after_bm: state.answers.q7_bm_relief || null,
+      frequency_during_flare: state.answers.q8_frequency_change || null,
+      stool_during_flare: state.answers.q9_stool_change || null,
+      duration: state.answers.q10_duration || null,
+      diagnoses: state.answers.q11_diagnosis || [],
+      treatments_tried: state.answers.q12_tried || [],
+      stress_connection: state.answers.q13_stress || null,
+      mental_health_impact: state.answers.q14_mental_health || null,
+      sleep_quality: state.answers.q15_sleep || null,
+      life_impact_level: state.answers.q16_life_impact || null,
+      hardest_part: state.answers.q17_hardest_part || null,
+      dream_outcome: state.answers.q18_vision || null,
+      role: 'member',
+      status: 'lead'
+    };
+
+    const { error } = await supabaseClient.rpc('insert_quiz_lead', {
+      user_data: userRecord
+    });
+
+    if (error) {
+      console.error('Supabase insert error:', error);
+      return null;
+    }
+
+    console.log('Supabase submission successful');
+    return true;
+  } catch (error) {
+    console.error('Error submitting to Supabase:', error);
+    return null;
+  }
+}
+
+/**
+ * Send webhook to Make.com and submit to Supabase
+ */
+async function sendWebhook(eventType) {
   const payload = {
     event: eventType,
     timestamp: new Date().toISOString(),
@@ -1298,6 +1352,8 @@ function sendWebhook(eventType) {
   if (eventType === 'quiz_email_captured') {
     payload.partial_data = {
       has_red_flags: state.hasRedFlags,
+      goal_selection: state.answers.goal_selection || null,
+      journey_stage: state.answers.journey_stage || null,
       primary_complaint: state.answers.q5_primary_complaint,
       primary_complaint_label: quizContent.complaintLabels[state.answers.q5_primary_complaint] || '',
       frequency: state.answers.q6_frequency,
@@ -1315,7 +1371,6 @@ function sendWebhook(eventType) {
       protocol_name: quizContent.protocols[state.calculatedProtocol].name,
       protocol_tagline: quizContent.protocols[state.calculatedProtocol].tagline,
       has_gut_brain_overlay: state.hasGutBrainOverlay,
-      // Quiz-3 specific: Goal-first intro data
       goal_selection: state.answers.goal_selection || null,
       journey_stage: state.answers.journey_stage || null,
       primary_complaint: state.answers.q5_primary_complaint,
@@ -1334,17 +1389,28 @@ function sendWebhook(eventType) {
       quiz_duration_seconds: Math.round((new Date(state.quizCompletedAt) - new Date(state.quizStartedAt)) / 1000),
       red_flags_bypassed: state.redFlagsBypassed
     };
+
+    // Submit to Supabase on quiz completion
+    submitToSupabase();
   }
 
-  // Log for debugging (webhook URL would go here)
   console.log('Webhook payload:', payload);
 
-  // Actual webhook call would be:
-  // fetch('YOUR_MAKE_WEBHOOK_URL', {
-  //   method: 'POST',
-  //   headers: { 'Content-Type': 'application/json' },
-  //   body: JSON.stringify(payload)
-  // }).catch(console.error);
+  // Send to Make.com webhook
+  try {
+    const response = await fetch(CONFIG.WEBHOOK_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+    if (response.ok) {
+      console.log('Make.com submission successful');
+    } else {
+      console.error('Webhook submission failed:', response.statusText);
+    }
+  } catch (error) {
+    console.error('Error submitting to webhook:', error);
+  }
 }
 
 /**

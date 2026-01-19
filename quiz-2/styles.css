@@ -194,8 +194,8 @@ body {
   align-items: center;
   justify-content: center;
   position: relative;
-  padding: 16px 0;
-  margin-bottom: 8px;
+  padding: 8px 0;
+  margin-bottom: 4px;
 }
 
 .back-button {
@@ -238,7 +238,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 20px 0;
+  padding: 12px 0;
   gap: 0;
 }
 
@@ -316,7 +316,7 @@ body {
   font-weight: 600;
   line-height: 1.4;
   text-align: center;
-  margin: 32px 0;
+  margin: 16px 0 24px;
   color: var(--text-dark);
 }
 
@@ -1148,6 +1148,37 @@ body {
 
   .warning-practitioner-card p {
     text-align: center;
+  }
+}
+
+/* Mobile sticky button styles */
+@media (max-width: 600px) {
+  /* Sticky Continue buttons on mobile when below fold */
+  .section-intro .btn-primary,
+  .practitioner-intro .btn-primary,
+  .validation-screen .btn-primary,
+  .protocol-preview .btn-primary,
+  .testimonial-container .btn-primary,
+  .question-container .continue-button,
+  .capture-container .btn-primary {
+    position: fixed;
+    bottom: 16px;
+    left: 16px;
+    right: 16px;
+    width: calc(100% - 32px);
+    z-index: 100;
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.15);
+  }
+
+  /* Add padding to containers so content doesn't get hidden behind sticky button */
+  .section-intro,
+  .practitioner-intro,
+  .validation-screen,
+  .protocol-preview,
+  .testimonial-container,
+  .question-container,
+  .capture-container {
+    padding-bottom: 90px;
   }
 }
 
