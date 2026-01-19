@@ -57,11 +57,8 @@ document.addEventListener('DOMContentLoaded', () => {
   // Track Meta Pixel PageView
   trackPixelEvent('PageView');
 
-  // Set up start button
-  const startBtn = document.getElementById('startQuizBtn');
-  if (startBtn) {
-    startBtn.addEventListener('click', startQuiz);
-  }
+  // Quiz-3: Auto-start - skip welcome screen and go directly to first question
+  startQuiz();
 });
 
 /**
