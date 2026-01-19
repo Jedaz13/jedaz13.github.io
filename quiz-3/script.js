@@ -54,11 +54,20 @@ document.addEventListener('DOMContentLoaded', () => {
   progressEl = document.getElementById('progressContainer');
   contentEl = document.getElementById('contentArea');
 
+  // Debug: Check if elements are found
+  console.log('contentEl:', contentEl);
+  console.log('quizUI:', quizUI);
+
   // Track Meta Pixel PageView
   trackPixelEvent('PageView');
 
   // Quiz-3: Auto-start - skip welcome screen and go directly to first question
-  startQuiz();
+  if (contentEl) {
+    startQuiz();
+  } else {
+    console.error('contentArea not found!');
+    document.body.innerHTML += '<p style="color:red;font-size:20px;text-align:center;margin-top:50px;">Error: contentArea not found</p>';
+  }
 });
 
 /**
@@ -101,6 +110,9 @@ function startQuiz() {
  * Show intro screen 1 - Goal Selection
  */
 function showIntroGoalScreen() {
+  console.log('showIntroGoalScreen called');
+  console.log('contentEl in showIntroGoalScreen:', contentEl);
+
   trackQuizStep('intro_goal');
   state.currentSectionIndex = 0;
   state.currentQuestionIndex = 0;
@@ -110,7 +122,7 @@ function showIntroGoalScreen() {
   updateProgressBar();
   updateBackButton();
 
-  contentEl.innerHTML = `
+  const htmlContent = `
     <div class="question-container">
       <h2 class="question-text">What would change your life most right now?</h2>
       <div class="options-container">
@@ -121,6 +133,10 @@ function showIntroGoalScreen() {
       </div>
     </div>
   `;
+
+  console.log('Setting innerHTML with:', htmlContent.substring(0, 100));
+  contentEl.innerHTML = htmlContent;
+  console.log('contentEl.innerHTML after set:', contentEl.innerHTML.substring(0, 100));
 
   // Add click handlers for options
   contentEl.querySelectorAll('.intro-option').forEach(btn => {
