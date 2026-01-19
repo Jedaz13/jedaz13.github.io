@@ -49,77 +49,62 @@
   <!-- End Google Tag Manager (noscript) -->
 
   <div class="quiz-container" id="quizContainer">
-    <!-- Welcome Screen (shown first) -->
-    <div class="welcome-screen" id="welcomeScreen">
-      <div class="welcome-content">
-        <img src="/assets/logo.png" alt="Gut Healing Academy" class="welcome-logo" onerror="this.style.display='none'" />
-
-        <h1>Your Personalized Gut Health Assessment</h1>
-
-        <p class="welcome-description">
-          This 5-minute assessment will help us understand your unique situation
-          and match you to the right protocol.
-        </p>
-
-        <div class="welcome-points">
-          <p>We'll ask about:</p>
-          <ul>
-            <li>Your current symptoms</li>
-            <li>What you've already tried</li>
-            <li>How this affects your daily life</li>
-          </ul>
-        </div>
-
-        <button class="btn-primary btn-large" id="startQuizBtn">
-          Let's Get Started &rarr;
-        </button>
-
-        <p class="privacy-note">
-          <span class="lock-icon">&#128274;</span> Your answers stay completely confidential
-        </p>
-      </div>
+    <!-- Welcome Screen (hidden in quiz-3 - auto-starts with questions) -->
+    <div class="welcome-screen hidden" id="welcomeScreen">
+      <!-- Welcome screen content removed for quiz-3 auto-start -->
     </div>
 
-    <!-- Quiz UI (hidden initially) -->
-    <div class="quiz-ui hidden" id="quizUI">
+    <!-- Quiz UI (shown immediately in quiz-3) -->
+    <div class="quiz-ui" id="quizUI">
       <!-- Header -->
       <div class="quiz-header" id="quizHeader">
         <button class="back-button" id="backButton" onclick="handleBack()" disabled>
           &#8592;
         </button>
-        <span class="section-label" id="sectionLabel">SAFETY SCREENING</span>
+        <span class="section-label" id="sectionLabel">YOUR GOALS</span>
       </div>
 
-      <!-- Progress Bar with fill elements -->
+      <!-- Progress Bar with fill elements (Quiz-3: 6 sections) -->
       <div class="progress-container" id="progressContainer">
+        <!-- Section 0: YOUR GOALS -->
         <div class="progress-segment" data-section="0">
           <div class="segment-fill"></div>
         </div>
         <div class="progress-dot" data-section="0"></div>
 
+        <!-- Section 1: SAFETY SCREENING -->
         <div class="progress-segment" data-section="1">
           <div class="segment-fill"></div>
         </div>
         <div class="progress-dot" data-section="1"></div>
 
+        <!-- Section 2: SYMPTOMS -->
         <div class="progress-segment" data-section="2">
           <div class="segment-fill"></div>
         </div>
         <div class="progress-dot" data-section="2"></div>
 
+        <!-- Section 3: HISTORY -->
         <div class="progress-segment" data-section="3">
           <div class="segment-fill"></div>
         </div>
         <div class="progress-dot" data-section="3"></div>
 
+        <!-- Section 4: GUT-BRAIN -->
         <div class="progress-segment" data-section="4">
+          <div class="segment-fill"></div>
+        </div>
+        <div class="progress-dot" data-section="4"></div>
+
+        <!-- Section 5: IMPACT -->
+        <div class="progress-segment" data-section="5">
           <div class="segment-fill"></div>
         </div>
       </div>
 
       <!-- Content Area -->
       <div id="contentArea">
-        <!-- Question content will be rendered here -->
+        <!-- Question content will be rendered here by JavaScript -->
       </div>
     </div>
   </div>
