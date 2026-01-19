@@ -102,13 +102,13 @@
    * Testimonials matched to complaint patterns
    */
   const TESTIMONIALS = {
-    bloating: { name: 'Suzy', quote: 'The bloating that made me look 6 months pregnant? Gone within 3 weeks of following my protocol.', pattern: 'Bloating Pattern' },
-    constipation: { name: 'Amanda', quote: 'After years of struggling, I finally have regular, comfortable digestion. It changed everything.', pattern: 'Constipation Pattern' },
-    diarrhea: { name: 'Cheryl', quote: 'I can finally leave the house without mapping every bathroom. The urgency is completely manageable now.', pattern: 'Urgency Pattern' },
-    mixed: { name: 'Cheryl', quote: 'The unpredictability was the worst part. Now I actually know what to expect from my body.', pattern: 'Mixed Pattern' },
-    pain: { name: 'Amanda', quote: 'The cramping that used to double me over? I barely notice it anymore.', pattern: 'Pain Pattern' },
-    gas: { name: 'Suzy', quote: 'I used to avoid social situations. Now I can actually enjoy dinner with friends again.', pattern: 'Gas Pattern' },
-    reflux: { name: 'Amanda', quote: 'No more burning, no more sleeping propped up. I can eat without fear.', pattern: 'Reflux Pattern' }
+    bloating: { name: 'Suzy', photo: 'assets/suzy.png', quote: 'The bloating that made me look 6 months pregnant? Gone within 3 weeks of following my protocol.', pattern: 'Bloating Pattern' },
+    constipation: { name: 'Amanda', photo: 'assets/amanda.png', quote: 'After years of struggling, I finally have regular, comfortable digestion. It changed everything.', pattern: 'Constipation Pattern' },
+    diarrhea: { name: 'Cheryl', photo: 'assets/cheryl.png', quote: 'I can finally leave the house without mapping every bathroom. The urgency is completely manageable now.', pattern: 'Urgency Pattern' },
+    mixed: { name: 'Cheryl', photo: 'assets/cheryl.png', quote: 'The unpredictability was the worst part. Now I actually know what to expect from my body.', pattern: 'Mixed Pattern' },
+    pain: { name: 'Amanda', photo: 'assets/amanda.png', quote: 'The cramping that used to double me over? I barely notice it anymore.', pattern: 'Pain Pattern' },
+    gas: { name: 'Suzy', photo: 'assets/suzy.png', quote: 'I used to avoid social situations. Now I can actually enjoy dinner with friends again.', pattern: 'Gas Pattern' },
+    reflux: { name: 'Amanda', photo: 'assets/amanda.png', quote: 'No more burning, no more sleeping propped up. I can eat without fear.', pattern: 'Reflux Pattern' }
   };
 
   /**
@@ -119,10 +119,13 @@
     const testimonial = TESTIMONIALS[complaint] || TESTIMONIALS.bloating;
 
     // Update testimonial
+    const photoEl = document.querySelector('.social-proof-section .testimonial-photo');
     const quoteEl = document.querySelector('.social-proof-section .testimonial-quote');
     const nameEl = document.querySelector('.social-proof-section .author-name');
     const patternEl = document.querySelector('.social-proof-section .author-pattern');
 
+    if (photoEl) photoEl.src = testimonial.photo;
+    if (photoEl) photoEl.alt = testimonial.name;
     if (quoteEl) quoteEl.textContent = '"' + testimonial.quote + '"';
     if (nameEl) nameEl.textContent = '— ' + testimonial.name;
     if (patternEl) patternEl.textContent = testimonial.pattern;

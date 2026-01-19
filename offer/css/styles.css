@@ -466,6 +466,22 @@ p:last-child {
   padding: 20px 24px;
   box-shadow: var(--shadow-card);
   border-left: 4px solid var(--primary-teal);
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.testimonial-photo {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--primary-teal);
+  flex-shrink: 0;
+}
+
+.testimonial-content {
+  flex: 1;
 }
 
 .testimonial-quote {
