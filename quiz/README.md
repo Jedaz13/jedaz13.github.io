@@ -7,12 +7,12 @@ A WhatsApp-style conversational gut health assessment that guides users through 
 - **iMessage-style Chat Interface**: Engaging conversational UI with typing indicators and smooth animations
 - **Medical Screening**: Rome IV criteria screening for red flags that require medical attention
 - **Smart Protocol Routing**: Automatically routes users to 1 of 6 protocols based on their symptoms:
-  - Bloating Protocol
-  - IBS-C (Constipation) Protocol
-  - IBS-D (Diarrhea) Protocol
-  - IBS-M (Mixed) Protocol
-  - Post-SIBO Protocol
-  - Gut-Brain Protocol
+  - The Bloat Reset Protocol (bloating/gas)
+  - The Regularity Protocol (constipation)
+  - The Calm Gut Protocol (diarrhea)
+  - The Stability Protocol (mixed/alternating)
+  - The Rebuild Protocol (post-SIBO)
+  - The Gut-Brain Protocol (stress-triggered)
 - **Data Collection**: Captures all responses and sends to webhook for processing
 - **Mobile-First Design**: Responsive design that works beautifully on all devices
 

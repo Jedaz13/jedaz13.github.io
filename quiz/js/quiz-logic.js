@@ -34,7 +34,7 @@ function determineProtocol(answers) {
   if (q13_stress === 'significant' && q14_mental_health === 'yes') {
     return {
       protocol: 6,
-      name: 'Gut-Brain Dominant',
+      name: 'The Gut-Brain Protocol',
       description: 'Stress-Triggered Pattern'
     };
   }
@@ -51,8 +51,8 @@ function determineProtocol(answers) {
   if (hasSIBO || triedSIBOAntibiotics) {
     return {
       protocol: 5,
-      name: 'Post-SIBO Recovery',
-      description: 'Post-Antibiotic Recovery Pattern'
+      name: 'The Rebuild Protocol',
+      description: 'Post-SIBO Recovery Pattern'
     };
   }
 
@@ -60,8 +60,8 @@ function determineProtocol(answers) {
   if (q8_frequency_change === 'both' || q9_stool_change === 'alternates' || q5_primary_complaint === 'mixed') {
     return {
       protocol: 4,
-      name: 'Mixed Pattern',
-      description: 'IBS-M / Alternating Pattern'
+      name: 'The Stability Protocol',
+      description: 'Mixed / Alternating Pattern'
     };
   }
 
@@ -69,8 +69,8 @@ function determineProtocol(answers) {
   if (q5_primary_complaint === 'diarrhea' || (q8_frequency_change === 'more' && q9_stool_change === 'loose')) {
     return {
       protocol: 3,
-      name: 'Diarrhea-Dominant',
-      description: 'IBS-D Pattern'
+      name: 'The Calm Gut Protocol',
+      description: 'Diarrhea-Dominant Pattern'
     };
   }
 
@@ -78,8 +78,8 @@ function determineProtocol(answers) {
   if (q5_primary_complaint === 'constipation' || (q8_frequency_change === 'less' && q9_stool_change === 'hard')) {
     return {
       protocol: 2,
-      name: 'Constipation-Dominant',
-      description: 'IBS-C Pattern'
+      name: 'The Regularity Protocol',
+      description: 'Constipation-Dominant Pattern'
     };
   }
 
@@ -87,7 +87,7 @@ function determineProtocol(answers) {
   if (q5_primary_complaint === 'bloating' || q5_primary_complaint === 'gas') {
     return {
       protocol: 1,
-      name: 'Bloating-Dominant',
+      name: 'The Bloat Reset Protocol',
       description: 'Bloating Pattern'
     };
   }
@@ -95,7 +95,7 @@ function determineProtocol(answers) {
   // Default fallback
   return {
     protocol: 1,
-    name: 'Bloating-Dominant',
+    name: 'The Bloat Reset Protocol',
     description: 'General Gut Health Pattern'
   };
 }
@@ -118,7 +118,7 @@ function addStressComponent(answers, protocol) {
   if (q13_stress === 'significant' || q14_mental_health === 'yes') {
     return {
       ...protocol,
-      name: `${protocol.name} (with Gut-Brain support)`,
+      name: `${protocol.name} + Gut-Brain Support`,
       hasStressComponent: true
     };
   }

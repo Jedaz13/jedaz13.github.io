@@ -64,14 +64,14 @@ The app routes users to 6 different protocols based on responses:
 
 | Protocol | Trigger Conditions |
 |----------|-------------------|
-| **Protocol 6: Gut-Brain Dominant** | Significant stress + mental health impact (checked first) |
-| **Protocol 5: Post-SIBO Recovery** | SIBO diagnosis or SIBO antibiotic treatment history |
-| **Protocol 4: Mixed Pattern (IBS-M)** | Alternating symptoms or frequency/stool changes |
-| **Protocol 3: Diarrhea-Dominant (IBS-D)** | Primary complaint: diarrhea, or increased frequency + loose stools |
-| **Protocol 2: Constipation-Dominant (IBS-C)** | Primary complaint: constipation, or decreased frequency + hard stools |
-| **Protocol 1: Bloating-Dominant** | Primary complaint: bloating or gas (default) |
+| **The Gut-Brain Protocol** | Significant stress + mental health impact (checked first) |
+| **The Rebuild Protocol** | SIBO diagnosis or SIBO antibiotic treatment history |
+| **The Stability Protocol** | Alternating symptoms or frequency/stool changes |
+| **The Calm Gut Protocol** | Primary complaint: diarrhea, or increased frequency + loose stools |
+| **The Regularity Protocol** | Primary complaint: constipation, or decreased frequency + hard stools |
+| **The Bloat Reset Protocol** | Primary complaint: bloating or gas (default) |
 
-Additional modifier: If stress impact is significant (not Gut-Brain protocol), "(with Gut-Brain support)" is appended.
+Additional modifier: If stress impact is significant (not Gut-Brain protocol), "+ Gut-Brain Support" is appended.
 
 ### Data Structure
 
