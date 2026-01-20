@@ -70,6 +70,9 @@ async function submitToSupabase({ isRedFlagExit = false } = {}) {
       name: state.userName || null,
       email: state.userEmail || null,
 
+      // Source tracking
+      quiz_source: 'quiz-1',
+
       // Protocol info (0 for red flag exits)
       protocol: isRedFlagExit ? 0 : (state.protocol?.protocol || null),
       protocol_name: isRedFlagExit ? 'Red Flag Exit' : (state.protocol?.name || null),

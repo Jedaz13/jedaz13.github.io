@@ -191,6 +191,18 @@ p:last-child {
   font-weight: 500;
 }
 
+/* Gut-Brain Badge */
+.gut-brain-badge {
+  display: inline-block;
+  background-color: var(--secondary-sage);
+  color: var(--navy-blue);
+  font-size: 13px;
+  font-weight: 500;
+  padding: 6px 14px;
+  border-radius: 20px;
+  margin: 8px auto 4px;
+}
+
 /* =====================================================
    Section 2: Assessment Revealed
    ===================================================== */

@@ -132,3 +132,252 @@ To change the quiz URL, update all CTA links in `index.html`:
 - **Colors**: Update CSS variables in `:root` in `css/styles.css`
 - **Layout**: Modify section padding and max-widths in CSS
 - **Typography**: Adjust font sizes in the responsive media queries
+
+---
+
+## Quiz System Documentation
+
+This section documents the quiz infrastructure for building aligned quiz variants.
+
+### Quiz Variants Overview
+
+| Quiz | Path | Source ID | Style | Unique Features |
+|------|------|-----------|-------|-----------------|
+| Quiz-1 | `/quiz/` | `quiz-1` (Supabase) / `chat-rebecca` (URL) | Chat-based with Rebecca | Conversational flow, typing indicators |
+| Quiz-2 | `/quiz-2/` | `quiz-2` | Survey-style | Interstitials, practitioner intros, testimonials |
+| Quiz-3 | `/quiz-3/` | `quiz-3` | Survey-style | Goal-first intro (goal_selection, journey_stage) |
+
+### Configuration Constants
+
+Every quiz MUST define these in its `CONFIG` object:
+
+```javascript
+const CONFIG = {
+  OFFER_URL: '/offer/',
+  SOURCE_TRACKING: 'quiz-X',  // Used for GTM, Supabase, and URL params
+  WEBHOOK_URL: 'https://hook.eu1.make.com/5uubblyocz70syh9xptkg248ycauy5pd',
+  SUPABASE_URL: 'https://mwabljnngygkmahjgvps.supabase.co',
+  SUPABASE_ANON_KEY: '...'
+};
+```
+
+### URL Parameters for Offer Page
+
+All quizzes redirect to `/offer/` with URL parameters. **New quizzes MUST include all standard parameters.**
+
+#### Standard Parameters (ALL quizzes)
+
+| Parameter | Type | Description | Example |
+|-----------|------|-------------|---------|
+| `source` | string | Quiz source identifier | `quiz-2`, `quiz-3` |
+| `name` | string | User's first name | `Sarah` |
+| `email` | string | User's email | `sarah@example.com` |
+| `protocol` | string | Protocol key | `bloat_reset`, `regularity`, `calm_gut`, `stability`, `rebuild` |
+| `protocol_name` | string | Display name | `Bloat Reset Protocol` |
+| `gut_brain` | boolean | Has gut-brain overlay | `true` / `false` |
+| `primary_complaint` | string | Main symptom | `bloating`, `constipation`, `diarrhea`, `mixed`, `pain`, `gas`, `reflux` |
+| `primary_complaint_label` | string | Display text | `Bloating & distension` |
+| `duration` | string | How long symptoms | `less_than_6_months`, `6-12_months`, `1-3_years`, `3-5_years`, `5+_years` |
+| `diagnoses` | string | Comma-separated | `ibs,sibo,food_intolerance` |
+| `treatments` | string | Comma-separated keys | `low_fodmap,probiotics,gluten_free` |
+| `treatments_formatted` | string | Display text | `Low FODMAP, probiotics, and gluten-free diet` |
+| `stress_level` | string | Stress connection | `significant`, `some`, `none` |
+| `life_impact` | string | Impact level | `severe`, `moderate`, `mild` |
+| `vision` | string | Dream outcome (max 200 chars, URL encoded) | User's free text response |
+
+#### Quiz-3 Specific Parameters
+
+| Parameter | Type | Description | Values |
+|-----------|------|-------------|--------|
+| `goal_selection` | string | What would change their life | `comfortable_eating`, `bathroom_freedom`, `energy_focus`, `understanding` |
+| `journey_stage` | string | Where in gut health journey | `just_starting`, `tried_few`, `tried_everything`, `returned` |
+
+### Supabase Data Structure
+
+All quizzes submit to Supabase via the `insert_quiz_lead` RPC function. **New quizzes MUST include all fields.**
+
+#### Required Fields
+
+```javascript
+const userRecord = {
+  // Contact info
+  name: string | null,
+  email: string | null,
+
+  // Source tracking (REQUIRED)
+  quiz_source: 'quiz-1' | 'quiz-2' | 'quiz-3' | 'quiz-X',
+
+  // Quiz-3+ specific (include even if null)
+  goal_selection: string | null,
+  journey_stage: string | null,
+
+  // Protocol info
+  protocol: number,           // 1-5 (see protocol mapping below)
+  protocol_name: string,
+  has_stress_component: boolean,
+
+  // Red flag info
+  has_red_flags: boolean,
+  red_flag_evaluated_cleared: boolean,
+  red_flag_details: object | null,  // JSONB
+
+  // Question answers (Q5-Q18)
+  primary_complaint: string,      // Q5
+  symptom_frequency: string,      // Q6
+  relief_after_bm: string,        // Q7
+  frequency_during_flare: string, // Q8
+  stool_during_flare: string,     // Q9
+  duration: string,               // Q10
+  diagnoses: array,               // Q11 (JSONB array)
+  treatments_tried: array,        // Q12 (JSONB array)
+  stress_connection: string,      // Q13
+  mental_health_impact: string,   // Q14
+  sleep_quality: string,          // Q15
+  life_impact_level: string,      // Q16
+  hardest_part: string,           // Q17 (free text)
+  dream_outcome: string,          // Q18 (free text)
+
+  // User status
+  role: 'member',
+  status: 'lead'
+};
+```
+
+#### Protocol Number Mapping
+
+```javascript
+const PROTOCOL_NUMBERS = {
+  bloat_reset: 1,
+  regularity: 2,
+  calm_gut: 3,
+  stability: 4,
+  rebuild: 5
+};
+```
+
+### GTM Tracking
+
+All quizzes push events to `dataLayer` for Google Tag Manager.
+
+```javascript
+window.dataLayer.push({
+  'event': 'quiz_step',
+  'quiz_section': 'part1_q1',  // Section name
+  'quiz_source': CONFIG.SOURCE_TRACKING
+});
+```
+
+#### Standard Section Names
+
+- `intro`, `intro_goal`, `intro_journey`, `intro_validation`
+- `part1_intro`, `part1_q1` through `part1_q4`, `part1_red_flag_warning`, `part1_practitioner_intro`
+- `part2_intro`, `part2_q1` through `part2_q5`, `part2_protocol_preview`
+- `email_capture`
+- `part3_intro`, `part3_q1` through `part3_q3`, `part3_validation`
+- `testimonial_suzy`, `testimonial_amanda`, `testimonial_cheryl`
+- `part4_intro`, `part4_q1` through `part4_q3`
+- `part5_intro`, `part5_q1` through `part5_q3`
+- `results_calculating`, `results_shown`, `offer_redirect`
+
+### Webhook Payload (Make.com)
+
+All quizzes send data to Make.com webhook with this structure:
+
+```javascript
+const payload = {
+  // Contact
+  name: string,
+  email: string,
+
+  // Protocol
+  protocol_number: number,
+  protocol_name: string,
+  protocol_description: string,
+  has_stress_component: boolean,
+
+  // Quiz-specific
+  goal_selection: string,      // Quiz-3+
+  journey_stage: string,       // Quiz-3+
+
+  // All question answers (q1-q18)
+  q1_weight_loss: string,
+  q2_blood: string,
+  q3_family_history: string,
+  q4_colonoscopy: string,
+  q5_primary_complaint: string,
+  q6_frequency: string,
+  q7_bm_relief: string,
+  q8_frequency_change: string,
+  q9_stool_change: string,
+  q10_duration: string,
+  q11_diagnosis: string,       // Comma-separated
+  q12_tried: string,           // Comma-separated
+  q13_stress: string,
+  q14_mental_health: string,
+  q15_sleep: string,
+  q16_life_impact: string,
+  q17_hardest_part: string,
+  q18_vision: string,
+
+  // Red flags
+  had_red_flags: boolean,
+  red_flag_evaluated_cleared: boolean,
+
+  // Tracking
+  source: string,              // CONFIG.SOURCE_TRACKING
+  submitted_at: string         // ISO timestamp
+};
+```
+
+### Building a New Quiz Version
+
+1. **Copy quiz-3 as template** (most complete version)
+2. **Update CONFIG.SOURCE_TRACKING** to `quiz-X`
+3. **Include ALL standard URL parameters** in `redirectToOffer()`
+4. **Include ALL Supabase fields** in `submitToSupabase()`
+5. **Include ALL webhook fields** in `sendWebhook()`
+6. **Add GTM tracking** for all steps
+7. **Update Supabase RPC** if adding new fields (run SQL in Supabase)
+8. **Test data flow**: Quiz → Supabase, Quiz → Make.com, Quiz → Offer URL
+
+### Question ID Reference
+
+| ID | Question | Section |
+|----|----------|---------|
+| `q1_weight_loss` | Unexplained weight loss? | Safety |
+| `q2_blood` | Blood in stool? | Safety |
+| `q3_family_history` | Family history GI cancer? | Safety |
+| `q4_colonoscopy` | Need colonoscopy? | Safety |
+| `q5_primary_complaint` | Primary symptom | Symptoms |
+| `q6_frequency` | How often symptoms? | Symptoms |
+| `q7_bm_relief` | Relief after BM? | Symptoms |
+| `q8_frequency_change` | Frequency during flare? | Symptoms |
+| `q9_stool_change` | Stool changes during flare? | Symptoms |
+| `q10_duration` | How long dealing with this? | History |
+| `q11_diagnosis` | Diagnoses received | History |
+| `q12_tried` | Treatments tried | History |
+| `q13_stress` | Stress connection | Gut-Brain |
+| `q14_mental_health` | Mental health impact | Gut-Brain |
+| `q15_sleep` | Sleep quality | Gut-Brain |
+| `q16_life_impact` | Life impact level | Impact |
+| `q17_hardest_part` | Hardest part (free text) | Impact |
+| `q18_vision` | Dream outcome (free text) | Impact |
+
+### Files to Update When Adding New Quiz Fields
+
+1. **Quiz JavaScript** (`quiz-X/script.js`)
+   - `submitToSupabase()` function
+   - `sendWebhook()` function
+   - `redirectToOffer()` function
+
+2. **Supabase RPC** (`supabase-update.sql`)
+   - Add column to INSERT INTO
+   - Add value extraction in VALUES
+
+3. **Offer Page** (`offer/script.js` or `offer/index.html`)
+   - Parse new URL parameters
+   - Display personalized content
+
+4. **This Documentation** (CLAUDE.md)
+   - Update parameter tables
+   - Update field references
