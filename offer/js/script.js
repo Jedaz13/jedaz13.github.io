@@ -18,13 +18,27 @@
   function getUrlParams() {
     const params = new URLSearchParams(window.location.search);
     return {
+      source: params.get('source') || '',
       name: params.get('name') || 'Friend',
       email: params.get('email') || '',
+      protocol: params.get('protocol') || '',
       protocol_name: params.get('protocol_name') || 'Personalized Gut Healing',
+      gut_brain: params.get('gut_brain') === 'true',
       primary_complaint: params.get('primary_complaint') || 'digestive',
-      q18_vision: params.get('q18_vision') || '',
+      primary_complaint_label: params.get('primary_complaint_label') || '',
+      duration: params.get('duration') || '',
       diagnoses: params.get('diagnoses') || '',
-      treatments_tried: params.get('treatments_tried') || ''
+      treatments: params.get('treatments') || '',
+      treatments_formatted: params.get('treatments_formatted') || '',
+      stress_level: params.get('stress_level') || '',
+      life_impact: params.get('life_impact') || '',
+      vision: params.get('vision') ? decodeURIComponent(params.get('vision')) : '',
+      // Legacy support
+      q18_vision: params.get('q18_vision') || '',
+      treatments_tried: params.get('treatments_tried') || '',
+      // Quiz-3 specific
+      goal_selection: params.get('goal_selection') || '',
+      journey_stage: params.get('journey_stage') || ''
     };
   }
 
@@ -73,13 +87,22 @@
       el.textContent = userData.primary_complaint;
     });
 
-    // Show goal section if q18_vision exists
-    if (userData.q18_vision && userData.q18_vision.trim() !== '') {
+    // Show gut-brain badge if applicable
+    if (userData.gut_brain) {
+      const gutBrainBadge = document.getElementById('gut-brain-badge');
+      if (gutBrainBadge) {
+        gutBrainBadge.style.display = 'inline-block';
+      }
+    }
+
+    // Show goal section if vision exists (check both new and legacy param names)
+    const visionText = userData.vision || userData.q18_vision;
+    if (visionText && visionText.trim() !== '') {
       const goalSection = document.getElementById('goal-section');
       const visionElement = document.querySelector('.user-vision');
 
       if (goalSection && visionElement) {
-        visionElement.textContent = userData.q18_vision;
+        visionElement.textContent = visionText;
         goalSection.style.display = 'block';
       }
     }
@@ -132,13 +155,43 @@
   }
 
   /**
+   * Duration labels for display
+   */
+  const DURATION_LABELS = {
+    'less_than_6_months': 'Less than 6 months',
+    '6-12_months': '6-12 months',
+    '1-3_years': '1-3 years',
+    '3-5_years': '3-5 years',
+    '5+_years': '5+ years'
+  };
+
+  /**
+   * Stress level labels for display
+   */
+  const STRESS_LABELS = {
+    'significant': 'Significant impact identified',
+    'some': 'Some connection noted',
+    'none': 'Minimal connection'
+  };
+
+  /**
    * Populate the assessment revealed section
    */
   function populateAssessmentSection() {
     // Primary complaint display
     const complaintDisplay = document.querySelector('.primary-complaint-display');
     if (complaintDisplay && userData.primary_complaint) {
-      complaintDisplay.textContent = COMPLAINT_LABELS[userData.primary_complaint] || userData.primary_complaint;
+      // Use label from URL if available, otherwise map from key
+      const label = userData.primary_complaint_label || COMPLAINT_LABELS[userData.primary_complaint] || userData.primary_complaint;
+      complaintDisplay.textContent = label;
+    }
+
+    // Duration display
+    const durationItem = document.getElementById('duration-item');
+    const durationDisplay = document.querySelector('.duration-display');
+    if (durationItem && durationDisplay && userData.duration && userData.duration.trim() !== '') {
+      durationDisplay.textContent = DURATION_LABELS[userData.duration] || userData.duration.replace(/_/g, ' ');
+      durationItem.style.display = 'flex';
     }
 
     // Diagnoses display
@@ -149,12 +202,21 @@
       diagnosesItem.style.display = 'flex';
     }
 
-    // Treatments display
+    // Treatments display (prefer formatted version)
     const treatmentsItem = document.getElementById('treatments-item');
     const treatmentsDisplay = document.querySelector('.treatments-display');
-    if (treatmentsItem && treatmentsDisplay && userData.treatments_tried && userData.treatments_tried.trim() !== '') {
-      treatmentsDisplay.textContent = userData.treatments_tried;
+    const treatmentsText = userData.treatments_formatted || userData.treatments_tried || userData.treatments;
+    if (treatmentsItem && treatmentsDisplay && treatmentsText && treatmentsText.trim() !== '') {
+      treatmentsDisplay.textContent = treatmentsText;
       treatmentsItem.style.display = 'flex';
+    }
+
+    // Stress connection display (only show if significant or some)
+    const stressItem = document.getElementById('stress-item');
+    const stressDisplay = document.querySelector('.stress-display');
+    if (stressItem && stressDisplay && userData.stress_level && userData.stress_level !== 'none') {
+      stressDisplay.textContent = STRESS_LABELS[userData.stress_level] || userData.stress_level;
+      stressItem.style.display = 'flex';
     }
   }
 
