@@ -1281,7 +1281,68 @@ function redirectToOffer() {
 }
 
 /**
- * Submit quiz data to Supabase users table
+ * Submit partial quiz data to Supabase on email capture
+ * This creates the initial lead record with email and any data collected so far
+ */
+async function submitToSupabasePartial() {
+  if (!supabaseClient) {
+    console.log('Supabase not configured - skipping database submission');
+    return null;
+  }
+
+  try {
+    const userRecord = {
+      name: state.userData.name || null,
+      email: state.userData.email || null,
+      quiz_source: CONFIG.SOURCE_TRACKING,
+      // Quiz-3 specific fields (collected before email)
+      goal_selection: state.answers.goal_selection || null,
+      journey_stage: state.answers.journey_stage || null,
+      // Partial quiz data collected so far
+      protocol: state.calculatedProtocol ? getProtocolNumber(state.calculatedProtocol) : null,
+      protocol_name: state.calculatedProtocol ? quizContent.protocols[state.calculatedProtocol].name : null,
+      has_stress_component: false, // Not determined yet at email capture
+      has_red_flags: state.hasRedFlags || false,
+      red_flag_evaluated_cleared: state.answers.red_flag_evaluated_cleared || false,
+      primary_complaint: state.answers.q5_primary_complaint || null,
+      symptom_frequency: state.answers.q6_frequency || null,
+      relief_after_bm: state.answers.q7_bm_relief || null,
+      frequency_during_flare: state.answers.q8_frequency_change || null,
+      stool_during_flare: state.answers.q9_stool_change || null,
+      duration: null, // Not collected yet
+      diagnoses: [], // Not collected yet
+      treatments_tried: [], // Not collected yet
+      stress_connection: null,
+      mental_health_impact: null,
+      sleep_quality: null,
+      life_impact_level: null,
+      hardest_part: null,
+      dream_outcome: null,
+      role: 'member',
+      status: 'lead'
+    };
+
+    // Use upsert to handle case where email already exists
+    const { error } = await supabaseClient.rpc('upsert_quiz_lead', {
+      user_data: userRecord
+    });
+
+    if (error) {
+      console.error('Supabase partial insert error:', error);
+      return null;
+    }
+
+    console.log('Supabase partial submission successful (email capture)');
+    return true;
+  } catch (error) {
+    console.error('Error submitting partial data to Supabase:', error);
+    return null;
+  }
+}
+
+/**
+ * Submit complete quiz data to Supabase users table
+ * This updates the existing record (from email capture) with full quiz data
  */
 async function submitToSupabase() {
   if (!supabaseClient) {
@@ -1321,7 +1382,8 @@ async function submitToSupabase() {
       status: 'lead'
     };
 
-    const { error } = await supabaseClient.rpc('insert_quiz_lead', {
+    // Use upsert to update the existing record created at email capture
+    const { error } = await supabaseClient.rpc('upsert_quiz_lead', {
       user_data: userRecord
     });
 
@@ -1330,7 +1392,7 @@ async function submitToSupabase() {
       return null;
     }
 
-    console.log('Supabase submission successful');
+    console.log('Supabase submission successful (quiz completion)');
     return true;
   } catch (error) {
     console.error('Error submitting to Supabase:', error);
@@ -1421,15 +1483,18 @@ async function sendWebhook(eventType) {
     submitted_at: new Date().toISOString()
   };
 
-  // Add event-specific data
+  // Add event-specific data and submit to Supabase
   if (eventType === 'quiz_email_captured') {
     payload.submission_type = 'email_capture';
+
+    // Submit partial data to Supabase on email capture
+    submitToSupabasePartial();
   }
 
   if (eventType === 'quiz_completed') {
     payload.submission_type = 'quiz_completed';
 
-    // Submit to Supabase on quiz completion
+    // Submit complete data to Supabase on quiz completion (upserts existing record)
     submitToSupabase();
   }
 
