@@ -240,10 +240,7 @@ BEGIN
     sleep_quality = COALESCE(EXCLUDED.sleep_quality, users.sleep_quality),
     life_impact_level = COALESCE(EXCLUDED.life_impact_level, users.life_impact_level),
     hardest_part = COALESCE(EXCLUDED.hardest_part, users.hardest_part),
-    dream_outcome = COALESCE(EXCLUDED.dream_outcome, users.dream_outcome),
-
-    -- Update timestamp
-    updated_at = NOW();
+    dream_outcome = COALESCE(EXCLUDED.dream_outcome, users.dream_outcome);
 END;
 $$;
 
