@@ -417,16 +417,15 @@
     // Build URLs - all plans have $1 7-day trial
     const urls = {
       monthly: STRIPE_LINKS.monthly + emailParam,
-      fourMonth: STRIPE_LINKS.fourMonth + emailParam,
       annual: STRIPE_LINKS.annual + emailParam
     };
 
     // Attach to buttons
     const btnMonthly = document.getElementById('btn-monthly');
-    const btn4Month = document.getElementById('btn-4month');
     const btnAnnual = document.getElementById('btn-annual');
     const btnSticky = document.getElementById('btn-sticky');
 
+    // Main CTA - Monthly plan with $1 trial
     if (btnMonthly) {
       btnMonthly.href = urls.monthly;
       btnMonthly.addEventListener('click', function() {
@@ -434,13 +433,7 @@
       });
     }
 
-    if (btn4Month) {
-      btn4Month.href = urls.fourMonth;
-      btn4Month.addEventListener('click', function() {
-        trackCheckout('4month', 149.00);
-      });
-    }
-
+    // Secondary link - Annual plan
     if (btnAnnual) {
       btnAnnual.href = urls.annual;
       btnAnnual.addEventListener('click', function() {
@@ -448,11 +441,11 @@
       });
     }
 
-    // Sticky CTA defaults to 4-month (most popular)
+    // Sticky CTA - defaults to monthly plan
     if (btnSticky) {
-      btnSticky.href = urls.fourMonth;
+      btnSticky.href = urls.monthly;
       btnSticky.addEventListener('click', function() {
-        trackCheckout('4month_sticky', 149.00);
+        trackCheckout('monthly_sticky', 47.00);
       });
     }
   }
