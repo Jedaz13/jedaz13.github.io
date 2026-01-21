@@ -679,6 +679,96 @@ p:last-child {
 }
 
 /* =====================================================
+   Simplified Single Pricing Card
+   ===================================================== */
+.pricing-card-single {
+  background-color: var(--white);
+  border-radius: var(--radius-xl);
+  padding: 28px 24px;
+  text-align: center;
+  box-shadow: var(--shadow-elevated);
+  border: 2px solid var(--primary-teal);
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.pricing-card-single .trial-badge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: linear-gradient(135deg, var(--primary-teal) 0%, #5a7d70 100%);
+  color: var(--white);
+  padding: 12px 16px;
+  border-radius: var(--radius);
+  margin-bottom: 24px;
+  font-size: 14px;
+}
+
+.pricing-card-single .trial-icon {
+  font-size: 18px;
+}
+
+.single-price {
+  margin-bottom: 8px;
+}
+
+.price-main {
+  font-size: 56px;
+  font-weight: 700;
+  color: var(--text-charcoal);
+  line-height: 1;
+}
+
+.price-after-trial {
+  font-size: 16px;
+  color: var(--text-secondary);
+  margin-bottom: 24px;
+}
+
+.btn-full-width {
+  width: 100%;
+  padding: 18px 24px;
+  font-size: 18px;
+}
+
+.subscription-disclaimer {
+  font-size: 11px;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  margin-top: 16px;
+  margin-bottom: 0;
+}
+
+.subscription-disclaimer a {
+  color: var(--text-secondary);
+  text-decoration: underline;
+}
+
+.subscription-disclaimer a:hover {
+  color: var(--primary-teal);
+}
+
+/* Annual Option Link */
+.annual-option {
+  text-align: center;
+  font-size: 14px;
+  color: var(--text-secondary);
+  margin-top: 20px;
+  margin-bottom: 0;
+}
+
+.annual-option a {
+  color: var(--primary-teal);
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.annual-option a:hover {
+  text-decoration: underline;
+}
+
+/* =====================================================
    Section 6: Guarantee
    ===================================================== */
 .guarantee-section {
