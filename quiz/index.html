@@ -10,32 +10,30 @@
     <!-- End Google Tag Manager -->
 
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Gut Health Assessment | Gut Healing Academy</title>
-    <meta name="description" content="Discover your gut type in 3 minutes and get a protocol that actually works. Built by registered dietitians and Monash-certified FODMAP specialists.">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Redirecting... | Gut Healing Academy</title>
 
-    <!-- Open Graph Meta Tags -->
-    <meta property="og:title" content="Gut Health Assessment | Gut Healing Academy">
-    <meta property="og:description" content="Discover your gut type in 3 minutes. Get a protocol that actually works.">
-    <meta property="og:type" content="website">
+    <!-- Redirect to quiz-3 -->
+    <meta http-equiv="refresh" content="0;url=/quiz-3/">
+    <link rel="canonical" href="/quiz-3/">
 
-    <!-- Favicon -->
-    <link rel="icon" type="image/png" href="assets/favicon.png">
-
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-
-    <link rel="stylesheet" href="css/styles.css">
-    <!-- Preload avatar -->
-    <link rel="preload" href="assets/rebecca-avatar.png" as="image">
     <style>
-        /* Fallback avatar styles */
-        .header-avatar, .message-avatar {
-            background: linear-gradient(135deg, #075E54 0%, #128C7E 100%);
-            color: white;
-            font-weight: 600;
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background: #FDF8F5;
+            color: #2D3436;
+        }
+        .redirect-message {
+            text-align: center;
+            padding: 2rem;
+        }
+        a {
+            color: #6B9080;
         }
     </style>
 </head>
@@ -45,64 +43,14 @@
     height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <!-- End Google Tag Manager (noscript) -->
 
-    <!-- CHAT PAGE -->
-    <div class="chat-page active" id="chatPage">
-        <!-- Progress Indicator -->
-        <div class="quiz-progress" id="quizProgress" style="display: none;">
-            <div class="progress-header">
-                <span class="progress-text">Part <span id="currentPart">1</span> of 5: <span id="partName">Safety Screening</span></span>
-            </div>
-            <div class="progress-bar">
-                <div class="progress-segments">
-                    <div class="progress-segment" data-part="1"></div>
-                    <div class="progress-segment" data-part="2"></div>
-                    <div class="progress-segment" data-part="3"></div>
-                    <div class="progress-segment" data-part="4"></div>
-                    <div class="progress-segment" data-part="5"></div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Chat Header -->
-        <header class="chat-header">
-            <img src="assets/rebecca-avatar.png" alt="Rebecca Taylor" class="header-avatar" onerror="this.onerror=null; this.src='assets/rebecca-avatar.svg';">
-            <div class="header-info">
-                <h2>Rebecca Taylor, RNutr</h2>
-                <span class="online-status">
-                    <span class="online-dot"></span> Online
-                </span>
-            </div>
-        </header>
-
-        <!-- Chat Area -->
-        <div class="chat-area" id="chatArea">
-            <!-- Messages will be dynamically inserted here -->
-        </div>
-
-        <!-- Input Container -->
-        <div id="inputContainer">
-            <!-- Input controls will be dynamically inserted here -->
-        </div>
-
-        <!-- Disclaimer Footer -->
-        <footer class="disclaimer-footer">
-            <div class="disclaimer-content">
-                <div class="disclaimer-header">
-                    <span class="disclaimer-icon">&#9877;</span>
-                    <span class="disclaimer-title">Medical Disclaimer</span>
-                </div>
-                <p>
-                    This assessment is for educational purposes only and does not constitute medical advice, diagnosis, or treatment. Consult a healthcare provider for medical concerns.
-                </p>
-            </div>
-        </footer>
+    <div class="redirect-message">
+        <p>Redirecting to our updated quiz...</p>
+        <p><a href="/quiz-3/">Click here if you're not redirected automatically</a></p>
     </div>
 
-    <!-- Scripts -->
-    <!-- Supabase JavaScript Client (CDN) -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="js/quiz-content.js"></script>
-    <script src="js/quiz-logic.js"></script>
-    <script src="js/quiz-app.js"></script>
+    <script>
+        // JavaScript redirect as backup
+        window.location.replace('/quiz-3/');
+    </script>
 </body>
 </html>
