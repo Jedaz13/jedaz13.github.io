@@ -381,3 +381,208 @@ const payload = {
 4. **This Documentation** (CLAUDE.md)
    - Update parameter tables
    - Update field references
+
+---
+
+## Offer Page Documentation
+
+This section documents the offer page infrastructure for creating variants and A/B testing.
+
+### Offer Page Overview
+
+| Page | Path | Purpose |
+|------|------|---------|
+| Offer (Original) | `/offer/` | Main offer page, receives traffic from all quizzes |
+
+### File Structure
+
+```
+/offer/
+├── index.html          # Main offer page HTML
+├── index-old.html      # Previous version (backup)
+├── css/
+│   └── styles.css      # Offer page styling
+├── js/
+│   ├── script.js       # Main functionality (URL params, Stripe, personalization)
+│   └── main.js         # Additional scripts (if any)
+├── assets/
+│   ├── favicon.png
+│   ├── Logo.png
+│   ├── landscape-logo.png
+│   ├── square-logo.png
+│   ├── tracking-mockup.png
+│   ├── Gut-healing-academy-hero-image.png
+│   ├── Minimalist-Bloating.png
+│   ├── Minimalist-constipation.png
+│   ├── Minimalist-Diarrhea.png
+│   ├── Minimalist-mixed.png
+│   ├── Minimalist-gut-brain.png
+│   ├── Minimalist-Post-SIBO-recovert.png
+│   ├── suzy.png         # Testimonial photo
+│   ├── amanda.png       # Testimonial photo
+│   ├── cheryl.png       # Testimonial photo
+│   ├── paulina.png      # Practitioner photo
+│   └── rebecca.png      # Practitioner photo
+└── README.md
+```
+
+### URL Parameters (Received from Quiz)
+
+The offer page reads these parameters from the URL and uses them for personalization:
+
+| Parameter | Used For | Default Value |
+|-----------|----------|---------------|
+| `source` | Analytics tracking | `''` |
+| `name` | Personalized greeting | `'Friend'` |
+| `email` | Stripe prefill | `''` |
+| `protocol` | Protocol key | `''` |
+| `protocol_name` | Display in header | `'Personalized Gut Healing'` |
+| `gut_brain` | Show nervous system badge | `false` |
+| `primary_complaint` | Testimonial matching | `'digestive'` |
+| `primary_complaint_label` | Assessment display | `''` |
+| `duration` | Assessment display | `''` |
+| `diagnoses` | Assessment display | `''` |
+| `treatments` | Assessment display | `''` |
+| `treatments_formatted` | Assessment display (preferred) | `''` |
+| `stress_level` | Assessment display | `''` |
+| `life_impact` | Analytics | `''` |
+| `vision` | Goal callback section | `''` |
+| `goal_selection` | Quiz-3 specific | `''` |
+| `journey_stage` | Quiz-3 specific | `''` |
+
+### Key JavaScript Functions (js/script.js)
+
+```javascript
+// URL parameter parsing
+getUrlParams()           // Returns object with all URL parameters
+
+// Personalization
+populatePersonalizedContent()  // Updates name, protocol, complaint throughout page
+populateAssessmentSection()    // Fills "Your Assessment Revealed" card
+populateSocialProof()          // Selects testimonial based on primary_complaint
+
+// Stripe integration
+setupStripeLinks()       // Attaches payment links with prefilled email
+trackCheckout()          // GTM tracking for checkout clicks
+
+// UI
+initStickyCTA()          // Mobile sticky button behavior
+initTimelineAnimation()  // Animated healing timeline
+```
+
+### Stripe Payment Links
+
+Located at the top of `js/script.js`:
+
+```javascript
+const STRIPE_LINKS = {
+  monthly: 'https://buy.stripe.com/bJe28seyJaf8d4ch1rgA802',    // $47/month
+  fourMonth: 'https://buy.stripe.com/cNfZigGRdrkaW45iJgA807',   // $149/4mo
+  annual: 'https://buy.stripe.com/bJe5kEduF1IC1lu26xgA803'      // $297/year
+};
+```
+
+### Testimonial Matching Logic
+
+Testimonials are matched to `primary_complaint` parameter:
+
+| Complaint | Testimonial | Quote Focus |
+|-----------|-------------|-------------|
+| `bloating` | Suzy | "6 months pregnant" bloating gone |
+| `constipation` | Amanda | Regular, comfortable digestion |
+| `diarrhea` | Cheryl | Bathroom mapping, urgency |
+| `mixed` | Cheryl | Unpredictability resolved |
+| `pain` | Amanda | Cramping relief |
+| `gas` | Suzy | Social situations |
+| `reflux` | Amanda | Burning, eating without fear |
+
+### Duplicating the Offer Page
+
+#### Step 1: Copy the Directory
+
+```bash
+cp -r /offer /offer-2
+```
+
+#### Step 2: Update Stripe Links (if different pricing/plans)
+
+In `offer-2/js/script.js`, update the `STRIPE_LINKS` object if you want different payment links:
+
+```javascript
+const STRIPE_LINKS = {
+  monthly: 'https://buy.stripe.com/YOUR_NEW_MONTHLY_LINK',
+  fourMonth: 'https://buy.stripe.com/YOUR_NEW_4MONTH_LINK',
+  annual: 'https://buy.stripe.com/YOUR_NEW_ANNUAL_LINK'
+};
+```
+
+#### Step 3: Update Quiz to Redirect to New Offer
+
+In the quiz's `script.js`, update `CONFIG.OFFER_URL`:
+
+```javascript
+const CONFIG = {
+  OFFER_URL: '/offer-2/',  // Changed from '/offer/'
+  // ... rest of config
+};
+```
+
+#### Step 4: (Optional) Add Redirect from Original Offer
+
+If you want ALL traffic to go to the new offer, create a redirect in `offer/index.html`:
+
+```html
+<!DOCTYPE html>
+<html>
+<head>
+  <!-- GTM code here -->
+  <meta http-equiv="refresh" content="0;url=/offer-2/">
+  <script>
+    // Preserve URL parameters in redirect
+    window.location.replace('/offer-2/' + window.location.search);
+  </script>
+</head>
+<body>
+  <p>Redirecting...</p>
+  <a href="/offer-2/">Click here if not redirected</a>
+</body>
+</html>
+```
+
+**IMPORTANT:** The redirect MUST preserve `window.location.search` to pass URL parameters!
+
+### Testing Checklist for Offer Page Variants
+
+- [ ] URL parameters pass through correctly (check browser console: `Offer page params:`)
+- [ ] User name displays correctly in header
+- [ ] Protocol name displays correctly
+- [ ] Primary complaint label shows in assessment card
+- [ ] Correct testimonial displays based on complaint
+- [ ] Gut-brain badge shows when `gut_brain=true`
+- [ ] Goal section shows when `vision` parameter exists
+- [ ] Stripe links work and prefill email
+- [ ] GTM tracking fires on page load
+- [ ] GTM tracking fires on checkout button clicks
+- [ ] Sticky CTA works on mobile
+- [ ] Timeline animation triggers on scroll
+
+### Files to Update When Creating Offer Variants
+
+1. **Copy entire `/offer/` directory** to `/offer-X/`
+2. **Update Stripe links** in `offer-X/js/script.js` (if different pricing)
+3. **Update quiz CONFIG** to point to new offer URL
+4. **Update CLAUDE.md** to document the new variant
+
+### Offer Page Sections Reference
+
+| Section | Purpose | Personalization |
+|---------|---------|-----------------|
+| Header | Protocol name, greeting | `name`, `protocol_name`, `gut_brain` |
+| Assessment Card | Shows quiz answers | `primary_complaint_label`, `duration`, `diagnoses`, `treatments_formatted`, `stress_level` |
+| Timeline | Healing journey animation | None (static) |
+| Goal Callback | User's vision | `vision` (only shows if exists) |
+| What's Included | Protocol features | `protocol_name`, `primary_complaint` |
+| Social Proof | Testimonial | `primary_complaint` (selects testimonial) |
+| Pricing | Three plan options | `email` (prefills Stripe) |
+| Guarantee | 60-day guarantee | None (static) |
+| Trust Footer | Credentials, payment icons | None (static) |
