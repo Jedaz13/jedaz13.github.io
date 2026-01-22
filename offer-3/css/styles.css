@@ -189,9 +189,21 @@ p:last-child {
   margin-bottom: 0;
 }
 
+/* Hero Split Layout */
+.hero-split {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+}
+
+.hero-content {
+  text-align: center;
+}
+
 .hero-protocol-image {
-  margin: 24px auto 0;
   max-width: 280px;
+  order: 2;
 }
 
 .hero-protocol-image img {
@@ -1213,9 +1225,24 @@ p:last-child {
     font-size: 20px;
   }
 
+  /* Hero Split - Side by Side */
+  .hero-split {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    gap: 40px;
+  }
+
+  .hero-content {
+    flex: 1;
+    text-align: left;
+    max-width: 55%;
+  }
+
   .hero-protocol-image {
-    max-width: 340px;
-    margin: 32px auto 0;
+    flex: 0 0 auto;
+    max-width: 300px;
+    order: 2;
   }
 
   /* Discovery */
@@ -1351,6 +1378,14 @@ p:last-child {
 
   .hero-section h1 {
     font-size: 44px;
+  }
+
+  .hero-split {
+    gap: 60px;
+  }
+
+  .hero-protocol-image {
+    max-width: 340px;
   }
 
   .practitioner-card {
