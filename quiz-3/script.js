@@ -3,7 +3,7 @@
 
 // Configuration
 const CONFIG = {
-  OFFER_URL: '/offer/',
+  OFFER_URL: '/offer-3/',
   SOURCE_TRACKING: 'quiz-3',
   LOADING_DURATION: 5500, // 5.5 seconds for loading animation
   AUTO_ADVANCE_DELAY: 400, // ms after single-select
