@@ -335,7 +335,7 @@ p:last-child {
 }
 
 /* =====================================================
-   Section 4: First Week
+   Section 4: First Week Timeline
    ===================================================== */
 .first-week-section {
   padding: 40px 0;
@@ -344,41 +344,84 @@ p:last-child {
 
 .first-week-section h2 {
   text-align: center;
+  margin-bottom: 32px;
+}
+
+.first-week-timeline {
+  position: relative;
+  padding-left: 50px;
   margin-bottom: 24px;
 }
 
-.first-week-table {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  margin-bottom: 24px;
+.first-week-timeline .timeline-line {
+  position: absolute;
+  left: 19px;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background-color: var(--secondary-sage);
 }
 
 .week-row {
-  display: flex;
-  gap: 16px;
-  padding: 16px;
-  background-color: var(--bg-cream);
-  border-radius: var(--radius);
-  align-items: flex-start;
+  position: relative;
+  margin-bottom: 20px;
 }
 
-.week-day {
-  flex-shrink: 0;
-  width: 70px;
-  font-size: 13px;
+.week-row:last-child {
+  margin-bottom: 0;
+}
+
+.week-marker {
+  position: absolute;
+  left: -50px;
+  top: 0;
+  width: 40px;
+  height: 40px;
+  background-color: var(--white);
+  border: 3px solid var(--secondary-sage);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1;
+  transition: all 0.3s ease;
+}
+
+.week-marker span {
+  font-size: 14px;
   font-weight: 700;
-  color: var(--primary-teal);
-  padding-top: 2px;
+  color: var(--text-secondary);
+  transition: color 0.3s ease;
+}
+
+.week-row.visible .week-marker {
+  background-color: var(--primary-teal);
+  border-color: var(--primary-teal);
+}
+
+.week-row.visible .week-marker span {
+  color: var(--white);
 }
 
 .week-content {
-  flex: 1;
+  background-color: var(--bg-cream);
+  padding: 16px 20px;
+  border-radius: var(--radius-lg);
+}
+
+.week-day {
+  display: block;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--primary-teal);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 4px;
 }
 
 .week-what {
   display: block;
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 600;
   color: var(--text-charcoal);
   margin-bottom: 4px;
@@ -388,7 +431,7 @@ p:last-child {
   display: block;
   font-size: 14px;
   color: var(--text-secondary);
-  line-height: 1.4;
+  line-height: 1.5;
 }
 
 .first-week-note {
@@ -396,6 +439,7 @@ p:last-child {
   font-size: 14px;
   color: var(--text-secondary);
   font-style: italic;
+  margin-top: 24px;
 }
 
 .protocol-name-text {
@@ -491,21 +535,24 @@ p:last-child {
 
 .preview-placeholder {
   background-color: var(--white);
-  border-radius: var(--radius);
+  border-radius: var(--radius-lg);
   overflow: hidden;
   margin-bottom: 12px;
-  box-shadow: var(--shadow-card);
+  box-shadow: var(--shadow-elevated);
+  border: 2px solid var(--secondary-sage);
 }
 
 .preview-placeholder img {
   width: 100%;
   height: auto;
+  display: block;
 }
 
 .preview-item p {
   font-size: 13px;
   color: var(--text-secondary);
   margin-bottom: 0;
+  line-height: 1.4;
 }
 
 /* =====================================================
@@ -531,17 +578,23 @@ p:last-child {
 .practitioners-carousel {
   position: relative;
   overflow: hidden;
+  min-height: 580px;
 }
 
 .practitioner-slide {
-  display: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
   opacity: 0;
-  transition: opacity 0.4s ease;
+  visibility: hidden;
+  transition: opacity 0.4s ease, visibility 0.4s ease;
 }
 
 .practitioner-slide.active {
-  display: block;
+  position: relative;
   opacity: 1;
+  visibility: visible;
 }
 
 .practitioner-card {
@@ -550,6 +603,7 @@ p:last-child {
   padding: 24px;
   box-shadow: var(--shadow-elevated);
   text-align: center;
+  min-height: 520px;
 }
 
 .practitioner-photo {
@@ -652,17 +706,12 @@ p:last-child {
   background-color: var(--secondary-sage);
 }
 
+/* Mobile: no animation, always visible */
 .timeline-milestone {
   position: relative;
   margin-bottom: 32px;
-  opacity: 0;
-  transform: translateX(-20px);
-  transition: all 0.5s ease;
-}
-
-.timeline-milestone.visible {
   opacity: 1;
-  transform: translateX(0);
+  transform: none;
 }
 
 .timeline-milestone:last-child {
@@ -675,30 +724,53 @@ p:last-child {
   top: 0;
   width: 32px;
   height: 32px;
-  background-color: var(--white);
-  border: 3px solid var(--secondary-sage);
+  background-color: var(--primary-teal);
+  border: 3px solid var(--primary-teal);
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.3s ease;
   z-index: 1;
-}
-
-.timeline-milestone.visible .milestone-marker {
-  background-color: var(--primary-teal);
-  border-color: var(--primary-teal);
 }
 
 .milestone-icon {
   font-size: 14px;
   font-weight: 700;
-  color: var(--text-secondary);
-  transition: color 0.3s ease;
+  color: var(--white);
 }
 
-.timeline-milestone.visible .milestone-icon {
-  color: var(--white);
+/* Desktop: enable scroll animations */
+@media (min-width: 768px) {
+  .timeline-milestone {
+    opacity: 0;
+    transform: translateX(-20px);
+    transition: all 0.5s ease;
+  }
+
+  .timeline-milestone.visible {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  .milestone-marker {
+    background-color: var(--white);
+    border-color: var(--secondary-sage);
+    transition: all 0.3s ease;
+  }
+
+  .timeline-milestone.visible .milestone-marker {
+    background-color: var(--primary-teal);
+    border-color: var(--primary-teal);
+  }
+
+  .milestone-icon {
+    color: var(--text-secondary);
+    transition: color 0.3s ease;
+  }
+
+  .timeline-milestone.visible .milestone-icon {
+    color: var(--white);
+  }
 }
 
 .milestone-content {
@@ -1259,9 +1331,31 @@ p:last-child {
     padding: 56px 0;
   }
 
-  .week-day {
-    width: 90px;
-    font-size: 14px;
+  .first-week-timeline {
+    padding-left: 60px;
+  }
+
+  .first-week-timeline .timeline-line {
+    left: 24px;
+  }
+
+  .week-marker {
+    left: -60px;
+    width: 48px;
+    height: 48px;
+  }
+
+  .week-marker span {
+    font-size: 16px;
+  }
+
+  /* Practitioners - fixed height */
+  .practitioners-carousel {
+    min-height: 400px;
+  }
+
+  .practitioner-card {
+    min-height: 360px;
   }
 
   /* Included */
@@ -1533,17 +1627,26 @@ p:last-child {
 }
 
 /* =====================================================
-   First Week Animation
+   First Week Animation (Desktop Only)
    ===================================================== */
+/* Mobile: no animation, always visible */
 .week-row {
-  opacity: 0;
-  transform: translateY(20px);
-  transition: all 0.5s ease;
+  opacity: 1;
+  transform: none;
 }
 
-.week-row.visible {
-  opacity: 1;
-  transform: translateY(0);
+/* Desktop: enable scroll animations */
+@media (min-width: 768px) {
+  .week-row {
+    opacity: 0;
+    transform: translateX(-20px);
+    transition: all 0.5s ease;
+  }
+
+  .week-row.visible {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }
 
 /* =====================================================
