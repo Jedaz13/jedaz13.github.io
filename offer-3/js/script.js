@@ -637,10 +637,13 @@
   }
 
   // =====================================================
-  // EXPECTATIONS TIMELINE ANIMATION
+  // EXPECTATIONS TIMELINE ANIMATION (Desktop Only)
   // =====================================================
 
   function initExpectationsTimeline() {
+    // Only run animations on desktop
+    if (window.innerWidth < 768) return;
+
     const milestones = document.querySelectorAll('.timeline-milestone');
 
     if (milestones.length === 0) return;
@@ -669,10 +672,13 @@
   }
 
   // =====================================================
-  // FIRST WEEK ANIMATION
+  // FIRST WEEK ANIMATION (Desktop Only)
   // =====================================================
 
   function initFirstWeekAnimation() {
+    // Only run animations on desktop
+    if (window.innerWidth < 768) return;
+
     const weekRows = document.querySelectorAll('.week-row');
 
     if (weekRows.length === 0) return;
@@ -690,8 +696,8 @@
         }
       });
     }, {
-      threshold: 0.1,
-      rootMargin: '0px 0px -30px 0px'
+      threshold: 0.2,
+      rootMargin: '0px 0px -50px 0px'
     });
 
     weekRows.forEach(function(row) {
