@@ -310,6 +310,15 @@
   // HERO SECTION
   // =====================================================
 
+  // Protocol images mapping
+  const PROTOCOL_IMAGES = {
+    bloat_reset: 'assets/Minimalist-Bloating.png',
+    regularity: 'assets/Minimalist-constipation.png',
+    calm_gut: 'assets/Minimalist-Diarrhea.png',
+    stability: 'assets/Minimalist-mixed.png',
+    rebuild: 'assets/Minimalist-Post-SIBO-recovert.png'
+  };
+
   function populateHeroSection() {
     const protocol = userData.protocol;
     const content = PROTOCOL_CONTENT[protocol] || PROTOCOL_CONTENT.bloat_reset;
@@ -326,6 +335,14 @@
       if (gutBrainNote) {
         gutBrainNote.style.display = 'block';
       }
+    }
+
+    // Update protocol image
+    const protocolImg = document.getElementById('hero-protocol-img');
+    if (protocolImg) {
+      const imgSrc = PROTOCOL_IMAGES[protocol] || PROTOCOL_IMAGES.bloat_reset;
+      protocolImg.src = imgSrc;
+      protocolImg.alt = content.name;
     }
   }
 

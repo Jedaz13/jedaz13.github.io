@@ -189,6 +189,18 @@ p:last-child {
   margin-bottom: 0;
 }
 
+.hero-protocol-image {
+  margin: 24px auto 0;
+  max-width: 280px;
+}
+
+.hero-protocol-image img {
+  width: 100%;
+  height: auto;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-elevated);
+}
+
 .btn-hero {
   margin-top: 24px;
 }
@@ -1199,6 +1211,11 @@ p:last-child {
 
   .hero-subheadline {
     font-size: 20px;
+  }
+
+  .hero-protocol-image {
+    max-width: 340px;
+    margin: 32px auto 0;
   }
 
   /* Discovery */
