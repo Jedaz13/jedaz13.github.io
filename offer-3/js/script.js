@@ -299,7 +299,9 @@
     populateTestimonials();
     initPractitionersCarousel();
     initExpectationsTimeline();
+    initFirstWeekAnimation();
     initTestimonialsCarousel();
+    initLightbox();
     setupStripeLinks();
     initStickyCTA();
   });
@@ -307,6 +309,15 @@
   // =====================================================
   // HERO SECTION
   // =====================================================
+
+  // Protocol images mapping
+  const PROTOCOL_IMAGES = {
+    bloat_reset: 'assets/Minimalist-Bloating.png',
+    regularity: 'assets/Minimalist-constipation.png',
+    calm_gut: 'assets/Minimalist-Diarrhea.png',
+    stability: 'assets/Minimalist-mixed.png',
+    rebuild: 'assets/Minimalist-Post-SIBO-recovert.png'
+  };
 
   function populateHeroSection() {
     const protocol = userData.protocol;
@@ -324,6 +335,14 @@
       if (gutBrainNote) {
         gutBrainNote.style.display = 'block';
       }
+    }
+
+    // Update protocol image
+    const protocolImg = document.getElementById('hero-protocol-img');
+    if (protocolImg) {
+      const imgSrc = PROTOCOL_IMAGES[protocol] || PROTOCOL_IMAGES.bloat_reset;
+      protocolImg.src = imgSrc;
+      protocolImg.alt = content.name;
     }
   }
 
@@ -441,6 +460,13 @@
   // TESTIMONIALS
   // =====================================================
 
+  // Testimonial photos mapping
+  const TESTIMONIAL_PHOTOS = {
+    'Suzy': 'assets/suzy.png',
+    'Amanda': 'assets/amanda.png',
+    'Cheryl': 'assets/cheryl.png'
+  };
+
   function populateTestimonials() {
     const protocol = userData.protocol;
     const testimonials = TESTIMONIALS[protocol] || TESTIMONIALS.bloat_reset;
@@ -455,13 +481,18 @@
 
     testimonials.forEach(function(testimonial, index) {
       const activeClass = index === 0 ? 'active' : '';
+      const photoUrl = TESTIMONIAL_PHOTOS[testimonial.name] || 'assets/suzy.png';
+
       carouselHtml += `
         <div class="testimonial-card ${activeClass}" data-slide="${index}">
-          <p class="testimonial-quote">"${testimonial.quote}"</p>
-          <div class="testimonial-author">
-            <span class="author-name">— ${testimonial.name} <span class="stars">★★★★★</span></span>
-            <span class="author-pattern">${testimonial.pattern}</span>
+          <div class="testimonial-header">
+            <img src="${photoUrl}" alt="${testimonial.name}" class="testimonial-photo" />
+            <div class="testimonial-author-info">
+              <span class="author-name">— ${testimonial.name} <span class="stars">★★★★★</span></span>
+              <span class="author-pattern">${testimonial.pattern}</span>
+            </div>
           </div>
+          <p class="testimonial-quote">"${testimonial.quote}"</p>
         </div>
       `;
 
@@ -634,6 +665,114 @@
 
     milestones.forEach(function(milestone) {
       observer.observe(milestone);
+    });
+  }
+
+  // =====================================================
+  // FIRST WEEK ANIMATION
+  // =====================================================
+
+  function initFirstWeekAnimation() {
+    const weekRows = document.querySelectorAll('.week-row');
+
+    if (weekRows.length === 0) return;
+
+    const observer = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          const dayIndex = parseInt(entry.target.getAttribute('data-day')) - 1;
+
+          setTimeout(function() {
+            entry.target.classList.add('visible');
+          }, dayIndex * 150);
+
+          observer.unobserve(entry.target);
+        }
+      });
+    }, {
+      threshold: 0.1,
+      rootMargin: '0px 0px -30px 0px'
+    });
+
+    weekRows.forEach(function(row) {
+      observer.observe(row);
+    });
+  }
+
+  // =====================================================
+  // LIGHTBOX
+  // =====================================================
+
+  function initLightbox() {
+    const previewItems = document.querySelectorAll('.preview-item[data-lightbox]');
+    const overlay = document.getElementById('lightbox-overlay');
+    const lightboxImage = document.getElementById('lightbox-image');
+    const lightboxCaption = document.getElementById('lightbox-caption');
+    const closeBtn = document.getElementById('lightbox-close');
+    const prevBtn = document.getElementById('lightbox-prev');
+    const nextBtn = document.getElementById('lightbox-next');
+
+    if (!overlay || previewItems.length === 0) return;
+
+    let currentIndex = 0;
+    const images = [];
+
+    // Collect all images and captions
+    previewItems.forEach(function(item, index) {
+      const imgSrc = item.getAttribute('data-lightbox');
+      const caption = item.querySelector('p').textContent;
+      images.push({ src: imgSrc, caption: caption });
+
+      item.addEventListener('click', function() {
+        openLightbox(index);
+      });
+    });
+
+    function openLightbox(index) {
+      currentIndex = index;
+      updateLightboxContent();
+      overlay.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeLightbox() {
+      overlay.classList.remove('active');
+      document.body.style.overflow = '';
+    }
+
+    function updateLightboxContent() {
+      lightboxImage.src = images[currentIndex].src;
+      lightboxCaption.textContent = images[currentIndex].caption;
+    }
+
+    function showNext() {
+      currentIndex = (currentIndex + 1) % images.length;
+      updateLightboxContent();
+    }
+
+    function showPrev() {
+      currentIndex = (currentIndex - 1 + images.length) % images.length;
+      updateLightboxContent();
+    }
+
+    // Event listeners
+    closeBtn.addEventListener('click', closeLightbox);
+    nextBtn.addEventListener('click', showNext);
+    prevBtn.addEventListener('click', showPrev);
+
+    overlay.addEventListener('click', function(e) {
+      if (e.target === overlay) {
+        closeLightbox();
+      }
+    });
+
+    // Keyboard navigation
+    document.addEventListener('keydown', function(e) {
+      if (!overlay.classList.contains('active')) return;
+
+      if (e.key === 'Escape') closeLightbox();
+      if (e.key === 'ArrowRight') showNext();
+      if (e.key === 'ArrowLeft') showPrev();
     });
   }
 
