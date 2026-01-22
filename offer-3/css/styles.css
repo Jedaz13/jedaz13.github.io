@@ -1,0 +1,1347 @@
+/* =====================================================
+   Gut Healing Academy - Offer 3 Styles
+   Mobile-first responsive design with carousels & animations
+   ===================================================== */
+
+/* CSS Custom Properties */
+:root {
+  /* Color Palette */
+  --bg-cream: #FDF8F5;
+  --white: #FFFFFF;
+  --text-charcoal: #2D3436;
+  --text-secondary: #636E72;
+  --cta-coral: #E07A5F;
+  --cta-coral-hover: #d16a50;
+  --primary-teal: #6B9080;
+  --secondary-sage: #A4C3B2;
+  --navy-blue: #264653;
+
+  /* Shadows */
+  --shadow-card: 0 2px 8px rgba(0, 0, 0, 0.08);
+  --shadow-elevated: 0 4px 16px rgba(0, 0, 0, 0.12);
+  --shadow-sticky: 0 -2px 10px rgba(0, 0, 0, 0.1);
+
+  /* Border radius */
+  --radius: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+
+  /* Typography */
+  --font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+
+  /* Layout */
+  --max-content-width: 640px;
+  --sticky-height: 60px;
+}
+
+/* Reset & Base */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-family);
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--text-charcoal);
+  background-color: var(--bg-cream);
+  padding-bottom: 0;
+}
+
+body.has-sticky-cta {
+  padding-bottom: var(--sticky-height);
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+a {
+  color: var(--primary-teal);
+  text-decoration: none;
+}
+
+/* Container */
+.container {
+  width: 100%;
+  max-width: var(--max-content-width);
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* Typography */
+h1 {
+  font-size: 28px;
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--text-charcoal);
+  margin-bottom: 1rem;
+}
+
+h2 {
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 1.3;
+  color: var(--text-charcoal);
+  margin-bottom: 1rem;
+}
+
+h3 {
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 1.3;
+  color: var(--text-charcoal);
+  margin-bottom: 0.5rem;
+}
+
+p {
+  margin-bottom: 0.75rem;
+}
+
+p:last-child {
+  margin-bottom: 0;
+}
+
+/* Buttons */
+.btn {
+  display: inline-block;
+  padding: 16px 28px;
+  font-size: 16px;
+  font-weight: 600;
+  text-align: center;
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: none;
+  min-height: 48px;
+  line-height: 1.2;
+  text-decoration: none;
+}
+
+.btn-primary {
+  background-color: var(--cta-coral);
+  color: var(--white);
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-primary:hover {
+  background-color: var(--cta-coral-hover);
+  box-shadow: 0 6px 20px rgba(224, 122, 95, 0.35);
+  transform: translateY(-2px);
+}
+
+.btn-primary:active {
+  transform: scale(0.98) translateY(0);
+}
+
+.btn-centered {
+  display: block;
+  width: fit-content;
+  margin: 24px auto 0;
+}
+
+.btn-full {
+  width: 100%;
+  padding: 18px 24px;
+  font-size: 18px;
+}
+
+.btn-large {
+  padding: 18px 36px;
+  font-size: 18px;
+}
+
+/* =====================================================
+   Section 1: Hero
+   ===================================================== */
+.hero-section {
+  padding: 48px 0 40px;
+  text-align: center;
+  background-color: var(--bg-cream);
+}
+
+.hero-section h1 {
+  font-size: 32px;
+  margin-bottom: 16px;
+}
+
+.hero-subheadline {
+  font-size: 18px;
+  color: var(--text-charcoal);
+  line-height: 1.5;
+  margin-bottom: 8px;
+}
+
+.hero-gut-brain-note {
+  font-size: 16px;
+  color: var(--primary-teal);
+  font-weight: 500;
+  font-style: italic;
+  margin-bottom: 0;
+}
+
+.btn-hero {
+  margin-top: 24px;
+}
+
+/* =====================================================
+   Section 2: The Discovery
+   ===================================================== */
+.discovery-section {
+  padding: 40px 0;
+  background-color: var(--white);
+}
+
+.discovery-section h2 {
+  font-size: 22px;
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.primary-complaint-text {
+  color: var(--primary-teal);
+}
+
+.discovery-opener {
+  margin-bottom: 20px;
+}
+
+.opener-text {
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--text-charcoal);
+  font-style: italic;
+}
+
+.discovery-content {
+  background-color: var(--bg-cream);
+  padding: 24px;
+  border-radius: var(--radius-lg);
+  margin-bottom: 0;
+}
+
+.discovery-content p {
+  font-size: 16px;
+  line-height: 1.7;
+  color: var(--text-charcoal);
+  margin-bottom: 16px;
+}
+
+.discovery-content p:last-child {
+  margin-bottom: 0;
+}
+
+/* Gut-Brain Overlay */
+.gut-brain-overlay {
+  margin-top: 24px;
+  padding: 24px;
+  background: linear-gradient(135deg, rgba(107, 144, 128, 0.1) 0%, rgba(164, 195, 178, 0.1) 100%);
+  border-left: 4px solid var(--primary-teal);
+  border-radius: var(--radius);
+}
+
+.gut-brain-overlay h3 {
+  color: var(--primary-teal);
+  margin-bottom: 12px;
+}
+
+.gut-brain-overlay p {
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--text-charcoal);
+}
+
+/* =====================================================
+   Section 3: Why Past Treatments Failed
+   ===================================================== */
+.why-failed-section {
+  padding: 40px 0;
+  background-color: var(--bg-cream);
+}
+
+.why-failed-section h2 {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.failed-treatments {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.failed-item {
+  background-color: var(--white);
+  padding: 20px;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+  border-left: 4px solid var(--cta-coral);
+}
+
+.failed-item h4 {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-charcoal);
+  margin-bottom: 8px;
+}
+
+.failed-item p {
+  font-size: 14px;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  margin-bottom: 0;
+}
+
+.why-failed-closing {
+  text-align: center;
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--primary-teal);
+  font-style: italic;
+}
+
+/* =====================================================
+   Section 4: First Week
+   ===================================================== */
+.first-week-section {
+  padding: 40px 0;
+  background-color: var(--white);
+}
+
+.first-week-section h2 {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.first-week-table {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.week-row {
+  display: flex;
+  gap: 16px;
+  padding: 16px;
+  background-color: var(--bg-cream);
+  border-radius: var(--radius);
+  align-items: flex-start;
+}
+
+.week-day {
+  flex-shrink: 0;
+  width: 70px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--primary-teal);
+  padding-top: 2px;
+}
+
+.week-content {
+  flex: 1;
+}
+
+.week-what {
+  display: block;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-charcoal);
+  margin-bottom: 4px;
+}
+
+.week-why {
+  display: block;
+  font-size: 14px;
+  color: var(--text-secondary);
+  line-height: 1.4;
+}
+
+.first-week-note {
+  text-align: center;
+  font-size: 14px;
+  color: var(--text-secondary);
+  font-style: italic;
+}
+
+.protocol-name-text {
+  color: var(--primary-teal);
+  font-weight: 500;
+}
+
+/* =====================================================
+   Section 5: What's Included
+   ===================================================== */
+.included-section {
+  padding: 40px 0;
+  background-color: var(--bg-cream);
+}
+
+.included-section h2 {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.included-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.included-item {
+  background-color: var(--white);
+  padding: 20px;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+}
+
+.included-item h3 {
+  font-size: 16px;
+  color: var(--primary-teal);
+  margin-bottom: 8px;
+}
+
+.included-item p {
+  font-size: 14px;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  margin-bottom: 0;
+}
+
+/* =====================================================
+   Section 6: Why We're Different
+   ===================================================== */
+.why-different-section {
+  padding: 40px 0;
+  background-color: var(--white);
+}
+
+.why-different-section h2 {
+  text-align: center;
+  font-size: 22px;
+  margin-bottom: 24px;
+}
+
+.why-different-content {
+  margin-bottom: 32px;
+}
+
+.why-different-content p {
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--text-charcoal);
+}
+
+/* Platform Preview */
+.platform-preview {
+  background-color: var(--bg-cream);
+  padding: 24px;
+  border-radius: var(--radius-lg);
+}
+
+.platform-preview h3 {
+  text-align: center;
+  font-size: 18px;
+  margin-bottom: 20px;
+}
+
+.preview-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+}
+
+.preview-item {
+  text-align: center;
+}
+
+.preview-placeholder {
+  background-color: var(--white);
+  border-radius: var(--radius);
+  overflow: hidden;
+  margin-bottom: 12px;
+  box-shadow: var(--shadow-card);
+}
+
+.preview-placeholder img {
+  width: 100%;
+  height: auto;
+}
+
+.preview-item p {
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin-bottom: 0;
+}
+
+/* =====================================================
+   Section 7: Practitioners Carousel
+   ===================================================== */
+.practitioners-section {
+  padding: 40px 0;
+  background-color: var(--bg-cream);
+}
+
+.practitioners-section h2 {
+  text-align: center;
+  margin-bottom: 8px;
+}
+
+.practitioners-subheader {
+  text-align: center;
+  font-size: 16px;
+  color: var(--text-secondary);
+  margin-bottom: 24px;
+}
+
+.practitioners-carousel {
+  position: relative;
+  overflow: hidden;
+}
+
+.practitioner-slide {
+  display: none;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.practitioner-slide.active {
+  display: block;
+  opacity: 1;
+}
+
+.practitioner-card {
+  background-color: var(--white);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  box-shadow: var(--shadow-elevated);
+  text-align: center;
+}
+
+.practitioner-photo {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin: 0 auto 16px;
+  border: 4px solid var(--primary-teal);
+}
+
+.practitioner-info h3 {
+  font-size: 20px;
+  color: var(--text-charcoal);
+  margin-bottom: 8px;
+}
+
+.practitioner-credentials {
+  font-size: 13px;
+  color: var(--primary-teal);
+  font-weight: 500;
+  margin-bottom: 16px;
+}
+
+.practitioner-bio {
+  text-align: left;
+  margin-bottom: 16px;
+}
+
+.practitioner-bio p {
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--text-secondary);
+}
+
+.practitioner-quote {
+  background-color: var(--bg-cream);
+  padding: 16px 20px;
+  border-left: 4px solid var(--primary-teal);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  font-style: italic;
+  font-size: 15px;
+  color: var(--text-charcoal);
+  text-align: left;
+  margin: 0;
+}
+
+/* Carousel Dots */
+.carousel-dots {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: var(--secondary-sage);
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  padding: 0;
+}
+
+.dot.active {
+  background-color: var(--primary-teal);
+  transform: scale(1.2);
+}
+
+.dot:hover {
+  background-color: var(--primary-teal);
+}
+
+/* =====================================================
+   Section 8: Expectations Timeline (Animated)
+   ===================================================== */
+.expectations-timeline-section {
+  padding: 40px 0;
+  background-color: var(--white);
+}
+
+.expectations-timeline-section h2 {
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.expectations-timeline {
+  position: relative;
+  padding-left: 40px;
+}
+
+.timeline-line {
+  position: absolute;
+  left: 15px;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background-color: var(--secondary-sage);
+}
+
+.timeline-milestone {
+  position: relative;
+  margin-bottom: 32px;
+  opacity: 0;
+  transform: translateX(-20px);
+  transition: all 0.5s ease;
+}
+
+.timeline-milestone.visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.timeline-milestone:last-child {
+  margin-bottom: 0;
+}
+
+.milestone-marker {
+  position: absolute;
+  left: -40px;
+  top: 0;
+  width: 32px;
+  height: 32px;
+  background-color: var(--white);
+  border: 3px solid var(--secondary-sage);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  z-index: 1;
+}
+
+.timeline-milestone.visible .milestone-marker {
+  background-color: var(--primary-teal);
+  border-color: var(--primary-teal);
+}
+
+.milestone-icon {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-secondary);
+  transition: color 0.3s ease;
+}
+
+.timeline-milestone.visible .milestone-icon {
+  color: var(--white);
+}
+
+.milestone-content {
+  background-color: var(--bg-cream);
+  padding: 20px;
+  border-radius: var(--radius-lg);
+}
+
+.milestone-label {
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--primary-teal);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 8px;
+}
+
+.milestone-content h3 {
+  font-size: 17px;
+  margin-bottom: 8px;
+}
+
+.milestone-content p {
+  font-size: 14px;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  margin-bottom: 0;
+}
+
+.expectations-closing {
+  margin-top: 32px;
+  text-align: center;
+  padding: 24px;
+  background-color: var(--bg-cream);
+  border-radius: var(--radius-lg);
+}
+
+.expectations-closing p {
+  font-size: 15px;
+  color: var(--text-charcoal);
+  line-height: 1.6;
+}
+
+/* =====================================================
+   Section 9: Testimonials Carousel
+   ===================================================== */
+.testimonials-section {
+  padding: 40px 0;
+  background-color: var(--bg-cream);
+}
+
+.testimonials-section h2 {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.testimonials-carousel {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.testimonial-card {
+  background-color: var(--white);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  box-shadow: var(--shadow-card);
+  border-left: 4px solid var(--primary-teal);
+  display: none;
+}
+
+.testimonial-card.active {
+  display: block;
+}
+
+.testimonial-quote {
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--text-charcoal);
+  font-style: italic;
+  margin-bottom: 16px;
+}
+
+.testimonial-author {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.author-name {
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--text-charcoal);
+}
+
+.author-pattern {
+  font-size: 12px;
+  color: var(--white);
+  background-color: var(--primary-teal);
+  padding: 4px 10px;
+  border-radius: 12px;
+}
+
+.stars {
+  color: #fbbf24;
+  font-size: 14px;
+  margin-left: 8px;
+}
+
+.testimonials-disclaimer {
+  text-align: center;
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin-top: 16px;
+  font-style: italic;
+}
+
+/* =====================================================
+   Section 10: Investment / Pricing
+   ===================================================== */
+.investment-section {
+  padding: 40px 0;
+  background-color: var(--white);
+}
+
+.investment-section h2 {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.investment-comparison {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+.comparison-col {
+  background-color: var(--bg-cream);
+  border-radius: var(--radius-lg);
+  padding: 20px;
+}
+
+.comparison-col h3 {
+  text-align: center;
+  font-size: 16px;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgba(0,0,0,0.1);
+}
+
+.typical-path h3 {
+  color: var(--text-secondary);
+}
+
+.your-path {
+  border: 2px solid var(--primary-teal);
+}
+
+.your-path h3 {
+  color: var(--primary-teal);
+}
+
+.comparison-col ul {
+  list-style: none;
+}
+
+.comparison-col li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+  border-bottom: 1px solid rgba(0,0,0,0.05);
+  font-size: 14px;
+}
+
+.comparison-col li:last-child {
+  border-bottom: none;
+}
+
+.comparison-col li.total {
+  margin-top: 8px;
+  padding-top: 12px;
+  border-top: 2px solid rgba(0,0,0,0.1);
+  font-weight: 600;
+}
+
+.comparison-col li.highlight span:last-child {
+  color: var(--primary-teal);
+  font-size: 18px;
+}
+
+.check-mark {
+  color: var(--primary-teal);
+  font-weight: 700;
+  font-size: 18px;
+}
+
+.coffee-note {
+  text-align: center;
+  font-size: 13px;
+  color: var(--text-secondary);
+  font-style: italic;
+  margin-top: 12px;
+}
+
+/* Pricing Card */
+.pricing-card {
+  background-color: var(--bg-cream);
+  border-radius: var(--radius-xl);
+  padding: 28px 24px;
+  text-align: center;
+  box-shadow: var(--shadow-elevated);
+  border: 2px solid var(--primary-teal);
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.trial-badge {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  background: linear-gradient(135deg, var(--primary-teal) 0%, #5a7d70 100%);
+  color: var(--white);
+  padding: 12px 16px;
+  border-radius: var(--radius);
+  margin-bottom: 24px;
+  font-size: 15px;
+}
+
+.trial-sub {
+  font-size: 13px;
+  opacity: 0.9;
+}
+
+.price-display {
+  margin-bottom: 8px;
+}
+
+.price-main {
+  font-size: 56px;
+  font-weight: 700;
+  color: var(--text-charcoal);
+  line-height: 1;
+}
+
+.price-after {
+  font-size: 18px;
+  color: var(--text-secondary);
+  margin-bottom: 4px;
+}
+
+.cancel-note {
+  font-size: 14px;
+  color: var(--text-secondary);
+  margin-bottom: 24px;
+}
+
+.subscription-terms {
+  font-size: 11px;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  margin-top: 16px;
+  margin-bottom: 0;
+}
+
+.annual-link {
+  text-align: center;
+  font-size: 14px;
+  color: var(--text-secondary);
+  margin-top: 20px;
+}
+
+.annual-link a {
+  color: var(--primary-teal);
+  font-weight: 500;
+}
+
+.annual-link a:hover {
+  text-decoration: underline;
+}
+
+/* =====================================================
+   Section 11: Guarantee
+   ===================================================== */
+.guarantee-section {
+  padding: 40px 0;
+  background-color: var(--bg-cream);
+}
+
+.guarantee-card {
+  display: flex;
+  gap: 20px;
+  background-color: var(--white);
+  padding: 24px;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+  border: 2px solid var(--primary-teal);
+}
+
+.guarantee-badge {
+  flex-shrink: 0;
+  width: 70px;
+  height: 70px;
+  background-color: var(--primary-teal);
+  border-radius: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: var(--white);
+}
+
+.guarantee-badge svg {
+  width: 28px;
+  height: 28px;
+  margin-bottom: 2px;
+}
+
+.guarantee-badge span {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.guarantee-content h3 {
+  color: var(--primary-teal);
+  margin-bottom: 12px;
+}
+
+.guarantee-content p {
+  font-size: 14px;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+.guarantee-why {
+  margin-top: 12px;
+  color: var(--text-charcoal) !important;
+}
+
+/* =====================================================
+   Section 12: Final CTA
+   ===================================================== */
+.final-cta-section {
+  padding: 48px 0;
+  background-color: var(--white);
+  text-align: center;
+}
+
+.final-cta-section h2 {
+  font-size: 28px;
+  margin-bottom: 16px;
+}
+
+.final-cta-section p {
+  font-size: 16px;
+  color: var(--text-charcoal);
+  max-width: 480px;
+  margin: 0 auto 8px;
+}
+
+.final-cta-section .btn {
+  margin-top: 24px;
+}
+
+/* =====================================================
+   Trust Footer
+   ===================================================== */
+.trust-section {
+  padding: 24px 0;
+  text-align: center;
+  background-color: var(--bg-cream);
+}
+
+.trust-items {
+  margin-bottom: 16px;
+}
+
+.trust-text {
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin-bottom: 4px;
+}
+
+.payment-icons {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.payment-icon {
+  display: inline-block;
+  padding: 6px 12px;
+  background-color: var(--white);
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  border: 1px solid #e5e7eb;
+}
+
+.secure-text {
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+/* =====================================================
+   Site Footer
+   ===================================================== */
+.site-footer {
+  padding: 32px 0;
+  background-color: var(--navy-blue);
+  color: var(--white);
+}
+
+.footer-disclaimer {
+  margin-bottom: 20px;
+}
+
+.footer-disclaimer p {
+  font-size: 11px;
+  line-height: 1.6;
+  opacity: 0.7;
+}
+
+.footer-links {
+  text-align: center;
+  margin-bottom: 12px;
+}
+
+.footer-links a {
+  color: var(--white);
+  opacity: 0.8;
+  font-size: 13px;
+  transition: opacity 0.2s ease;
+}
+
+.footer-links a:hover {
+  opacity: 1;
+}
+
+.footer-links .divider {
+  margin: 0 8px;
+  opacity: 0.5;
+}
+
+.footer-copyright {
+  text-align: center;
+  font-size: 12px;
+  opacity: 0.6;
+}
+
+/* =====================================================
+   Sticky Mobile CTA
+   ===================================================== */
+.sticky-cta {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: var(--sticky-height);
+  background-color: var(--cta-coral);
+  z-index: 1000;
+  padding: 8px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transform: translateY(100%);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  pointer-events: none;
+}
+
+.sticky-cta.visible {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.btn-sticky {
+  background-color: var(--white);
+  color: var(--cta-coral);
+  width: 100%;
+  max-width: 400px;
+  font-size: 16px;
+  padding: 14px 24px;
+}
+
+.btn-sticky:hover {
+  background-color: #f5f5f5;
+  transform: none;
+  box-shadow: none;
+}
+
+/* =====================================================
+   Desktop Styles (768px+)
+   ===================================================== */
+@media (min-width: 768px) {
+  :root {
+    --max-content-width: 700px;
+  }
+
+  h1 {
+    font-size: 36px;
+  }
+
+  h2 {
+    font-size: 28px;
+  }
+
+  /* Hero */
+  .hero-section {
+    padding: 64px 0 56px;
+  }
+
+  .hero-section h1 {
+    font-size: 40px;
+  }
+
+  .hero-subheadline {
+    font-size: 20px;
+  }
+
+  /* Discovery */
+  .discovery-section {
+    padding: 56px 0;
+  }
+
+  .discovery-section h2 {
+    font-size: 26px;
+  }
+
+  /* First Week */
+  .first-week-section {
+    padding: 56px 0;
+  }
+
+  .week-day {
+    width: 90px;
+    font-size: 14px;
+  }
+
+  /* Included */
+  .included-section {
+    padding: 56px 0;
+  }
+
+  .included-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+
+  .included-item:last-child {
+    grid-column: span 2;
+  }
+
+  /* Why Different */
+  .why-different-section {
+    padding: 56px 0;
+  }
+
+  .preview-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  /* Practitioners */
+  .practitioners-section {
+    padding: 56px 0;
+  }
+
+  .practitioner-card {
+    display: flex;
+    gap: 24px;
+    text-align: left;
+    padding: 32px;
+  }
+
+  .practitioner-photo {
+    margin: 0;
+  }
+
+  .practitioner-info {
+    flex: 1;
+  }
+
+  /* Timeline */
+  .expectations-timeline-section {
+    padding: 56px 0;
+  }
+
+  /* Testimonials - show all 3 in a row */
+  .testimonials-section {
+    padding: 56px 0;
+  }
+
+  .testimonials-carousel {
+    flex-direction: row;
+    gap: 20px;
+  }
+
+  .testimonial-card {
+    flex: 1;
+    display: block !important;
+  }
+
+  #testimonial-dots {
+    display: none;
+  }
+
+  /* Investment */
+  .investment-section {
+    padding: 56px 0;
+  }
+
+  .investment-comparison {
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+  }
+
+  /* Guarantee */
+  .guarantee-section {
+    padding: 56px 0;
+  }
+
+  .guarantee-card {
+    padding: 32px;
+  }
+
+  /* Final CTA */
+  .final-cta-section {
+    padding: 64px 0;
+  }
+
+  .final-cta-section h2 {
+    font-size: 32px;
+  }
+
+  /* Hide sticky CTA on desktop */
+  .sticky-cta {
+    display: none !important;
+  }
+
+  body.has-sticky-cta {
+    padding-bottom: 0;
+  }
+}
+
+/* Large Desktop (1024px+) */
+@media (min-width: 1024px) {
+  :root {
+    --max-content-width: 800px;
+  }
+
+  .hero-section h1 {
+    font-size: 44px;
+  }
+
+  .practitioner-card {
+    padding: 40px;
+  }
+
+  .practitioner-photo {
+    width: 140px;
+    height: 140px;
+  }
+}
