@@ -1345,3 +1345,209 @@ p:last-child {
     height: 140px;
   }
 }
+
+/* =====================================================
+   Lightbox Modal
+   ===================================================== */
+.lightbox-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.9);
+  z-index: 9999;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.lightbox-overlay.active {
+  display: flex;
+  opacity: 1;
+}
+
+.lightbox-content {
+  max-width: 90vw;
+  max-height: 90vh;
+  text-align: center;
+}
+
+.lightbox-content img {
+  max-width: 100%;
+  max-height: 80vh;
+  border-radius: var(--radius-lg);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+}
+
+.lightbox-caption {
+  color: var(--white);
+  font-size: 14px;
+  margin-top: 16px;
+  opacity: 0.9;
+}
+
+.lightbox-close {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: none;
+  border: none;
+  color: var(--white);
+  font-size: 40px;
+  cursor: pointer;
+  padding: 10px;
+  line-height: 1;
+  transition: transform 0.2s ease;
+  z-index: 10000;
+}
+
+.lightbox-close:hover {
+  transform: scale(1.2);
+}
+
+.lightbox-prev,
+.lightbox-next {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  color: var(--white);
+  font-size: 32px;
+  padding: 20px 16px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+  border-radius: var(--radius);
+}
+
+.lightbox-prev {
+  left: 20px;
+}
+
+.lightbox-next {
+  right: 20px;
+}
+
+.lightbox-prev:hover,
+.lightbox-next:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* Preview item clickable */
+.preview-item[data-lightbox] {
+  cursor: pointer;
+}
+
+.preview-placeholder {
+  position: relative;
+  overflow: hidden;
+}
+
+.preview-zoom-icon {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(107, 144, 128, 0.9);
+  color: var(--white);
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.preview-item[data-lightbox]:hover .preview-zoom-icon {
+  opacity: 1;
+}
+
+.preview-item[data-lightbox]:hover .preview-placeholder img {
+  transform: scale(1.02);
+  transition: transform 0.3s ease;
+}
+
+.preview-hint {
+  text-align: center;
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin-bottom: 16px;
+  font-style: italic;
+}
+
+/* =====================================================
+   First Week Animation
+   ===================================================== */
+.week-row {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.5s ease;
+}
+
+.week-row.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* =====================================================
+   Testimonials with Photos
+   ===================================================== */
+.testimonial-card {
+  display: flex;
+  flex-direction: column;
+}
+
+.testimonial-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.testimonial-photo {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid var(--primary-teal);
+  flex-shrink: 0;
+}
+
+.testimonial-author-info {
+  flex: 1;
+}
+
+.testimonial-author-info .author-name {
+  display: block;
+  margin-bottom: 4px;
+}
+
+.testimonial-quote {
+  margin-bottom: 16px;
+}
+
+/* Desktop testimonials layout adjustment */
+@media (min-width: 768px) {
+  .testimonial-card {
+    flex: 1;
+  }
+
+  .testimonial-header {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .testimonial-photo {
+    width: 70px;
+    height: 70px;
+  }
+
+  .testimonial-author-info {
+    text-align: center;
+  }
+}
