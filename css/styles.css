@@ -101,18 +101,18 @@
   color: var(--forest);
 }
 
-.header-nav .nav-login {
+.header-nav a.nav-login {
   background: var(--forest);
-  color: var(--white);
+  color: var(--white) !important;
   padding: 12px 24px;
   border-radius: 100px;
   font-weight: 600;
   transition: all 0.2s;
 }
 
-.header-nav .nav-login:hover {
+.header-nav a.nav-login:hover {
   background: var(--citrus);
-  color: var(--forest);
+  color: var(--forest) !important;
 }
 
 .header-nav .nav-divider {
