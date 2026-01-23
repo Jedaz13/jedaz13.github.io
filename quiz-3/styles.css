@@ -1,28 +1,55 @@
 /* Survey-Style Quiz Styles */
-/* Gut Healing Academy Quiz 3.0 - Goal-First Intro Variant */
+/* Gut Healing Academy Quiz 3.0 - Citrus Energy Theme */
 
 :root {
-  /* Design System Colors */
-  --primary-green: #5B7B6D;
-  --primary-green-hover: #4A6A5C;
-  --background-cream: #FAF8F5;
+  /* Background Colors */
+  --bg-warm-white: #FFFDF7;
+  --bg-cream: #FBF9F3;
+  --bg-sage-subtle: #F7FAF7;
   --card-background: #FFFFFF;
-  --text-dark: #2D3436;
-  --text-muted: #6B7280;
-  --accent-gold: #D4A853;
+
+  /* Text Colors */
+  --text-forest: #1B3329;
+  --text-olive: #3D5245;
+  --text-muted: #6B7D6E;
+  --text-light: #8A9A8E;
+
+  /* Primary - Citrus Accent */
+  --citrus: #F9C74F;
+  --citrus-bright: #FFDA6A;
+  --citrus-light: #FFF3CD;
+  --citrus-pale: #FFFBEB;
+
+  /* Secondary - Greens */
+  --forest: #1B3329;
+  --forest-light: #2A4A3A;
+  --leaf: #4A7C59;
+  --spring: #7FB069;
+  --sage: #A8C5A8;
+
+  /* Utility Colors */
+  --success: #52B788;
+  --success-light: #E8F5EE;
+  --divider: #E8EBE8;
+  --divider-dark: #D4DAD5;
   --warning-yellow: #F59E0B;
-  --border-light: #E5E7EB;
-  --error: #E07A5F;
+  --error: #DC6B4D;
 
   /* Legacy aliases for backwards compatibility */
-  --bg-primary: var(--background-cream);
+  --primary-green: var(--forest);
+  --primary-green-hover: var(--forest-light);
+  --background-cream: var(--bg-warm-white);
+  --text-dark: var(--text-forest);
+  --accent-gold: var(--citrus);
+  --border-light: var(--divider);
+  --bg-primary: var(--bg-warm-white);
   --bg-card: var(--card-background);
-  --text-primary: var(--text-dark);
+  --text-primary: var(--text-forest);
   --text-secondary: var(--text-muted);
-  --accent: var(--primary-green);
-  --accent-light: #E8F0EE;
-  --border: var(--border-light);
-  --border-hover: var(--primary-green);
+  --accent: var(--forest);
+  --accent-light: var(--citrus-pale);
+  --border: var(--divider);
+  --border-hover: var(--citrus);
 }
 
 * {
@@ -32,9 +59,9 @@
 }
 
 body {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  background: var(--background-cream);
-  color: var(--text-dark);
+  font-family: 'Source Sans 3', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: var(--bg-warm-white);
+  color: var(--text-olive);
   line-height: 1.6;
   min-height: 100vh;
 }
@@ -73,11 +100,12 @@ body {
 }
 
 .welcome-screen h1 {
-  font-size: 28px;
-  font-weight: 700;
-  color: var(--text-dark);
+  font-family: 'DM Serif Display', serif;
+  font-size: 2rem;
+  font-weight: 400;
+  color: var(--text-forest);
   margin-bottom: 16px;
-  line-height: 1.2;
+  line-height: 1.12;
 }
 
 .welcome-description {
@@ -119,8 +147,16 @@ body {
   content: '\2713';
   position: absolute;
   left: 0;
-  color: var(--primary-green);
+  color: var(--forest);
+  background: var(--citrus);
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
   font-weight: 600;
+  font-size: 12px;
 }
 
 .btn-large {
@@ -159,10 +195,11 @@ body {
 }
 
 .section-intro h2 {
-  font-size: 24px;
-  font-weight: 600;
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.6rem;
+  font-weight: 400;
   margin: 24px 0 16px;
-  color: var(--text-dark);
+  color: var(--text-forest);
   line-height: 1.3;
 }
 
@@ -223,11 +260,15 @@ body {
 }
 
 .section-label {
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 1.5px;
+  display: inline-block;
+  background: var(--citrus);
+  color: var(--forest);
+  padding: 8px 18px;
+  border-radius: 100px;
+  font-size: 0.8rem;
+  font-weight: 700;
   text-transform: uppercase;
-  color: var(--primary-green);
+  letter-spacing: 0.5px;
   text-align: center;
 }
 
@@ -257,8 +298,8 @@ body {
   left: 0;
   height: 100%;
   width: 0%;
-  background: var(--primary-green);
-  border-radius: 2px;
+  background: var(--citrus);
+  border-radius: 4px;
   transition: width 0.4s ease;
 }
 
@@ -270,14 +311,14 @@ body {
   width: 10px;
   height: 10px;
   border-radius: 50%;
-  background: var(--border-light);
+  background: var(--divider);
   margin: 0 2px;
   transition: background 0.3s ease, transform 0.3s ease;
   flex-shrink: 0;
 }
 
 .progress-dot.active {
-  background: var(--primary-green);
+  background: var(--citrus);
 }
 
 /* Pulse animation for current section's next dot */
@@ -312,12 +353,13 @@ body {
 }
 
 .question-text {
-  font-size: 22px;
-  font-weight: 600;
-  line-height: 1.4;
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.5rem;
+  font-weight: 400;
+  line-height: 1.3;
   text-align: center;
   margin: 16px 0 24px 0;
-  color: var(--text-dark);
+  color: var(--text-forest);
 }
 
 /* Options Container */
@@ -331,28 +373,28 @@ body {
 /* Option Buttons */
 .option-button {
   width: 100%;
-  padding: 18px 24px;
+  padding: 20px 24px;
   background: var(--card-background);
-  border: 2px solid var(--border-light);
-  border-radius: 50px;
-  font-size: 16px;
-  font-weight: 400;
-  text-align: center;
+  border: 2px solid var(--divider);
+  border-radius: 14px;
+  font-size: 1rem;
+  font-weight: 500;
+  text-align: left;
   cursor: pointer;
   transition: all 0.2s ease;
-  color: var(--text-dark);
+  color: var(--text-olive);
   min-height: 56px;
 }
 
 .option-button:hover {
-  border-color: var(--primary-green);
-  background: var(--accent-light);
+  border-color: var(--sage);
+  background: var(--bg-sage-subtle);
 }
 
 .option-button.selected {
-  border-color: var(--primary-green);
-  background: var(--primary-green);
-  color: white;
+  border-color: var(--citrus);
+  background: var(--citrus-pale);
+  color: var(--text-forest);
 }
 
 /* Multi-select styling */
@@ -369,49 +411,52 @@ body {
 .continue-button,
 .btn-primary {
   width: 100%;
-  padding: 16px 32px;
+  padding: 18px 36px;
   margin-top: 24px;
-  background: var(--primary-green);
+  background: var(--forest);
   border: none;
-  border-radius: 50px;
-  font-size: 16px;
+  border-radius: 100px;
+  font-size: 1.05rem;
   font-weight: 600;
   text-align: center;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.3s ease;
   color: white;
   min-height: 56px;
+  box-shadow: 0 4px 20px rgba(27, 51, 41, 0.2);
 }
 
 .continue-button:hover:not(:disabled),
 .btn-primary:hover:not(:disabled) {
-  background: var(--primary-green-hover);
-  transform: translateY(-1px);
+  background: var(--forest-light);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 24px rgba(27, 51, 41, 0.3);
 }
 
 .continue-button:disabled {
-  background: var(--border-light);
+  background: var(--divider);
   cursor: not-allowed;
   color: var(--text-muted);
+  box-shadow: none;
 }
 
 .btn-secondary {
   width: 100%;
   padding: 16px 32px;
-  background: var(--card-background);
-  border: 1px solid var(--border-light);
-  border-radius: 50px;
-  font-size: 16px;
-  font-weight: 600;
+  background: transparent;
+  border: 1px solid var(--divider);
+  border-radius: 100px;
+  font-size: 1rem;
+  font-weight: 500;
   cursor: pointer;
   transition: all 0.2s ease;
-  color: var(--text-dark);
+  color: var(--text-muted);
   min-height: 56px;
 }
 
 .btn-secondary:hover {
-  border-color: var(--primary-green);
-  background: var(--accent-light);
+  border-color: var(--text-muted);
+  color: var(--text-forest);
 }
 
 /* Text Input */
@@ -469,19 +514,24 @@ body {
 }
 
 .capture-label {
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 1.5px;
+  display: inline-block;
+  background: var(--citrus);
+  color: var(--forest);
+  padding: 6px 14px;
+  border-radius: 100px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
   text-transform: uppercase;
-  color: var(--primary-green);
-  margin-bottom: 8px;
+  margin-bottom: 16px;
 }
 
 .capture-title {
-  font-size: 24px;
-  font-weight: 600;
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.6rem;
+  font-weight: 400;
   margin-bottom: 24px;
-  color: var(--text-dark);
+  color: var(--text-forest);
   line-height: 1.3;
 }
 
@@ -525,15 +575,16 @@ body {
   width: 100px;
   height: 100px;
   border-radius: 50%;
-  border: 3px solid var(--primary-green);
+  border: 4px solid var(--citrus);
   object-fit: cover;
   margin-bottom: 24px;
 }
 
 .practitioner-intro h2 {
-  font-size: 24px;
-  font-weight: 600;
-  color: var(--text-dark);
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.6rem;
+  font-weight: 400;
+  color: var(--text-forest);
   margin-bottom: 20px;
   line-height: 1.3;
 }
@@ -547,11 +598,12 @@ body {
 
 .practitioner-credentials {
   display: inline-block;
-  font-size: 13px;
-  color: var(--text-muted);
-  background: var(--accent-light);
+  font-size: 0.85rem;
+  color: var(--forest);
+  background: var(--citrus-light);
   padding: 8px 16px;
-  border-radius: 20px;
+  border-radius: 100px;
+  font-weight: 600;
   margin-top: 16px;
   margin-bottom: 32px;
 }
@@ -632,13 +684,13 @@ body {
 .protocol-preview .check-icon {
   width: 48px;
   height: 48px;
-  background: var(--primary-green);
+  background: var(--citrus);
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   margin: 0 auto 24px;
-  color: white;
+  color: var(--forest);
   font-size: 24px;
 }
 
@@ -654,31 +706,32 @@ body {
   background: var(--card-background);
   border-radius: 16px;
   padding: 24px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  border: 2px solid var(--primary-green);
+  border: 2px solid var(--citrus);
+  box-shadow: 0 8px 32px rgba(249, 199, 79, 0.15);
   margin-bottom: 24px;
 }
 
 .protocol-card .protocol-name {
-  font-size: 22px;
-  font-weight: 700;
-  color: var(--text-dark);
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.5rem;
+  font-weight: 400;
+  color: var(--text-forest);
   margin-bottom: 8px;
 }
 
 .protocol-card .protocol-tagline {
-  font-size: 15px;
+  font-size: 1rem;
   color: var(--text-muted);
   font-style: italic;
 }
 
 .protocol-card .gut-brain-badge {
   display: inline-block;
-  background: var(--accent-light);
-  color: var(--primary-green);
-  padding: 6px 12px;
-  border-radius: 20px;
-  font-size: 13px;
+  background: var(--citrus-light);
+  color: var(--forest);
+  padding: 6px 14px;
+  border-radius: 100px;
+  font-size: 0.85rem;
   font-weight: 600;
   margin-top: 12px;
 }
@@ -700,9 +753,10 @@ body {
 }
 
 .validation-screen h2 {
-  font-size: 24px;
-  font-weight: 600;
-  color: var(--text-dark);
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.6rem;
+  font-weight: 400;
+  color: var(--text-forest);
   margin-bottom: 24px;
   text-align: center;
 }
@@ -779,21 +833,22 @@ body {
 .intro-validation-screen .validation-icon {
   width: 64px;
   height: 64px;
-  background: var(--accent-light);
+  background: var(--citrus);
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   margin-bottom: 24px;
   font-size: 32px;
-  color: var(--primary-green);
+  color: var(--forest);
   animation: scaleIn 0.5s ease;
 }
 
 .intro-validation-screen h2 {
-  font-size: 26px;
-  font-weight: 700;
-  color: var(--text-dark);
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.8rem;
+  font-weight: 400;
+  color: var(--text-forest);
   margin-bottom: 16px;
   line-height: 1.3;
 }
@@ -850,10 +905,10 @@ body {
 }
 
 .testimonial-card .testimonial-photo {
-  width: 80px;
-  height: 80px;
+  width: 56px;
+  height: 56px;
   border-radius: 50%;
-  border: 3px solid var(--primary-green);
+  background: var(--citrus-light);
   object-fit: cover;
   margin-bottom: 20px;
 }
@@ -938,8 +993,8 @@ body {
 .spinner {
   width: 48px;
   height: 48px;
-  border: 3px solid var(--border-light);
-  border-top-color: var(--primary-green);
+  border: 3px solid var(--divider);
+  border-top-color: var(--citrus);
   border-radius: 50%;
   animation: spin 1s linear infinite;
   margin-bottom: 24px;
@@ -966,16 +1021,16 @@ body {
 }
 
 .results-screen .check-icon {
-  width: 64px;
-  height: 64px;
-  background: var(--primary-green);
+  width: 80px;
+  height: 80px;
+  background: var(--citrus);
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   margin: 0 auto 24px;
-  color: white;
-  font-size: 32px;
+  color: var(--forest);
+  font-size: 40px;
   animation: scaleIn 0.5s ease;
 }
 
@@ -991,42 +1046,44 @@ body {
 }
 
 .results-screen h1 {
-  font-size: 28px;
-  font-weight: 700;
-  color: var(--text-dark);
+  font-family: 'DM Serif Display', serif;
+  font-size: 2rem;
+  font-weight: 400;
+  color: var(--text-forest);
   margin-bottom: 24px;
-  line-height: 1.2;
+  line-height: 1.12;
 }
 
 .results-protocol-card {
   background: var(--card-background);
-  border-radius: 16px;
+  border-radius: 20px;
   padding: 28px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  border: 2px solid var(--primary-green);
+  border: 2px solid var(--citrus);
+  box-shadow: 0 8px 32px rgba(249, 199, 79, 0.15);
   margin-bottom: 24px;
 }
 
 .results-protocol-card .protocol-name {
-  font-size: 24px;
-  font-weight: 700;
-  color: var(--text-dark);
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.8rem;
+  font-weight: 400;
+  color: var(--text-forest);
   margin-bottom: 8px;
 }
 
 .results-protocol-card .gut-brain-badge {
   display: inline-block;
-  background: var(--accent-light);
-  color: var(--primary-green);
-  padding: 6px 12px;
-  border-radius: 20px;
-  font-size: 13px;
+  background: var(--citrus-light);
+  color: var(--forest);
+  padding: 6px 14px;
+  border-radius: 100px;
+  font-size: 0.85rem;
   font-weight: 600;
   margin-bottom: 12px;
 }
 
 .results-protocol-card .protocol-tagline {
-  font-size: 15px;
+  font-size: 1rem;
   color: var(--text-muted);
   font-style: italic;
 }
