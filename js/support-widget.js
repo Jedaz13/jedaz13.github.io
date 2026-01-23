@@ -21,7 +21,8 @@
     ownerRole: 'Founder',
     ownerAvatar: '/about/founder-gedas.png',
     bubbleDelay: 30000, // 30 seconds
-    bubbleMessage: "What's your biggest concern about joining?"
+    bubbleMessage: "What held you back from starting the gut health protocol today?",
+    promptMessage: "What held you back from starting the gut health protocol today?"
   };
 
   // =====================================================
@@ -54,39 +55,10 @@
   }
 
   // =====================================================
-  // Dynamic Prompt Generation
+  // Prompt Message
   // =====================================================
-  function generatePrompt(params) {
-    const complaint = params.primary_complaint_label || params.primary_complaint || 'digestive issues';
-    const complaintLower = complaint.toLowerCase();
-
-    // Priority 1: Long-term sufferers (3+ years)
-    if (params.duration && (params.duration.includes('3') || params.duration.includes('5') || params.duration.includes('years'))) {
-      return `You've been dealing with ${complaintLower} for a while now. I understand the skepticism. What's your biggest concern?`;
-    }
-
-    // Priority 2: Have tried treatments
-    if (params.treatments_formatted && params.treatments_formatted.trim() !== '') {
-      return `You've already tried ${params.treatments_formatted}. Wondering why this would be different? Ask me directly.`;
-    }
-
-    // Priority 3: Severe life impact
-    if (params.life_impact === 'severe') {
-      return `When ${complaintLower} affects your daily life this much, you deserve real answers. What would you like to know?`;
-    }
-
-    // Priority 4: Gut-brain connection
-    if (params.gut_brain) {
-      return `I noticed stress plays a role in your symptoms. Have questions about the gut-brain approach? I'm here.`;
-    }
-
-    // Priority 5: Multiple diagnoses
-    if (params.diagnoses && params.diagnoses.includes(',')) {
-      return `With your diagnoses in the picture, you probably have specific questions. Ask me anything.`;
-    }
-
-    // Default fallback
-    return `Have questions about whether this fits your ${complaintLower} situation? I personally read and respond to every message.`;
+  function generatePrompt() {
+    return CONFIG.promptMessage;
   }
 
   // =====================================================
