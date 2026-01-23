@@ -17,7 +17,11 @@
     webhookUrl: 'https://hook.eu1.make.com/5uubblyocz70syh9xptkg248ycauy5pd',
     calendlyUrl: 'https://calendly.com/gedas-guthealingacademy/gut-healing-academy-intro-meet',
     position: 'bottom-right',
-    ownerName: 'Gedas'
+    ownerName: 'Gedas',
+    ownerRole: 'Founder',
+    ownerAvatar: '/about/founder-gedas.png',
+    bubbleDelay: 30000, // 30 seconds
+    bubbleMessage: "What's your biggest concern about joining?"
   };
 
   // =====================================================
@@ -99,6 +103,23 @@
           <span class="gha-toggle-text">Questions?</span>
         </button>
 
+        <div class="gha-chat-bubble" id="gha-bubble">
+          <button class="gha-bubble-close" id="gha-bubble-close" aria-label="Close">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+          <div class="gha-bubble-header">
+            <img src="${CONFIG.ownerAvatar}" alt="${CONFIG.ownerName}" class="gha-bubble-avatar">
+            <div>
+              <div class="gha-bubble-name">${CONFIG.ownerName}</div>
+              <div class="gha-bubble-role">${CONFIG.ownerRole}</div>
+            </div>
+          </div>
+          <p class="gha-bubble-message">${CONFIG.bubbleMessage}</p>
+        </div>
+
         <div class="gha-widget-panel" id="gha-panel">
           <div class="gha-panel-header">
             <button class="gha-close-btn" id="gha-close" aria-label="Close panel">
@@ -107,15 +128,15 @@
                 <line x1="6" y1="6" x2="18" y2="18"></line>
               </svg>
             </button>
-            <h3 class="gha-panel-title">
-              <svg width="20" height="20" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="12" cy="12" r="10"></circle>
-                <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
-                <line x1="12" y1="17" x2="12.01" y2="17"></line>
-              </svg>
-              Have a question before joining?
-            </h3>
-            <p class="gha-panel-subtitle">I'll personally respond via email</p>
+            <img src="${CONFIG.ownerAvatar}" alt="${CONFIG.ownerName}" class="gha-owner-avatar">
+            <div class="gha-header-info">
+              <h3 class="gha-panel-title">Chat with <span class="gha-owner-name">${CONFIG.ownerName}</span></h3>
+              <p class="gha-panel-subtitle">I'll personally respond via email</p>
+              <div class="gha-online-badge">
+                <span class="gha-online-dot"></span>
+                <span>Usually replies within a few hours</span>
+              </div>
+            </div>
           </div>
 
           <div class="gha-panel-body" id="gha-panel-body">
@@ -270,15 +291,21 @@
     const spinner = document.getElementById('gha-spinner');
     const panelBody = document.getElementById('gha-panel-body');
     const successState = document.getElementById('gha-success');
+    const bubble = document.getElementById('gha-bubble');
+    const bubbleClose = document.getElementById('gha-bubble-close');
 
     let isOpen = false;
+    let bubbleDismissed = false;
+    let bubbleTimeout = null;
 
     // Toggle panel open/close
     function openPanel() {
       isOpen = true;
       toggle.classList.add('gha-active');
       panel.classList.add('gha-open');
+      widget.classList.add('gha-panel-open');
       backdrop.classList.add('gha-visible');
+      hideBubble();
       messageInput.focus();
     }
 
@@ -286,6 +313,7 @@
       isOpen = false;
       toggle.classList.remove('gha-active');
       panel.classList.remove('gha-open');
+      widget.classList.remove('gha-panel-open');
       backdrop.classList.remove('gha-visible');
     }
 
@@ -297,10 +325,42 @@
       }
     }
 
+    // Bubble functions
+    function showBubble() {
+      if (!bubbleDismissed && !isOpen) {
+        bubble.classList.add('gha-visible');
+      }
+    }
+
+    function hideBubble() {
+      bubble.classList.remove('gha-visible');
+      bubbleDismissed = true;
+      if (bubbleTimeout) {
+        clearTimeout(bubbleTimeout);
+        bubbleTimeout = null;
+      }
+    }
+
+    // Start bubble timer
+    bubbleTimeout = setTimeout(showBubble, CONFIG.bubbleDelay);
+
     // Event listeners
     toggle.addEventListener('click', togglePanel);
     closeBtn.addEventListener('click', closePanel);
     backdrop.addEventListener('click', closePanel);
+
+    // Bubble event listeners
+    bubble.addEventListener('click', function(e) {
+      if (e.target !== bubbleClose && !bubbleClose.contains(e.target)) {
+        hideBubble();
+        openPanel();
+      }
+    });
+
+    bubbleClose.addEventListener('click', function(e) {
+      e.stopPropagation();
+      hideBubble();
+    });
 
     // Close on escape key
     document.addEventListener('keydown', function(e) {

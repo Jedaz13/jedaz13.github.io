@@ -131,7 +131,7 @@
   bottom: calc(100% + 12px);
   right: 0;
   width: 380px;
-  max-height: 520px;
+  max-height: 580px;
   background-color: var(--gha-white);
   border-radius: var(--gha-radius-xl);
   box-shadow: var(--gha-shadow-elevated);
@@ -140,6 +140,8 @@
   transform: translateY(10px) scale(0.95);
   transition: var(--gha-transition);
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
 .gha-widget-panel.gha-open {
@@ -164,25 +166,70 @@
    Panel Header
    ===================================================== */
 .gha-panel-header {
-  padding: 20px 20px 16px;
+  padding: 16px 20px;
   border-bottom: 1px solid var(--gha-divider);
   background: linear-gradient(135deg, var(--gha-forest) 0%, var(--gha-forest-light) 100%);
   color: var(--gha-white);
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  position: relative;
+  flex-shrink: 0;
+}
+
+.gha-owner-avatar {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid var(--gha-citrus);
+  flex-shrink: 0;
+}
+
+.gha-header-info {
+  flex: 1;
+  min-width: 0;
 }
 
 .gha-panel-title {
-  font-size: 17px;
+  font-size: 16px;
   font-weight: 600;
-  margin: 0 0 4px 0;
+  margin: 0 0 2px 0;
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
+}
+
+.gha-owner-name {
+  color: var(--gha-citrus);
 }
 
 .gha-panel-subtitle {
   font-size: 13px;
   opacity: 0.85;
   margin: 0;
+}
+
+.gha-online-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 12px;
+  opacity: 0.9;
+  margin-top: 2px;
+}
+
+.gha-online-dot {
+  width: 8px;
+  height: 8px;
+  background-color: var(--gha-success);
+  border-radius: 50%;
+  animation: gha-pulse 2s ease-in-out infinite;
+}
+
+@keyframes gha-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
 }
 
 .gha-close-btn {
@@ -218,7 +265,8 @@
 .gha-panel-body {
   padding: 20px;
   overflow-y: auto;
-  max-height: 380px;
+  flex: 1;
+  min-height: 0;
 }
 
 /* =====================================================
@@ -496,4 +544,137 @@
 
 .gha-widget-panel.gha-open .gha-panel-body {
   animation: gha-slide-up 0.4s ease-out;
+}
+
+/* =====================================================
+   Chat Bubble (Auto-popup after delay)
+   ===================================================== */
+.gha-chat-bubble {
+  position: absolute;
+  bottom: calc(100% + 12px);
+  right: 0;
+  width: 280px;
+  background-color: var(--gha-white);
+  border-radius: var(--gha-radius-lg);
+  box-shadow: var(--gha-shadow-elevated);
+  padding: 14px 16px;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(10px) scale(0.9);
+  transition: var(--gha-transition);
+  cursor: pointer;
+}
+
+.gha-chat-bubble.gha-visible {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0) scale(1);
+}
+
+/* Hide bubble when panel is open */
+.gha-widget-panel.gha-open ~ .gha-widget-toggle + .gha-chat-bubble,
+.gha-support-widget.gha-panel-open .gha-chat-bubble {
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none;
+}
+
+.gha-chat-bubble::after {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  right: 24px;
+  width: 16px;
+  height: 16px;
+  background-color: var(--gha-white);
+  transform: rotate(45deg);
+  box-shadow: 2px 2px 4px rgba(27, 51, 41, 0.1);
+}
+
+.gha-bubble-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.gha-bubble-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--gha-citrus);
+}
+
+.gha-bubble-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--gha-text-forest);
+}
+
+.gha-bubble-role {
+  font-size: 11px;
+  color: var(--gha-text-muted);
+}
+
+.gha-bubble-message {
+  font-size: 14px;
+  color: var(--gha-text-forest);
+  line-height: 1.5;
+  margin: 0;
+}
+
+.gha-bubble-close {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--gha-bg-cream);
+  border: none;
+  border-radius: 50%;
+  color: var(--gha-text-muted);
+  cursor: pointer;
+  transition: var(--gha-transition);
+  padding: 0;
+}
+
+.gha-bubble-close:hover {
+  background: var(--gha-divider);
+  color: var(--gha-text-forest);
+}
+
+.gha-bubble-close svg {
+  width: 12px;
+  height: 12px;
+}
+
+/* Mobile adjustments for bubble */
+@media (max-width: 480px) {
+  .gha-chat-bubble {
+    width: 260px;
+    right: 0;
+  }
+}
+
+/* Animation for bubble entrance */
+@keyframes gha-bubble-bounce {
+  0% {
+    opacity: 0;
+    transform: translateY(20px) scale(0.8);
+  }
+  50% {
+    transform: translateY(-5px) scale(1.02);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.gha-chat-bubble.gha-visible {
+  animation: gha-bubble-bounce 0.5s ease-out forwards;
 }
