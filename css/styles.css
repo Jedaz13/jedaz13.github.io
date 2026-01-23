@@ -252,6 +252,7 @@ body {
   background: var(--bg-warm-white);
   padding: 40px 20px 48px;
   position: relative;
+  overflow: hidden;
 }
 
 /* Decorative gradient blob */
