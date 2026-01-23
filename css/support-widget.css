@@ -1,0 +1,499 @@
+/* =====================================================
+   Gut Healing Academy - Support Widget Styles
+   Self-contained styles with gha-* namespace
+   ===================================================== */
+
+/* CSS Custom Properties (scoped to widget) */
+.gha-support-widget {
+  /* Colors - Citrus Energy Theme */
+  --gha-forest: #1B3329;
+  --gha-forest-light: #2A4A3A;
+  --gha-citrus: #F9C74F;
+  --gha-citrus-bright: #FFDA6A;
+  --gha-citrus-light: #FFF3CD;
+  --gha-white: #FFFFFF;
+  --gha-bg-cream: #FBF9F3;
+  --gha-text-forest: #1B3329;
+  --gha-text-olive: #3D5245;
+  --gha-text-muted: #6B7D6E;
+  --gha-leaf: #4A7C59;
+  --gha-success: #52B788;
+  --gha-success-light: #E8F5EE;
+  --gha-error: #E07A5F;
+  --gha-error-light: #FEF2EE;
+  --gha-divider: #E8EBE8;
+
+  /* Shadows */
+  --gha-shadow: 0 8px 32px rgba(27, 51, 41, 0.15);
+  --gha-shadow-elevated: 0 12px 48px rgba(27, 51, 41, 0.2);
+
+  /* Layout */
+  --gha-radius: 10px;
+  --gha-radius-lg: 14px;
+  --gha-radius-xl: 20px;
+  --gha-font: 'Source Sans 3', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+
+  /* Animation */
+  --gha-transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* =====================================================
+   Widget Container
+   ===================================================== */
+.gha-support-widget {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 9999;
+  font-family: var(--gha-font);
+  font-size: 16px;
+  line-height: 1.5;
+  color: var(--gha-text-olive);
+}
+
+/* Adjust for sticky CTA on mobile */
+@media (max-width: 767px) {
+  .gha-support-widget {
+    bottom: 80px;
+  }
+}
+
+/* =====================================================
+   Toggle Button
+   ===================================================== */
+.gha-widget-toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 20px;
+  background-color: var(--gha-forest);
+  color: var(--gha-white);
+  border: none;
+  border-radius: 100px;
+  cursor: pointer;
+  box-shadow: var(--gha-shadow);
+  transition: var(--gha-transition);
+  font-family: var(--gha-font);
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.gha-widget-toggle:hover {
+  background-color: var(--gha-citrus);
+  color: var(--gha-forest);
+  transform: translateY(-2px);
+  box-shadow: var(--gha-shadow-elevated);
+}
+
+.gha-widget-toggle:active {
+  transform: scale(0.98);
+}
+
+.gha-widget-toggle.gha-active {
+  background-color: var(--gha-citrus);
+  color: var(--gha-forest);
+}
+
+.gha-toggle-icon {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+}
+
+.gha-toggle-text {
+  display: inline;
+}
+
+/* Mobile: icon only */
+@media (max-width: 480px) {
+  .gha-widget-toggle {
+    padding: 14px;
+    width: 52px;
+    height: 52px;
+    justify-content: center;
+  }
+
+  .gha-toggle-text {
+    display: none;
+  }
+
+  .gha-toggle-icon {
+    width: 24px;
+    height: 24px;
+  }
+}
+
+/* =====================================================
+   Panel
+   ===================================================== */
+.gha-widget-panel {
+  position: absolute;
+  bottom: calc(100% + 12px);
+  right: 0;
+  width: 380px;
+  max-height: 520px;
+  background-color: var(--gha-white);
+  border-radius: var(--gha-radius-xl);
+  box-shadow: var(--gha-shadow-elevated);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(10px) scale(0.95);
+  transition: var(--gha-transition);
+  overflow: hidden;
+}
+
+.gha-widget-panel.gha-open {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0) scale(1);
+}
+
+/* Mobile: nearly full-width */
+@media (max-width: 480px) {
+  .gha-widget-panel {
+    position: fixed;
+    bottom: 140px;
+    right: 12px;
+    left: 12px;
+    width: auto;
+    max-height: calc(100vh - 200px);
+  }
+}
+
+/* =====================================================
+   Panel Header
+   ===================================================== */
+.gha-panel-header {
+  padding: 20px 20px 16px;
+  border-bottom: 1px solid var(--gha-divider);
+  background: linear-gradient(135deg, var(--gha-forest) 0%, var(--gha-forest-light) 100%);
+  color: var(--gha-white);
+}
+
+.gha-panel-title {
+  font-size: 17px;
+  font-weight: 600;
+  margin: 0 0 4px 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.gha-panel-subtitle {
+  font-size: 13px;
+  opacity: 0.85;
+  margin: 0;
+}
+
+.gha-close-btn {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.15);
+  border: none;
+  border-radius: 50%;
+  color: var(--gha-white);
+  cursor: pointer;
+  transition: var(--gha-transition);
+  padding: 0;
+}
+
+.gha-close-btn:hover {
+  background: rgba(255, 255, 255, 0.25);
+}
+
+.gha-close-btn svg {
+  width: 16px;
+  height: 16px;
+}
+
+/* =====================================================
+   Panel Body
+   ===================================================== */
+.gha-panel-body {
+  padding: 20px;
+  overflow-y: auto;
+  max-height: 380px;
+}
+
+/* =====================================================
+   Dynamic Prompt
+   ===================================================== */
+.gha-prompt-message {
+  background-color: var(--gha-citrus-light);
+  border-left: 4px solid var(--gha-citrus);
+  border-radius: 0 var(--gha-radius) var(--gha-radius) 0;
+  padding: 14px 16px;
+  margin-bottom: 20px;
+}
+
+.gha-prompt-message p {
+  margin: 0;
+  font-size: 15px;
+  color: var(--gha-text-forest);
+  line-height: 1.5;
+}
+
+/* =====================================================
+   Form
+   ===================================================== */
+.gha-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.gha-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.gha-form-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--gha-text-forest);
+}
+
+.gha-form-input,
+.gha-form-textarea {
+  width: 100%;
+  padding: 12px 14px;
+  font-family: var(--gha-font);
+  font-size: 15px;
+  color: var(--gha-text-forest);
+  background-color: var(--gha-bg-cream);
+  border: 2px solid transparent;
+  border-radius: var(--gha-radius);
+  transition: var(--gha-transition);
+  box-sizing: border-box;
+}
+
+.gha-form-input:focus,
+.gha-form-textarea:focus {
+  outline: none;
+  border-color: var(--gha-citrus);
+  background-color: var(--gha-white);
+}
+
+.gha-form-input::placeholder,
+.gha-form-textarea::placeholder {
+  color: var(--gha-text-muted);
+}
+
+.gha-form-input.gha-error,
+.gha-form-textarea.gha-error {
+  border-color: var(--gha-error);
+  background-color: var(--gha-error-light);
+}
+
+.gha-form-textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+
+.gha-error-message {
+  font-size: 12px;
+  color: var(--gha-error);
+  margin-top: 4px;
+}
+
+/* =====================================================
+   Submit Button
+   ===================================================== */
+.gha-submit-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  padding: 14px 20px;
+  background-color: var(--gha-forest);
+  color: var(--gha-white);
+  border: none;
+  border-radius: 100px;
+  cursor: pointer;
+  font-family: var(--gha-font);
+  font-size: 16px;
+  font-weight: 600;
+  transition: var(--gha-transition);
+}
+
+.gha-submit-btn:hover:not(:disabled) {
+  background-color: var(--gha-citrus);
+  color: var(--gha-forest);
+  transform: translateY(-1px);
+}
+
+.gha-submit-btn:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+.gha-submit-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.gha-btn-spinner {
+  width: 18px;
+  height: 18px;
+  border: 2px solid transparent;
+  border-top-color: currentColor;
+  border-radius: 50%;
+  animation: gha-spin 0.8s linear infinite;
+}
+
+@keyframes gha-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* =====================================================
+   Calendly Link
+   ===================================================== */
+.gha-calendly-link {
+  display: block;
+  text-align: center;
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid var(--gha-divider);
+}
+
+.gha-calendly-link a {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  color: var(--gha-leaf);
+  text-decoration: none;
+  font-weight: 500;
+  transition: var(--gha-transition);
+}
+
+.gha-calendly-link a:hover {
+  color: var(--gha-forest);
+}
+
+.gha-calendly-link svg {
+  width: 16px;
+  height: 16px;
+}
+
+/* =====================================================
+   Success State
+   ===================================================== */
+.gha-success-state {
+  display: none;
+  text-align: center;
+  padding: 20px 0;
+}
+
+.gha-success-state.gha-visible {
+  display: block;
+}
+
+.gha-success-icon {
+  width: 64px;
+  height: 64px;
+  margin: 0 auto 16px;
+  background-color: var(--gha-success-light);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.gha-success-icon svg {
+  width: 32px;
+  height: 32px;
+  color: var(--gha-success);
+}
+
+.gha-success-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--gha-text-forest);
+  margin: 0 0 8px 0;
+}
+
+.gha-success-message {
+  font-size: 14px;
+  color: var(--gha-text-muted);
+  margin: 0 0 20px 0;
+  line-height: 1.5;
+}
+
+.gha-success-cta {
+  display: inline-block;
+  padding: 12px 24px;
+  background-color: var(--gha-citrus);
+  color: var(--gha-forest);
+  border-radius: 100px;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: var(--gha-transition);
+}
+
+.gha-success-cta:hover {
+  background-color: var(--gha-citrus-bright);
+  transform: translateY(-1px);
+}
+
+/* Hide form when success is shown */
+.gha-panel-body.gha-form-hidden .gha-form,
+.gha-panel-body.gha-form-hidden .gha-prompt-message,
+.gha-panel-body.gha-form-hidden .gha-calendly-link {
+  display: none;
+}
+
+/* =====================================================
+   Backdrop overlay (mobile)
+   ===================================================== */
+.gha-backdrop {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(27, 51, 41, 0.4);
+  z-index: 9998;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.gha-backdrop.gha-visible {
+  display: block;
+  opacity: 1;
+}
+
+@media (min-width: 481px) {
+  .gha-backdrop {
+    display: none !important;
+  }
+}
+
+/* =====================================================
+   Animation for panel entrance
+   ===================================================== */
+@keyframes gha-slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.gha-widget-panel.gha-open .gha-panel-body {
+  animation: gha-slide-up 0.4s ease-out;
+}
