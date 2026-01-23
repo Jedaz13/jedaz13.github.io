@@ -135,6 +135,44 @@ h3 {
   margin-bottom: 0.5rem;
 }
 
+/* Accent line for headlines */
+.accent-heading {
+  position: relative;
+  display: inline-block;
+}
+
+.accent-heading::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 60px;
+  height: 3px;
+  background: var(--citrus);
+  border-radius: 2px;
+}
+
+.accent-heading-center {
+  position: relative;
+  display: block;
+}
+
+.accent-heading-center::after {
+  content: '';
+  display: block;
+  width: 60px;
+  height: 3px;
+  background: var(--citrus);
+  border-radius: 2px;
+  margin: 12px auto 0;
+}
+
+/* Highlighted text */
+.text-highlight {
+  background: linear-gradient(to bottom, transparent 60%, var(--citrus-light) 60%);
+  padding: 0 4px;
+}
+
 p {
   margin-bottom: 0.75rem;
 }
@@ -168,13 +206,28 @@ p:last-child {
 }
 
 .btn-primary:hover {
-  background-color: var(--forest-light);
-  box-shadow: 0 6px 24px rgba(27, 51, 41, 0.3);
+  background-color: var(--citrus);
+  color: var(--forest);
+  box-shadow: 0 6px 24px rgba(249, 199, 79, 0.4);
   transform: translateY(-2px);
 }
 
 .btn-primary:active {
   transform: scale(0.98) translateY(0);
+}
+
+/* Citrus button for dark backgrounds */
+.btn-citrus {
+  background-color: var(--citrus);
+  color: var(--forest);
+  box-shadow: 0 4px 20px rgba(249, 199, 79, 0.3);
+}
+
+.btn-citrus:hover {
+  background-color: var(--citrus-bright);
+  color: var(--forest);
+  box-shadow: 0 6px 24px rgba(249, 199, 79, 0.5);
+  transform: translateY(-2px);
 }
 
 .btn-centered {
@@ -268,6 +321,15 @@ p:last-child {
 
 .btn-hero {
   margin-top: 24px;
+  background-color: var(--citrus);
+  color: var(--forest);
+  box-shadow: 0 4px 20px rgba(249, 199, 79, 0.3);
+}
+
+.btn-hero:hover {
+  background-color: var(--citrus-bright);
+  color: var(--forest);
+  box-shadow: 0 6px 24px rgba(249, 199, 79, 0.5);
 }
 
 /* =====================================================
@@ -284,8 +346,20 @@ p:last-child {
   margin-bottom: 24px;
 }
 
+.discovery-section h2::after {
+  content: '';
+  display: block;
+  width: 60px;
+  height: 3px;
+  background: var(--citrus);
+  border-radius: 2px;
+  margin: 12px auto 0;
+}
+
 .primary-complaint-text {
-  color: var(--primary-teal);
+  color: var(--leaf);
+  background: linear-gradient(to bottom, transparent 60%, var(--citrus-light) 60%);
+  padding: 0 4px;
 }
 
 .discovery-opener {
@@ -362,7 +436,7 @@ p:last-child {
   padding: 20px;
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-card);
-  border-left: 4px solid var(--cta-coral);
+  border-left: 4px solid var(--citrus);
 }
 
 .failed-item h4 {
@@ -398,6 +472,16 @@ p:last-child {
 .first-week-section h2 {
   text-align: center;
   margin-bottom: 32px;
+}
+
+.first-week-section h2::after {
+  content: '';
+  display: block;
+  width: 60px;
+  height: 3px;
+  background: var(--citrus);
+  border-radius: 2px;
+  margin: 12px auto 0;
 }
 
 .first-week-timeline {
@@ -501,16 +585,28 @@ p:last-child {
 }
 
 /* =====================================================
-   Section 5: What's Included
+   Section 5: What's Included - Dark Pattern Interruption
    ===================================================== */
 .included-section {
-  padding: 40px 0;
-  background-color: var(--bg-cream);
+  padding: 48px 0;
+  background: linear-gradient(135deg, var(--forest) 0%, var(--forest-light) 100%);
+  color: var(--white);
 }
 
 .included-section h2 {
   text-align: center;
-  margin-bottom: 24px;
+  margin-bottom: 32px;
+  color: var(--white);
+}
+
+.included-section h2::after {
+  content: '';
+  display: block;
+  width: 60px;
+  height: 3px;
+  background: var(--citrus);
+  border-radius: 2px;
+  margin: 12px auto 0;
 }
 
 .included-grid {
@@ -520,21 +616,22 @@ p:last-child {
 }
 
 .included-item {
-  background-color: var(--white);
+  background-color: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
   padding: 20px;
   border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-card);
+  border: 1px solid rgba(255, 255, 255, 0.15);
 }
 
 .included-item h3 {
   font-size: 16px;
-  color: var(--primary-teal);
+  color: var(--citrus);
   margin-bottom: 8px;
 }
 
 .included-item p {
   font-size: 14px;
-  color: var(--text-secondary);
+  color: rgba(255, 255, 255, 0.85);
   line-height: 1.5;
   margin-bottom: 0;
 }
@@ -551,6 +648,16 @@ p:last-child {
   text-align: center;
   font-size: 22px;
   margin-bottom: 24px;
+}
+
+.why-different-section h2::after {
+  content: '';
+  display: block;
+  width: 60px;
+  height: 3px;
+  background: var(--citrus);
+  border-radius: 2px;
+  margin: 12px auto 0;
 }
 
 .why-different-content {
@@ -612,13 +719,23 @@ p:last-child {
    Section 7: Practitioners Carousel
    ===================================================== */
 .practitioners-section {
-  padding: 40px 0;
-  background-color: var(--bg-cream);
+  padding: 48px 0;
+  background-color: var(--bg-sage-subtle);
 }
 
 .practitioners-section h2 {
   text-align: center;
   margin-bottom: 8px;
+}
+
+.practitioners-section h2::after {
+  content: '';
+  display: block;
+  width: 60px;
+  height: 3px;
+  background: var(--citrus);
+  border-radius: 2px;
+  margin: 12px auto 0;
 }
 
 .practitioners-subheader {
@@ -665,7 +782,7 @@ p:last-child {
   border-radius: 50%;
   object-fit: cover;
   margin: 0 auto 16px;
-  border: 4px solid var(--primary-teal);
+  border: 4px solid var(--citrus);
 }
 
 .practitioner-info h3 {
@@ -693,9 +810,9 @@ p:last-child {
 }
 
 .practitioner-quote {
-  background-color: var(--bg-cream);
+  background-color: var(--citrus-pale);
   padding: 16px 20px;
-  border-left: 4px solid var(--primary-teal);
+  border-left: 4px solid var(--citrus);
   border-radius: 0 var(--radius) var(--radius) 0;
   font-style: italic;
   font-size: 15px;
@@ -743,6 +860,16 @@ p:last-child {
 .expectations-timeline-section h2 {
   text-align: center;
   margin-bottom: 32px;
+}
+
+.expectations-timeline-section h2::after {
+  content: '';
+  display: block;
+  width: 60px;
+  height: 3px;
+  background: var(--citrus);
+  border-radius: 2px;
+  margin: 12px auto 0;
 }
 
 .expectations-timeline {
@@ -812,8 +939,8 @@ p:last-child {
   }
 
   .timeline-milestone.visible .milestone-marker {
-    background-color: var(--primary-teal);
-    border-color: var(--primary-teal);
+    background-color: var(--citrus);
+    border-color: var(--citrus);
   }
 
   .milestone-icon {
@@ -822,7 +949,7 @@ p:last-child {
   }
 
   .timeline-milestone.visible .milestone-icon {
-    color: var(--white);
+    color: var(--forest);
   }
 }
 
@@ -881,6 +1008,16 @@ p:last-child {
   margin-bottom: 24px;
 }
 
+.testimonials-section h2::after {
+  content: '';
+  display: block;
+  width: 60px;
+  height: 3px;
+  background: var(--citrus);
+  border-radius: 2px;
+  margin: 12px auto 0;
+}
+
 .testimonials-carousel {
   display: flex;
   flex-direction: column;
@@ -892,7 +1029,7 @@ p:last-child {
   border-radius: var(--radius-lg);
   padding: 24px;
   box-shadow: var(--shadow-card);
-  border-left: 4px solid var(--primary-teal);
+  border-left: 4px solid var(--citrus);
   display: none;
 }
 
@@ -955,6 +1092,16 @@ p:last-child {
   margin-bottom: 24px;
 }
 
+.investment-section h2::after {
+  content: '';
+  display: block;
+  width: 60px;
+  height: 3px;
+  background: var(--citrus);
+  border-radius: 2px;
+  margin: 12px auto 0;
+}
+
 .investment-comparison {
   display: grid;
   grid-template-columns: 1fr;
@@ -981,11 +1128,11 @@ p:last-child {
 }
 
 .your-path {
-  border: 2px solid var(--primary-teal);
+  border: 2px solid var(--citrus);
 }
 
 .your-path h3 {
-  color: var(--primary-teal);
+  color: var(--leaf);
 }
 
 .comparison-col ul {
@@ -1124,20 +1271,20 @@ p:last-child {
   padding: 24px;
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-card);
-  border: 2px solid var(--primary-teal);
+  border: 2px solid var(--citrus);
 }
 
 .guarantee-badge {
   flex-shrink: 0;
   width: 70px;
   height: 70px;
-  background-color: var(--primary-teal);
+  background-color: var(--citrus);
   border-radius: 50%;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  color: var(--white);
+  color: var(--forest);
 }
 
 .guarantee-badge svg {
@@ -1153,7 +1300,7 @@ p:last-child {
 }
 
 .guarantee-content h3 {
-  color: var(--primary-teal);
+  color: var(--leaf);
   margin-bottom: 12px;
 }
 
