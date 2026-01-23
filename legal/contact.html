@@ -14,7 +14,29 @@
     })(window,document,'script','dataLayer','GTM-KQ3LKTBL');</script>
     <!-- End Google Tag Manager -->
 
+    <!-- Google Fonts - Citrus Energy Theme -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
+
     <style>
+        /* Citrus Energy Theme Variables */
+        :root {
+            --bg-warm-white: #FFFDF7;
+            --bg-cream: #FBF9F3;
+            --text-forest: #1B3329;
+            --text-olive: #3D5245;
+            --text-muted: #6B7D6E;
+            --citrus: #F9C74F;
+            --citrus-light: #FFF3CD;
+            --citrus-pale: #FFFBEB;
+            --forest: #1B3329;
+            --forest-light: #2A4A3A;
+            --leaf: #4A7C59;
+            --sage: #A8C5A8;
+            --divider: #E8EBE8;
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -22,11 +44,11 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-family: 'Source Sans 3', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             font-size: 17px;
             line-height: 1.7;
-            color: #2D3436;
-            background-color: #FDF8F5;
+            color: var(--text-olive);
+            background-color: var(--bg-warm-white);
         }
 
         .container {
@@ -45,37 +67,43 @@
             text-align: center;
             margin-bottom: 40px;
             padding-bottom: 30px;
-            border-bottom: 2px solid #A4C3B2;
+            border-bottom: 2px solid var(--citrus);
         }
 
         .logo {
             font-size: 24px;
             font-weight: 700;
-            color: #264653;
+            color: var(--forest);
             margin-bottom: 20px;
         }
 
         h1 {
+            font-family: 'DM Serif Display', serif;
             font-size: 32px;
-            color: #264653;
+            font-weight: 400;
+            color: var(--text-forest);
             margin-bottom: 10px;
         }
 
         .last-updated {
-            color: #6B9080;
+            color: var(--leaf);
             font-size: 14px;
         }
 
         h2 {
+            font-family: 'DM Serif Display', serif;
             font-size: 22px;
-            color: #264653;
+            font-weight: 400;
+            color: var(--text-forest);
             margin-top: 35px;
             margin-bottom: 15px;
         }
 
         h3 {
+            font-family: 'DM Serif Display', serif;
             font-size: 18px;
-            color: #264653;
+            font-weight: 400;
+            color: var(--text-forest);
             margin-top: 25px;
             margin-bottom: 10px;
         }
@@ -94,12 +122,12 @@
         }
 
         a {
-            color: #6B9080;
+            color: var(--leaf);
             text-decoration: underline;
         }
 
         a:hover {
-            color: #264653;
+            color: var(--forest);
         }
 
         .intro-text {
@@ -108,9 +136,9 @@
         }
 
         .contact-section {
-            background-color: #fff;
-            border: 1px solid #A4C3B2;
-            border-radius: 8px;
+            background-color: #FFFFFF;
+            border: 1px solid var(--divider);
+            border-radius: 14px;
             padding: 25px;
             margin-bottom: 20px;
         }
@@ -134,16 +162,16 @@
         }
 
         .highlight-box {
-            background-color: #E8F4F0;
-            border-left: 4px solid #6B9080;
+            background-color: var(--citrus-pale);
+            border-left: 4px solid var(--citrus);
             padding: 20px;
             margin: 25px 0;
-            border-radius: 0 8px 8px 0;
+            border-radius: 0 14px 14px 0;
         }
 
         .highlight-box h2 {
             margin-top: 0;
-            color: #264653;
+            color: var(--text-forest);
         }
 
         .address-block {
@@ -154,16 +182,17 @@
         footer {
             margin-top: 60px;
             padding-top: 30px;
-            border-top: 2px solid #A4C3B2;
+            border-top: 2px solid var(--citrus);
         }
 
         .footer-disclaimer {
-            background-color: #E8F4F0;
+            background-color: var(--bg-cream);
             padding: 20px;
-            border-radius: 8px;
+            border-radius: 14px;
             margin-bottom: 25px;
             font-size: 14px;
             line-height: 1.6;
+            color: var(--text-muted);
         }
 
         .footer-nav {
@@ -172,7 +201,7 @@
         }
 
         .footer-nav a {
-            color: #6B9080;
+            color: var(--leaf);
             text-decoration: none;
             margin: 0 10px;
             font-size: 15px;
@@ -180,16 +209,16 @@
 
         .footer-nav a:hover {
             text-decoration: underline;
-            color: #264653;
+            color: var(--forest);
         }
 
         .footer-nav span {
-            color: #A4C3B2;
+            color: var(--sage);
         }
 
         .copyright {
             text-align: center;
-            color: #6B9080;
+            color: var(--text-muted);
             font-size: 14px;
         }
 
@@ -210,8 +239,8 @@
 
         /* Site Header */
         .site-header {
-            background: #FFFFFF;
-            border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+            background: var(--bg-warm-white);
+            border-bottom: 1px solid var(--divider);
             padding: 0 20px;
             position: relative;
         }
@@ -222,7 +251,7 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            height: 60px;
+            height: 70px;
         }
 
         .header-logo {
@@ -248,24 +277,32 @@
         }
 
         .header-nav a {
-            font-size: 14px;
+            font-size: 0.9rem;
             font-weight: 500;
-            color: #2D3436;
+            color: var(--text-olive);
             text-decoration: none;
         }
 
         .header-nav a:hover {
-            color: #6B9080;
+            color: var(--forest);
         }
 
         .header-nav .nav-login {
-            color: #6B9080;
+            background: var(--forest);
+            color: #FFFFFF;
+            padding: 12px 24px;
+            border-radius: 100px;
+            font-weight: 600;
+        }
+
+        .header-nav .nav-login:hover {
+            background: var(--forest-light);
         }
 
         .header-nav .nav-divider {
             width: 1px;
             height: 20px;
-            background: rgba(0, 0, 0, 0.1);
+            background: var(--divider);
         }
 
         .mobile-menu-btn {
@@ -282,7 +319,7 @@
             display: block;
             width: 24px;
             height: 2px;
-            background: #2D3436;
+            background: var(--text-forest);
         }
 
         .mobile-menu {
@@ -292,8 +329,8 @@
             left: 0;
             right: 0;
             background: #FFFFFF;
-            border-bottom: 1px solid rgba(0, 0, 0, 0.08);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            border-bottom: 1px solid var(--divider);
+            box-shadow: 0 4px 24px rgba(27, 51, 41, 0.06);
             padding: 16px 20px;
             z-index: 100;
         }
@@ -305,11 +342,11 @@
         .mobile-menu a {
             display: block;
             padding: 12px 0;
-            font-size: 16px;
+            font-size: 1rem;
             font-weight: 500;
-            color: #2D3436;
+            color: var(--text-olive);
             text-decoration: none;
-            border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+            border-bottom: 1px solid var(--divider);
         }
 
         .mobile-menu a:last-child {
@@ -317,11 +354,12 @@
         }
 
         .mobile-menu a:hover {
-            color: #6B9080;
+            color: var(--forest);
         }
 
         .mobile-menu .nav-login {
-            color: #6B9080;
+            color: var(--leaf);
+            font-weight: 600;
         }
 
         @media (min-width: 768px) {
