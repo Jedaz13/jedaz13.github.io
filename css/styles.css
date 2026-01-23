@@ -107,10 +107,12 @@
   padding: 12px 24px;
   border-radius: 100px;
   font-weight: 600;
+  transition: all 0.2s;
 }
 
 .header-nav .nav-login:hover {
-  background: var(--forest-light);
+  background: var(--citrus);
+  color: var(--forest);
 }
 
 .header-nav .nav-divider {
@@ -295,6 +297,12 @@ body {
   color: var(--text-forest);
   margin-bottom: 16px;
   max-width: 600px;
+}
+
+/* Text highlight with citrus underline */
+.text-highlight {
+  background: linear-gradient(to bottom, transparent 60%, var(--citrus-light) 60%);
+  padding: 0 4px;
 }
 
 .hero-subheadline {
