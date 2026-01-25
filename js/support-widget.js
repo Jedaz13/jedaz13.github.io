@@ -249,10 +249,11 @@
       submitted_at: new Date().toISOString()
     };
 
+    // Use text/plain to avoid CORS preflight, Make.com will still parse JSON
     const response = await fetch(CONFIG.webhookUrl, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'text/plain'
       },
       body: JSON.stringify(payload)
     });
