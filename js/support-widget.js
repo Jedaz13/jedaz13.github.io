@@ -14,7 +14,7 @@
   // Configuration - Edit these values
   // =====================================================
   const CONFIG = {
-    webhookUrl: 'https://hook.eu1.make.com/5uubblyocz70syh9xptkg248ycauy5pd',
+    webhookUrl: 'https://hook.eu1.make.com/to2fgap6cvp980epzhfqe7pm0p95zri2',
     calendlyUrl: 'https://calendly.com/gedas-guthealingacademy/gut-healing-academy-intro-meet',
     position: 'bottom-right',
     ownerName: 'Gedas',
