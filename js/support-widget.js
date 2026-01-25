@@ -237,25 +237,24 @@
   // Webhook Submission (for email notifications)
   // =====================================================
   async function submitToWebhook(email, message, params) {
-    const payload = {
-      email: email,
-      name: params.name || '',
-      message: message,
-      page_url: window.location.href,
-      source: params.source,
-      utm_source: params.utm_source,
-      utm_medium: params.utm_medium,
-      utm_campaign: params.utm_campaign,
-      submitted_at: new Date().toISOString()
-    };
+    // Use URLSearchParams for form-encoded data (CORS-safe, properly parsed by Make.com)
+    const formData = new URLSearchParams();
+    formData.append('email', email);
+    formData.append('name', params.name || '');
+    formData.append('message', message);
+    formData.append('page_url', window.location.href);
+    formData.append('source', params.source || '');
+    formData.append('utm_source', params.utm_source || '');
+    formData.append('utm_medium', params.utm_medium || '');
+    formData.append('utm_campaign', params.utm_campaign || '');
+    formData.append('submitted_at', new Date().toISOString());
 
-    // Use text/plain to avoid CORS preflight, Make.com will still parse JSON
     const response = await fetch(CONFIG.webhookUrl, {
       method: 'POST',
       headers: {
-        'Content-Type': 'text/plain'
+        'Content-Type': 'application/x-www-form-urlencoded'
       },
-      body: JSON.stringify(payload)
+      body: formData.toString()
     });
 
     if (!response.ok) {
