@@ -14,7 +14,12 @@
   // Configuration - Edit these values
   // =====================================================
   const CONFIG = {
+    // Supabase
+    SUPABASE_URL: 'https://mwabljnngygkmahjgvps.supabase.co',
+    SUPABASE_ANON_KEY: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im13YWJsam5uZ3lna21haGpndnBzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU1MjQ3MzgsImV4cCI6MjA4MTEwMDczOH0.rbZYj1aXui_xZ0qkg7QONdHppnJghT2r0ycZwtr3a-E',
+    // Make.com webhook (for email notifications)
     webhookUrl: 'https://hook.eu1.make.com/to2fgap6cvp980epzhfqe7pm0p95zri2',
+    // Widget settings
     calendlyUrl: 'https://calendly.com/gedas-guthealingacademy/gut-healing-academy-intro-meet',
     position: 'bottom-right',
     ownerName: 'Gedas',
@@ -193,25 +198,49 @@
   }
 
   // =====================================================
-  // Webhook Submission
+  // Supabase Submission (primary data store)
+  // =====================================================
+  async function submitToSupabase(email, message, params) {
+    const payload = {
+      email: email,
+      name: params.name || null,
+      visitor_message: message,
+      page_url: window.location.href,
+      source: params.source || null,
+      status: 'pending',
+      utm_source: params.utm_source || null,
+      utm_medium: params.utm_medium || null,
+      utm_campaign: params.utm_campaign || null
+    };
+
+    const response = await fetch(`${CONFIG.SUPABASE_URL}/rest/v1/support_conversations`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'apikey': CONFIG.SUPABASE_ANON_KEY,
+        'Authorization': `Bearer ${CONFIG.SUPABASE_ANON_KEY}`,
+        'Prefer': 'return=minimal'
+      },
+      body: JSON.stringify(payload)
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error('Supabase error:', errorText);
+      throw new Error('Supabase submission failed');
+    }
+
+    return response;
+  }
+
+  // =====================================================
+  // Webhook Submission (for email notifications)
   // =====================================================
   async function submitToWebhook(email, message, params) {
     const payload = {
       email: email,
       name: params.name || '',
       message: message,
-      protocol: params.protocol,
-      protocol_name: params.protocol_name,
-      primary_complaint: params.primary_complaint,
-      primary_complaint_label: params.primary_complaint_label,
-      duration: params.duration,
-      diagnoses: params.diagnoses,
-      treatments_formatted: params.treatments_formatted,
-      stress_level: params.stress_level,
-      life_impact: params.life_impact,
-      gut_brain: params.gut_brain,
-      goal_selection: params.goal_selection,
-      journey_stage: params.journey_stage,
       page_url: window.location.href,
       source: params.source,
       utm_source: params.utm_source,
@@ -388,24 +417,46 @@
 
       setLoading(true);
 
-      try {
-        await submitToWebhook(
-          emailInput.value.trim(),
-          messageInput.value.trim(),
-          params
-        );
-        showSuccess();
+      const email = emailInput.value.trim();
+      const message = messageInput.value.trim();
 
-        // Track in GTM if available
-        if (window.dataLayer) {
-          window.dataLayer.push({
-            event: 'support_widget_submit',
-            widget_source: params.source
-          });
+      try {
+        // Submit to both Supabase and webhook in parallel
+        // Supabase is primary (data store), webhook is for email notifications
+        const results = await Promise.allSettled([
+          submitToSupabase(email, message, params),
+          submitToWebhook(email, message, params)
+        ]);
+
+        // Check if Supabase succeeded (primary)
+        const supabaseResult = results[0];
+        const webhookResult = results[1];
+
+        if (supabaseResult.status === 'rejected') {
+          console.error('Supabase submission failed:', supabaseResult.reason);
+        }
+
+        if (webhookResult.status === 'rejected') {
+          console.error('Webhook submission failed:', webhookResult.reason);
+        }
+
+        // Show success if at least one succeeded
+        if (supabaseResult.status === 'fulfilled' || webhookResult.status === 'fulfilled') {
+          showSuccess();
+
+          // Track in GTM if available
+          if (window.dataLayer) {
+            window.dataLayer.push({
+              event: 'support_widget_submit',
+              widget_source: params.source
+            });
+          }
+        } else {
+          // Both failed
+          throw new Error('All submissions failed');
         }
       } catch (error) {
         console.error('Support widget submission error:', error);
-        // Show a simple error state
         alert('Something went wrong. Please try again or book a call instead.');
       } finally {
         setLoading(false);
