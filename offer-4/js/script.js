@@ -50,6 +50,19 @@
   };
 
   // =====================================================
+  // PATTERN TYPE LABELS
+  // =====================================================
+  const PATTERN_LABELS = {
+    bloating: 'bloating-dominant',
+    constipation: 'slow-transit',
+    diarrhea: 'motility-driven',
+    mixed: 'alternating',
+    pain: 'sensitivity-dominant',
+    gas: 'fermentation-type',
+    reflux: 'upper-GI'
+  };
+
+  // =====================================================
   // DURATION LABELS
   // =====================================================
   const DURATION_LABELS = {
@@ -198,6 +211,13 @@
     const complaintPatternEl = document.getElementById('complaint-pattern');
     if (complaintPatternEl) {
       complaintPatternEl.textContent = state.userData.primary_complaint_label || 'your specific';
+    }
+
+    // Pattern type interpretation
+    const patternTypeEl = document.getElementById('pattern-type');
+    if (patternTypeEl) {
+      const patternType = PATTERN_LABELS[state.userData.primary_complaint] || 'digestive';
+      patternTypeEl.textContent = patternType;
     }
 
     // Gut-brain section (conditional)
