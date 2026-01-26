@@ -128,6 +128,25 @@ const blocks = [
   quizContent.block7
 ];
 
+// Section labels for each block
+const SECTION_LABELS = [
+  'YOUR GOALS',
+  'SYMPTOMS',
+  'WHY THIS WORKS',
+  'GUT-BRAIN',
+  'KNOWLEDGE',
+  'SAFETY CHECK',
+  'FINAL STEPS'
+];
+
+// Questions per section for progress calculation
+const QUESTIONS_PER_SECTION = [5, 6, 1, 5, 5, 4, 5];
+
+// DOM Elements
+let contentEl;
+let sectionLabelEl;
+let backButtonEl;
+
 // =================================================
 // INITIALIZATION
 // =================================================
@@ -136,6 +155,11 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 function initQuiz() {
+  // Cache DOM elements
+  contentEl = document.getElementById('contentArea');
+  sectionLabelEl = document.getElementById('sectionLabel');
+  backButtonEl = document.getElementById('backButton');
+
   state.quizStartTime = new Date();
   state.screenStartTime = new Date();
 
@@ -149,7 +173,7 @@ function initQuiz() {
   trackPixelEvent('PageView');
 
   // Set up back button
-  document.getElementById('backButton').addEventListener('click', handleBack);
+  backButtonEl.addEventListener('click', handleBack);
 
   // Set up page unload tracking
   window.addEventListener('beforeunload', handlePageUnload);
@@ -164,29 +188,33 @@ function initQuiz() {
 // =================================================
 function renderCurrentScreen() {
   const screenInfo = screenOrder[state.currentScreenIndex];
-  const container = document.getElementById('quizContainer');
 
   state.screenStartTime = new Date();
   state.totalScreensViewed++;
   state.screensViewed.push(screenInfo.screenKey);
 
-  // Update back button visibility
-  document.getElementById('backButton').style.display =
-    state.currentScreenIndex > 0 ? 'flex' : 'none';
+  // Update block index
+  state.currentBlockIndex = screenInfo.block;
+
+  // Update section label
+  updateSectionLabel();
+
+  // Update back button
+  updateBackButton();
 
   // Special screen types
   if (screenInfo.type === 'goal_reminder') {
-    renderGoalReminder(container, screenInfo.screenKey);
+    renderGoalReminder(contentEl, screenInfo.screenKey);
     return;
   }
 
   if (screenInfo.type === 'loading') {
-    renderLoadingScreen(container);
+    renderLoadingScreen(contentEl);
     return;
   }
 
   if (screenInfo.type === 'results') {
-    renderResultsScreen(container);
+    renderResultsScreen(contentEl);
     return;
   }
 
@@ -203,25 +231,25 @@ function renderCurrentScreen() {
   // Render based on screen type
   switch (screen.type) {
     case 'single_select':
-      renderSingleSelect(container, screen);
+      renderSingleSelect(contentEl, screen);
       break;
     case 'multi_select':
-      renderMultiSelect(container, screen);
+      renderMultiSelect(contentEl, screen);
       break;
     case 'slider':
-      renderSlider(container, screen);
+      renderSlider(contentEl, screen);
       break;
     case 'info':
-      renderInfoScreen(container, screen);
+      renderInfoScreen(contentEl, screen);
       break;
     case 'knowledge_quiz':
-      renderKnowledgeQuiz(container, screen);
+      renderKnowledgeQuiz(contentEl, screen);
       break;
     case 'email_input':
-      renderEmailInput(container, screen);
+      renderEmailInput(contentEl, screen);
       break;
     case 'text_input':
-      renderTextInput(container, screen);
+      renderTextInput(contentEl, screen);
       break;
     default:
       console.error('Unknown screen type:', screen.type);
@@ -229,6 +257,18 @@ function renderCurrentScreen() {
 
   // Scroll to top
   window.scrollTo(0, 0);
+}
+
+function updateSectionLabel() {
+  if (sectionLabelEl) {
+    sectionLabelEl.textContent = SECTION_LABELS[state.currentBlockIndex] || 'QUIZ';
+  }
+}
+
+function updateBackButton() {
+  if (backButtonEl) {
+    backButtonEl.disabled = state.currentScreenIndex === 0;
+  }
 }
 
 function getScreenContent(screenKey) {
@@ -243,36 +283,19 @@ function getScreenContent(screenKey) {
 // SINGLE SELECT RENDERER
 // =================================================
 function renderSingleSelect(container, screen) {
-  const hasIcons = screen.options.some(opt => opt.icon);
-
   let html = `
-    <div class="screen">
-      <div class="screen-header">
-        ${screen.subtitle ? `<p class="screen-subtitle">${screen.subtitle}</p>` : ''}
-        <h1 class="screen-title">${screen.question}</h1>
-      </div>
+    <div class="question-container">
+      <h2 class="question-text">${screen.question}</h2>
+      ${screen.subtitle ? `<p class="question-subtitle" style="text-align: center; color: var(--text-muted); margin-bottom: 16px;">${screen.subtitle}</p>` : ''}
       <div class="options-container">
   `;
 
   screen.options.forEach((option, index) => {
-    if (hasIcons) {
-      html += `
-        <button class="option-button" data-value="${option.value}" data-index="${index}">
-          <div class="option-icon">${option.icon || ''}</div>
-          <div class="option-text">
-            <span>${option.text}</span>
-          </div>
-        </button>
-      `;
-    } else {
-      html += `
-        <button class="option-button" data-value="${option.value}" data-index="${index}">
-          <div class="option-text">
-            <span>${option.text}</span>
-          </div>
-        </button>
-      `;
-    }
+    html += `
+      <button class="option-button" data-value="${option.value}" data-index="${index}">
+        ${option.text}
+      </button>
+    `;
   });
 
   html += `
@@ -392,30 +415,23 @@ function renderTimelineGraphic() {
 // =================================================
 function renderMultiSelect(container, screen) {
   let html = `
-    <div class="screen">
-      <div class="screen-header">
-        <h1 class="screen-title">${screen.question}</h1>
-      </div>
-      <div class="checkbox-container">
+    <div class="question-container">
+      <h2 class="question-text">${screen.question}</h2>
+      <div class="options-container">
   `;
 
   screen.options.forEach((option, index) => {
     html += `
-      <div class="checkbox-option" data-value="${option.value}" data-index="${index}">
-        <div class="checkbox-box">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
-            <polyline points="20 6 9 17 4 12"></polyline>
-          </svg>
-        </div>
-        <span class="checkbox-label">${option.text}</span>
-      </div>
+      <button class="option-button multi-select" data-value="${option.value}" data-index="${index}">
+        ${option.text}
+      </button>
     `;
   });
 
   html += `
       </div>
       <div id="validationContainer"></div>
-      <button class="btn btn-primary mt-lg" id="continueBtn">Continue</button>
+      <button class="btn-primary" id="continueBtn">Continue</button>
     </div>
   `;
 
@@ -424,7 +440,7 @@ function renderMultiSelect(container, screen) {
   const selectedValues = [];
 
   // Add click handlers
-  container.querySelectorAll('.checkbox-option').forEach(option => {
+  container.querySelectorAll('.option-button.multi-select').forEach(option => {
     option.addEventListener('click', () => {
       const value = option.dataset.value;
 
@@ -432,7 +448,7 @@ function renderMultiSelect(container, screen) {
       if (value === 'nothing') {
         // Deselect all others
         selectedValues.length = 0;
-        container.querySelectorAll('.checkbox-option').forEach(o => o.classList.remove('selected'));
+        container.querySelectorAll('.option-button.multi-select').forEach(o => o.classList.remove('selected'));
         option.classList.add('selected');
         selectedValues.push(value);
       } else {
@@ -523,10 +539,8 @@ function updateMultiSelectValidation(screen, selectedValues) {
 // =================================================
 function renderSlider(container, screen) {
   let html = `
-    <div class="screen">
-      <div class="screen-header">
-        <h1 class="screen-title">${screen.question}</h1>
-      </div>
+    <div class="question-container">
+      <h2 class="question-text">${screen.question}</h2>
       <div class="slider-container">
         <div class="slider-labels">
           <span class="slider-label">${screen.leftAnchor}</span>
@@ -545,7 +559,7 @@ function renderSlider(container, screen) {
         </div>
       </div>
       <div id="validationContainer"></div>
-      <button class="btn btn-primary mt-lg" id="continueBtn">Continue</button>
+      <button class="btn-primary" id="continueBtn">Continue</button>
     </div>
   `;
 
@@ -629,8 +643,8 @@ function calculateGutBrainScore() {
 // =================================================
 function renderInfoScreen(container, screen) {
   let html = `
-    <div class="screen info-screen">
-      <h1 class="info-headline">${screen.headline}</h1>
+    <div class="question-container info-screen">
+      <h2 class="question-text">${screen.headline}</h2>
   `;
 
   if (screen.body) {
@@ -663,7 +677,7 @@ function renderInfoScreen(container, screen) {
   }
 
   html += `
-      <button class="btn btn-primary mt-xl" id="continueBtn">${screen.buttonText || 'Continue'}</button>
+      <button class="btn-primary" id="continueBtn">${screen.buttonText || 'Continue'}</button>
     </div>
   `;
 
@@ -691,10 +705,8 @@ function renderKnowledgeQuiz(container, screen) {
   const hasIcons = screen.options.some(opt => opt.icon);
 
   let html = `
-    <div class="screen">
-      <div class="screen-header">
-        <h1 class="screen-title">${screen.question}</h1>
-      </div>
+    <div class="question-container">
+      <h2 class="question-text">${screen.question}</h2>
       <div class="options-container">
   `;
 
@@ -703,17 +715,13 @@ function renderKnowledgeQuiz(container, screen) {
       html += `
         <button class="option-button" data-value="${option.value}" data-correct="${option.correct}" data-index="${index}">
           <div class="option-icon">${option.icon}</div>
-          <div class="option-text">
-            <span>${option.text}</span>
-          </div>
+          <span>${option.text}</span>
         </button>
       `;
     } else {
       html += `
         <button class="option-button" data-value="${option.value}" data-correct="${option.correct}" data-index="${index}">
-          <div class="option-text">
-            <span>${option.text}</span>
-          </div>
+          ${option.text}
         </button>
       `;
     }
@@ -758,7 +766,7 @@ function renderKnowledgeFeedback(container, screen) {
   const feedback = isCorrect ? screen.feedback.correct : screen.feedback.incorrect;
 
   let html = `
-    <div class="screen feedback-screen">
+    <div class="question-container feedback-screen">
       <div class="feedback-card ${isCorrect ? 'correct' : 'incorrect'}">
         <div class="feedback-icon">${feedback.icon}</div>
         <h2 class="feedback-title">${feedback.title}</h2>
@@ -786,7 +794,7 @@ function renderKnowledgeFeedback(container, screen) {
 
   html += `
       </div>
-      <button class="btn btn-primary mt-lg" id="continueBtn">Continue</button>
+      <button class="btn-primary" id="continueBtn">Continue</button>
     </div>
   `;
 
@@ -804,18 +812,16 @@ function renderKnowledgeFeedback(container, screen) {
 // =================================================
 function renderEmailInput(container, screen) {
   let html = `
-    <div class="screen">
-      <div class="screen-header">
-        <h1 class="screen-title">${screen.headline}</h1>
-        ${screen.subtitle ? `<p class="screen-subtitle">${screen.subtitle}</p>` : ''}
-      </div>
+    <div class="question-container">
+      <h2 class="question-text">${screen.headline}</h2>
+      ${screen.subtitle ? `<p class="question-subtitle">${screen.subtitle}</p>` : ''}
       <div class="input-container">
         <input type="email" class="email-input" id="emailInput"
           placeholder="${screen.placeholder}" autocomplete="email">
         <p class="input-error hidden" id="emailError">Please enter a valid email address</p>
       </div>
-      <button class="btn btn-primary" id="continueBtn">${screen.buttonText}</button>
-      <p class="text-center mt-md" style="font-size: 0.875rem; color: var(--text-muted);">${screen.privacyText}</p>
+      <button class="btn-primary" id="continueBtn">${screen.buttonText}</button>
+      <p class="privacy-text">${screen.privacyText}</p>
     </div>
   `;
 
@@ -878,11 +884,9 @@ function renderTextInput(container, screen) {
   const hint = screen.hint ? screen.hint.replace('{goal}', goalText) : '';
 
   let html = `
-    <div class="screen">
-      <div class="screen-header">
-        <h1 class="screen-title">${screen.question}</h1>
-        ${screen.subtitle ? `<p class="screen-subtitle">${screen.subtitle}</p>` : ''}
-      </div>
+    <div class="question-container">
+      <h2 class="question-text">${screen.question}</h2>
+      ${screen.subtitle ? `<p class="question-subtitle">${screen.subtitle}</p>` : ''}
       <div class="input-container">
   `;
 
@@ -902,11 +906,11 @@ function renderTextInput(container, screen) {
   html += `
       </div>
       <div id="validationContainer"></div>
-      <button class="btn btn-primary" id="continueBtn">${screen.buttonText || 'Continue'}</button>
+      <button class="btn-primary" id="continueBtn">${screen.buttonText || 'Continue'}</button>
   `;
 
   if (screen.optional) {
-    html += `<button class="btn btn-skip mt-md" id="skipBtn">${screen.skipText}</button>`;
+    html += `<button class="btn-skip" id="skipBtn">${screen.skipText}</button>`;
   }
 
   html += `</div>`;
@@ -983,13 +987,13 @@ function renderGoalReminder(container, reminderKey) {
     .replace('{name}', name);
 
   const html = `
-    <div class="screen">
+    <div class="question-container">
       <div class="goal-reminder">
         <div class="goal-reminder-icon">🎯</div>
         <h2 class="goal-reminder-title">Remember your goal</h2>
         <p class="goal-reminder-text">${message.replace(/\n/g, '<br>')}</p>
       </div>
-      <button class="btn btn-primary mt-xl" id="continueBtn">Continue</button>
+      <button class="btn-primary" id="continueBtn">Continue</button>
     </div>
   `;
 
@@ -1012,8 +1016,8 @@ function renderLoadingScreen(container) {
   const loading = quizContent.loadingSequence;
 
   let html = `
-    <div class="screen loading-screen">
-      <h1 class="loading-title">${loading.headline}</h1>
+    <div class="question-container loading-screen">
+      <h2 class="question-text">${loading.headline}</h2>
       <div class="loading-progress-list">
   `;
 
@@ -1094,11 +1098,13 @@ async function startLoadingAnimation() {
 
   // Show completion message
   setTimeout(() => {
-    const container = document.getElementById('quizContainer');
-    const completionDiv = document.createElement('div');
-    completionDiv.className = 'validation-card text-center mt-lg';
-    completionDiv.innerHTML = `<p class="validation-text" style="font-size: 1.125rem;">${quizContent.loadingSequence.completionMessage}</p>`;
-    container.querySelector('.loading-screen').appendChild(completionDiv);
+    const loadingScreen = document.querySelector('.loading-screen');
+    if (loadingScreen) {
+      const completionDiv = document.createElement('div');
+      completionDiv.className = 'validation-card';
+      completionDiv.innerHTML = `<p class="validation-text">${quizContent.loadingSequence.completionMessage}</p>`;
+      loadingScreen.appendChild(completionDiv);
+    }
 
     // Submit final data
     submitFinalData();
@@ -1209,7 +1215,7 @@ function renderNormalResults(container) {
   const frequencyInsight = frequencyInsights[state.answers.symptom_frequency] || '';
 
   let html = `
-    <div class="screen results-screen">
+    <div class="question-container results-screen">
       <!-- Header -->
       <div class="results-header">
         <p class="results-greeting">${name}, your protocol is ready.</p>
@@ -1369,7 +1375,7 @@ function renderRedFlagResults(container) {
   );
 
   let html = `
-    <div class="screen red-flag-screen">
+    <div class="question-container red-flag-screen">
       <img src="${practitioner.photo}" alt="${practitioner.name}" class="red-flag-photo">
 
       <h1 class="red-flag-title">"${name}, I need to be direct with you."</h1>
@@ -1531,25 +1537,43 @@ function handleBack() {
 // PROGRESS BAR
 // =================================================
 function updateProgressBar() {
-  const progress = (state.currentScreenIndex / CONFIG.TOTAL_SCREENS) * 100;
-  document.querySelector('.progress-fill').style.width = progress + '%';
+  const segments = document.querySelectorAll('.progress-segment');
+  const dots = document.querySelectorAll('.progress-dot');
 
-  // Update segments
-  const segmentsContainer = document.getElementById('progressSegments');
-  segmentsContainer.innerHTML = '';
-
-  for (let i = 0; i < CONFIG.TOTAL_BLOCKS; i++) {
-    const segment = document.createElement('div');
-    segment.className = 'progress-segment';
-
-    if (i < state.currentBlockIndex) {
-      segment.classList.add('completed');
-    } else if (i === state.currentBlockIndex) {
-      segment.classList.add('active');
-    }
-
-    segmentsContainer.appendChild(segment);
+  // Calculate progress within current section
+  let questionsBeforeCurrentSection = 0;
+  for (let i = 0; i < state.currentBlockIndex; i++) {
+    questionsBeforeCurrentSection += QUESTIONS_PER_SECTION[i];
   }
+  const currentQuestionInSection = state.currentScreenIndex - questionsBeforeCurrentSection;
+  const questionsInCurrentSection = QUESTIONS_PER_SECTION[state.currentBlockIndex] || 1;
+  const progressInSection = Math.min(currentQuestionInSection / questionsInCurrentSection, 1);
+
+  segments.forEach((segment, index) => {
+    const fill = segment.querySelector('.segment-fill');
+    segment.classList.remove('completed', 'current');
+
+    if (index < state.currentBlockIndex) {
+      // Completed sections
+      segment.classList.add('completed');
+      if (fill) fill.style.width = '100%';
+    } else if (index === state.currentBlockIndex) {
+      // Current section - show partial fill
+      segment.classList.add('current');
+      if (fill) fill.style.width = (progressInSection * 100) + '%';
+    } else {
+      // Future sections
+      if (fill) fill.style.width = '0%';
+    }
+  });
+
+  // Update dots
+  dots.forEach((dot, index) => {
+    dot.classList.remove('active');
+    if (index < state.currentBlockIndex) {
+      dot.classList.add('active');
+    }
+  });
 }
 
 // =================================================
@@ -1645,6 +1669,17 @@ function buildUserRecord(isPartial) {
     hardest_part: null,
     dream_outcome: state.answers.user_vision || null,
 
+    // Quiz-4 specific fields (new)
+    user_timeline: state.answers.user_timeline || null,
+    knowledge_score: state.knowledgeScore || 0,
+    gut_brain_score: state.gutBrainScore || null,
+    slider_stress_gut: state.answers.stress_gut_score || null,
+    slider_food_anxiety: state.answers.food_anxiety_score || null,
+    slider_mood_impact: state.answers.mood_impact_score || null,
+    slider_thought_frequency: state.answers.thought_frequency_score || null,
+    symptom_timing: state.answers.symptom_timing || null,
+    symptom_trigger_timing: state.answers.symptom_trigger_timing || null,
+
     // Status
     role: 'member',
     status: 'lead'
@@ -1698,6 +1733,20 @@ async function sendWebhook(eventType) {
     // Red flags
     had_red_flags: state.hasRedFlags || false,
     red_flag_evaluated_cleared: false,
+
+    // Quiz-4 specific fields (new)
+    user_timeline: state.answers.user_timeline || '',
+    knowledge_score: state.knowledgeScore || 0,
+    gut_brain_score: state.gutBrainScore ? state.gutBrainScore.toFixed(2) : '',
+    slider_stress_gut: state.answers.stress_gut_score || '',
+    slider_food_anxiety: state.answers.food_anxiety_score || '',
+    slider_mood_impact: state.answers.mood_impact_score || '',
+    slider_thought_frequency: state.answers.thought_frequency_score || '',
+    symptom_timing: state.answers.symptom_timing || '',
+    symptom_trigger_timing: state.answers.symptom_trigger_timing || '',
+    knowledge_q1_correct: state.answers.knowledge_q1_correct ? 'true' : 'false',
+    knowledge_q2_correct: state.answers.knowledge_q2_correct ? 'true' : 'false',
+    knowledge_q3_correct: state.answers.knowledge_q3_correct ? 'true' : 'false',
 
     // Tracking
     source: CONFIG.SOURCE_TRACKING,
