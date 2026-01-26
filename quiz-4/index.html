@@ -4,8 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Gut Health Assessment | Gut Healing Academy</title>
+  <meta name="description" content="Take our personalized gut health assessment to discover your unique symptom pattern and get matched with the right protocol.">
 
-  <!-- Google Tag Manager - REQUIRED -->
+  <!-- Google Tag Manager -->
   <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
   new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
   j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
@@ -13,13 +14,13 @@
   })(window,document,'script','dataLayer','GTM-KQ3LKTBL');</script>
   <!-- End Google Tag Manager -->
 
-  <!-- Fonts -->
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="/assets/favicon.png">
+
+  <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
-
-  <!-- Favicon -->
-  <link rel="icon" type="image/png" href="/assets/favicon.png">
 
   <!-- Styles -->
   <link rel="stylesheet" href="styles.css">
@@ -35,45 +36,79 @@
     s.parentNode.insertBefore(t,s)}(window, document,'script',
     'https://connect.facebook.net/en_US/fbevents.js');
     fbq('init', '1088554609476230');
-    fbq('track', 'PageView');
   </script>
   <noscript><img height="1" width="1" style="display:none"
     src="https://www.facebook.com/tr?id=1088554609476230&ev=PageView&noscript=1"
   /></noscript>
   <!-- End Meta Pixel Code -->
-
-  <!-- Open Graph -->
-  <meta property="og:title" content="Gut Health Assessment | Gut Healing Academy">
-  <meta property="og:description" content="Take our free gut health assessment to discover your personalized protocol.">
-  <meta property="og:type" content="website">
 </head>
 <body>
-  <!-- Google Tag Manager (noscript) - REQUIRED -->
+  <!-- Google Tag Manager (noscript) -->
   <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KQ3LKTBL"
   height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <!-- End Google Tag Manager (noscript) -->
 
-  <!-- Progress Bar -->
-  <div class="progress-container">
-    <div class="progress-bar" id="progressBar">
-      <div class="progress-fill"></div>
-    </div>
-    <div class="progress-segments" id="progressSegments">
-      <!-- Segments will be rendered by JS -->
-    </div>
-  </div>
-
-  <!-- Quiz Container -->
   <div class="quiz-container" id="quizContainer">
-    <!-- Content rendered by JavaScript -->
-  </div>
+    <!-- Quiz UI -->
+    <div class="quiz-ui" id="quizUI">
+      <!-- Header -->
+      <div class="quiz-header" id="quizHeader">
+        <button class="back-button" id="backButton" disabled>
+          &#8592;
+        </button>
+        <span class="section-label" id="sectionLabel">YOUR GOALS</span>
+      </div>
 
-  <!-- Back Button (fixed) -->
-  <button class="back-button" id="backButton" style="display: none;">
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-      <path d="M19 12H5M12 19l-7-7 7-7"/>
-    </svg>
-  </button>
+      <!-- Progress Bar (Quiz-4: 7 blocks) -->
+      <div class="progress-container" id="progressContainer">
+        <!-- Block 0: GOALS & CONTEXT -->
+        <div class="progress-segment" data-section="0">
+          <div class="segment-fill"></div>
+        </div>
+        <div class="progress-dot" data-section="0"></div>
+
+        <!-- Block 1: SYMPTOM PATTERNS -->
+        <div class="progress-segment" data-section="1">
+          <div class="segment-fill"></div>
+        </div>
+        <div class="progress-dot" data-section="1"></div>
+
+        <!-- Block 2: WHY DIFFERENT -->
+        <div class="progress-segment" data-section="2">
+          <div class="segment-fill"></div>
+        </div>
+        <div class="progress-dot" data-section="2"></div>
+
+        <!-- Block 3: GUT-BRAIN -->
+        <div class="progress-segment" data-section="3">
+          <div class="segment-fill"></div>
+        </div>
+        <div class="progress-dot" data-section="3"></div>
+
+        <!-- Block 4: KNOWLEDGE -->
+        <div class="progress-segment" data-section="4">
+          <div class="segment-fill"></div>
+        </div>
+        <div class="progress-dot" data-section="4"></div>
+
+        <!-- Block 5: SAFETY -->
+        <div class="progress-segment" data-section="5">
+          <div class="segment-fill"></div>
+        </div>
+        <div class="progress-dot" data-section="5"></div>
+
+        <!-- Block 6: FINAL -->
+        <div class="progress-segment" data-section="6">
+          <div class="segment-fill"></div>
+        </div>
+      </div>
+
+      <!-- Content Area -->
+      <div id="contentArea">
+        <!-- Question content will be rendered here by JavaScript -->
+      </div>
+    </div>
+  </div>
 
   <!-- Scripts -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
