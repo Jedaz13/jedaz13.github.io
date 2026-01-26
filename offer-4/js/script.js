@@ -11,8 +11,8 @@
   // =====================================================
   const STRIPE_LINKS = {
     trial_1: 'https://buy.stripe.com/cNifZigGRdrkaW45iJgA807',
-    trial_5: 'https://buy.stripe.com/5kA4gA3Q1enaaMQ9BagA805',  // $5 trial link - UPDATE WITH ACTUAL
-    trial_9: 'https://buy.stripe.com/6oE4gAcyBgvm2py3djgA806'   // $9 trial link - UPDATE WITH ACTUAL
+    trial_5: 'https://buy.stripe.com/7sY4gA62d0Eye8g7qRgA808',
+    trial_9: 'https://buy.stripe.com/14A6oI3U5drkaW4aD3gA809'
   };
 
   // =====================================================
