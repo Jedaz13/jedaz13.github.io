@@ -353,6 +353,37 @@ a:hover {
   color: var(--primary-teal);
 }
 
+/* Protocol Includes Card - Wider & Prominent */
+.protocol-includes-card {
+  position: relative;
+  margin-left: -12px;
+  margin-right: -12px;
+  padding-left: 24px;
+  padding-right: 24px;
+  border: 2px solid var(--sage);
+  background: linear-gradient(to bottom, var(--white) 0%, var(--bg-sage-subtle) 100%);
+}
+
+/* Pattern Interpretation Item */
+.pattern-item {
+  background: var(--citrus-pale);
+  border-radius: var(--radius);
+  margin: -4px -8px 12px -8px;
+  padding: 16px !important;
+  border-bottom: none !important;
+}
+
+.pattern-icon {
+  background: var(--citrus) !important;
+  color: var(--forest) !important;
+  font-size: 10px;
+}
+
+.pattern-highlight {
+  color: var(--primary-teal);
+  font-weight: 600;
+}
+
 /* Goal Section */
 .goal-section .goal-quote {
   font-style: italic;
@@ -668,6 +699,19 @@ a:hover {
 
   .price-summary-card {
     padding: 24px;
+  }
+
+  /* Protocol Includes Card - More prominent on desktop */
+  .protocol-includes-card {
+    margin-left: -20px;
+    margin-right: -20px;
+    padding-left: 32px;
+    padding-right: 32px;
+  }
+
+  .pattern-item {
+    margin: -4px -12px 16px -12px;
+    padding: 20px !important;
   }
 }
 
