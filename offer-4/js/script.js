@@ -249,20 +249,10 @@
         // Update state
         state.selectedPrice = parseInt(this.dataset.price);
 
-        // Update displayed price in step 2
-        updateSelectedPriceDisplay();
-
         // Track selection
         trackPriceSelection(state.selectedPrice);
       });
     });
-  }
-
-  function updateSelectedPriceDisplay() {
-    const priceDisplay = document.getElementById('selected-price');
-    if (priceDisplay) {
-      priceDisplay.textContent = state.selectedPrice;
-    }
   }
 
   // =====================================================
@@ -274,18 +264,41 @@
     if (continueBtn) {
       continueBtn.addEventListener('click', function() {
         showStep(2);
+        syncDropdownWithSelection();
         trackStepView('step2');
       });
     }
 
-    // Change price (go back to Step 1)
-    const changeBtn = document.getElementById('changePrice');
-    if (changeBtn) {
-      changeBtn.addEventListener('click', function() {
-        showStep(1);
-        trackStepView('step1_return');
+    // Price dropdown in Step 2
+    const priceDropdown = document.getElementById('priceDropdown');
+    if (priceDropdown) {
+      priceDropdown.addEventListener('change', function() {
+        const newPrice = parseInt(this.value);
+        state.selectedPrice = newPrice;
+
+        // Also update Step 1 buttons to stay in sync
+        syncStep1Buttons(newPrice);
+
+        trackPriceSelection(newPrice);
       });
     }
+  }
+
+  function syncDropdownWithSelection() {
+    const priceDropdown = document.getElementById('priceDropdown');
+    if (priceDropdown) {
+      priceDropdown.value = state.selectedPrice.toString();
+    }
+  }
+
+  function syncStep1Buttons(price) {
+    const priceButtons = document.querySelectorAll('.price-btn');
+    priceButtons.forEach(function(btn) {
+      btn.classList.remove('selected');
+      if (parseInt(btn.dataset.price) === price) {
+        btn.classList.add('selected');
+      }
+    });
   }
 
   function showStep(stepNumber) {
