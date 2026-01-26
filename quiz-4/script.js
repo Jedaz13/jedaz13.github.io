@@ -7,7 +7,7 @@
 // CONFIGURATION
 // =================================================
 const CONFIG = {
-  OFFER_URL: '/offer/',
+  OFFER_URL: '/offer-4/',
   SOURCE_TRACKING: 'quiz-4',
   WEBHOOK_URL: 'https://hook.eu1.make.com/5uubblyocz70syh9xptkg248ycauy5pd',
   SUPABASE_URL: 'https://mwabljnngygkmahjgvps.supabase.co',
@@ -1771,7 +1771,11 @@ function redirectToOffer() {
   if (state.treatmentsTried.length > 0) {
     params.set('treatments', state.treatmentsTried.join(','));
     params.set('treatments_formatted', formatTreatmentsList(state.treatmentsTried));
+    params.set('treatments_tried_count', state.treatmentsTried.filter(t => t !== 'nothing').length.toString());
   }
+
+  // Gut-brain score (for offer-4)
+  params.set('gut_brain_score', state.gutBrainScore.toFixed(1));
 
   // Stress level
   params.set('stress_level', state.gutBrainScore >= 4 ? 'significant' : (state.gutBrainScore >= 3 ? 'some' : 'none'));
