@@ -430,7 +430,6 @@ function renderMultiSelect(container, screen) {
 
   html += `
       </div>
-      <div id="validationContainer"></div>
       <button class="btn-primary" id="continueBtn">Continue</button>
     </div>
   `;
@@ -469,13 +468,10 @@ function renderMultiSelect(container, screen) {
           selectedValues.push(value);
         }
       }
-
-      // Show validation based on count
-      updateMultiSelectValidation(screen, selectedValues);
     });
   });
 
-  // Continue button
+  // Continue button - show validation modal then advance
   document.getElementById('continueBtn').addEventListener('click', () => {
     state.answers[screen.storeAs] = selectedValues;
 
@@ -492,15 +488,20 @@ function renderMultiSelect(container, screen) {
       // May influence protocol
     }
 
-    advanceToNextScreen();
+    // Show validation modal for multi-select
+    const validationMessage = getMultiSelectValidation(screen, selectedValues);
+    if (validationMessage) {
+      showValidationModal(validationMessage, screen.reinforcementMessage, advanceToNextScreen);
+    } else {
+      advanceToNextScreen();
+    }
   });
 }
 
-function updateMultiSelectValidation(screen, selectedValues) {
-  const validationContainer = document.getElementById('validationContainer');
+function getMultiSelectValidation(screen, selectedValues) {
   const count = selectedValues.length;
 
-  if (!screen.validationMessages) return;
+  if (!screen.validationMessages) return null;
 
   let message = '';
 
@@ -524,14 +525,38 @@ function updateMultiSelectValidation(screen, selectedValues) {
     }
   }
 
-  if (message) {
-    validationContainer.innerHTML = `
-      <div class="validation-card">
+  return message || null;
+}
+
+function showValidationModal(message, reinforcement, onContinue) {
+  // Create modal overlay
+  const modal = document.createElement('div');
+  modal.className = 'validation-modal-overlay';
+  modal.innerHTML = `
+    <div class="validation-modal">
+      <div class="validation-modal-content">
         <p class="validation-text">${message}</p>
-        ${screen.reinforcementMessage ? `<p class="validation-text mt-md"><em>${screen.reinforcementMessage}</em></p>` : ''}
+        ${reinforcement ? `<p class="validation-text reinforcement"><em>${reinforcement}</em></p>` : ''}
       </div>
-    `;
-  }
+      <button class="btn-primary" id="modalContinueBtn">Continue</button>
+    </div>
+  `;
+
+  document.body.appendChild(modal);
+
+  // Animate in
+  requestAnimationFrame(() => {
+    modal.classList.add('active');
+  });
+
+  // Continue button closes modal and advances
+  modal.querySelector('#modalContinueBtn').addEventListener('click', () => {
+    modal.classList.remove('active');
+    setTimeout(() => {
+      modal.remove();
+      onContinue();
+    }, 200);
+  });
 }
 
 // =================================================
@@ -647,6 +672,15 @@ function renderInfoScreen(container, screen) {
       <h2 class="question-text">${screen.headline}</h2>
   `;
 
+  // Add image if specified
+  if (screen.image) {
+    html += `
+      <div class="info-image-container">
+        <img src="${screen.image}" alt="${screen.imageAlt || ''}" class="info-image" onerror="this.style.display='none'">
+      </div>
+    `;
+  }
+
   if (screen.body) {
     html += `<p class="info-body">${screen.body.replace(/\n/g, '<br>')}</p>`;
   }
@@ -758,7 +792,7 @@ function handleKnowledgeAnswer(screen, value, isCorrect) {
   // Show feedback
   state.showingFeedback = true;
   state.currentFeedbackCorrect = isCorrect;
-  renderKnowledgeFeedback(document.getElementById('quizContainer'), screen);
+  renderKnowledgeFeedback(contentEl, screen);
 }
 
 function renderKnowledgeFeedback(container, screen) {
@@ -975,12 +1009,18 @@ function renderTextInput(container, screen) {
 }
 
 // =================================================
-// GOAL REMINDER RENDERER
+// GOAL REMINDER / JOURNEY MAP RENDERER
 // =================================================
 function renderGoalReminder(container, reminderKey) {
   const reminder = reminderKey === 'goal_reminder_1' ? quizContent.goalReminder1 : quizContent.goalReminder2;
   const goalText = quizContent.goalTexts[state.answers.user_goal] || 'feel better';
   const name = state.userData.name || 'friend';
+
+  // Check if this is a journey map type (first reminder)
+  if (reminder.type === 'journey_map') {
+    renderJourneyMap(container, reminder, goalText);
+    return;
+  }
 
   let message = reminder.template
     .replace('{goal}', goalText)
@@ -1003,6 +1043,92 @@ function renderGoalReminder(container, reminderKey) {
   trackEvent('quiz_goal_reminder', {
     quiz_version: 'v4',
     reminder_number: reminder.reminderNumber,
+    user_goal: state.answers.user_goal
+  });
+
+  document.getElementById('continueBtn').addEventListener('click', advanceToNextScreen);
+}
+
+// =================================================
+// JOURNEY MAP RENDERER - "Your Path Forward"
+// =================================================
+function renderJourneyMap(container, reminder, goalText) {
+  const treatments = state.treatmentsTried || [];
+  const treatmentLabels = treatments
+    .filter(t => t !== 'nothing')
+    .slice(0, 4) // Show max 4 treatments
+    .map(t => quizContent.treatmentLabels[t] || t);
+
+  const hasTriedThings = treatmentLabels.length > 0;
+
+  let html = `
+    <div class="question-container journey-map-screen">
+      <h2 class="question-text">${reminder.headline}</h2>
+
+      <!-- Goal Statement -->
+      <div class="journey-goal-statement">
+        <span class="journey-goal-icon">🎯</span>
+        <span>${reminder.template.replace('{goal}', goalText)}</span>
+      </div>
+
+      <!-- Journey Timeline -->
+      <div class="journey-timeline">
+        <!-- PAST -->
+        <div class="journey-phase past">
+          <div class="journey-phase-label">WHAT YOU'VE TRIED</div>
+          <div class="journey-phase-content">
+            ${hasTriedThings ? `
+              <div class="journey-tried-items">
+                ${treatmentLabels.map(t => `<span class="journey-tried-item">${t}</span>`).join('')}
+                ${treatments.length > 4 ? `<span class="journey-tried-more">+${treatments.length - 4} more</span>` : ''}
+              </div>
+              <p class="journey-phase-note">These can work — they just needed the right sequence.</p>
+            ` : `
+              <p class="journey-phase-note">Starting fresh gives us a clear baseline.</p>
+            `}
+          </div>
+        </div>
+
+        <!-- Arrow -->
+        <div class="journey-arrow">→</div>
+
+        <!-- NOW -->
+        <div class="journey-phase now">
+          <div class="journey-phase-label">THE MISSING PIECE</div>
+          <div class="journey-phase-content">
+            <div class="journey-missing-piece">
+              <span class="journey-piece-icon">📊</span>
+              <span>Tracking + Practitioner Reviews</span>
+            </div>
+            <p class="journey-phase-note">Someone who adjusts based on YOUR response.</p>
+          </div>
+        </div>
+
+        <!-- Arrow -->
+        <div class="journey-arrow">→</div>
+
+        <!-- FUTURE -->
+        <div class="journey-phase future">
+          <div class="journey-phase-label">YOUR GOAL</div>
+          <div class="journey-phase-content">
+            <div class="journey-goal-destination">
+              <span class="journey-goal-icon-large">✨</span>
+              <span>${goalText}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <button class="btn-primary" id="continueBtn">Continue</button>
+    </div>
+  `;
+
+  container.innerHTML = html;
+
+  // Track journey map view
+  trackEvent('quiz_journey_map', {
+    quiz_version: 'v4',
+    treatments_tried_count: treatments.length,
     user_goal: state.answers.user_goal
   });
 
