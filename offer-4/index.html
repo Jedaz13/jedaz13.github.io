@@ -130,12 +130,36 @@
             <h2 class="section-heading">PRICE TODAY</h2>
             <div class="price-line">
               <span class="price-label-line">7-day trial — full access</span>
-              <div class="price-selector">
-                <select class="price-dropdown" id="priceDropdown">
-                  <option value="1">$1</option>
-                  <option value="5">$5</option>
-                  <option value="9">$9</option>
-                </select>
+              <div class="price-selector-custom" id="priceSelector">
+                <button class="price-selector-trigger" id="priceTrigger">
+                  <span class="price-selector-value" id="priceValue">$1</span>
+                  <svg class="price-selector-arrow" width="12" height="12" viewBox="0 0 12 12" fill="none">
+                    <path d="M2.5 4.5L6 8L9.5 4.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </button>
+                <div class="price-selector-dropdown" id="priceDropdownMenu">
+                  <button class="price-option selected" data-value="1">
+                    <span class="price-option-amount">$1</span>
+                    <span class="price-option-label">Budget-friendly</span>
+                    <svg class="price-option-check" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                      <path d="M13.5 4.5L6 12L2.5 8.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                  </button>
+                  <button class="price-option" data-value="5">
+                    <span class="price-option-amount">$5</span>
+                    <span class="price-option-label">Standard</span>
+                    <svg class="price-option-check" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                      <path d="M13.5 4.5L6 12L2.5 8.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                  </button>
+                  <button class="price-option" data-value="9">
+                    <span class="price-option-amount">$9</span>
+                    <span class="price-option-label">Support others</span>
+                    <svg class="price-option-check" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                      <path d="M13.5 4.5L6 12L2.5 8.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                  </button>
+                </div>
               </div>
             </div>
 
