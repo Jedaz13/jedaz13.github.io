@@ -10,7 +10,7 @@
   // STRIPE PAYMENT LINKS
   // =====================================================
   const STRIPE_LINKS = {
-    trial_1: 'https://buy.stripe.com/cNifZigGRdrkaW45iJgA807',
+    trial_1: 'https://buy.stripe.com/bJe28seyJaf8d4ch1rgA802',
     trial_5: 'https://buy.stripe.com/7sY4gA62d0Eye8g7qRgA808',
     trial_9: 'https://buy.stripe.com/14A6oI3U5drkaW4aD3gA809'
   };
@@ -269,26 +269,75 @@
       });
     }
 
-    // Price dropdown in Step 2
-    const priceDropdown = document.getElementById('priceDropdown');
-    if (priceDropdown) {
-      priceDropdown.addEventListener('change', function() {
-        const newPrice = parseInt(this.value);
+    // Custom price dropdown in Step 2
+    initCustomDropdown();
+  }
+
+  function initCustomDropdown() {
+    const selector = document.getElementById('priceSelector');
+    const trigger = document.getElementById('priceTrigger');
+    const options = document.querySelectorAll('.price-option');
+
+    if (!selector || !trigger) return;
+
+    // Toggle dropdown on trigger click
+    trigger.addEventListener('click', function(e) {
+      e.stopPropagation();
+      selector.classList.toggle('open');
+    });
+
+    // Handle option selection
+    options.forEach(function(option) {
+      option.addEventListener('click', function(e) {
+        e.stopPropagation();
+        const newPrice = parseInt(this.dataset.value);
         state.selectedPrice = newPrice;
 
-        // Also update Step 1 buttons to stay in sync
+        // Update UI
+        updateCustomDropdownUI(newPrice);
         syncStep1Buttons(newPrice);
+
+        // Close dropdown
+        selector.classList.remove('open');
 
         trackPriceSelection(newPrice);
       });
+    });
+
+    // Close dropdown when clicking outside
+    document.addEventListener('click', function(e) {
+      if (!selector.contains(e.target)) {
+        selector.classList.remove('open');
+      }
+    });
+
+    // Close on escape key
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        selector.classList.remove('open');
+      }
+    });
+  }
+
+  function updateCustomDropdownUI(price) {
+    // Update trigger display
+    const priceValue = document.getElementById('priceValue');
+    if (priceValue) {
+      priceValue.textContent = '$' + price;
     }
+
+    // Update selected state on options
+    const options = document.querySelectorAll('.price-option');
+    options.forEach(function(option) {
+      option.classList.remove('selected');
+      if (parseInt(option.dataset.value) === price) {
+        option.classList.add('selected');
+      }
+    });
   }
 
   function syncDropdownWithSelection() {
-    const priceDropdown = document.getElementById('priceDropdown');
-    if (priceDropdown) {
-      priceDropdown.value = state.selectedPrice.toString();
-    }
+    updateCustomDropdownUI(state.selectedPrice);
   }
 
   function syncStep1Buttons(price) {
