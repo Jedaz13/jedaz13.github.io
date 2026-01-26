@@ -44,7 +44,7 @@
 
           <p class="step-subtitle">We want everyone to be able to try this — regardless of budget.</p>
 
-          <p class="step-body">Our 7-day trial costs us around $5 to support. Choose what works for you:</p>
+          <p class="step-body">Our 7-day trial costs us around $9 to support. Choose what works for you:</p>
 
           <div class="price-selection">
             <p class="price-label">Select your trial price:</p>
@@ -89,7 +89,7 @@
               <li class="include-item">
                 <span class="check-icon">&#10003;</span>
                 <div class="include-content">
-                  <strong>Weekly practitioner review</strong> — Rebecca or another registered nutritionist looks at your tracking and tells you what to adjust <em>(This is the part most programs skip)</em>
+                  <strong>Weekly practitioner review</strong> — Registered nutritionists look at your tracking and tell you what to adjust <em>(This is the part most programs skip)</em>
                 </div>
               </li>
               <li class="include-item">
@@ -130,8 +130,13 @@
             <h2 class="section-heading">PRICE TODAY</h2>
             <div class="price-line">
               <span class="price-label-line">7-day trial — full access</span>
-              <span class="price-value">$<span id="selected-price">1</span></span>
-              <button class="change-link" id="changePrice">[Change]</button>
+              <div class="price-selector">
+                <select class="price-dropdown" id="priceDropdown">
+                  <option value="1">$1</option>
+                  <option value="5">$5</option>
+                  <option value="9">$9</option>
+                </select>
+              </div>
             </div>
 
             <div class="after-trial">
@@ -140,10 +145,6 @@
                 <div class="option-line">
                   <span>Monthly membership</span>
                   <span>$47/month</span>
-                </div>
-                <div class="option-line highlight">
-                  <span>or save 47% with annual</span>
-                  <span>$297/year</span>
                 </div>
               </div>
             </div>
