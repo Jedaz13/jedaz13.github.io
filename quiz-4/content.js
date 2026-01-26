@@ -4,8 +4,8 @@
    ===================================================== */
 
 const quizContent = {
-  // Member count used throughout
-  memberCount: 847,
+  // Member count - placeholder for future use
+  memberCount: null,
 
   // =================================================
   // BLOCK 1: GOALS & CONTEXT (Screens 1-5)
@@ -342,44 +342,41 @@ const quizContent = {
   },
 
   // =================================================
-  // GOAL REMINDER #1 (After Screen 10)
+  // GOAL REMINDER #1 - Combined with "Your Path Forward" Journey Map
   // =================================================
   goalReminder1: {
     id: 'goal_reminder_1',
-    type: 'goal_reminder',
+    type: 'journey_map',
     reminderNumber: 1,
-    template: "Remember: You said you want to {goal}.\n\nEvery question helps us get you there faster."
+    headline: 'YOUR PATH FORWARD',
+    template: "You want to {goal}."
   },
 
   // =================================================
   // BLOCK 3: WHY WE'RE DIFFERENT (Screen 11)
+  // Now a simple transition screen, main content moved to journey map
   // =================================================
   block3: {
     id: 'why_different',
-    label: 'Why We\'re Different',
+    label: 'Why This Works',
     screens: [
-      // Screen 11: Info Screen
+      // Screen 11: Simple transition - content is minimal since journey map covers it
       {
         id: 'why_programs_fail',
         screenNumber: 11,
         type: 'info',
-        headline: 'WHY MOST GUT PROGRAMS FAIL',
+        headline: "HERE'S WHAT CHANGES THIS TIME",
         comparison: {
           problem: {
             title: '❌ The Cycle You\'ve Been Stuck In',
             text: "Get protocol → Try alone → Don't know if it's working → Give up too early OR stick with it too long → Back to square one"
           },
           solution: {
-            title: '✓ How This Works',
+            title: '✓ What Makes This Different',
             text: "Get protocol → Track daily (3 min) → Practitioner reviews → Adjustments based on YOUR response → Progress"
           }
         },
-        statistic: {
-          number: '78%',
-          label: 'of members who complete their first month report significant symptom improvement',
-          subtext: '— Based on 847 active members'
-        },
-        buttonText: 'Got it'
+        buttonText: 'Continue'
       }
     ]
   },
@@ -391,13 +388,15 @@ const quizContent = {
     id: 'gut_brain',
     label: 'Gut-Brain Connection',
     screens: [
-      // Screen 12: Intro
+      // Screen 12: Intro with image
       {
         id: 'gut_brain_intro',
         screenNumber: 12,
         type: 'info',
-        headline: 'UNDERSTANDING YOUR GUT-BRAIN CONNECTION',
-        body: "Your gut has its own nervous system — 500 million neurons. That's more than your spinal cord.\n\nThe next few questions help us understand how YOUR stress and gut talk to each other.\n\nThere are no right or wrong answers.",
+        headline: 'YOUR GUT-BRAIN CONNECTION',
+        body: "Your gut has its own nervous system — 500 million neurons. That's more than your spinal cord.\n\nThe next few questions help us understand how YOUR stress and gut talk to each other.",
+        image: '/assets/gut-brain-connection.png',
+        imageAlt: 'Illustration of gut-brain connection',
         buttonText: 'Continue'
       },
 
@@ -483,9 +482,9 @@ const quizContent = {
         id: 'knowledge_intro',
         screenNumber: 17,
         type: 'info',
-        headline: 'GUT KNOWLEDGE CHECK',
-        body: "Let's see what you already know about how digestion works.\n\nDon't worry — there are no wrong answers. This helps us customize your education.",
-        buttonText: 'Start'
+        headline: 'QUICK GUT CHECK',
+        body: "You might learn something new about your gut here.\n\nTest your gut instincts.",
+        buttonText: 'Let\'s Go'
       },
 
       // Screen 18: Knowledge Q1 - Eating Speed
@@ -739,11 +738,11 @@ const quizContent = {
     type: 'loading',
     headline: 'CREATING YOUR PERSONALIZED PROTOCOL',
     steps: [
-      { text: 'Analyzing symptom patterns...', duration: 2000 },
-      { text: 'Cross-referencing with 847 member profiles...', duration: 2500 },
-      { text: 'Matching gut response patterns...', duration: 2000 },
+      { text: 'Analyzing your symptom patterns...', duration: 2000 },
+      { text: 'Cross-referencing with successful protocols...', duration: 2500 },
+      { text: 'Matching your gut response patterns...', duration: 2000 },
       { text: 'Identifying your protocol...', duration: 1500 },
-      { text: 'Generating recommendations...', duration: 2000 }
+      { text: 'Generating personalized recommendations...', duration: 2000 }
     ],
     popupQuestions: [
       {
