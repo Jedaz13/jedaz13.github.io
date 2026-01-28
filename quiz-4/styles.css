@@ -3956,3 +3956,425 @@ body {
     font-size: 1rem;
   }
 }
+
+/* ==================== */
+/* ANIMATED REVEAL SEQUENCE */
+/* ==================== */
+.animated-reveal {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 80vh;
+  padding: 40px 20px;
+  text-align: center;
+  background: linear-gradient(180deg, var(--bg-cream) 0%, #fff 100%);
+}
+
+.reveal-step {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1), transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  margin-bottom: 24px;
+}
+
+.reveal-step.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Step 1: Logo */
+.reveal-logo {
+  margin-bottom: 40px;
+}
+
+.reveal-logo-img {
+  width: 180px;
+  height: auto;
+  filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.08));
+}
+
+/* Step 2: Protocol Ready */
+.reveal-ready {
+  margin-bottom: 20px;
+}
+
+.reveal-icon {
+  font-size: 48px;
+  margin-bottom: 16px;
+  animation: gentlePulse 2s ease-in-out infinite;
+}
+
+@keyframes gentlePulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+.reveal-headline {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.8rem;
+  font-weight: 400;
+  color: var(--text-forest);
+  line-height: 1.3;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+/* Step 3: Goal Connection */
+.reveal-goal {
+  margin-bottom: 28px;
+}
+
+.reveal-goal-text {
+  font-size: 1.15rem;
+  color: var(--text-olive);
+  line-height: 1.6;
+}
+
+.reveal-goal-text strong {
+  color: var(--text-forest);
+  font-weight: 600;
+}
+
+/* Step 4: Timeline */
+.reveal-timeline {
+  margin-bottom: 32px;
+  width: 100%;
+  max-width: 360px;
+}
+
+.reveal-timeline-card {
+  background: var(--card-background);
+  border: 2px solid var(--citrus);
+  border-radius: 16px;
+  padding: 20px 24px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  box-shadow: 0 4px 20px rgba(249, 199, 79, 0.15);
+}
+
+.reveal-timeline-icon {
+  font-size: 28px;
+  flex-shrink: 0;
+}
+
+.reveal-timeline-text {
+  font-size: 0.95rem;
+  color: var(--text-olive);
+  line-height: 1.5;
+  text-align: left;
+  margin: 0;
+}
+
+.reveal-timeline-text strong {
+  color: var(--text-forest);
+}
+
+/* Step 5: Let's Begin */
+.reveal-begin {
+  margin-top: 8px;
+}
+
+.reveal-begin-text {
+  font-size: 1.1rem;
+  color: var(--text-muted);
+  margin-bottom: 20px;
+}
+
+.reveal-cta {
+  min-width: 220px;
+  animation: subtleGlow 2s ease-in-out infinite;
+}
+
+@keyframes subtleGlow {
+  0%, 100% { box-shadow: 0 4px 15px rgba(107, 144, 128, 0.3); }
+  50% { box-shadow: 0 4px 25px rgba(107, 144, 128, 0.5); }
+}
+
+/* Mobile adjustments for reveal */
+@media (max-width: 600px) {
+  .animated-reveal {
+    min-height: 85vh;
+    padding: 32px 20px;
+  }
+
+  .reveal-logo-img {
+    width: 140px;
+  }
+
+  .reveal-headline {
+    font-size: 1.5rem;
+  }
+
+  .reveal-goal-text {
+    font-size: 1.05rem;
+  }
+
+  .reveal-timeline-card {
+    padding: 16px 20px;
+  }
+
+  .reveal-timeline-text {
+    font-size: 0.9rem;
+  }
+}
+
+/* ==================== */
+/* UPDATED RESULTS PAGE */
+/* ==================== */
+.results-label {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+}
+
+.gut-type-name {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.8rem;
+  font-weight: 400;
+  color: var(--text-forest);
+  border-bottom: 4px solid var(--citrus);
+  padding-bottom: 8px;
+  display: inline-block;
+  margin-bottom: 24px;
+}
+
+/* Protocol Explanation Section */
+.protocol-explanation {
+  text-align: left;
+  margin-bottom: 24px;
+  padding: 0 4px;
+}
+
+.protocol-explanation-title {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.15rem;
+  font-weight: 400;
+  color: var(--text-forest);
+  margin-bottom: 12px;
+}
+
+.protocol-explanation-text {
+  font-size: 0.95rem;
+  color: var(--text-olive);
+  line-height: 1.7;
+}
+
+/* Protocol Includes with Check */
+.protocol-includes {
+  list-style: none;
+  padding: 0;
+  margin: 16px 0 0;
+  text-align: left;
+}
+
+.protocol-includes li {
+  padding: 8px 0;
+  font-size: 0.95rem;
+  color: var(--text-olive);
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.include-check {
+  color: var(--success);
+  font-weight: bold;
+  flex-shrink: 0;
+}
+
+/* What Changes Section */
+.what-changes-section {
+  margin-bottom: 24px;
+}
+
+.what-changes-title {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.1rem;
+  font-weight: 400;
+  color: var(--text-forest);
+  margin-bottom: 16px;
+  text-align: left;
+}
+
+.outcome-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  background: var(--bg-sage-subtle);
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 12px;
+}
+
+.outcome-icon {
+  font-size: 1.3rem;
+  flex-shrink: 0;
+}
+
+.outcome-text {
+  font-size: 0.95rem;
+  color: var(--text-olive);
+  line-height: 1.5;
+  margin: 0;
+}
+
+.outcome-text strong {
+  color: var(--text-forest);
+}
+
+/* Personalization Summary */
+.personalization-summary {
+  background: var(--card-background);
+  border: 1px solid var(--divider);
+  border-radius: 16px;
+  padding: 20px;
+  margin-bottom: 24px;
+  text-align: left;
+}
+
+.personalization-title {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1rem;
+  font-weight: 400;
+  color: var(--text-forest);
+  margin-bottom: 12px;
+}
+
+.personalization-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.personalization-list li {
+  padding: 6px 0;
+  font-size: 0.9rem;
+  color: var(--text-olive);
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.pers-bullet {
+  color: var(--citrus);
+  font-weight: bold;
+  flex-shrink: 0;
+}
+
+.personalization-list strong {
+  color: var(--text-forest);
+}
+
+/* Scarcity Message */
+.scarcity-message {
+  background: linear-gradient(135deg, var(--citrus-pale), rgba(249, 199, 79, 0.15));
+  border: 2px solid var(--citrus);
+  border-radius: 16px;
+  padding: 20px;
+  margin-bottom: 24px;
+  text-align: center;
+}
+
+.scarcity-message p {
+  font-size: 0.95rem;
+  color: var(--text-forest);
+  margin: 0;
+}
+
+.scarcity-message strong {
+  color: var(--forest);
+  font-weight: 700;
+}
+
+.scarcity-subtext {
+  font-size: 0.85rem !important;
+  color: var(--text-muted) !important;
+  margin-top: 8px !important;
+}
+
+/* Practitioner Quote */
+.practitioner-quote {
+  display: flex;
+  gap: 16px;
+  background: var(--bg-sage-subtle);
+  border-radius: 16px;
+  padding: 20px;
+  margin-bottom: 24px;
+  text-align: left;
+}
+
+.practitioner-photo {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+  border: 2px solid var(--citrus);
+}
+
+.practitioner-content {
+  flex: 1;
+}
+
+.practitioner-text {
+  font-style: italic;
+  color: var(--text-olive);
+  font-size: 0.92rem;
+  line-height: 1.6;
+  margin: 0 0 8px;
+}
+
+.practitioner-name {
+  font-weight: 600;
+  color: var(--text-forest);
+  font-size: 0.85rem;
+  margin: 0;
+}
+
+/* CTA Section Updates */
+.cta-section {
+  text-align: center;
+  padding: 28px 24px;
+  margin-bottom: 24px;
+}
+
+.cta-guarantee {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  margin-top: 12px;
+}
+
+/* Mobile adjustments for results */
+@media (max-width: 600px) {
+  .gut-type-name {
+    font-size: 1.5rem;
+  }
+
+  .protocol-explanation-title,
+  .what-changes-title {
+    font-size: 1.05rem;
+  }
+
+  .outcome-card {
+    padding: 14px;
+  }
+
+  .practitioner-quote {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .practitioner-photo {
+    margin: 0 auto;
+  }
+
+  .personalization-summary {
+    padding: 16px;
+  }
+}
