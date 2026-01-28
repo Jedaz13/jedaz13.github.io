@@ -1,6 +1,6 @@
 /* =====================================================
    Quiz v4 Script - Gut Healing Academy
-   Psychological Commitment-Building Quiz
+   28 Screens - Updated Structure
    ===================================================== */
 
 // =================================================
@@ -13,8 +13,8 @@ const CONFIG = {
   SUPABASE_URL: 'https://mwabljnngygkmahjgvps.supabase.co',
   SUPABASE_ANON_KEY: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im13YWJsam5uZ3lna21haGpndnBzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDcwNzQ1NzIsImV4cCI6MjA2MjY1MDU3Mn0.nFiAK8bLfNB0lG6SbDa6ReJjr1K1468g_uZfvmh_h1w',
   AUTO_ADVANCE_DELAY: 400,
-  TOTAL_SCREENS: 25,
-  TOTAL_BLOCKS: 6
+  TOTAL_SCREENS: 28,
+  TOTAL_PHASES: 7
 };
 
 // =================================================
@@ -23,7 +23,7 @@ const CONFIG = {
 const state = {
   // Navigation
   currentScreenIndex: 0,
-  currentBlockIndex: 0,
+  currentPhaseIndex: 0,
   history: [],
 
   // User data
@@ -39,6 +39,7 @@ const state = {
   gutBrainScore: 0,
   knowledgeScore: 0,
   treatmentsTried: [],
+  treatmentsCount: 0,
 
   // Red flags
   hasRedFlags: false,
@@ -56,9 +57,9 @@ const state = {
   loadingPopupIndex: 0,
   loadingPaused: false,
 
-  // UI state
-  showingFeedback: false,
-  currentFeedbackCorrect: null
+  // Knowledge quiz state
+  lastKnowledgeAnswer: null,
+  lastKnowledgeCorrect: null
 };
 
 // Initialize Supabase client
@@ -71,75 +72,70 @@ try {
   console.log('Supabase not available');
 }
 
-// Screen order mapping (Gut-Brain section skipped per user request)
-// Name collection moved early for personalization
+// Screen order mapping (28 screens)
 const screenOrder = [
-  // Block 1: Goals & Context (1-5)
-  { block: 0, screenKey: 'goal_selection' },
-  { block: 0, screenKey: 'name_collection' },  // Moved early for personalization
-  { block: 0, screenKey: 'timeline_setting' },
-  { block: 0, screenKey: 'primary_complaint' },
-  { block: 0, screenKey: 'frequency' },
-  { block: 0, screenKey: 'duration' },
-  // Block 2: Symptom Patterns (6-10)
-  { block: 1, screenKey: 'bm_relief' },
-  { block: 1, screenKey: 'flare_frequency' },
-  { block: 1, screenKey: 'stool_changes' },
-  { block: 1, screenKey: 'treatments_tried' },
-  { block: 1, screenKey: 'diagnosis_history' },
-  // Goal Reminder 1
-  { block: 1, screenKey: 'goal_reminder_1', type: 'goal_reminder' },
-  // Block 3: Why Different
-  { block: 2, screenKey: 'why_programs_fail' },
-  // Block 4: Knowledge Quiz (Gut-Brain section skipped)
-  { block: 3, screenKey: 'knowledge_intro' },
-  { block: 3, screenKey: 'knowledge_eating_speed' },
-  { block: 3, screenKey: 'knowledge_fodmap' },
-  { block: 3, screenKey: 'knowledge_meal_timing' },
-  // Goal Reminder 2
-  { block: 3, screenKey: 'goal_reminder_2', type: 'goal_reminder' },
-  // Block 5: Safety
-  { block: 4, screenKey: 'safety_intro' },
-  { block: 4, screenKey: 'safety_weight_loss' },
-  { block: 4, screenKey: 'safety_blood' },
-  { block: 4, screenKey: 'safety_family' },
-  // Block 6: Email & Final
-  { block: 5, screenKey: 'email_capture' },
-  { block: 5, screenKey: 'life_impact' },
-  { block: 5, screenKey: 'vision' },
-  // Loading & Results
-  { block: 5, screenKey: 'loading_sequence', type: 'loading' },
-  { block: 5, screenKey: 'results_page', type: 'results' }
+  // Phase 1: Emotional Hook (Screens 1-5)
+  { phase: 0, screenKey: 'future_vision' },
+  { phase: 0, screenKey: 'timeline' },
+  { phase: 0, screenKey: 'primary_complaint' },
+  { phase: 0, screenKey: 'duration' },
+  { phase: 0, screenKey: 'validation_duration' },
+  // Phase 2: Clinical Assessment (Screens 6-12)
+  { phase: 1, screenKey: 'bm_relief' },
+  { phase: 1, screenKey: 'flare_frequency' },
+  { phase: 1, screenKey: 'stool_changes' },
+  { phase: 1, screenKey: 'progress_validation' },
+  { phase: 1, screenKey: 'treatments_tried' },
+  { phase: 1, screenKey: 'diagnosis_history' },
+  { phase: 1, screenKey: 'name_capture' },
+  // Phase 3: The Bridge (Screens 13-14)
+  { phase: 2, screenKey: 'why_different' },
+  { phase: 2, screenKey: 'testimonial' },
+  // Phase 4: Knowledge Quiz (Screens 15-19)
+  { phase: 3, screenKey: 'knowledge_intro' },
+  { phase: 3, screenKey: 'knowledge_eating_speed' },
+  { phase: 3, screenKey: 'knowledge_eating_response' },
+  { phase: 3, screenKey: 'knowledge_fodmap' },
+  { phase: 3, screenKey: 'knowledge_fodmap_response' },
+  // Phase 5: Gut-Brain (Screens 20-21)
+  { phase: 4, screenKey: 'stress_connection' },
+  { phase: 4, screenKey: 'stress_validation' },
+  // Phase 6: Safety (Screens 22-23, 23b conditional)
+  { phase: 5, screenKey: 'safety_blood' },
+  { phase: 5, screenKey: 'safety_weight' },
+  // Phase 7: Email Capture (Screens 24-26)
+  { phase: 6, screenKey: 'life_impact' },
+  { phase: 6, screenKey: 'email_capture' },
+  { phase: 6, screenKey: 'vision_optional' },
+  // Loading & Results (Screens 27-28)
+  { phase: 6, screenKey: 'loading_sequence', type: 'loading' },
+  { phase: 6, screenKey: 'results_page', type: 'results' }
 ];
 
-// Block mapping (6 blocks after removing gut-brain section)
-const blocks = [
-  quizContent.block1,
-  quizContent.block2,
-  quizContent.block3,
-  quizContent.block5,  // Knowledge quiz (was block5)
-  quizContent.block6,  // Safety (was block6)
-  quizContent.block7   // Final (was block7)
+// Phase mapping (phases array from content)
+const phases = [
+  quizContent.phase1,
+  quizContent.phase2,
+  quizContent.phase3,
+  quizContent.phase4,
+  quizContent.phase5,
+  quizContent.phase6,
+  quizContent.phase7
 ];
 
-// Section labels for each block (6 blocks now)
+// Section labels for each phase (7 phases now)
 const SECTION_LABELS = [
   'YOUR GOALS',
-  'SYMPTOMS',
+  'YOUR SYMPTOMS',
   'WHY THIS WORKS',
-  'KNOWLEDGE',
-  'SAFETY CHECK',
-  'FINAL STEPS'
+  'QUICK GUT CHECK',
+  'YOUR PROFILE',
+  'FINAL QUESTIONS',
+  'YOUR RESULTS'
 ];
 
-// Questions per section for progress calculation (6 sections)
-// Block 0: goal_selection, name_collection, timeline_setting, primary_complaint, frequency, duration = 6
-// Block 1: bm_relief, flare_frequency, stool_changes, treatments_tried, diagnosis_history, goal_reminder_1 = 6
-// Block 2: why_programs_fail = 1
-// Block 3: knowledge_intro, knowledge_eating_speed, knowledge_fodmap, knowledge_meal_timing, goal_reminder_2 = 5
-// Block 4: safety_intro, safety_weight_loss, safety_blood, safety_family = 4
-// Block 5: email_capture, life_impact, vision, loading_sequence, results_page = 5
-const QUESTIONS_PER_SECTION = [6, 6, 1, 5, 4, 5];
+// Questions per section for progress calculation (7 phases)
+const QUESTIONS_PER_PHASE = [5, 7, 2, 5, 2, 2, 5];
 
 // DOM Elements
 let contentEl;
@@ -192,8 +188,8 @@ function renderCurrentScreen() {
   state.totalScreensViewed++;
   state.screensViewed.push(screenInfo.screenKey);
 
-  // Update block index
-  state.currentBlockIndex = screenInfo.block;
+  // Update phase index
+  state.currentPhaseIndex = screenInfo.phase;
 
   // Update section label
   updateSectionLabel();
@@ -202,11 +198,6 @@ function renderCurrentScreen() {
   updateBackButton();
 
   // Special screen types
-  if (screenInfo.type === 'goal_reminder') {
-    renderGoalReminder(contentEl, screenInfo.screenKey);
-    return;
-  }
-
   if (screenInfo.type === 'loading') {
     renderLoadingScreen(contentEl);
     return;
@@ -217,7 +208,7 @@ function renderCurrentScreen() {
     return;
   }
 
-  // Get screen content from blocks
+  // Get screen content from phases
   const screen = getScreenContent(screenInfo.screenKey);
   if (!screen) {
     console.error('Screen not found:', screenInfo.screenKey);
@@ -235,20 +226,38 @@ function renderCurrentScreen() {
     case 'multi_select':
       renderMultiSelect(contentEl, screen);
       break;
-    case 'slider':
-      renderSlider(contentEl, screen);
-      break;
     case 'info':
       renderInfoScreen(contentEl, screen);
+      break;
+    case 'info_dynamic':
+      renderInfoDynamic(contentEl, screen);
+      break;
+    case 'info_animated':
+      renderInfoAnimated(contentEl, screen);
+      break;
+    case 'info_conditional':
+      renderInfoConditional(contentEl, screen);
+      break;
+    case 'testimonial':
+      renderTestimonial(contentEl, screen);
       break;
     case 'knowledge_quiz':
       renderKnowledgeQuiz(contentEl, screen);
       break;
+    case 'knowledge_response':
+      renderKnowledgeResponse(contentEl, screen);
+      break;
     case 'email_input':
       renderEmailInput(contentEl, screen);
       break;
-    case 'text_input':
-      renderTextInput(contentEl, screen);
+    case 'text_input_with_validation':
+      renderTextInputWithValidation(contentEl, screen);
+      break;
+    case 'text_input_optional':
+      renderTextInputOptional(contentEl, screen);
+      break;
+    case 'warning':
+      renderWarningScreen(contentEl, screen);
       break;
     default:
       console.error('Unknown screen type:', screen.type);
@@ -260,7 +269,7 @@ function renderCurrentScreen() {
 
 function updateSectionLabel() {
   if (sectionLabelEl) {
-    sectionLabelEl.textContent = SECTION_LABELS[state.currentBlockIndex] || 'QUIZ';
+    sectionLabelEl.textContent = SECTION_LABELS[state.currentPhaseIndex] || 'QUIZ';
   }
 }
 
@@ -271,9 +280,17 @@ function updateBackButton() {
 }
 
 function getScreenContent(screenKey) {
-  for (const block of blocks) {
-    const screen = block.screens.find(s => s.id === screenKey);
-    if (screen) return screen;
+  // Check special screens first
+  if (screenKey === 'safety_warning') {
+    return quizContent.safetyWarning;
+  }
+
+  // Search through all phases
+  for (const phase of phases) {
+    if (phase && phase.screens) {
+      const screen = phase.screens.find(s => s.id === screenKey);
+      if (screen) return screen;
+    }
   }
   return null;
 }
@@ -282,24 +299,39 @@ function getScreenContent(screenKey) {
 // SINGLE SELECT RENDERER
 // =================================================
 function renderSingleSelect(container, screen) {
+  const name = state.userData.name || 'Friend';
+  const question = screen.questionTemplate
+    ? screen.questionTemplate.replace('{firstName}', name)
+    : screen.question;
+
+  const hasIcons = screen.options.some(opt => opt.icon);
+
   let html = `
     <div class="question-container">
-      <h2 class="question-text">${screen.question}</h2>
-      ${screen.subtitle ? `<p class="question-subtitle" style="text-align: center; color: var(--text-muted); margin-bottom: 16px;">${screen.subtitle}</p>` : ''}
-      <div class="options-container">
+      <h2 class="question-text">${question}</h2>
+      ${screen.subtitle ? `<p class="question-subtitle">${screen.subtitle}</p>` : ''}
+      <div class="options-container ${hasIcons ? 'with-icons' : ''}">
   `;
 
   screen.options.forEach((option, index) => {
-    html += `
-      <button class="option-button" data-value="${option.value}" data-index="${index}">
-        ${option.text}
-      </button>
-    `;
+    if (hasIcons && option.icon) {
+      html += `
+        <button class="option-button" data-value="${option.value}" data-index="${index}">
+          <span class="option-icon">${option.icon}</span>
+          <span class="option-text">${option.text}</span>
+        </button>
+      `;
+    } else {
+      html += `
+        <button class="option-button" data-value="${option.value}" data-index="${index}">
+          ${option.text}
+        </button>
+      `;
+    }
   });
 
   html += `
       </div>
-      <div id="validationContainer"></div>
     </div>
   `;
 
@@ -334,79 +366,22 @@ function handleSingleSelectAnswer(screen, value, option) {
     });
   }
 
+  // Handle gut-brain score
+  if (option.gutBrainScore !== undefined) {
+    state.gutBrainScore = option.gutBrainScore;
+    // Determine if gut-brain overlay should be added
+    if (value === 'yes_definitely' || value === 'sometimes') {
+      state.hasGutBrainOverlay = true;
+    }
+  }
+
   // Visual feedback
   const buttons = document.querySelectorAll('.option-button');
   buttons.forEach(btn => btn.classList.remove('selected'));
   document.querySelector(`[data-value="${value}"]`).classList.add('selected');
 
-  // Check for validation message
-  if (screen.validationMessages && screen.validationMessages[value]) {
-    showValidation(screen.validationMessages[value], screen.reinforcementMessage);
-  } else if (screen.reinforcementMessage && !screen.validationMessages) {
-    showValidation(null, screen.reinforcementMessage);
-  } else {
-    // Auto-advance after delay
-    setTimeout(() => advanceToNextScreen(), CONFIG.AUTO_ADVANCE_DELAY);
-  }
-}
-
-function showValidation(message, reinforcement) {
-  const validationContainer = document.getElementById('validationContainer');
-
-  let html = '<div class="validation-card">';
-
-  if (typeof message === 'object' && message.title) {
-    html += `<h3 class="validation-title">${message.title}</h3>`;
-    html += `<p class="validation-text">${message.message.replace(/\n/g, '<br>')}</p>`;
-  } else if (message) {
-    html += `<p class="validation-text">${message}</p>`;
-  }
-
-  if (reinforcement) {
-    html += `<p class="validation-text mt-md"><em>${reinforcement}</em></p>`;
-  }
-
-  html += '</div>';
-
-  // Show timeline if configured
-  const screen = getScreenContent(screenOrder[state.currentScreenIndex].screenKey);
-  if (screen && screen.showTimeline) {
-    html += renderTimelineGraphic();
-  }
-
-  html += `
-    <button class="btn btn-primary mt-lg" id="continueBtn">Continue</button>
-  `;
-
-  validationContainer.innerHTML = html;
-
-  document.getElementById('continueBtn').addEventListener('click', advanceToNextScreen);
-}
-
-function renderTimelineGraphic() {
-  return `
-    <div class="timeline-graphic">
-      <div class="timeline-bar">
-        <div class="timeline-segment animate-week" style="animation-delay: 0.2s"></div>
-        <div class="timeline-segment animate-week" style="animation-delay: 0.5s"></div>
-        <div class="timeline-segment animate-week" style="animation-delay: 0.8s"></div>
-      </div>
-      <div class="timeline-labels">
-        <div class="timeline-label animate-week" style="animation-delay: 0.2s">
-          <div class="timeline-label-week">WEEK 1-2</div>
-          <div class="timeline-label-text">First improvements<br>(bloating reduces, more predictable)</div>
-        </div>
-        <div class="timeline-label animate-week" style="animation-delay: 0.5s">
-          <div class="timeline-label-week">WEEK 3-4</div>
-          <div class="timeline-label-text">Patterns emerge<br>(you know your triggers)</div>
-        </div>
-        <div class="timeline-label animate-week" style="animation-delay: 0.8s">
-          <div class="timeline-label-week">MONTH 2-3</div>
-          <div class="timeline-label-text">Real control<br>(symptoms are the exception)</div>
-        </div>
-      </div>
-    </div>
-  `;
+  // Auto-advance after delay
+  setTimeout(() => advanceToNextScreen(), CONFIG.AUTO_ADVANCE_DELAY);
 }
 
 // =================================================
@@ -416,12 +391,13 @@ function renderMultiSelect(container, screen) {
   let html = `
     <div class="question-container">
       <h2 class="question-text">${screen.question}</h2>
+      ${screen.subtitle ? `<p class="question-subtitle">${screen.subtitle}</p>` : ''}
       <div class="options-container">
   `;
 
   screen.options.forEach((option, index) => {
     html += `
-      <button class="option-button multi-select" data-value="${option.value}" data-index="${index}">
+      <button class="option-button multi-select" data-value="${option.value}" data-index="${index}" ${option.exclusive ? 'data-exclusive="true"' : ''}>
         ${option.text}
       </button>
     `;
@@ -441,20 +417,24 @@ function renderMultiSelect(container, screen) {
   container.querySelectorAll('.option-button.multi-select').forEach(option => {
     option.addEventListener('click', () => {
       const value = option.dataset.value;
+      const isExclusive = option.dataset.exclusive === 'true';
 
-      // Handle "nothing" option
-      if (value === 'nothing') {
+      if (isExclusive) {
         // Deselect all others
         selectedValues.length = 0;
         container.querySelectorAll('.option-button.multi-select').forEach(o => o.classList.remove('selected'));
         option.classList.add('selected');
         selectedValues.push(value);
       } else {
-        // Remove "nothing" if selecting something else
-        const nothingIndex = selectedValues.indexOf('nothing');
-        if (nothingIndex > -1) {
-          selectedValues.splice(nothingIndex, 1);
-          container.querySelector('[data-value="nothing"]')?.classList.remove('selected');
+        // Remove exclusive options if selecting something else
+        const exclusiveIndex = selectedValues.findIndex(v => {
+          const opt = screen.options.find(o => o.value === v);
+          return opt && opt.exclusive;
+        });
+        if (exclusiveIndex > -1) {
+          const exclusiveValue = selectedValues[exclusiveIndex];
+          selectedValues.splice(exclusiveIndex, 1);
+          container.querySelector(`[data-value="${exclusiveValue}"]`)?.classList.remove('selected');
         }
 
         // Toggle selection
@@ -470,196 +450,21 @@ function renderMultiSelect(container, screen) {
     });
   });
 
-  // Continue button - show validation modal then advance
+  // Continue button
   document.getElementById('continueBtn').addEventListener('click', () => {
     state.answers[screen.storeAs] = selectedValues;
 
     // Store treatments count
-    if (screen.storeAs === 'treatments_tried') {
+    if (screen.countTreatments) {
       state.treatmentsTried = selectedValues;
+      state.treatmentsCount = selectedValues.filter(t => t !== 'nothing').length;
     }
 
     // Track answer
     trackAnswer(screen, selectedValues, selectedValues.join(', '));
 
-    // Check for SIBO in diagnoses
-    if (screen.storeAs === 'diagnoses' && selectedValues.includes('sibo')) {
-      // May influence protocol
-    }
-
-    // Show validation modal for multi-select
-    const validationMessage = getMultiSelectValidation(screen, selectedValues);
-    if (validationMessage) {
-      showValidationModal(validationMessage, screen.reinforcementMessage, advanceToNextScreen);
-    } else {
-      advanceToNextScreen();
-    }
-  });
-}
-
-function getMultiSelectValidation(screen, selectedValues) {
-  const count = selectedValues.length;
-
-  if (!screen.validationMessages) return null;
-
-  let message = '';
-
-  if (count <= 1) {
-    message = screen.validationMessages.range_0_1;
-  } else if (count <= 3) {
-    message = screen.validationMessages.range_2_3;
-  } else if (count <= 5) {
-    message = screen.validationMessages.range_4_5;
-  } else {
-    message = screen.validationMessages.range_6_plus?.replace('{count}', count);
-  }
-
-  // Special validation for specific selections
-  if (screen.specialValidation) {
-    for (const [key, msg] of Object.entries(screen.specialValidation)) {
-      if (selectedValues.includes(key)) {
-        message = msg;
-        break;
-      }
-    }
-  }
-
-  return message || null;
-}
-
-function showValidationModal(message, reinforcement, onContinue) {
-  // Create modal overlay
-  const modal = document.createElement('div');
-  modal.className = 'validation-modal-overlay';
-  modal.innerHTML = `
-    <div class="validation-modal">
-      <div class="validation-modal-content">
-        <p class="validation-text">${message}</p>
-        ${reinforcement ? `<p class="validation-text reinforcement"><em>${reinforcement}</em></p>` : ''}
-      </div>
-      <button class="btn-primary" id="modalContinueBtn">Continue</button>
-    </div>
-  `;
-
-  document.body.appendChild(modal);
-
-  // Animate in
-  requestAnimationFrame(() => {
-    modal.classList.add('active');
-  });
-
-  // Continue button closes modal and advances
-  modal.querySelector('#modalContinueBtn').addEventListener('click', () => {
-    modal.classList.remove('active');
-    setTimeout(() => {
-      modal.remove();
-      onContinue();
-    }, 200);
-  });
-}
-
-// =================================================
-// SLIDER RENDERER
-// =================================================
-function renderSlider(container, screen) {
-  let html = `
-    <div class="question-container">
-      <h2 class="question-text">${screen.question}</h2>
-      <div class="slider-container">
-        <div class="slider-labels">
-          <span class="slider-label">${screen.leftAnchor}</span>
-          <span class="slider-label">${screen.rightAnchor}</span>
-        </div>
-        <div class="slider-track-container">
-          <input type="range" class="slider-input" id="sliderInput"
-            min="${screen.min}" max="${screen.max}" value="3" step="1">
-          <div class="slider-track">
-            <div class="slider-fill" id="sliderFill"></div>
-            <div class="slider-thumb" id="sliderThumb"></div>
-          </div>
-        </div>
-        <div class="slider-points">
-          ${[1,2,3,4,5].map(n => `<div class="slider-point" data-value="${n}">${n}</div>`).join('')}
-        </div>
-      </div>
-      <div id="validationContainer"></div>
-      <button class="btn-primary" id="continueBtn">Continue</button>
-    </div>
-  `;
-
-  container.innerHTML = html;
-
-  const slider = document.getElementById('sliderInput');
-  const fill = document.getElementById('sliderFill');
-  const thumb = document.getElementById('sliderThumb');
-  const points = document.querySelectorAll('.slider-point');
-
-  function updateSlider(value) {
-    const percent = ((value - screen.min) / (screen.max - screen.min)) * 100;
-    fill.style.width = percent + '%';
-    thumb.style.left = percent + '%';
-
-    points.forEach(p => {
-      p.classList.toggle('active', parseInt(p.dataset.value) === parseInt(value));
-    });
-
-    // Show conditional validation for high scores
-    if (screen.conditionalValidation && parseInt(value) >= screen.conditionalValidation.threshold) {
-      showSliderValidation(screen.conditionalValidation);
-    } else {
-      document.getElementById('validationContainer').innerHTML = '';
-    }
-  }
-
-  slider.addEventListener('input', (e) => updateSlider(e.target.value));
-
-  points.forEach(point => {
-    point.addEventListener('click', () => {
-      slider.value = point.dataset.value;
-      updateSlider(point.dataset.value);
-    });
-  });
-
-  // Initialize
-  updateSlider(3);
-
-  // Continue button
-  document.getElementById('continueBtn').addEventListener('click', () => {
-    const value = parseInt(slider.value);
-    state.answers[screen.storeAs] = value;
-
-    // Track answer
-    trackAnswer(screen, value, value.toString());
-
-    // Calculate gut-brain score after last slider
-    if (screen.isLastSlider) {
-      calculateGutBrainScore();
-    }
-
     advanceToNextScreen();
   });
-}
-
-function showSliderValidation(validation) {
-  const validationContainer = document.getElementById('validationContainer');
-  validationContainer.innerHTML = `
-    <div class="validation-card">
-      <h3 class="validation-title">${validation.title}</h3>
-      <p class="validation-text">${validation.message.replace(/\n/g, '<br>')}</p>
-    </div>
-  `;
-}
-
-function calculateGutBrainScore() {
-  const scores = [
-    state.answers.stress_gut_score || 3,
-    state.answers.food_anxiety_score || 3,
-    state.answers.mood_impact_score || 3,
-    state.answers.thought_frequency_score || 3
-  ];
-
-  state.gutBrainScore = scores.reduce((a, b) => a + b, 0) / scores.length;
-  state.hasGutBrainOverlay = state.gutBrainScore >= 3.5;
 }
 
 // =================================================
@@ -667,70 +472,23 @@ function calculateGutBrainScore() {
 // =================================================
 function renderInfoScreen(container, screen) {
   let html = `
-    <div class="question-container info-screen">
-      <h2 class="question-text">${screen.headline}</h2>
+    <div class="question-container info-screen" ${screen.backgroundColor ? `style="background-color: ${screen.backgroundColor}"` : ''}>
   `;
 
-  // Add image if specified
-  if (screen.image) {
-    html += `
-      <div class="info-image-container">
-        <img src="${screen.image}" alt="${screen.imageAlt || ''}" class="info-image" onerror="this.style.display='none'">
-      </div>
-    `;
+  if (screen.icon) {
+    html += `<div class="info-icon">${screen.icon}</div>`;
   }
+
+  html += `<h2 class="question-text">${screen.headline}</h2>`;
 
   if (screen.body) {
     html += `<p class="info-body">${screen.body.replace(/\n/g, '<br>')}</p>`;
   }
 
-  if (screen.comparison) {
+  if (screen.statHighlight) {
     html += `
-      <div class="cycle-comparison-container">
-        <!-- The Old Cycle -->
-        <div class="cycle-card cycle-stuck animate-phase" style="animation-delay: 0.1s">
-          <div class="cycle-header stuck">
-            <span class="cycle-icon">🔄</span>
-            <span class="cycle-title">The Cycle You've Been Stuck In</span>
-          </div>
-          <div class="cycle-flow stuck">
-            <div class="cycle-step">Try something new</div>
-            <div class="cycle-arrow">→</div>
-            <div class="cycle-step">Do it alone</div>
-            <div class="cycle-arrow">→</div>
-            <div class="cycle-step">Is it working?</div>
-            <div class="cycle-arrow">→</div>
-            <div class="cycle-step">Give up or stick too long</div>
-            <div class="cycle-arrow cycle-loop">↻</div>
-          </div>
-        </div>
-
-        <!-- The Escape Path -->
-        <div class="cycle-card cycle-escape animate-phase" style="animation-delay: 0.4s">
-          <div class="cycle-header escape">
-            <span class="cycle-icon">✨</span>
-            <span class="cycle-title">How You Escape This Time</span>
-          </div>
-          <div class="cycle-flow escape">
-            <div class="cycle-step highlight">Get your protocol</div>
-            <div class="cycle-arrow">→</div>
-            <div class="cycle-step highlight">Track daily (3 min)</div>
-            <div class="cycle-arrow">→</div>
-            <div class="cycle-step highlight">Practitioners review</div>
-            <div class="cycle-arrow">→</div>
-            <div class="cycle-step highlight success">Real progress</div>
-          </div>
-        </div>
-      </div>
-    `;
-  }
-
-  if (screen.statistic) {
-    html += `
-      <div class="stat-box">
-        <div class="stat-number">${screen.statistic.number}</div>
-        <div class="stat-label">${screen.statistic.label}</div>
-        <div class="stat-label">${screen.statistic.subtext}</div>
+      <div class="stat-highlight">
+        <span class="stat-number">${screen.statHighlight}</span>
       </div>
     `;
   }
@@ -742,12 +500,145 @@ function renderInfoScreen(container, screen) {
 
   container.innerHTML = html;
 
-  // Track info screen view
-  trackEvent('quiz_info_screen', {
-    quiz_version: 'v4',
-    screen_id: screen.id,
-    screen_type: 'info'
-  });
+  document.getElementById('continueBtn').addEventListener('click', advanceToNextScreen);
+}
+
+// =================================================
+// INFO DYNAMIC RENDERER (based on previous answer)
+// =================================================
+function renderInfoDynamic(container, screen) {
+  const answerValue = state.answers[screen.basedOn];
+  const content = screen.dynamicContent[answerValue] || screen.dynamicContent.default;
+
+  let html = `
+    <div class="question-container info-screen">
+      ${content.icon ? `<div class="info-icon">${content.icon}</div>` : ''}
+      <h2 class="question-text">${content.headline}</h2>
+      <p class="info-body">${content.body.replace(/\n/g, '<br>')}</p>
+      <button class="btn-primary" id="continueBtn">${screen.buttonText || 'Continue'}</button>
+    </div>
+  `;
+
+  container.innerHTML = html;
+
+  document.getElementById('continueBtn').addEventListener('click', advanceToNextScreen);
+}
+
+// =================================================
+// INFO ANIMATED RENDERER (with cycle comparison)
+// =================================================
+function renderInfoAnimated(container, screen) {
+  let html = `
+    <div class="question-container info-screen info-animated">
+      <h2 class="question-text">${screen.headline}</h2>
+
+      <div class="cycle-comparison-container">
+        <!-- The Stuck Loop -->
+        <div class="cycle-card cycle-stuck animate-phase" style="animation-delay: 0.1s">
+          <div class="cycle-header stuck">
+            <span class="cycle-icon">🔄</span>
+            <span class="cycle-title">The Stuck Loop</span>
+          </div>
+          <div class="cycle-flow stuck">
+            <div class="cycle-step">Generic advice</div>
+            <div class="cycle-arrow">→</div>
+            <div class="cycle-step">Temporary relief</div>
+            <div class="cycle-arrow">→</div>
+            <div class="cycle-step">Symptoms return</div>
+            <div class="cycle-arrow">→</div>
+            <div class="cycle-step">Try again</div>
+            <div class="cycle-arrow cycle-loop">↻</div>
+          </div>
+        </div>
+
+        <!-- The Escape Path -->
+        <div class="cycle-card cycle-escape animate-phase" style="animation-delay: 0.4s">
+          <div class="cycle-header escape">
+            <span class="cycle-icon">✨</span>
+            <span class="cycle-title">The Escape Path</span>
+          </div>
+          <div class="cycle-flow escape">
+            <div class="cycle-step highlight">Personalized protocol</div>
+            <div class="cycle-arrow">→</div>
+            <div class="cycle-step highlight">Root cause</div>
+            <div class="cycle-arrow">→</div>
+            <div class="cycle-step highlight success">Lasting control</div>
+          </div>
+        </div>
+      </div>
+
+      <p class="info-body">${screen.body}</p>
+      <button class="btn-primary animate-phase" style="animation-delay: 0.7s" id="continueBtn">${screen.buttonText || 'Continue'}</button>
+    </div>
+  `;
+
+  container.innerHTML = html;
+
+  document.getElementById('continueBtn').addEventListener('click', advanceToNextScreen);
+}
+
+// =================================================
+// INFO CONDITIONAL RENDERER (based on stress answer)
+// =================================================
+function renderInfoConditional(container, screen) {
+  const answerValue = state.answers[screen.basedOn];
+  let contentKey = 'not_connected';
+
+  // Determine which content to show based on stress connection answer
+  if (answerValue === 'yes_definitely' || answerValue === 'sometimes') {
+    contentKey = 'stress_connected';
+  }
+
+  const content = screen.content[contentKey];
+
+  // Set gut-brain overlay if indicated
+  if (content.addOverlay) {
+    state.hasGutBrainOverlay = true;
+  }
+
+  let html = `
+    <div class="question-container info-screen">
+      ${content.icon ? `<div class="info-icon">${content.icon}</div>` : ''}
+      <h2 class="question-text">${content.headline}</h2>
+      <p class="info-body">${content.body.replace(/\n/g, '<br>')}</p>
+      <button class="btn-primary" id="continueBtn">${screen.buttonText || 'Continue'}</button>
+    </div>
+  `;
+
+  container.innerHTML = html;
+
+  document.getElementById('continueBtn').addEventListener('click', advanceToNextScreen);
+}
+
+// =================================================
+// TESTIMONIAL RENDERER
+// =================================================
+function renderTestimonial(container, screen) {
+  const name = state.userData.name || 'Friend';
+  const headline = screen.headlineTemplate.replace('{firstName}', name);
+
+  let html = `
+    <div class="question-container testimonial-screen">
+      <h2 class="question-text">${headline}</h2>
+
+      <div class="testimonial-card">
+        <div class="testimonial-image-container">
+          <img src="${screen.authorImage}" alt="${screen.author}" class="testimonial-image" onerror="this.style.display='none'">
+        </div>
+        <blockquote class="testimonial-quote">
+          "${screen.quote}"
+        </blockquote>
+        <div class="testimonial-author">
+          <strong>${screen.author}</strong>
+          <span class="testimonial-detail">${screen.authorDetail}</span>
+        </div>
+      </div>
+
+      <button class="btn-primary" id="continueBtn">${screen.buttonText || 'Continue'}</button>
+    </div>
+  `;
+
+  container.innerHTML = html;
 
   document.getElementById('continueBtn').addEventListener('click', advanceToNextScreen);
 }
@@ -756,30 +647,25 @@ function renderInfoScreen(container, screen) {
 // KNOWLEDGE QUIZ RENDERER
 // =================================================
 function renderKnowledgeQuiz(container, screen) {
-  if (state.showingFeedback) {
-    renderKnowledgeFeedback(container, screen);
-    return;
-  }
-
   const hasIcons = screen.options.some(opt => opt.icon);
 
   let html = `
-    <div class="question-container">
+    <div class="question-container knowledge-quiz" ${screen.backgroundColor ? `style="background-color: ${screen.backgroundColor}"` : ''}>
       <h2 class="question-text">${screen.question}</h2>
-      <div class="options-container">
+      <div class="options-container ${hasIcons ? 'with-icons knowledge-options' : ''}">
   `;
 
   screen.options.forEach((option, index) => {
-    if (hasIcons) {
+    if (hasIcons && option.icon) {
       html += `
-        <button class="option-button" data-value="${option.value}" data-correct="${option.correct}" data-index="${index}">
-          <div class="option-icon">${option.icon}</div>
-          <span>${option.text}</span>
+        <button class="option-button knowledge-option" data-value="${option.value}" data-correct="${option.correct}" data-index="${index}">
+          <span class="option-icon">${option.icon}</span>
+          <span class="option-text">${option.text}</span>
         </button>
       `;
     } else {
       html += `
-        <button class="option-button" data-value="${option.value}" data-correct="${option.correct}" data-index="${index}">
+        <button class="option-button knowledge-option" data-value="${option.value}" data-correct="${option.correct}" data-index="${index}">
           ${option.text}
         </button>
       `;
@@ -806,6 +692,10 @@ function handleKnowledgeAnswer(screen, value, isCorrect) {
   state.answers[screen.storeAs] = value;
   state.answers[screen.storeAs + '_correct'] = isCorrect;
 
+  // Store for the response screen
+  state.lastKnowledgeAnswer = value;
+  state.lastKnowledgeCorrect = isCorrect;
+
   // Update knowledge score
   if (isCorrect) {
     state.knowledgeScore++;
@@ -814,73 +704,69 @@ function handleKnowledgeAnswer(screen, value, isCorrect) {
   // Track answer
   trackAnswer(screen, value, value, isCorrect);
 
-  // Show feedback
-  state.showingFeedback = true;
-  state.currentFeedbackCorrect = isCorrect;
-  renderKnowledgeFeedback(contentEl, screen);
+  // Visual feedback
+  const buttons = document.querySelectorAll('.option-button');
+  buttons.forEach(btn => btn.classList.remove('selected'));
+  document.querySelector(`[data-value="${value}"]`).classList.add('selected');
+
+  // Auto-advance to response screen
+  setTimeout(() => advanceToNextScreen(), CONFIG.AUTO_ADVANCE_DELAY);
 }
 
-function renderKnowledgeFeedback(container, screen) {
-  const isCorrect = state.currentFeedbackCorrect;
-  const feedback = isCorrect ? screen.feedback.correct : screen.feedback.incorrect;
+// =================================================
+// KNOWLEDGE RESPONSE RENDERER
+// =================================================
+function renderKnowledgeResponse(container, screen) {
+  const isCorrect = state.lastKnowledgeCorrect;
+  const content = isCorrect ? screen.content.correct : screen.content.incorrect;
 
   let html = `
-    <div class="question-container feedback-screen">
+    <div class="question-container knowledge-response" ${screen.backgroundColor ? `style="background-color: ${screen.backgroundColor}"` : ''}>
       <div class="feedback-card ${isCorrect ? 'correct' : 'incorrect'}">
-        <div class="feedback-icon">${feedback.icon}</div>
-        <h2 class="feedback-title">${feedback.title}</h2>
-        <p class="feedback-text">${feedback.text.replace(/\n/g, '<br>')}</p>
-  `;
-
-  if (feedback.tip) {
-    if (typeof feedback.tip === 'object' && feedback.tip.items) {
-      html += `
-        <div class="feedback-tip">
-          <div class="feedback-tip-title">${feedback.tip.title}</div>
-          <ul class="gut-response-list">
-            ${feedback.tip.items.map(item => `<li class="${item.color}">${item.text}</li>`).join('')}
-          </ul>
-        </div>
-      `;
-    } else {
-      html += `
-        <div class="feedback-tip">
-          <p class="validation-text">${feedback.tip.replace(/\n/g, '<br>')}</p>
-        </div>
-      `;
-    }
-  }
-
-  html += `
+        <div class="feedback-icon">${content.icon}</div>
+        <h2 class="feedback-title">${content.headline}</h2>
+        <p class="feedback-text">${content.body.replace(/\n/g, '<br>')}</p>
       </div>
-      <button class="btn-primary" id="continueBtn">Continue</button>
+      <button class="btn-primary" id="continueBtn">${content.buttonText || 'Continue'}</button>
     </div>
   `;
 
   container.innerHTML = html;
 
-  document.getElementById('continueBtn').addEventListener('click', () => {
-    state.showingFeedback = false;
-    state.currentFeedbackCorrect = null;
-    advanceToNextScreen();
-  });
+  document.getElementById('continueBtn').addEventListener('click', advanceToNextScreen);
 }
 
 // =================================================
 // EMAIL INPUT RENDERER
 // =================================================
 function renderEmailInput(container, screen) {
+  const name = state.userData.name || 'Friend';
+  const headline = screen.headlineTemplate
+    ? screen.headlineTemplate.replace('{firstName}', name)
+    : screen.headline;
+
   let html = `
-    <div class="question-container">
-      <h2 class="question-text">${screen.headline}</h2>
-      ${screen.subtitle ? `<p class="question-subtitle">${screen.subtitle}</p>` : ''}
+    <div class="question-container email-capture">
+      <h2 class="question-text">${headline}</h2>
+  `;
+
+  if (screen.valueList) {
+    html += `
+      <ul class="value-list">
+        ${screen.valueList.map(item => `<li>${item}</li>`).join('')}
+      </ul>
+    `;
+  }
+
+  html += `
+      ${screen.inputLabel ? `<label class="input-label">${screen.inputLabel}</label>` : ''}
       <div class="input-container">
         <input type="email" class="email-input" id="emailInput"
           placeholder="${screen.placeholder}" autocomplete="email">
         <p class="input-error hidden" id="emailError">Please enter a valid email address</p>
       </div>
-      <button class="btn-primary" id="continueBtn">${screen.buttonText}</button>
-      <p class="privacy-text">${screen.privacyText}</p>
+      <button class="btn-primary" id="continueBtn">${screen.buttonText || 'Continue'}</button>
+      ${screen.gdprText ? `<p class="privacy-text">${screen.gdprText}</p>` : ''}
     </div>
   `;
 
@@ -936,264 +822,151 @@ function isValidEmail(email) {
 }
 
 // =================================================
-// TEXT INPUT RENDERER
+// TEXT INPUT WITH VALIDATION RENDERER
 // =================================================
-function renderTextInput(container, screen) {
-  const goalText = quizContent.goalTexts[state.answers.user_goal] || '';
-  const hint = screen.hint ? screen.hint.replace('{goal}', goalText) : '';
+function renderTextInputWithValidation(container, screen) {
+  // Determine which content to show based on treatments count
+  let contentKey = 'low_count';
+  if (state.treatmentsCount >= 5) {
+    contentKey = 'high_count';
+  } else if (state.treatmentsCount >= 2) {
+    contentKey = 'medium_count';
+  }
+
+  const content = screen.dynamicContent[contentKey];
+  const bodyText = content.body.replace('{count}', state.treatmentsCount);
+
+  // Convert markdown bold to HTML
+  const formattedBody = bodyText.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
 
   let html = `
-    <div class="question-container">
+    <div class="question-container text-input-validation">
+      <h2 class="question-text">${content.headline}</h2>
+      <p class="info-body">${formattedBody}</p>
+
+      <label class="input-label">${screen.inputLabel}</label>
+      <div class="input-container">
+        <input type="text" class="name-input" id="nameInput"
+          placeholder="${screen.placeholder}" autocomplete="given-name">
+      </div>
+
+      <button class="btn-primary" id="continueBtn">Continue</button>
+    </div>
+  `;
+
+  container.innerHTML = html;
+
+  const nameInput = document.getElementById('nameInput');
+  const continueBtn = document.getElementById('continueBtn');
+
+  continueBtn.addEventListener('click', () => {
+    const name = nameInput.value.trim();
+
+    if (screen.required && !name) {
+      nameInput.focus();
+      return;
+    }
+
+    state.userData.name = name || 'Friend';
+    state.answers.user_name = name;
+
+    // Track answer
+    trackAnswer(screen, name, name);
+
+    advanceToNextScreen();
+  });
+
+  // Allow enter key
+  nameInput.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') {
+      continueBtn.click();
+    }
+  });
+}
+
+// =================================================
+// TEXT INPUT OPTIONAL RENDERER
+// =================================================
+function renderTextInputOptional(container, screen) {
+  let html = `
+    <div class="question-container text-input-optional">
       <h2 class="question-text">${screen.question}</h2>
       ${screen.subtitle ? `<p class="question-subtitle">${screen.subtitle}</p>` : ''}
+
       <div class="input-container">
-  `;
-
-  if (screen.storeAs === 'user_vision') {
-    html += `
-      <textarea class="textarea-input" id="textInput"
-        placeholder="${screen.placeholder}" rows="4"></textarea>
-      ${hint ? `<p class="input-hint">${hint}</p>` : ''}
-    `;
-  } else if (screen.storeAs === 'user_name') {
-    // Single line name input with simpler styling
-    html += `
-      <input type="text" class="name-input" id="textInput"
-        placeholder="${screen.placeholder}" autocomplete="given-name">
-    `;
-  } else {
-    html += `
-      <input type="text" class="text-input" id="textInput"
-        placeholder="${screen.placeholder}">
-    `;
-  }
-
-  html += `
+        <textarea class="textarea-input" id="textInput"
+          placeholder="${screen.placeholder}" rows="3"></textarea>
       </div>
-      <div id="validationContainer"></div>
+
       <button class="btn-primary" id="continueBtn">${screen.buttonText || 'Continue'}</button>
+      <button class="btn-skip" id="skipBtn">${screen.skipText || 'Skip'}</button>
+    </div>
   `;
-
-  if (screen.optional) {
-    html += `<button class="btn-skip" id="skipBtn">${screen.skipText}</button>`;
-  }
-
-  html += `</div>`;
 
   container.innerHTML = html;
 
   const textInput = document.getElementById('textInput');
   const continueBtn = document.getElementById('continueBtn');
+  const skipBtn = document.getElementById('skipBtn');
 
   continueBtn.addEventListener('click', () => {
     const value = textInput.value.trim();
-
-    if (!screen.optional && !value) {
-      textInput.focus();
-      return;
-    }
-
-    // Store value
-    if (screen.storeAs === 'user_name') {
-      state.userData.name = value || 'Friend';
-      state.answers.user_name = value;
-    } else {
-      state.answers[screen.storeAs] = value;
-    }
+    state.answers[screen.storeAs] = value;
 
     // Track answer
-    trackAnswer(screen, value, value);
-
-    // Show validation message if exists
-    if (value && screen.validationMessage) {
-      const validationContainer = document.getElementById('validationContainer');
-      validationContainer.innerHTML = `
-        <div class="validation-card">
-          <p class="validation-text">${screen.validationMessage.replace(/\n/g, '<br>')}</p>
-        </div>
-      `;
-
-      continueBtn.textContent = 'Continue';
-      continueBtn.removeEventListener('click', arguments.callee);
-      continueBtn.addEventListener('click', advanceToNextScreen);
-    } else {
-      advanceToNextScreen();
+    if (value) {
+      trackAnswer(screen, value, value);
     }
+
+    advanceToNextScreen();
   });
 
-  // Skip button
-  if (screen.optional) {
-    document.getElementById('skipBtn').addEventListener('click', () => {
-      state.answers[screen.storeAs] = '';
+  skipBtn.addEventListener('click', () => {
+    state.answers[screen.storeAs] = '';
+    advanceToNextScreen();
+  });
+}
+
+// =================================================
+// WARNING SCREEN RENDERER (Red flags)
+// =================================================
+function renderWarningScreen(container, screen) {
+  let html = `
+    <div class="question-container warning-screen">
+      ${screen.icon ? `<div class="warning-icon">${screen.icon}</div>` : ''}
+      <h2 class="question-text">${screen.headline}</h2>
+      <p class="info-body">${screen.body.replace(/\n/g, '<br>')}</p>
+
+      <div class="warning-options">
+  `;
+
+  screen.options.forEach(option => {
+    html += `
+      <button class="btn-secondary warning-option" data-value="${option.value}">
+        ${option.text}
+      </button>
+    `;
+  });
+
+  html += `
+      </div>
+      ${screen.note ? `<p class="warning-note">${screen.note}</p>` : ''}
+    </div>
+  `;
+
+  container.innerHTML = html;
+
+  container.querySelectorAll('.warning-option').forEach(btn => {
+    btn.addEventListener('click', () => {
+      state.answers.red_flag_response = btn.dataset.value;
+
+      if (btn.dataset.value === 'already_cleared') {
+        state.answers.red_flag_evaluated_cleared = true;
+      }
+
       advanceToNextScreen();
     });
-  }
-
-  // Allow enter key for name field
-  if (screen.storeAs === 'user_name') {
-    textInput.addEventListener('keypress', (e) => {
-      if (e.key === 'Enter') {
-        continueBtn.click();
-      }
-    });
-  }
-}
-
-// =================================================
-// GOAL REMINDER / JOURNEY MAP RENDERER
-// =================================================
-function renderGoalReminder(container, reminderKey) {
-  const reminder = reminderKey === 'goal_reminder_1' ? quizContent.goalReminder1 : quizContent.goalReminder2;
-  const goalText = quizContent.goalTexts[state.answers.user_goal] || 'feel better';
-  const name = state.userData.name || 'friend';
-
-  // Check if this is a journey map type (first reminder)
-  if (reminder.type === 'journey_map') {
-    renderJourneyMap(container, reminder, goalText);
-    return;
-  }
-
-  // Get relevant data for achievement diagram
-  const complaint = quizContent.complaintLabels[state.answers.primary_complaint] || 'your symptoms';
-  const treatments = state.treatmentsTried || [];
-  const treatmentCount = treatments.filter(t => t !== 'nothing').length;
-
-  const html = `
-    <div class="question-container goal-reminder-v2">
-      <div class="goal-reminder-header">
-        <div class="goal-reminder-icon">🎯</div>
-        <h2 class="goal-reminder-title">${name}, you're almost there</h2>
-      </div>
-
-      <div class="achievement-diagram">
-        <div class="achievement-step animate-phase" style="animation-delay: 0.1s">
-          <div class="achievement-icon">📋</div>
-          <div class="achievement-content">
-            <div class="achievement-label">YOUR CHALLENGE</div>
-            <div class="achievement-value">${complaint}</div>
-          </div>
-        </div>
-        <div class="achievement-connector animate-phase" style="animation-delay: 0.2s">+</div>
-        <div class="achievement-step animate-phase" style="animation-delay: 0.3s">
-          <div class="achievement-icon">💪</div>
-          <div class="achievement-content">
-            <div class="achievement-label">YOUR EFFORT</div>
-            <div class="achievement-value">${treatmentCount > 0 ? treatmentCount + ' approaches tried' : 'Ready to start'}</div>
-          </div>
-        </div>
-        <div class="achievement-connector animate-phase" style="animation-delay: 0.4s">+</div>
-        <div class="achievement-step animate-phase" style="animation-delay: 0.5s">
-          <div class="achievement-icon">👩‍⚕️</div>
-          <div class="achievement-content">
-            <div class="achievement-label">THE MISSING PIECE</div>
-            <div class="achievement-value">Expert guidance</div>
-          </div>
-        </div>
-        <div class="achievement-connector animate-phase" style="animation-delay: 0.6s">=</div>
-        <div class="achievement-step achievement-goal animate-phase" style="animation-delay: 0.7s">
-          <div class="achievement-icon">✨</div>
-          <div class="achievement-content">
-            <div class="achievement-label">YOUR GOAL</div>
-            <div class="achievement-value">${goalText}</div>
-          </div>
-        </div>
-      </div>
-
-      <p class="goal-reminder-subtext animate-phase" style="animation-delay: 0.9s">Just a few more questions and your personalized protocol will be ready.</p>
-      <button class="btn-primary animate-phase" style="animation-delay: 1s" id="continueBtn">Continue</button>
-    </div>
-  `;
-
-  container.innerHTML = html;
-
-  // Track goal reminder
-  trackEvent('quiz_goal_reminder', {
-    quiz_version: 'v4',
-    reminder_number: reminder.reminderNumber,
-    user_goal: state.answers.user_goal
   });
-
-  document.getElementById('continueBtn').addEventListener('click', advanceToNextScreen);
-}
-
-// =================================================
-// JOURNEY MAP RENDERER - "Your Path Forward"
-// =================================================
-function renderJourneyMap(container, reminder, goalText) {
-  const treatments = state.treatmentsTried || [];
-  const treatmentLabels = treatments
-    .filter(t => t !== 'nothing')
-    .slice(0, 4) // Show max 4 treatments
-    .map(t => quizContent.treatmentLabels[t] || t);
-
-  const hasTriedThings = treatmentLabels.length > 0;
-
-  let html = `
-    <div class="question-container journey-map-screen">
-      <h2 class="question-text">${reminder.headline}</h2>
-
-      <!-- Journey Timeline -->
-      <div class="journey-timeline">
-        <!-- PAST -->
-        <div class="journey-phase past animate-phase" style="animation-delay: 0.1s">
-          <div class="journey-phase-label">WHAT YOU'VE TRIED</div>
-          <div class="journey-phase-content">
-            ${hasTriedThings ? `
-              <div class="journey-tried-items">
-                ${treatmentLabels.map(t => `<span class="journey-tried-item">${t}</span>`).join('')}
-                ${treatments.length > 4 ? `<span class="journey-tried-more">+${treatments.length - 4} more</span>` : ''}
-              </div>
-              <p class="journey-phase-note">Your dedication shows you're ready for this.</p>
-            ` : `
-              <p class="journey-phase-note">Starting fresh gives us a clear baseline.</p>
-            `}
-          </div>
-        </div>
-
-        <!-- Arrow -->
-        <div class="journey-arrow animate-phase" style="animation-delay: 0.3s">↓</div>
-
-        <!-- NOW -->
-        <div class="journey-phase now animate-phase" style="animation-delay: 0.5s">
-          <div class="journey-phase-label">THE MISSING PIECE</div>
-          <div class="journey-phase-content">
-            <div class="journey-missing-piece">
-              <span class="journey-piece-icon">📊</span>
-              <span>Tracking + Practitioner Reviews</span>
-            </div>
-            <p class="journey-phase-note">Registered nutritionists adjust based on YOUR response.</p>
-          </div>
-        </div>
-
-        <!-- Arrow -->
-        <div class="journey-arrow animate-phase" style="animation-delay: 0.7s">↓</div>
-
-        <!-- FUTURE -->
-        <div class="journey-phase future animate-phase" style="animation-delay: 0.9s">
-          <div class="journey-phase-label">YOUR GOAL</div>
-          <div class="journey-phase-content">
-            <div class="journey-goal-destination">
-              <span class="journey-goal-icon-large">✨</span>
-              <span>${goalText}</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <button class="btn-primary animate-phase" style="animation-delay: 1.1s" id="continueBtn">Continue</button>
-    </div>
-  `;
-
-  container.innerHTML = html;
-
-  // Track journey map view
-  trackEvent('quiz_journey_map', {
-    quiz_version: 'v4',
-    treatments_tried_count: treatments.length,
-    user_goal: state.answers.user_goal
-  });
-
-  document.getElementById('continueBtn').addEventListener('click', advanceToNextScreen);
 }
 
 // =================================================
@@ -1202,35 +975,29 @@ function renderJourneyMap(container, reminder, goalText) {
 function renderLoadingScreen(container) {
   const loading = quizContent.loadingSequence;
   const name = state.userData.name || 'Friend';
+  const headline = loading.headlineTemplate.replace('{firstName}', name);
 
-  // Show a popup overlay with comparison loading
   let html = `
     <div class="comparison-popup-overlay">
       <div class="comparison-popup comparison-popup-large">
-        <h2 class="comparison-popup-title-large">CREATING YOUR PERSONALIZED PROTOCOL</h2>
-        <p class="comparison-popup-subtitle">${name}, we're matching your profile with similar success stories...</p>
+        <h2 class="comparison-popup-title-large">${headline}</h2>
+        <p class="comparison-popup-subtitle">${loading.subtext}</p>
 
         <div class="comparison-progress-list">
   `;
 
-  // Generate comparison items with percentages and unique colors
-  const comparisonSteps = [
-    { text: 'Analyzing your symptom patterns', targetPercent: 100, color: '#F59E0B' },
-    { text: 'Finding members with similar profiles', targetPercent: 100, color: '#10B981' },
-    { text: 'Cross-referencing successful protocols', targetPercent: 100, color: '#3B82F6' },
-    { text: 'Calculating your match score', targetPercent: 100, color: '#8B5CF6' },
-    { text: 'Generating your recommendations', targetPercent: 100, color: '#2ECC71' }
-  ];
+  // Progress bar colors
+  const colors = ['#F59E0B', '#10B981', '#3B82F6', '#8B5CF6', '#2ECC71'];
 
-  comparisonSteps.forEach((step, index) => {
+  loading.progressBars.forEach((bar, index) => {
     html += `
-      <div class="comparison-item" id="comparisonItem${index}" data-color="${step.color}">
+      <div class="comparison-item" id="comparisonItem${index}" data-color="${colors[index]}">
         <div class="comparison-item-header">
-          <span class="comparison-item-text">${step.text}</span>
+          <span class="comparison-item-text">${bar.label}</span>
           <span class="comparison-item-percent" id="comparisonPercent${index}">0%</span>
         </div>
         <div class="comparison-bar">
-          <div class="comparison-bar-fill" id="comparisonFill${index}" style="background: ${step.color}"></div>
+          <div class="comparison-bar-fill" id="comparisonFill${index}" style="background: ${colors[index]}"></div>
         </div>
       </div>
     `;
@@ -1259,14 +1026,14 @@ function renderLoadingScreen(container) {
   });
 
   // Start loading animation
-  startComparisonAnimation(comparisonSteps);
+  startComparisonAnimation(loading.progressBars, colors);
 }
 
-async function startComparisonAnimation(steps) {
+async function startComparisonAnimation(bars, colors) {
   const loading = quizContent.loadingSequence;
-  const stepDurations = [1800, 2000, 2200, 1500, 2000];
+  state.loadingPopupIndex = 0;
 
-  for (let i = 0; i < steps.length; i++) {
+  for (let i = 0; i < bars.length; i++) {
     const item = document.getElementById(`comparisonItem${i}`);
     const fill = document.getElementById(`comparisonFill${i}`);
     const percentEl = document.getElementById(`comparisonPercent${i}`);
@@ -1275,21 +1042,16 @@ async function startComparisonAnimation(steps) {
 
     item.classList.add('active');
 
-    // Check for popup questions at specific steps
-    if (i === 1) {
-      const popupQuestion = loading.popupQuestions[0];
-      if (popupQuestion && !state.answers[popupQuestion.storeAs]) {
-        await showLoadingPopup(popupQuestion);
-      }
-    } else if (i === 3) {
-      const popupQuestion = loading.popupQuestions[1];
-      if (popupQuestion && !state.answers[popupQuestion.storeAs]) {
-        await showLoadingPopup(popupQuestion);
-      }
+    // Check for popup questions (only 2 popups now)
+    const popup = loading.popups.find(p => p.triggerAtStep === i);
+    if (popup && !state.answers[popup.storeAs]) {
+      // Show popup at specified percent
+      await animateComparisonBar(fill, percentEl, bars[i].duration * (popup.triggerAtPercent / 100), popup.triggerAtPercent);
+      await showLoadingPopup(popup);
+      await animateComparisonBar(fill, percentEl, bars[i].duration * ((100 - popup.triggerAtPercent) / 100), 100, popup.triggerAtPercent);
+    } else {
+      await animateComparisonBar(fill, percentEl, bars[i].duration, 100);
     }
-
-    // Animate progress bar with percentage counter
-    await animateComparisonBar(fill, percentEl, stepDurations[i], steps[i].targetPercent);
 
     item.classList.remove('active');
     item.classList.add('completed');
@@ -1320,7 +1082,7 @@ async function startComparisonAnimation(steps) {
   }, 500);
 }
 
-function animateComparisonBar(fill, percentEl, duration, targetPercent) {
+function animateComparisonBar(fill, percentEl, duration, targetPercent, startPercent = 0) {
   return new Promise(resolve => {
     const startTime = Date.now();
     const animate = () => {
@@ -1329,91 +1091,10 @@ function animateComparisonBar(fill, percentEl, duration, targetPercent) {
 
       // Easing function for smooth animation
       const easedProgress = 1 - Math.pow(1 - progress, 3);
-      const currentPercent = Math.round(easedProgress * targetPercent);
+      const currentPercent = Math.round(startPercent + easedProgress * (targetPercent - startPercent));
 
       fill.style.width = currentPercent + '%';
       percentEl.textContent = currentPercent + '%';
-
-      if (progress < 1 && !state.loadingPaused) {
-        requestAnimationFrame(animate);
-      } else if (!state.loadingPaused) {
-        resolve();
-      }
-    };
-    animate();
-  });
-}
-
-async function startLoadingAnimation() {
-  const loading = quizContent.loadingSequence;
-  const totalDuration = loading.steps.reduce((sum, step) => sum + step.duration, 0);
-  let elapsedDuration = 0;
-
-  for (let i = 0; i < loading.steps.length; i++) {
-    const step = loading.steps[i];
-    const item = document.getElementById(`loadingItem${i}`);
-    const fill = document.getElementById(`loadingFill${i}`);
-
-    if (!item || !fill) continue;
-
-    item.classList.add('active');
-
-    // Check for popup questions
-    const currentPercent = (elapsedDuration / totalDuration) * 100;
-    const popupQuestion = loading.popupQuestions.find(q =>
-      q.triggerAtPercent <= currentPercent + 10 &&
-      state.loadingPopupIndex <= loading.popupQuestions.indexOf(q)
-    );
-
-    if (popupQuestion && !state.answers[popupQuestion.storeAs]) {
-      await showLoadingPopup(popupQuestion);
-    }
-
-    // Animate progress bar
-    await animateProgressBar(fill, step.duration);
-
-    item.classList.remove('active');
-    item.classList.add('completed');
-
-    elapsedDuration += step.duration;
-  }
-
-  // Show completion message
-  setTimeout(() => {
-    const loadingScreen = document.querySelector('.loading-screen');
-    if (loadingScreen) {
-      const completionDiv = document.createElement('div');
-      completionDiv.className = 'validation-card';
-      completionDiv.innerHTML = `<p class="validation-text">${quizContent.loadingSequence.completionMessage}</p>`;
-      loadingScreen.appendChild(completionDiv);
-    }
-
-    // Submit final data
-    submitFinalData();
-
-    // Auto-advance after brief delay
-    setTimeout(advanceToNextScreen, 1500);
-  }, 500);
-}
-
-function animateProgressBar(fill, duration) {
-  return new Promise(resolve => {
-    const startTime = Date.now();
-    const animate = () => {
-      const elapsed = Date.now() - startTime;
-      const progress = Math.min(elapsed / duration, 1);
-
-      // Easing: fast start, slow middle, fast end
-      let easedProgress;
-      if (progress < 0.2) {
-        easedProgress = progress * 3; // Fast 0-60%
-      } else if (progress < 0.8) {
-        easedProgress = 0.6 + (progress - 0.2) * 0.5; // Slow 60-90%
-      } else {
-        easedProgress = 0.9 + (progress - 0.8) * 0.5; // Fast finish 90-100%
-      }
-
-      fill.style.width = Math.min(easedProgress * 100, 100) + '%';
 
       if (progress < 1 && !state.loadingPaused) {
         requestAnimationFrame(animate);
@@ -1469,7 +1150,7 @@ function showLoadingPopup(question) {
 // =================================================
 function renderResultsScreen(container) {
   // Check for red flags first
-  if (state.hasRedFlags) {
+  if (state.hasRedFlags && !state.answers.red_flag_evaluated_cleared) {
     renderRedFlagResults(container);
     return;
   }
@@ -1479,154 +1160,76 @@ function renderResultsScreen(container) {
 
 function renderNormalResults(container) {
   const protocol = quizContent.protocols[state.calculatedProtocol];
+  const gutType = quizContent.gutTypes[state.calculatedProtocol];
   const practitioner = quizContent.practitioners.rebecca;
-  const goalText = quizContent.goalTexts[state.answers.user_goal] || 'feel better';
+  const goalText = quizContent.goalTexts[state.answers.future_vision] || 'feel better';
   const name = state.userData.name || 'Friend';
+  const scarcityPercent = quizContent.scarcityPercentages[state.calculatedProtocol] || 20;
 
-  // Determine gut-brain level
-  let gutBrainLevel = 'minor';
-  if (state.gutBrainScore >= 4) gutBrainLevel = 'significant';
-  else if (state.gutBrainScore >= 3) gutBrainLevel = 'moderate';
+  // Get timeline prediction
+  const timelinePrediction = getTimelinePrediction();
 
-  // Build frequency insight
-  const frequencyInsights = {
-    daily: "That level of consistency actually helps us - it means patterns should be visible quickly.",
-    several_weekly: "We'll identify your specific triggers.",
-    weekly: "Your patterns may be tied to weekly habits - diet, stress cycles, or routines.",
-    monthly: "Monthly patterns often point to hormonal or longer-term dietary triggers."
-  };
-
-  const frequencyInsight = frequencyInsights[state.answers.symptom_frequency] || '';
+  // Format timeline prediction (convert markdown bold to HTML)
+  const formattedTimeline = timelinePrediction.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
 
   let html = `
     <div class="question-container results-screen">
-      <!-- Header -->
+      <!-- Header with Gut Type -->
       <div class="results-header">
-        <p class="results-greeting">${name}, your protocol is ready.</p>
+        <p class="results-greeting">${name}, you're a</p>
+        <h1 class="gut-type-name" style="border-color: ${gutType.color}">${gutType.name}</h1>
+        <p class="gut-type-description">${gutType.description}</p>
       </div>
 
       <!-- Protocol Card -->
-      <div class="protocol-card">
-        <div class="protocol-label">YOUR RECOMMENDED PROTOCOL</div>
+      <div class="protocol-card" style="border-color: ${gutType.color}">
+        <div class="protocol-label">YOUR MATCHED PROTOCOL</div>
         <h2 class="protocol-name">${protocol.name}</h2>
         ${state.hasGutBrainOverlay ? `<span class="protocol-overlay">${quizContent.nervousSystemOverlay.name}</span>` : ''}
-        <p class="protocol-description">Based on your symptom pattern, gut history, and the ${state.treatmentsTried.length} approaches you've already tried, this is your highest-probability path to relief.</p>
-      </div>
 
-      <!-- Analysis Card -->
-      <div class="analysis-card">
-        <h3 class="analysis-title">Here's what stood out in your responses:</h3>
-        <ul class="analysis-list">
-          <li class="analysis-item">You've been dealing with ${quizContent.complaintLabels[state.answers.primary_complaint] || 'gut issues'} for ${quizContent.durationLabels[state.answers.symptom_duration] || 'some time'}</li>
-          <li class="analysis-item">Your symptoms are ${state.answers.symptom_frequency} — ${frequencyInsight}</li>
-          <li class="analysis-item">You've tried ${state.treatmentsTried.length} different approaches — which tells us what hasn't worked</li>
-          <li class="analysis-item">Your gut-brain score of ${state.gutBrainScore.toFixed(1)}/5 suggests stress is a ${gutBrainLevel} factor${state.hasGutBrainOverlay ? " — that's why we're adding Nervous System Support" : ''}</li>
+        <ul class="protocol-includes">
+          ${protocol.includes.map(item => `<li>${item}</li>`).join('')}
         </ul>
-
-        <!-- Practitioner Quote -->
-        <div class="practitioner-quote">
-          <img src="${practitioner.photo}" alt="${practitioner.name}" class="practitioner-photo">
-          <div class="practitioner-content">
-            <p class="practitioner-text">"${practitioner.quote}"</p>
-            <p class="practitioner-name">— ${practitioner.name}, ${practitioner.credentials}</p>
-            <p class="practitioner-title">${practitioner.title}</p>
-          </div>
-        </div>
       </div>
 
-      <!-- Why Different Section -->
-      <div class="difference-section">
-        <h3 class="difference-title">WHY THIS TIME IS DIFFERENT</h3>
-        <div class="difference-comparison">
-          <div class="difference-item before">
-            <span class="difference-icon">❌</span>
-            <span class="difference-text">Before: Try diet → No feedback → Give up or plateau</span>
-          </div>
-          <div class="difference-item after">
-            <span class="difference-icon">✓</span>
-            <span class="difference-text">Now: Personalized protocol → Daily tracking → Practitioner reviews → Adjustments → Progress</span>
-          </div>
-        </div>
-
-        <div class="features-list">
-          <div class="feature-item">
-            <span class="feature-icon">📋</span>
-            <div class="feature-content">
-              <div class="feature-title">Your Protocol</div>
-              <div class="feature-desc">${protocol.name}, customized to your symptom pattern</div>
-            </div>
-          </div>
-          <div class="feature-item">
-            <span class="feature-icon">📊</span>
-            <div class="feature-content">
-              <div class="feature-title">Daily Tracking</div>
-              <div class="feature-desc">3 minutes/day to log symptoms (this is how we spot what's working)</div>
-            </div>
-          </div>
-          <div class="feature-item">
-            <span class="feature-icon">👩‍⚕️</span>
-            <div class="feature-content">
-              <div class="feature-title">Practitioner Access</div>
-              <div class="feature-desc">Ask questions, get protocol adjustments, never feel stuck</div>
-            </div>
-          </div>
-          <div class="feature-item">
-            <span class="feature-icon">📈</span>
-            <div class="feature-content">
-              <div class="feature-title">Progress Reviews</div>
-              <div class="feature-desc">We look at your data and tell you what to change</div>
-            </div>
-          </div>
-        </div>
+      <!-- Timeline Prediction -->
+      <div class="timeline-prediction">
+        <h3 class="timeline-header">When you can expect to feel better:</h3>
+        <p class="timeline-text">${formattedTimeline}</p>
       </div>
 
-      <!-- Timeline Section -->
-      <div class="timeline-section">
-        <h3 class="timeline-header">YOUR PATH TO ${goalText.toUpperCase()}</h3>
-        <p class="timeline-expectation">Here's what to expect:</p>
+      <!-- Scarcity Message -->
+      <div class="scarcity-message">
+        <p>Only <strong>${scarcityPercent}%</strong> of women who take this quiz match the ${protocol.displayName}.</p>
+        <p class="scarcity-subtext">You've qualified for personalized practitioner support.</p>
+      </div>
 
-        <div class="timeline-steps">
-          <div class="timeline-step">
-            <div class="timeline-step-marker">
-              <div class="timeline-step-dot"></div>
-              <div class="timeline-step-line"></div>
-            </div>
-            <div class="timeline-step-content">
-              <div class="timeline-step-week">Week 1-2</div>
-              <div class="timeline-step-desc">${protocol.weekOneResult}</div>
-            </div>
-          </div>
-          <div class="timeline-step">
-            <div class="timeline-step-marker">
-              <div class="timeline-step-dot"></div>
-              <div class="timeline-step-line"></div>
-            </div>
-            <div class="timeline-step-content">
-              <div class="timeline-step-week">Week 3-4</div>
-              <div class="timeline-step-desc">You'll know your triggers — your personal Green/Yellow/Red food list takes shape</div>
-            </div>
-          </div>
-          <div class="timeline-step">
-            <div class="timeline-step-marker">
-              <div class="timeline-step-dot"></div>
-            </div>
-            <div class="timeline-step-content">
-              <div class="timeline-step-week">Month 2-3</div>
-              <div class="timeline-step-desc">Real, lasting control — symptoms become the exception, not the rule</div>
-            </div>
-          </div>
+      <!-- Analysis Section -->
+      <div class="analysis-card">
+        <h3 class="analysis-title">Your Assessment Summary:</h3>
+        <ul class="analysis-list">
+          <li>Primary concern: <strong>${quizContent.complaintLabels[state.answers.primary_complaint] || 'gut issues'}</strong></li>
+          <li>Duration: <strong>${quizContent.durationLabels[state.answers.symptom_duration] || 'some time'}</strong></li>
+          <li>Approaches tried: <strong>${state.treatmentsCount}</strong></li>
+          ${state.hasGutBrainOverlay ? `<li>Stress connection: <strong>Significant</strong> — includes nervous system support</li>` : ''}
+        </ul>
+      </div>
+
+      <!-- Practitioner Quote -->
+      <div class="practitioner-quote">
+        <img src="${practitioner.photo}" alt="${practitioner.name}" class="practitioner-photo" onerror="this.style.display='none'">
+        <div class="practitioner-content">
+          <p class="practitioner-text">"${practitioner.quote}"</p>
+          <p class="practitioner-name">— ${practitioner.name}, ${practitioner.credentials}</p>
         </div>
       </div>
 
       <!-- CTA Section -->
       <div class="cta-section">
-        <p class="cta-message">${name}, you've already taken the hardest step — getting clear on what you're dealing with.</p>
-        <button class="btn btn-coral" id="ctaBtn">START MY $1 TRIAL</button>
-        <div class="member-count">
-          <span class="member-count-dot"></span>
-          <span>Join ${quizContent.memberCount} women who are finally getting answers</span>
-        </div>
-        <p class="cta-subtext">Questions? Message our team anytime.</p>
+        <h3 class="cta-headline">Start Your $1 Trial</h3>
+        <p class="cta-subtext">7-day full access to your protocol + practitioner support</p>
+        <button class="btn btn-coral" id="ctaBtn">Claim My Protocol →</button>
+        <p class="cta-guarantee">Cancel anytime. No questions asked.</p>
       </div>
     </div>
   `;
@@ -1649,6 +1252,22 @@ function renderNormalResults(container) {
   });
 }
 
+function getTimelinePrediction() {
+  const lifeImpact = state.answers.life_impact;
+  const duration = state.answers.symptom_duration;
+
+  if (lifeImpact === 'severe') {
+    return quizContent.timelinePredictions.high_impact;
+  }
+
+  if (duration === '5_plus_years' || duration === '3_5_years') {
+    const durationText = quizContent.durationText[duration] || 'years';
+    return quizContent.timelinePredictions.long_duration.replace('{duration}', durationText);
+  }
+
+  return quizContent.timelinePredictions.default;
+}
+
 function renderRedFlagResults(container) {
   const practitioner = quizContent.practitioners.rebecca;
   const name = state.userData.name || 'Friend';
@@ -1660,7 +1279,7 @@ function renderRedFlagResults(container) {
 
   let html = `
     <div class="question-container red-flag-screen">
-      <img src="${practitioner.photo}" alt="${practitioner.name}" class="red-flag-photo">
+      <img src="${practitioner.photo}" alt="${practitioner.name}" class="red-flag-photo" onerror="this.style.display='none'">
 
       <h1 class="red-flag-title">"${name}, I need to be direct with you."</h1>
 
@@ -1707,7 +1326,6 @@ function renderRedFlagResults(container) {
 
   // Handle "already cleared" button - continue to normal results
   document.getElementById('continueAnywayBtn').addEventListener('click', () => {
-    state.redFlagsBypassed = true;
     state.answers.red_flag_evaluated_cleared = true;
     // Re-render as normal results
     renderNormalResults(container);
@@ -1723,12 +1341,18 @@ function calculateProtocol() {
   const treatments = state.treatmentsTried || [];
 
   // Priority 1: Post-SIBO (requires both diagnosis AND treatment)
-  if (diagnoses.includes('sibo') && treatments.includes('sibo_antibiotics')) {
+  if (diagnoses.includes('sibo') && treatments.includes('prescription')) {
     state.calculatedProtocol = 'rebuild';
     return;
   }
 
-  // Priority 2: Primary complaint mapping
+  // Priority 2: Alternating stool pattern -> stability
+  if (answers.stool_changes === 'alternates') {
+    state.calculatedProtocol = 'stability';
+    return;
+  }
+
+  // Priority 3: Primary complaint mapping
   const complaint = answers.primary_complaint;
 
   const protocolMap = {
@@ -1740,13 +1364,7 @@ function calculateProtocol() {
     'mixed': 'stability'
   };
 
-  // Check for alternating stool pattern
-  if (answers.stool_changes === 'alternates') {
-    state.calculatedProtocol = 'stability';
-    return;
-  }
-
-  // Handle pain with sub-logic
+  // Handle pain with sub-logic based on flare frequency
   if (complaint === 'pain') {
     if (answers.flare_frequency === 'more') {
       state.calculatedProtocol = 'calm_gut';
@@ -1767,7 +1385,7 @@ function calculateProtocol() {
 // NAVIGATION
 // =================================================
 function advanceToNextScreen() {
-  // Prevent duplicate history entries - only push if this screen isn't already at the top of history
+  // Save to history
   const lastHistoryEntry = state.history[state.history.length - 1];
   const shouldPushHistory = !lastHistoryEntry ||
     lastHistoryEntry.screenIndex !== state.currentScreenIndex;
@@ -1775,16 +1393,25 @@ function advanceToNextScreen() {
   if (shouldPushHistory) {
     state.history.push({
       screenIndex: state.currentScreenIndex,
-      blockIndex: state.currentBlockIndex
+      phaseIndex: state.currentPhaseIndex
     });
+  }
+
+  // Check if we need to show safety warning (after safety_weight)
+  const currentScreen = screenOrder[state.currentScreenIndex];
+  if (currentScreen.screenKey === 'safety_weight' && state.hasRedFlags) {
+    // Insert safety warning screen
+    state.currentScreenIndex++;
+    renderWarningScreen(contentEl, quizContent.safetyWarning);
+    return;
   }
 
   // Move to next screen
   state.currentScreenIndex++;
 
-  // Update block index
+  // Update phase index
   if (state.currentScreenIndex < screenOrder.length) {
-    state.currentBlockIndex = screenOrder[state.currentScreenIndex].block;
+    state.currentPhaseIndex = screenOrder[state.currentScreenIndex].phase;
   }
 
   // Check if quiz is complete
@@ -1800,20 +1427,16 @@ function advanceToNextScreen() {
 function handleBack() {
   if (state.history.length === 0) return;
 
-  // Reset feedback state
-  state.showingFeedback = false;
-  state.currentFeedbackCorrect = null;
-
-  // Pop from history until we get to a different screen
+  // Pop from history
   let prev = state.history.pop();
 
-  // Skip any duplicate entries (shouldn't happen with the guard above, but just in case)
+  // Skip any duplicate entries
   while (state.history.length > 0 && prev.screenIndex === state.currentScreenIndex) {
     prev = state.history.pop();
   }
 
   state.currentScreenIndex = prev.screenIndex;
-  state.currentBlockIndex = prev.blockIndex;
+  state.currentPhaseIndex = prev.phaseIndex;
 
   renderCurrentScreen();
   updateProgressBar();
@@ -1826,29 +1449,29 @@ function updateProgressBar() {
   const segments = document.querySelectorAll('.progress-segment');
   const dots = document.querySelectorAll('.progress-dot');
 
-  // Calculate progress within current section
-  let questionsBeforeCurrentSection = 0;
-  for (let i = 0; i < state.currentBlockIndex; i++) {
-    questionsBeforeCurrentSection += QUESTIONS_PER_SECTION[i];
+  // Calculate progress within current phase
+  let questionsBeforeCurrentPhase = 0;
+  for (let i = 0; i < state.currentPhaseIndex; i++) {
+    questionsBeforeCurrentPhase += QUESTIONS_PER_PHASE[i];
   }
-  const currentQuestionInSection = state.currentScreenIndex - questionsBeforeCurrentSection;
-  const questionsInCurrentSection = QUESTIONS_PER_SECTION[state.currentBlockIndex] || 1;
-  const progressInSection = Math.min(currentQuestionInSection / questionsInCurrentSection, 1);
+  const currentQuestionInPhase = state.currentScreenIndex - questionsBeforeCurrentPhase;
+  const questionsInCurrentPhase = QUESTIONS_PER_PHASE[state.currentPhaseIndex] || 1;
+  const progressInPhase = Math.min(currentQuestionInPhase / questionsInCurrentPhase, 1);
 
   segments.forEach((segment, index) => {
     const fill = segment.querySelector('.segment-fill');
     segment.classList.remove('completed', 'current');
 
-    if (index < state.currentBlockIndex) {
-      // Completed sections
+    if (index < state.currentPhaseIndex) {
+      // Completed phases
       segment.classList.add('completed');
       if (fill) fill.style.width = '100%';
-    } else if (index === state.currentBlockIndex) {
-      // Current section - show partial fill
+    } else if (index === state.currentPhaseIndex) {
+      // Current phase - show partial fill
       segment.classList.add('current');
-      if (fill) fill.style.width = (progressInSection * 100) + '%';
+      if (fill) fill.style.width = (progressInPhase * 100) + '%';
     } else {
-      // Future sections
+      // Future phases
       if (fill) fill.style.width = '0%';
     }
   });
@@ -1856,7 +1479,7 @@ function updateProgressBar() {
   // Update dots
   dots.forEach((dot, index) => {
     dot.classList.remove('active');
-    if (index < state.currentBlockIndex) {
+    if (index < state.currentPhaseIndex) {
       dot.classList.add('active');
     }
   });
@@ -1926,8 +1549,8 @@ function buildUserRecord(isPartial) {
     quiz_source: CONFIG.SOURCE_TRACKING,
 
     // Goal info
-    goal_selection: state.answers.user_goal || null,
-    journey_stage: null, // Not in v4
+    goal_selection: state.answers.future_vision || null,
+    journey_stage: null,
 
     // Protocol
     protocol: state.calculatedProtocol ? protocolNumbers[state.calculatedProtocol] : null,
@@ -1936,33 +1559,29 @@ function buildUserRecord(isPartial) {
 
     // Red flags
     has_red_flags: state.hasRedFlags || false,
-    red_flag_evaluated_cleared: false,
+    red_flag_evaluated_cleared: state.answers.red_flag_evaluated_cleared || false,
     red_flag_details: state.hasRedFlags ? { flags: state.redFlags } : null,
 
     // Questions
     primary_complaint: state.answers.primary_complaint || null,
-    symptom_frequency: state.answers.symptom_frequency || null,
+    symptom_frequency: null,
     relief_after_bm: state.answers.bm_relief || null,
     frequency_during_flare: state.answers.flare_frequency || null,
     stool_during_flare: state.answers.stool_changes || null,
     duration: state.answers.symptom_duration || null,
     diagnoses: state.answers.diagnoses || [],
     treatments_tried: state.treatmentsTried || [],
-    stress_connection: state.gutBrainScore >= 4 ? 'significant' : (state.gutBrainScore >= 3 ? 'some' : 'none'),
-    mental_health_impact: state.answers.mood_impact_score >= 4 ? 'yes' : (state.answers.mood_impact_score >= 3 ? 'sometimes' : 'no'),
+    stress_connection: state.answers.stress_connection || null,
+    mental_health_impact: null,
     sleep_quality: null,
     life_impact_level: state.answers.life_impact || null,
     hardest_part: null,
     dream_outcome: state.answers.user_vision || null,
 
-    // Quiz-4 specific fields (new)
+    // Quiz-4 specific fields
     user_timeline: state.answers.user_timeline || null,
     knowledge_score: state.knowledgeScore || 0,
     gut_brain_score: state.gutBrainScore || null,
-    slider_stress_gut: state.answers.stress_gut_score || null,
-    slider_food_anxiety: state.answers.food_anxiety_score || null,
-    slider_mood_impact: state.answers.mood_impact_score || null,
-    slider_thought_frequency: state.answers.thought_frequency_score || null,
     symptom_timing: state.answers.symptom_timing || null,
     symptom_trigger_timing: state.answers.symptom_trigger_timing || null,
 
@@ -1991,26 +1610,26 @@ async function sendWebhook(eventType) {
     protocol_description: protocol ? protocol.tagline : '',
     has_stress_component: state.hasGutBrainOverlay || false,
 
-    goal_selection: state.answers.user_goal || '',
+    goal_selection: state.answers.future_vision || '',
     journey_stage: '',
 
     // Safety questions
-    q1_weight_loss: state.answers.safety_weight_loss || '',
+    q1_weight_loss: state.answers.safety_weight || '',
     q2_blood: state.answers.safety_blood || '',
-    q3_family_history: state.answers.safety_family || '',
+    q3_family_history: '',
     q4_colonoscopy: '',
 
     // Quiz questions
     q5_primary_complaint: state.answers.primary_complaint || '',
-    q6_frequency: state.answers.symptom_frequency || '',
+    q6_frequency: '',
     q7_bm_relief: state.answers.bm_relief || '',
     q8_frequency_change: state.answers.flare_frequency || '',
     q9_stool_change: state.answers.stool_changes || '',
     q10_duration: state.answers.symptom_duration || '',
     q11_diagnosis: (state.answers.diagnoses || []).join(','),
     q12_tried: (state.treatmentsTried || []).join(','),
-    q13_stress: state.gutBrainScore >= 4 ? 'significant' : (state.gutBrainScore >= 3 ? 'some' : 'none'),
-    q14_mental_health: state.answers.mood_impact_score >= 4 ? 'yes' : 'no',
+    q13_stress: state.answers.stress_connection || '',
+    q14_mental_health: '',
     q15_sleep: '',
     q16_life_impact: state.answers.life_impact || '',
     q17_hardest_part: '',
@@ -2018,21 +1637,16 @@ async function sendWebhook(eventType) {
 
     // Red flags
     had_red_flags: state.hasRedFlags || false,
-    red_flag_evaluated_cleared: false,
+    red_flag_evaluated_cleared: state.answers.red_flag_evaluated_cleared || false,
 
-    // Quiz-4 specific fields (new)
+    // Quiz-4 specific fields
     user_timeline: state.answers.user_timeline || '',
     knowledge_score: state.knowledgeScore || 0,
-    gut_brain_score: state.gutBrainScore ? state.gutBrainScore.toFixed(2) : '',
-    slider_stress_gut: state.answers.stress_gut_score || '',
-    slider_food_anxiety: state.answers.food_anxiety_score || '',
-    slider_mood_impact: state.answers.mood_impact_score || '',
-    slider_thought_frequency: state.answers.thought_frequency_score || '',
+    gut_brain_score: state.gutBrainScore || '',
     symptom_timing: state.answers.symptom_timing || '',
     symptom_trigger_timing: state.answers.symptom_trigger_timing || '',
-    knowledge_q1_correct: state.answers.knowledge_q1_correct ? 'true' : 'false',
-    knowledge_q2_correct: state.answers.knowledge_q2_correct ? 'true' : 'false',
-    knowledge_q3_correct: state.answers.knowledge_q3_correct ? 'true' : 'false',
+    knowledge_eating_speed_correct: state.answers.knowledge_eating_speed_correct ? 'true' : 'false',
+    knowledge_fodmap_correct: state.answers.knowledge_fodmap_correct ? 'true' : 'false',
 
     // Tracking
     source: CONFIG.SOURCE_TRACKING,
@@ -2041,7 +1655,6 @@ async function sendWebhook(eventType) {
   };
 
   try {
-    // Send as form-encoded data
     const formData = new URLSearchParams();
     for (const [key, value] of Object.entries(payload)) {
       formData.append(key, typeof value === 'boolean' ? (value ? 'true' : 'false') : String(value));
@@ -2081,9 +1694,14 @@ function redirectToOffer() {
   params.set('protocol_name', state.calculatedProtocol ? quizContent.protocols[state.calculatedProtocol].name : '');
   params.set('gut_brain', state.hasGutBrainOverlay ? 'true' : 'false');
 
+  // Gut type
+  if (state.calculatedProtocol && quizContent.gutTypes[state.calculatedProtocol]) {
+    params.set('gut_type', quizContent.gutTypes[state.calculatedProtocol].name);
+  }
+
   // Goal
-  if (state.answers.user_goal) {
-    params.set('goal_selection', state.answers.user_goal);
+  if (state.answers.future_vision) {
+    params.set('goal_selection', state.answers.future_vision);
   }
 
   // Complaint info
@@ -2106,14 +1724,11 @@ function redirectToOffer() {
   if (state.treatmentsTried.length > 0) {
     params.set('treatments', state.treatmentsTried.join(','));
     params.set('treatments_formatted', formatTreatmentsList(state.treatmentsTried));
-    params.set('treatments_tried_count', state.treatmentsTried.filter(t => t !== 'nothing').length.toString());
+    params.set('treatments_tried_count', state.treatmentsCount.toString());
   }
 
-  // Gut-brain score (for offer-4)
-  params.set('gut_brain_score', state.gutBrainScore.toFixed(1));
-
   // Stress level
-  params.set('stress_level', state.gutBrainScore >= 4 ? 'significant' : (state.gutBrainScore >= 3 ? 'some' : 'none'));
+  params.set('stress_level', state.hasGutBrainOverlay ? 'significant' : 'none');
 
   // Life impact
   if (state.answers.life_impact) {
@@ -2163,8 +1778,8 @@ function trackScreenView(screen) {
     screen_number: screen.screenNumber || state.currentScreenIndex + 1,
     screen_id: screen.id,
     screen_name: screen.question || screen.headline || screen.id,
-    block_id: screenOrder[state.currentScreenIndex]?.block || 0,
-    block_number: state.currentBlockIndex + 1,
+    phase_id: screenOrder[state.currentScreenIndex]?.phase || 0,
+    phase_number: state.currentPhaseIndex + 1,
     time_on_previous_screen_seconds: timeOnPrevious
   });
 }
@@ -2194,14 +1809,15 @@ function trackQuizComplete() {
     total_time_seconds: totalTime,
     total_screens_viewed: state.totalScreensViewed,
     protocol_assigned: state.calculatedProtocol,
+    gut_type: state.calculatedProtocol ? quizContent.gutTypes[state.calculatedProtocol].name : null,
     has_red_flags: state.hasRedFlags,
-    user_goal: state.answers.user_goal,
+    user_goal: state.answers.future_vision,
     user_timeline: state.answers.user_timeline,
     primary_complaint: state.answers.primary_complaint,
     duration: state.answers.symptom_duration,
-    treatments_tried_count: state.treatmentsTried.length,
+    treatments_tried_count: state.treatmentsCount,
     knowledge_score: state.knowledgeScore,
-    gut_brain_score: state.gutBrainScore
+    gut_brain_overlay: state.hasGutBrainOverlay
   });
 
   // Track pixel complete registration
