@@ -171,13 +171,12 @@ function initQuiz() {
   // Generate unique session ID for tracking
   state.sessionId = generateSessionId();
 
-  // Track quiz start
+  // Track quiz start (GTM, step tracking, and Supabase)
   trackEvent('quiz_start', {
     quiz_version: 'v4',
     timestamp: state.quizStartTime.toISOString()
   });
-
-  // Track quiz start to Supabase
+  trackQuizStep('quiz_start');
   trackQuizEvent('quiz_start');
 
   // Track page view
@@ -206,6 +205,9 @@ function renderCurrentScreen() {
 
   // Update phase index
   state.currentPhaseIndex = screenInfo.phase;
+
+  // Track quiz step for GTM
+  trackQuizStep(getTrackingSectionName());
 
   // Update section label
   updateSectionLabel();
@@ -806,7 +808,8 @@ function renderEmailInput(container, screen) {
     state.answers.user_email = email;
     state.emailCaptured = true;
 
-    // Track email capture
+    // Track email capture (both step and detailed)
+    trackQuizStep('email_captured');
     trackEvent('quiz_email_submit', {
       quiz_version: 'v4',
       screen_number: screen.screenNumber
@@ -1107,6 +1110,9 @@ async function startComparisonAnimation(bars, colors) {
 // ANIMATED REVEAL SEQUENCE
 // =================================================
 function startAnimatedReveal() {
+  // Track animated reveal start
+  trackQuizStep('animated_reveal');
+
   const container = contentEl;
   const name = state.userData.name || 'Friend';
   const goalText = quizContent.goalTexts[state.answers.future_vision] || 'feel better';
@@ -1423,6 +1429,9 @@ function getContextualRebeccaQuote() {
 }
 
 function renderRedFlagResults(container) {
+  // Track red flag results
+  trackQuizStep('red_flag_results');
+
   const practitioner = quizContent.practitioners.rebecca;
   const name = state.userData.name || 'Friend';
 
@@ -1836,6 +1845,9 @@ async function sendWebhook(eventType) {
 // REDIRECT TO OFFER
 // =================================================
 function redirectToOffer() {
+  // Track offer redirect
+  trackQuizStep('offer_redirect');
+
   const params = new URLSearchParams();
 
   // Standard params
@@ -1921,6 +1933,72 @@ function trackEvent(eventName, data) {
     ...data
   });
   console.log('DataLayer push:', eventName, data);
+}
+
+// =================================================
+// GTM QUIZ STEP TRACKING (Quiz-4 specific)
+// =================================================
+function trackQuizStep(sectionName) {
+  window.dataLayer = window.dataLayer || [];
+  window.dataLayer.push({
+    'event': 'quiz_step',
+    'quiz_section': sectionName,
+    'quiz_source': CONFIG.SOURCE_TRACKING
+  });
+  console.log('GTM quiz_step:', { quiz_section: sectionName, quiz_source: CONFIG.SOURCE_TRACKING });
+}
+
+// Get tracking section name based on current screen
+function getTrackingSectionName() {
+  const screenInfo = screenOrder[state.currentScreenIndex];
+  const screenKey = screenInfo?.screenKey || 'unknown';
+
+  // Map screen keys to tracking section names
+  const sectionMap = {
+    // Phase 1: Emotional Hook (YOUR GOALS)
+    'future_vision': 'phase1_q1_future_vision',
+    'timeline': 'phase1_q2_timeline',
+    'primary_complaint': 'phase1_q3_complaint',
+    'duration': 'phase1_q4_duration',
+    'validation_duration': 'phase1_validation',
+
+    // Phase 2: Clinical Assessment (YOUR SYMPTOMS)
+    'bm_relief': 'phase2_q1_bm_relief',
+    'flare_frequency': 'phase2_q2_flare_frequency',
+    'stool_changes': 'phase2_q3_stool_changes',
+    'progress_validation': 'phase2_validation',
+    'treatments_tried': 'phase2_q4_treatments',
+    'diagnosis_history': 'phase2_q5_diagnosis',
+    'name_capture': 'phase2_name_capture',
+
+    // Phase 3: The Bridge (WHY THIS WORKS)
+    'why_different': 'phase3_why_different',
+    'testimonial': 'phase3_testimonial',
+
+    // Phase 4: Knowledge Quiz (QUICK GUT CHECK)
+    'knowledge_intro': 'phase4_intro',
+    'knowledge_eating_speed': 'phase4_q1_eating_speed',
+    'knowledge_eating_response': 'phase4_q1_response',
+    'knowledge_fodmap': 'phase4_q2_fodmap',
+    'knowledge_fodmap_response': 'phase4_q2_response',
+
+    // Phase 5: Gut-Brain (YOUR PROFILE)
+    'stress_connection': 'phase5_q1_stress',
+    'stress_validation': 'phase5_validation',
+
+    // Phase 6: Safety (FINAL QUESTIONS)
+    'safety_blood': 'phase6_q1_safety_blood',
+    'safety_weight': 'phase6_q2_safety_weight',
+
+    // Phase 7: Email Capture & Results (YOUR RESULTS)
+    'life_impact': 'phase7_q1_life_impact',
+    'email_capture': 'phase7_email_capture',
+    'vision_optional': 'phase7_vision_optional',
+    'loading_sequence': 'phase7_loading',
+    'results_page': 'phase7_results'
+  };
+
+  return sectionMap[screenKey] || `unknown_${screenKey}`;
 }
 
 // =================================================
