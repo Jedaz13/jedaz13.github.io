@@ -1,6 +1,6 @@
 /* =====================================================
    Quiz v4 Content - Gut Healing Academy
-   30 Screens across 7 Blocks
+   28 Screens - Updated Structure
    ===================================================== */
 
 const quizContent = {
@@ -8,87 +8,40 @@ const quizContent = {
   memberCount: null,
 
   // =================================================
-  // BLOCK 1: GOALS & CONTEXT (Screens 1-5)
+  // PHASE 1: EMOTIONAL HOOK (Screens 1-5)
   // =================================================
-  block1: {
-    id: 'goals_context',
-    label: 'Goals & Context',
+  phase1: {
+    id: 'emotional_hook',
+    label: 'Your Goals',
     screens: [
-      // Screen 1: Goal Selection
+      // Screen 1: Future Vision
       {
-        id: 'goal_selection',
+        id: 'future_vision',
         screenNumber: 1,
         type: 'single_select',
         question: 'If your gut worked perfectly tomorrow, what would you do first?',
         options: [
-          {
-            icon: '🍽️',
-            text: 'Eat whatever I want without fear or calculation',
-            value: 'eat_freely'
-          },
-          {
-            icon: '🗺️',
-            text: 'Travel or go somewhere without planning around bathrooms',
-            value: 'travel_freedom'
-          },
-          {
-            icon: '👥',
-            text: 'Go out to dinner with friends or family, stress-free',
-            value: 'social_eating'
-          },
-          {
-            icon: '☕',
-            text: 'Just enjoy a normal morning — coffee, breakfast, no symptoms',
-            value: 'normal_morning'
-          }
+          { icon: '🍽️', text: 'Eat whatever I want without fear', value: 'eat_freely' },
+          { icon: '✈️', text: 'Travel without bathroom anxiety', value: 'travel' },
+          { icon: '👥', text: 'Enjoy meals with friends & family', value: 'social' },
+          { icon: '☀️', text: 'Have a normal, predictable morning', value: 'morning' }
         ],
-        storeAs: 'user_goal'
+        storeAs: 'future_vision'
       },
 
-      // Screen 2: Timeline Setting
+      // Screen 2: Timeline
       {
-        id: 'timeline_setting',
+        id: 'timeline',
         screenNumber: 2,
         type: 'single_select',
         question: 'When do you want to feel in control of your gut?',
         options: [
-          {
-            text: 'As soon as possible — I need relief now',
-            value: 'asap'
-          },
-          {
-            text: 'Within the next few weeks',
-            value: 'few_weeks'
-          },
-          {
-            text: "I'm ready to do this properly, however long it takes",
-            value: 'long_term'
-          },
-          {
-            text: 'I have an important event coming up',
-            value: 'event'
-          }
+          { icon: '🚀', text: "As soon as possible — I'm ready now", value: 'asap' },
+          { icon: '📅', text: 'Within the next few weeks', value: 'few_weeks' },
+          { icon: '🎯', text: "I'm focused on long-term change", value: 'long_term' },
+          { icon: '🗓️', text: 'Before a specific event or date', value: 'event' }
         ],
-        storeAs: 'user_timeline',
-        validationMessages: {
-          asap: {
-            title: "Let's be real with you.",
-            message: "Most members notice improvement within the first 1-2 weeks. But real, lasting change — the kind where you stop thinking about your gut — takes 2-3 months.\n\nThe good news? You won't be doing this alone. Our practitioners review your progress and adjust as you go."
-          },
-          few_weeks: {
-            title: "That's realistic.",
-            message: "Most members see noticeable changes in weeks 1-2, and significant improvement by week 4. The key is consistency — and having someone who actually tracks your progress with you."
-          },
-          long_term: {
-            title: "You're thinking about this the right way.",
-            message: "Quick fixes are why you're still searching. Real gut healing typically takes 2-3 months, but you'll feel progress along the way. We're with you for the whole journey."
-          },
-          event: {
-            title: "We can work with this.",
-            message: "Tell us about your event and we'll prioritize fast-acting changes while building toward lasting improvement."
-          }
-        },
-        showTimeline: true
+        storeAs: 'user_timeline'
       },
 
       // Screen 3: Primary Complaint
@@ -97,116 +50,73 @@ const quizContent = {
         screenNumber: 3,
         type: 'single_select',
         question: "What's your #1 struggle right now?",
-        subtitle: 'Select the one that affects you most',
+        subtitle: 'Choose the one that bothers you most',
         options: [
-          {
-            text: 'Bloating — I wake up flat and look 6 months pregnant by evening',
-            value: 'bloating',
-            protocol: 'bloat_reset'
-          },
-          {
-            text: 'Constipation — Days without relief, straining, never feeling done',
-            value: 'constipation',
-            protocol: 'regularity'
-          },
-          {
-            text: "Diarrhea — Urgency, loose stools, can't trust my body",
-            value: 'diarrhea',
-            protocol: 'calm_gut'
-          },
-          {
-            text: "It changes — I never know which day I'll get",
-            value: 'mixed',
-            protocol: 'stability'
-          },
-          {
-            text: 'Pain and cramping that stops me in my tracks',
-            value: 'pain',
-            protocol: 'bloat_reset'
-          },
-          {
-            text: 'Gas that makes me avoid being around people',
-            value: 'gas',
-            protocol: 'bloat_reset'
-          }
+          { icon: '🎈', text: 'Bloating & distension', value: 'bloating', protocol: 'bloat_reset' },
+          { icon: '🧱', text: 'Constipation', value: 'constipation', protocol: 'regularity' },
+          { icon: '💨', text: 'Diarrhea or urgency', value: 'diarrhea', protocol: 'calm_gut' },
+          { icon: '🔄', text: 'It alternates (sometimes both)', value: 'mixed', protocol: 'stability' },
+          { icon: '⚡', text: 'Abdominal pain or cramping', value: 'pain', protocol: 'bloat_reset' },
+          { icon: '💭', text: 'Excessive gas', value: 'gas', protocol: 'bloat_reset' }
         ],
         storeAs: 'primary_complaint'
       },
 
-      // Screen 4: Frequency
-      {
-        id: 'frequency',
-        screenNumber: 4,
-        type: 'single_select',
-        question: 'How often does this happen?',
-        options: [
-          {
-            text: "Every single day — it's my baseline now",
-            value: 'daily'
-          },
-          {
-            text: "Several times a week — I'm always bracing for it",
-            value: 'several_weekly'
-          },
-          {
-            text: 'Weekly — bad days are predictable',
-            value: 'weekly'
-          },
-          {
-            text: 'A few times a month — flares come and go',
-            value: 'monthly'
-          }
-        ],
-        storeAs: 'symptom_frequency'
-      },
-
-      // Screen 5: Duration + Validation
+      // Screen 4: Duration
       {
         id: 'duration',
-        screenNumber: 5,
+        screenNumber: 4,
         type: 'single_select',
         question: 'How long have you been dealing with this?',
         options: [
-          {
-            text: '3-6 months — this is relatively new',
-            value: '3_6_months'
-          },
-          {
-            text: "6-12 months — it's becoming my normal",
-            value: '6_12_months'
-          },
-          {
-            text: "1-3 years — I've tried a few things",
-            value: '1_3_years'
-          },
-          {
-            text: "3-5 years — I've tried many things",
-            value: '3_5_years'
-          },
-          {
-            text: "5+ years — I've tried everything",
-            value: '5_plus_years'
-          }
+          { text: '3-6 months', value: '3_6_months', durationValue: 0.5 },
+          { text: '6-12 months', value: '6_12_months', durationValue: 1 },
+          { text: '1-3 years', value: '1_3_years', durationValue: 2 },
+          { text: '3-5 years', value: '3_5_years', durationValue: 4 },
+          { text: '5+ years', value: '5_plus_years', durationValue: 6 }
         ],
-        storeAs: 'symptom_duration',
-        validationMessages: {
-          '3_6_months': "Six months of unexplained symptoms is exhausting — especially when you don't know what's causing them. You're right to look for answers now.",
-          '6_12_months': "A year of fighting your own body takes a toll. The good news? You're catching this before it becomes your whole identity.",
-          '1_3_years': "After a few years, it's easy to lose hope. But you're still searching — that tells us something important about you.",
-          '3_5_years': "Three to five years is a long time to feel this way. Most of our members came to us at exactly this stage.",
-          '5_plus_years': "<strong>5+ years</strong> is a long time to fight your own body. You've likely tried everything. What our members at this stage discover is that the missing piece wasn't more restriction — it was structured support and someone who actually reviews their progress."
+        storeAs: 'symptom_duration'
+      },
+
+      // Screen 5: Validation Duration (INFO SCREEN)
+      {
+        id: 'validation_duration',
+        screenNumber: 5,
+        type: 'info_dynamic',
+        dynamicContent: {
+          '5_plus_years': {
+            icon: '💪',
+            headline: "That's a long time to struggle alone.",
+            body: "Most women we help have been dealing with this for years. You're not starting from scratch — you're finally getting the right support."
+          },
+          '3_5_years': {
+            icon: '💪',
+            headline: "Years of dealing with this takes its toll.",
+            body: "You've been patient. You've tried things. Now it's time for answers that actually work for YOUR gut."
+          },
+          '1_3_years': {
+            icon: '✨',
+            headline: "You've been at this for a while.",
+            body: "Long enough to know that generic advice doesn't cut it. Let's find what works for you specifically."
+          },
+          default: {
+            icon: '✨',
+            headline: "Good — you're catching this early.",
+            body: "The sooner you address gut issues, the faster you can get back to normal. Let's figure out your pattern."
+          }
         },
-        reinforcementMessage: "The difference this time? You won't be figuring it out alone. Our practitioners review your progress and adjust your protocol based on how YOUR gut responds."
+        basedOn: 'symptom_duration',
+        buttonText: 'Continue'
       }
     ]
   },
 
   // =================================================
-  // BLOCK 2: SYMPTOM PATTERNS (Screens 6-10)
+  // PHASE 2: CLINICAL ASSESSMENT (Screens 6-12)
   // =================================================
-  block2: {
-    id: 'symptom_patterns',
-    label: 'Symptom Patterns',
+  phase2: {
+    id: 'clinical_assessment',
+    label: 'Your Symptoms',
     screens: [
       // Screen 6: BM Relief
       {
@@ -214,51 +124,27 @@ const quizContent = {
         screenNumber: 6,
         type: 'single_select',
         question: 'When you have a bowel movement, does your discomfort get better?',
+        subtitle: 'This helps us understand your symptom pattern',
         options: [
-          {
-            text: 'Yes — relief is temporary but real',
-            value: 'yes'
-          },
-          {
-            text: "Sometimes — it's unpredictable",
-            value: 'sometimes'
-          },
-          {
-            text: "No — going doesn't help",
-            value: 'no'
-          },
-          {
-            text: "I don't really have pain, just other symptoms",
-            value: 'no_pain'
-          }
+          { text: 'Yes, I usually feel relief', value: 'yes', romeIV: true },
+          { text: 'Sometimes, but not always', value: 'sometimes', romeIV: true },
+          { text: 'No, it stays the same or gets worse', value: 'no', romeIV: false },
+          { text: "I don't really have pain or discomfort", value: 'no_pain', romeIV: false }
         ],
-        storeAs: 'bm_relief',
-        note: 'Rome IV criteria question'
+        storeAs: 'bm_relief'
       },
 
-      // Screen 7: Flare Frequency Change
+      // Screen 7: Flare Frequency
       {
         id: 'flare_frequency',
         screenNumber: 7,
         type: 'single_select',
         question: 'During a flare, what happens to your bathroom frequency?',
         options: [
-          {
-            text: 'I go MORE often',
-            value: 'more'
-          },
-          {
-            text: 'I go LESS often',
-            value: 'less'
-          },
-          {
-            text: 'It swings both ways depending on the day',
-            value: 'both'
-          },
-          {
-            text: "Frequency doesn't really change",
-            value: 'no_change'
-          }
+          { text: 'I go more often than usual', value: 'more', pattern: 'diarrhea' },
+          { text: 'I go less often than usual', value: 'less', pattern: 'constipation' },
+          { text: 'It varies — sometimes more, sometimes less', value: 'both', pattern: 'mixed' },
+          { text: 'About the same as normal', value: 'same', pattern: 'neutral' }
         ],
         storeAs: 'flare_frequency'
       },
@@ -270,506 +156,458 @@ const quizContent = {
         type: 'single_select',
         question: 'What about your stool during flares — what changes?',
         options: [
-          {
-            text: 'It gets loose, watery, or urgent',
-            value: 'loose'
-          },
-          {
-            text: 'It gets hard, lumpy, or difficult to pass',
-            value: 'hard'
-          },
-          {
-            text: "It alternates — I never know which it'll be",
-            value: 'alternates'
-          },
-          {
-            text: 'It stays about the same',
-            value: 'same'
-          }
+          { text: 'Looser or more watery', value: 'loose', pattern: 'diarrhea' },
+          { text: 'Harder or more difficult to pass', value: 'hard', pattern: 'constipation' },
+          { text: 'It alternates between both', value: 'alternates', pattern: 'mixed' },
+          { text: 'Stays about the same', value: 'same', pattern: 'neutral' }
         ],
         storeAs: 'stool_changes'
       },
 
-      // Screen 9: Treatments Tried
+      // Screen 9: Progress Validation (INFO SCREEN)
+      {
+        id: 'progress_validation',
+        screenNumber: 9,
+        type: 'info',
+        icon: '📊',
+        headline: "Perfect. We're building your profile.",
+        body: "These questions help us match you with the right protocol. 83% of women with your symptom pattern see improvement within 6 weeks with the right approach.",
+        statHighlight: '83%',
+        buttonText: 'Continue'
+      },
+
+      // Screen 10: Treatments Tried
       {
         id: 'treatments_tried',
-        screenNumber: 9,
-        type: 'multi_select',
-        question: 'What have you already tried? Select all that apply.',
-        options: [
-          { text: 'Low FODMAP diet', value: 'low_fodmap' },
-          { text: 'Gluten-free', value: 'gluten_free' },
-          { text: 'Dairy-free', value: 'dairy_free' },
-          { text: 'Probiotics (any brand)', value: 'probiotics' },
-          { text: 'Digestive enzymes', value: 'enzymes' },
-          { text: 'Prescription medications (PPIs, antispasmodics)', value: 'prescription' },
-          { text: 'Antibiotics for SIBO (Rifaximin, etc.)', value: 'sibo_antibiotics' },
-          { text: 'Herbal antimicrobials', value: 'herbal' },
-          { text: 'Strict elimination diets', value: 'elimination' },
-          { text: "Nothing yet — I'm just starting", value: 'nothing' }
-        ],
-        storeAs: 'treatments_tried',
-        validationMessages: {
-          range_0_1: "Starting fresh gives us a clear baseline to work from.",
-          range_2_3: "You've done your research — that initiative shows you're ready to solve this.",
-          range_4_5: "You've put in serious effort. That dedication is exactly what leads to breakthroughs with the right guidance.",
-          range_6_plus: "You've tried <strong>{count} different approaches</strong>. That persistence is remarkable — and it gives us valuable data to work with."
-        },
-        reinforcementMessage: "Your efforts weren't wasted — they've taught you what doesn't work alone. Now let's add the guidance piece."
-      },
-
-      // Screen 10: Diagnosis History
-      {
-        id: 'diagnosis_history',
         screenNumber: 10,
         type: 'multi_select',
-        question: 'Have you received any diagnosis? Select all that apply.',
+        question: 'What have you already tried?',
+        subtitle: 'Select all that apply',
+        options: [
+          { text: 'Probiotics', value: 'probiotics' },
+          { text: 'Elimination diets', value: 'elimination' },
+          { text: 'Low FODMAP diet', value: 'low_fodmap' },
+          { text: 'Fiber supplements', value: 'fiber' },
+          { text: 'Over-the-counter medications', value: 'otc_meds' },
+          { text: 'Prescription medications', value: 'prescription' },
+          { text: 'Functional testing (SIBO, stool tests)', value: 'testing' },
+          { text: 'Worked with a practitioner', value: 'practitioner' },
+          { text: "I haven't tried much yet", value: 'nothing', exclusive: true }
+        ],
+        storeAs: 'treatments_tried',
+        countTreatments: true
+      },
+
+      // Screen 11: Diagnosis History
+      {
+        id: 'diagnosis_history',
+        screenNumber: 11,
+        type: 'multi_select',
+        question: 'Have you received any of these diagnoses?',
+        subtitle: 'Select all that apply',
         options: [
           { text: 'IBS (Irritable Bowel Syndrome)', value: 'ibs' },
-          { text: 'SIBO (Small Intestinal Bacterial Overgrowth)', value: 'sibo' },
-          { text: "IBD (Crohn's or Ulcerative Colitis)", value: 'ibd' },
-          { text: 'GERD / Acid Reflux', value: 'gerd' },
-          { text: 'Food intolerances or sensitivities', value: 'food_intolerance' },
-          { text: "No formal diagnosis — doctors say tests look 'normal'", value: 'no_diagnosis' },
+          { text: 'SIBO (Small Intestinal Bacterial Overgrowth)', value: 'sibo', protocolModifier: 'rebuild' },
+          { text: "IBD (Crohn's or Ulcerative Colitis)", value: 'ibd', redFlag: true },
+          { text: 'GERD / Acid reflux', value: 'gerd' },
+          { text: 'Food intolerances', value: 'food_intolerance' },
+          { text: 'Celiac disease', value: 'celiac', redFlag: true },
+          { text: 'No official diagnosis yet', value: 'no_diagnosis', exclusive: true },
           { text: 'Other', value: 'other' }
         ],
-        storeAs: 'diagnoses',
-        specialValidation: {
-          no_diagnosis: "'Normal' tests with real symptoms is incredibly frustrating. It doesn't mean nothing is wrong — it means standard tests aren't designed to catch functional gut issues.\n\nThis is exactly what our protocols are built for."
-        }
+        storeAs: 'diagnoses'
+      },
+
+      // Screen 12: Name Capture (WITH VALIDATION)
+      {
+        id: 'name_capture',
+        screenNumber: 12,
+        type: 'text_input_with_validation',
+        dynamicContent: {
+          high_count: {
+            headline: "You've tried a lot.",
+            body: "**{count} different approaches** — that takes real persistence. Most women give up long before this. Let's find what actually works for YOUR gut."
+          },
+          medium_count: {
+            headline: "You've been looking for answers.",
+            body: "And you haven't given up. That persistence is going to pay off. Let's personalize this for you."
+          },
+          low_count: {
+            headline: "Let's get you on the right track from the start.",
+            body: "Before we continue, we want to personalize your results."
+          }
+        },
+        inputLabel: "What's your first name?",
+        placeholder: 'Enter your first name',
+        storeAs: 'user_name',
+        required: true
       }
     ]
   },
 
   // =================================================
-  // GOAL REMINDER #1 - Combined with "Your Path Forward" Journey Map
+  // PHASE 3: THE BRIDGE (Screens 13-14)
   // =================================================
-  goalReminder1: {
-    id: 'goal_reminder_1',
-    type: 'journey_map',
-    reminderNumber: 1,
-    headline: 'YOUR PATH FORWARD',
-    template: "You want to {goal}."
-  },
-
-  // =================================================
-  // BLOCK 3: WHY WE'RE DIFFERENT (Screen 11)
-  // Now a simple transition screen, main content moved to journey map
-  // =================================================
-  block3: {
-    id: 'why_different',
+  phase3: {
+    id: 'the_bridge',
     label: 'Why This Works',
     screens: [
-      // Screen 11: Simple transition - content is minimal since journey map covers it
+      // Screen 13: Why Different (INFO ANIMATED)
       {
-        id: 'why_programs_fail',
-        screenNumber: 11,
-        type: 'info',
-        headline: "HERE'S WHAT CHANGES THIS TIME",
-        comparison: {
-          problem: {
-            title: '❌ The Cycle You\'ve Been Stuck In',
-            text: "Get protocol → Try alone → Don't know if it's working → Give up too early OR stick with it too long → Back to square one"
-          },
-          solution: {
-            title: '✓ What Makes This Different',
-            text: "Get protocol → Track daily (3 min) → Practitioner reviews → Adjustments based on YOUR response → Progress"
-          }
-        },
-        buttonText: 'Continue'
-      }
-    ]
-  },
-
-  // =================================================
-  // BLOCK 4: GUT-BRAIN CONNECTION (Screens 12-16)
-  // =================================================
-  block4: {
-    id: 'gut_brain',
-    label: 'Gut-Brain Connection',
-    screens: [
-      // Screen 12: Intro with image
-      {
-        id: 'gut_brain_intro',
-        screenNumber: 12,
-        type: 'info',
-        headline: 'YOUR GUT-BRAIN CONNECTION',
-        body: "Your gut has its own nervous system — 500 million neurons. That's more than your spinal cord.\n\nThe next few questions help us understand how YOUR stress and gut talk to each other.",
-        image: '/assets/gut-brain-connection.png',
-        imageAlt: 'Illustration of gut-brain connection',
-        buttonText: 'Continue'
-      },
-
-      // Screen 13: Slider - Stress-Gut
-      {
-        id: 'slider_stress_gut',
+        id: 'why_different',
         screenNumber: 13,
-        type: 'slider',
-        question: 'My gut symptoms and my stress levels are...',
-        leftAnchor: 'Completely unrelated',
-        rightAnchor: 'Directly connected',
-        min: 1,
-        max: 5,
-        storeAs: 'stress_gut_score',
-        conditionalValidation: {
-          threshold: 4,
-          title: "You're noticing the gut-brain connection — and you're right.",
-          message: "Your gut has 500 million neurons (more than your spinal cord). Stress signals travel directly to your digestive system.\n\nYour protocol will include nervous system tools alongside dietary changes."
-        }
+        type: 'info_animated',
+        headline: "HERE'S WHY NOTHING HAS WORKED",
+        animation: 'stuck_loop_vs_escape',
+        body: "Most programs treat symptoms. We match you to a protocol based on YOUR pattern — so you can finally break the cycle.",
+        buttonText: 'Show me how'
       },
 
-      // Screen 14: Slider - Food Anxiety
+      // Screen 14: Testimonial
       {
-        id: 'slider_food_anxiety',
+        id: 'testimonial',
         screenNumber: 14,
-        type: 'slider',
-        question: 'Before eating, I worry about how my gut will react...',
-        leftAnchor: "Never — I don't think about it",
-        rightAnchor: "Always — I'm anxious before every meal",
-        min: 1,
-        max: 5,
-        storeAs: 'food_anxiety_score',
-        conditionalValidation: {
-          threshold: 4,
-          title: "Food anxiety is real, and it actually makes symptoms worse.",
-          message: "When you're stressed about eating, your body shifts into 'fight or flight' mode — which shuts down digestion.\n\nWe'll work on breaking this cycle."
-        }
-      },
-
-      // Screen 15: Slider - Mood Impact
-      {
-        id: 'slider_mood_impact',
-        screenNumber: 15,
-        type: 'slider',
-        question: 'On bad gut days, my mood is...',
-        leftAnchor: 'Completely unaffected',
-        rightAnchor: 'Significantly worse',
-        min: 1,
-        max: 5,
-        storeAs: 'mood_impact_score',
-        conditionalValidation: {
-          threshold: 4,
-          title: "You're not imagining it, and you're not alone.",
-          message: "Research shows gut issues increase anxiety and depression risk by 3x. It's bidirectional — your gut affects your brain, and your brain affects your gut.\n\nYour protocol addresses both sides of this connection."
-        }
-      },
-
-      // Screen 16: Slider - Thought Frequency
-      {
-        id: 'slider_thought_frequency',
-        screenNumber: 16,
-        type: 'slider',
-        question: 'I think about my gut issues...',
-        leftAnchor: 'Rarely crosses my mind',
-        rightAnchor: 'It dominates my thoughts daily',
-        min: 1,
-        max: 5,
-        storeAs: 'thought_frequency_score',
-        isLastSlider: true
+        type: 'testimonial',
+        headlineTemplate: "{firstName}, meet Sarah.",
+        quote: "I tried low FODMAP for 6 months. Probiotics. Expensive tests. Nothing worked until I found my actual gut type. 4 weeks later, I ate at a restaurant without panic for the first time in 3 years.",
+        author: "Sarah, 47",
+        authorDetail: "Bloat-Dominant Responder",
+        authorImage: '/assets/testimonial-sarah.png',
+        buttonText: 'Find my gut type'
       }
     ]
   },
 
   // =================================================
-  // BLOCK 5: KNOWLEDGE QUIZ (Screens 17-20)
+  // PHASE 4: KNOWLEDGE QUIZ (Screens 15-19)
   // =================================================
-  block5: {
+  phase4: {
     id: 'knowledge_quiz',
-    label: 'Knowledge Quiz',
+    label: 'Quick Gut Check',
     screens: [
-      // Screen 17: Intro
+      // Screen 15: Knowledge Intro
       {
         id: 'knowledge_intro',
-        screenNumber: 17,
+        screenNumber: 15,
         type: 'info',
-        headline: 'QUICK GUT CHECK 🧠',
-        body: "This helps us understand your current knowledge so we can personalize your protocol — no repeating what you already know.\n\nYou might learn something new! Test your gut instincts.",
-        buttonText: 'Let\'s Go'
+        icon: '🧠',
+        headline: 'QUICK GUT CHECK',
+        body: "These 2 questions help us personalize your protocol. Don't worry — there are no wrong answers.",
+        backgroundColor: '#f0f9f4',
+        buttonText: "Let's go"
       },
 
-      // Screen 18: Knowledge Q1 - Eating Speed
+      // Screen 16: Knowledge - Eating Speed
       {
         id: 'knowledge_eating_speed',
-        screenNumber: 18,
+        screenNumber: 16,
         type: 'knowledge_quiz',
-        question: 'Quick question: When you eat quickly, what happens in your gut?',
+        question: 'When you eat quickly, what happens in your gut?',
+        backgroundColor: '#f0f9f4',
         options: [
-          { text: 'You swallow more air, causing bloating', value: 'air', correct: true },
-          { text: 'Your stomach produces less acid', value: 'acid', correct: false },
-          { text: "Nothing — speed doesn't matter", value: 'nothing', correct: false },
-          { text: 'Food digests faster', value: 'faster', correct: false }
+          { text: 'Nothing different', value: 'nothing', correct: false },
+          { text: 'You swallow more air → more bloating', value: 'air', correct: true },
+          { text: 'You digest faster', value: 'faster', correct: false }
         ],
-        storeAs: 'knowledge_q1',
-        correctAnswer: 'air',
-        feedback: {
+        storeAs: 'knowledge_eating_speed',
+        correctAnswer: 'air'
+      },
+
+      // Screen 17: Knowledge Eating Response (CONDITIONAL INFO)
+      {
+        id: 'knowledge_eating_response',
+        screenNumber: 17,
+        type: 'knowledge_response',
+        backgroundColor: '#f0f9f4',
+        content: {
           correct: {
-            icon: '🎉',
-            title: "You're right!",
-            text: "Eating quickly traps excess air in your gut. Most see 30-40% less bloating by changing HOW they eat."
+            icon: '👍',
+            headline: "You're right!",
+            body: "Eating speed directly impacts bloating. Your protocol will include specific timing strategies to reduce air swallowing.",
+            buttonText: 'Next question'
           },
           incorrect: {
             icon: '💡',
-            title: "Good guess!",
-            text: "Eating quickly traps excess air in your gut. Most see 30-40% less bloating by changing HOW they eat.",
-            tip: "This is why you'll have access to our practitioners — ask whenever you're unsure."
-          }
-        }
-      },
-
-      // Screen 19: Knowledge Q2 - FODMAP Foods
-      {
-        id: 'knowledge_fodmap',
-        screenNumber: 19,
-        type: 'knowledge_quiz',
-        question: 'Which of these foods is MOST likely to cause bloating for someone with gut issues?',
-        options: [
-          { text: 'Apple', value: 'apple', icon: '🍎', correct: true },
-          { text: 'White rice', value: 'rice', icon: '🍚', correct: false },
-          { text: 'Eggs', value: 'eggs', icon: '🥚', correct: false },
-          { text: 'Chicken', value: 'chicken', icon: '🍗', correct: false }
-        ],
-        storeAs: 'knowledge_q2',
-        correctAnswer: 'apple',
-        feedback: {
-          correct: {
-            icon: '🎉',
-            title: "You know your stuff!",
-            text: "Apples are high in FODMAPs — common triggers despite being \"healthy.\" Rice, eggs, and chicken are usually safe.",
-            tip: {
-              title: 'GUT RESPONSE SYSTEM',
-              items: [
-                { color: 'green', text: '🟢 GREEN: Rice, eggs, chicken, fish' },
-                { color: 'yellow', text: '🟡 YELLOW: Oats, sweet potato' },
-                { color: 'red', text: '🔴 RED: Apples, onion, garlic' }
-              ]
-            }
-          },
-          incorrect: {
-            icon: '🍎',
-            title: "Tricky one!",
-            text: "Apples are high in FODMAPs and trigger gas — even though they're \"healthy.\" Rice, eggs, and chicken are usually safe.",
-            tip: "Your protocol includes a personalized Green/Yellow/Red food list — no more Googling."
-          }
-        }
-      },
-
-      // Screen 20: Knowledge Q3 - Meal Timing
-      {
-        id: 'knowledge_meal_timing',
-        screenNumber: 20,
-        type: 'knowledge_quiz',
-        question: 'For someone with bloating, which eating pattern typically works BETTER?',
-        options: [
-          { text: '3 larger meals with no snacking', value: '3_meals', correct: true },
-          { text: '5-6 small meals throughout the day', value: 'grazing', correct: false },
-          { text: 'Eating whenever hungry', value: 'intuitive', correct: false },
-          { text: 'Intermittent fasting (long gaps)', value: 'fasting', correct: false }
-        ],
-        storeAs: 'knowledge_q3',
-        correctAnswer: '3_meals',
-        feedback: {
-          correct: {
-            icon: '🎉',
-            title: "Exactly right!",
-            text: "4-5 hours between meals lets your gut's \"cleaning wave\" sweep out bacteria. Constant snacking blocks this."
-          },
-          incorrect: {
-            icon: '💡',
-            title: "This surprises most people!",
-            text: "4-5 hours between meals lets your gut's \"cleaning wave\" sweep out bacteria. Constant snacking blocks this — making bloating worse.",
-            tip: "Your protocol includes clear meal timing guidelines tailored to you."
+            headline: 'Good guess!',
+            body: "Actually, fast eating = more air swallowed = more bloating. Your protocol will address this with specific timing strategies.",
+            buttonText: 'Next question'
           }
         },
-        isLastKnowledgeQuiz: true
+        basedOn: 'knowledge_eating_speed'
+      },
+
+      // Screen 18: Knowledge - FODMAP
+      {
+        id: 'knowledge_fodmap',
+        screenNumber: 18,
+        type: 'knowledge_quiz',
+        question: 'Which food is MOST likely to cause bloating?',
+        backgroundColor: '#f0f9f4',
+        options: [
+          { icon: '🍌', text: 'Banana', value: 'banana', correct: false },
+          { icon: '🍎', text: 'Apple', value: 'apple', correct: true },
+          { icon: '🍇', text: 'Grapes', value: 'grapes', correct: false }
+        ],
+        storeAs: 'knowledge_fodmap',
+        correctAnswer: 'apple'
+      },
+
+      // Screen 19: Knowledge FODMAP Response (CONDITIONAL INFO)
+      {
+        id: 'knowledge_fodmap_response',
+        screenNumber: 19,
+        type: 'knowledge_response',
+        backgroundColor: '#f0f9f4',
+        content: {
+          correct: {
+            icon: '🎯',
+            headline: 'Exactly right!',
+            body: "Apples are high-FODMAP — one of the most common bloating triggers. Your protocol includes a complete guide to swaps like this.",
+            buttonText: 'Continue'
+          },
+          incorrect: {
+            icon: '💡',
+            headline: 'Tricky one!',
+            body: "Apples are actually high-FODMAP — one of the most common bloating triggers, even though they're 'healthy.' Your protocol will show you exactly which foods to swap.",
+            buttonText: 'Continue'
+          }
+        },
+        basedOn: 'knowledge_fodmap'
       }
     ]
   },
 
   // =================================================
-  // GOAL REMINDER #2 (After Screen 20)
+  // PHASE 5: GUT-BRAIN CONNECTION (Screens 20-21)
   // =================================================
-  goalReminder2: {
-    id: 'goal_reminder_2',
-    type: 'goal_reminder',
-    reminderNumber: 2,
-    template: "You're almost there, {name}.\n\nYou started this quiz because you want to {goal}.\n\nJust a few more questions and your personalized protocol will be ready."
+  phase5: {
+    id: 'gut_brain',
+    label: 'Your Profile',
+    screens: [
+      // Screen 20: Stress Connection
+      {
+        id: 'stress_connection',
+        screenNumber: 20,
+        type: 'single_select',
+        questionTemplate: "{firstName}, do you notice your symptoms get worse when you're stressed or anxious?",
+        options: [
+          { text: 'Yes, definitely', value: 'yes_definitely', gutBrainScore: 3 },
+          { text: 'Sometimes', value: 'sometimes', gutBrainScore: 2 },
+          { text: 'Not really', value: 'not_really', gutBrainScore: 1 },
+          { text: "I've never thought about it", value: 'never_thought', gutBrainScore: 1 }
+        ],
+        storeAs: 'stress_connection'
+      },
+
+      // Screen 21: Stress Validation (CONDITIONAL INFO)
+      {
+        id: 'stress_validation',
+        screenNumber: 21,
+        type: 'info_conditional',
+        content: {
+          stress_connected: {
+            icon: '🧠',
+            headline: "You're not imagining it.",
+            body: "The gut-brain connection is real — stress directly affects digestion through the vagus nerve. Your protocol includes nervous system support strategies.",
+            addOverlay: 'gut_brain'
+          },
+          not_connected: {
+            icon: '✓',
+            headline: 'Good to know.',
+            body: "We'll focus your protocol on the physical triggers. Everyone's gut responds differently.",
+            addOverlay: null
+          }
+        },
+        basedOn: 'stress_connection',
+        buttonText: 'Continue'
+      }
+    ]
   },
 
   // =================================================
-  // BLOCK 6: SAFETY SCREENING (Screens 21-24)
+  // PHASE 6: SAFETY CHECK (Screens 22-23)
   // =================================================
-  block6: {
-    id: 'safety_screening',
-    label: 'Safety Screening',
+  phase6: {
+    id: 'safety_check',
+    label: 'Final Questions',
     screens: [
-      // Screen 21: Safety Intro
-      {
-        id: 'safety_intro',
-        screenNumber: 21,
-        type: 'info',
-        headline: 'SAFETY CHECK',
-        body: "Before we finalize your protocol, we need to make sure we're addressing functional gut issues — not something that needs medical attention first.\n\nThese questions take 30 seconds and help us give you responsible recommendations.\n\nOur practitioners review these to ensure your protocol is appropriate for your situation.",
-        buttonText: 'Continue'
-      },
-
-      // Screen 22: Weight Loss
-      {
-        id: 'safety_weight_loss',
-        screenNumber: 22,
-        type: 'single_select',
-        question: 'In the past 3 months, have you lost weight without trying to?',
-        options: [
-          { text: 'Yes, more than 10 lbs (4.5 kg)', value: 'yes_significant', redFlag: true },
-          { text: 'Yes, a few pounds', value: 'yes_minor', redFlag: false },
-          { text: 'No, my weight has been stable', value: 'no', redFlag: false },
-          { text: "No, I've actually gained weight", value: 'gained', redFlag: false }
-        ],
-        storeAs: 'safety_weight_loss'
-      },
-
-      // Screen 23: Blood in Stool
+      // Screen 22: Safety - Blood
       {
         id: 'safety_blood',
-        screenNumber: 23,
+        screenNumber: 22,
         type: 'single_select',
-        question: 'Have you noticed any blood in your stool, or stools that are black and tarry?',
+        question: 'Have you noticed any blood in your stool recently?',
+        subtitle: 'This helps us ensure you\'re getting the right support',
         options: [
-          { text: 'Yes, recently', value: 'yes_recent', redFlag: true },
-          { text: 'Yes, but not in the past 6 months', value: 'yes_past', redFlag: false },
-          { text: 'No, never', value: 'no', redFlag: false },
-          { text: "I'm not sure", value: 'unsure', redFlag: false }
+          { text: 'Yes, in the past month', value: 'yes_recent', redFlag: true },
+          { text: 'Yes, but it was months ago', value: 'yes_past', redFlag: false },
+          { text: 'No', value: 'no', redFlag: false }
         ],
         storeAs: 'safety_blood'
       },
 
-      // Screen 24: Family History
+      // Screen 23: Safety - Weight
       {
-        id: 'safety_family',
-        screenNumber: 24,
+        id: 'safety_weight',
+        screenNumber: 23,
         type: 'single_select',
-        question: 'Does anyone in your immediate family have colon cancer or inflammatory bowel disease?',
+        question: 'Have you lost weight without trying in the past few months?',
         options: [
-          { text: 'Yes', value: 'yes', redFlag: true },
-          { text: 'No', value: 'no', redFlag: false },
-          { text: "I'm not sure", value: 'unsure', redFlag: false }
+          { text: 'Yes, more than 10 lbs', value: 'yes_significant', redFlag: true },
+          { text: 'Yes, a few pounds', value: 'yes_few', redFlag: false },
+          { text: 'No', value: 'no', redFlag: false }
         ],
-        storeAs: 'safety_family'
+        storeAs: 'safety_weight'
       }
     ]
   },
 
+  // Safety Warning Screen (CONDITIONAL - Only if red flags)
+  safetyWarning: {
+    id: 'safety_warning',
+    type: 'warning',
+    icon: '⚕️',
+    headline: 'Before we continue...',
+    body: "Based on your answers, we recommend checking in with a healthcare provider to rule out anything that needs medical attention. Our protocols are designed to complement — not replace — medical care.",
+    options: [
+      { text: "I've already been cleared by a doctor", value: 'already_cleared', continueFlow: true },
+      { text: "I'll schedule an appointment", value: 'will_check', continueFlow: true }
+    ],
+    note: 'You can still see your results and access educational content.'
+  },
+
   // =================================================
-  // BLOCK 7: EMAIL & FINAL (Screens 25-28)
+  // PHASE 7: EMAIL CAPTURE (Screens 24-26)
   // =================================================
-  block7: {
-    id: 'email_final',
-    label: 'Final Questions',
+  phase7: {
+    id: 'email_capture_phase',
+    label: 'Your Results',
     screens: [
+      // Screen 24: Life Impact
+      {
+        id: 'life_impact',
+        screenNumber: 24,
+        type: 'single_select',
+        questionTemplate: "{firstName}, how much has this taken from your life?",
+        options: [
+          { text: "Severely — I plan my life around it", value: 'severe', impact: 'high' },
+          { text: "Moderately — it affects most days", value: 'moderate', impact: 'medium' },
+          { text: "Mildly — it's annoying but manageable", value: 'mild', impact: 'low' }
+        ],
+        storeAs: 'life_impact'
+      },
+
       // Screen 25: Email Capture
       {
         id: 'email_capture',
         screenNumber: 25,
         type: 'email_input',
-        headline: 'Your personalized protocol is ready.',
-        subtitle: 'Enter your email to see your results.',
-        placeholder: 'your@email.com',
-        buttonText: 'See My Results',
-        privacyText: 'We respect your privacy. No spam, ever.',
-        storeAs: 'user_email'
-      },
-
-      // Screen 26: Life Impact
-      {
-        id: 'life_impact',
-        screenNumber: 26,
-        type: 'single_select',
-        question: 'How much has this taken from your life?',
-        options: [
-          {
-            text: "Everything — I've changed jobs, stopped traveling, missed things I can't get back",
-            value: 'severe'
-          },
-          {
-            text: "A lot — I regularly say no to things I want to say yes to",
-            value: 'moderate'
-          },
-          {
-            text: "Some — it's frustrating but I manage around it",
-            value: 'mild'
-          }
+        headlineTemplate: 'Your personalized protocol is ready, {firstName}.',
+        valueList: [
+          '✓ Your Gut Type',
+          '✓ Your matched protocol',
+          '✓ When you can expect to feel better'
         ],
-        storeAs: 'life_impact'
+        inputLabel: 'Enter your email to see your results',
+        placeholder: 'your@email.com',
+        storeAs: 'user_email',
+        required: true,
+        gdprText: "We'll send your results and helpful tips. Unsubscribe anytime.",
+        buttonText: 'See My Results'
       },
 
-      // Screen 27: Vision
+      // Screen 26: Vision Optional
       {
-        id: 'vision',
-        screenNumber: 27,
-        type: 'text_input',
-        question: 'If your gut worked perfectly tomorrow, what would you do first?',
-        placeholder: 'Picture your life without gut issues...',
-        hint: 'You said you want to {goal}. What does that look like for you?',
+        id: 'vision_optional',
+        screenNumber: 26,
+        type: 'text_input_optional',
+        question: "One last thing — if your gut worked perfectly, what's the FIRST thing you'd do?",
+        subtitle: "(Optional — skip if you'd rather see your results now)",
+        placeholder: "e.g., Eat pizza without worry, Travel to Italy...",
         storeAs: 'user_vision',
-        optional: true,
-        skipText: 'Skip',
-        validationMessage: "Hold onto that image.\n\nThat's not just a dream — it's what we're working toward. Your protocol is designed to get you there step by step."
-      },
-
-      // Screen 28: Name Collection
-      {
-        id: 'name_collection',
-        screenNumber: 28,
-        type: 'text_input',
-        question: "What's your first name?",
-        subtitle: 'So we can personalize your results',
-        placeholder: 'Your first name',
-        storeAs: 'user_name',
-        buttonText: 'See My Protocol'
+        required: false,
+        skipText: 'Skip and see my results',
+        buttonText: 'See My Results'
       }
     ]
   },
 
   // =================================================
-  // LOADING SEQUENCE (Screen 29)
+  // LOADING SEQUENCE (Screen 27)
   // =================================================
   loadingSequence: {
     id: 'loading_sequence',
-    screenNumber: 29,
+    screenNumber: 27,
     type: 'loading',
-    headline: 'CREATING YOUR PERSONALIZED PROTOCOL',
-    steps: [
-      { text: 'Analyzing your symptom patterns...', duration: 2000 },
-      { text: 'Cross-referencing with successful protocols...', duration: 2500 },
-      { text: 'Matching your gut response patterns...', duration: 2000 },
-      { text: 'Identifying your protocol...', duration: 1500 },
-      { text: 'Generating personalized recommendations...', duration: 2000 }
+    headlineTemplate: 'Analyzing your profile, {firstName}...',
+    subtext: 'Please wait while we create your personalized protocol',
+    progressBars: [
+      { id: 'symptoms', label: 'Analyzing symptom pattern...', duration: 2000 },
+      { id: 'matching', label: 'Matching with protocol database...', duration: 2000 },
+      { id: 'profiles', label: 'Cross-referencing similar profiles...', duration: 1500 },
+      { id: 'timeline', label: 'Calculating improvement timeline...', duration: 1500 },
+      { id: 'recommendations', label: 'Generating personalized recommendations...', duration: 1500 }
     ],
-    popupQuestions: [
+    totalDuration: 10000,
+    popups: [
       {
         id: 'symptom_timing',
-        question: 'Do your symptoms tend to be worse in the evening than morning?',
-        options: ['Yes', 'No', 'About the same'],
-        storeAs: 'symptom_timing',
-        triggerAtPercent: 30
+        triggerAtStep: 0,
+        triggerAtPercent: 50,
+        question: 'Are your symptoms worse in the evening than morning?',
+        options: ['Yes', 'No'],
+        storeAs: 'symptom_timing'
       },
       {
         id: 'symptom_trigger_timing',
-        question: 'Do you notice symptoms are worse after eating, or on an empty stomach?',
-        options: ['After eating', 'Empty stomach', 'Both/Neither'],
-        storeAs: 'symptom_trigger_timing',
-        triggerAtPercent: 60
+        triggerAtStep: 1,
+        triggerAtPercent: 75,
+        question: 'Do symptoms get worse after eating, or on an empty stomach?',
+        options: ['After eating', 'Empty stomach', 'Both'],
+        storeAs: 'symptom_trigger_timing'
       }
     ],
     completionMessage: '✓ Your personalized protocol is ready'
   },
 
   // =================================================
-  // RESULTS PAGE (Screen 30)
+  // RESULTS PAGE (Screen 28)
   // =================================================
   resultsPage: {
     id: 'results_page',
-    screenNumber: 30,
+    screenNumber: 28,
     type: 'results'
+  },
+
+  // =================================================
+  // GUT TYPES
+  // =================================================
+  gutTypes: {
+    bloat_reset: {
+      name: 'Bloat-Dominant Responder',
+      description: 'Your gut is highly reactive to certain triggers, causing bloating and distension as its primary response.',
+      color: '#E07A5F'
+    },
+    regularity: {
+      name: 'Slow-Transit Responder',
+      description: 'Your gut moves slower than optimal, leading to constipation and incomplete elimination.',
+      color: '#6B9080'
+    },
+    calm_gut: {
+      name: 'Rapid-Transit Responder',
+      description: 'Your gut moves too quickly, often triggered by specific foods or stress.',
+      color: '#81B29A'
+    },
+    stability: {
+      name: 'Mixed-Pattern Responder',
+      description: 'Your gut alternates between patterns, requiring a balanced approach.',
+      color: '#F2CC8F'
+    },
+    rebuild: {
+      name: 'Post-Treatment Rebuilder',
+      description: 'Your gut is recovering and needs specific support to rebuild optimal function.',
+      color: '#3D405B'
+    }
   },
 
   // =================================================
@@ -778,28 +616,58 @@ const quizContent = {
   protocols: {
     bloat_reset: {
       name: 'The Bloat Reset Protocol',
+      displayName: 'The Bloat Reset Protocol',
       tagline: 'For women who wake up flat and look pregnant by evening',
-      weekOneResult: 'Reduced evening bloating, more predictable days'
+      weekOneResult: 'Reduced evening bloating, more predictable days',
+      includes: [
+        '20-minute meal timing strategies',
+        'Top FODMAP trigger identification',
+        'Daily tracking for pattern recognition'
+      ]
     },
     regularity: {
       name: 'The Regularity Protocol',
+      displayName: 'The Regularity Protocol',
       tagline: 'For women who go days without relief',
-      weekOneResult: 'First signs of regularity, less straining'
+      weekOneResult: 'First signs of regularity, less straining',
+      includes: [
+        'Optimal hydration timing',
+        'Fiber optimization without bloating',
+        'Motility-supporting routines'
+      ]
     },
     calm_gut: {
       name: 'The Calm Gut Protocol',
+      displayName: 'The Calm Gut Protocol',
       tagline: "For women who can't trust their body",
-      weekOneResult: 'Reduced urgency, calmer digestion after meals'
+      weekOneResult: 'Reduced urgency, calmer digestion after meals',
+      includes: [
+        'Trigger identification system',
+        'Gut-soothing food combinations',
+        'Urgency management strategies'
+      ]
     },
     stability: {
       name: 'The Stability Protocol',
+      displayName: 'The Stability Protocol',
       tagline: "For women who never know which day they'll get",
-      weekOneResult: 'Beginning to identify pattern triggers'
+      weekOneResult: 'Beginning to identify pattern triggers',
+      includes: [
+        'Pattern tracking for both states',
+        'Flexible food guidelines',
+        'Transition management'
+      ]
     },
     rebuild: {
       name: 'The Rebuild Protocol',
+      displayName: 'The Rebuild Protocol',
       tagline: 'For women recovering from SIBO treatment',
-      weekOneResult: 'Reintroduction framework, early signs of tolerance'
+      weekOneResult: 'Reintroduction framework, early signs of tolerance',
+      includes: [
+        'Post-treatment gut restoration',
+        'PHGG prebiotic introduction',
+        'MMC (migrating motor complex) support'
+      ]
     }
   },
 
@@ -807,6 +675,26 @@ const quizContent = {
   nervousSystemOverlay: {
     name: '+ Nervous System Support',
     tagline: 'Stress-gut connection tools integrated'
+  },
+
+  // =================================================
+  // SCARCITY PERCENTAGES BY PROTOCOL
+  // =================================================
+  scarcityPercentages: {
+    bloat_reset: 23,
+    regularity: 18,
+    calm_gut: 15,
+    stability: 12,
+    rebuild: 8
+  },
+
+  // =================================================
+  // TIMELINE PREDICTIONS
+  // =================================================
+  timelinePredictions: {
+    default: "Women with your profile typically see noticeable improvement in **4-6 weeks**.",
+    high_impact: "Given how much this has affected your life, you may notice changes even sooner — many women report feeling different within the **first 2 weeks**.",
+    long_duration: "After {duration} of symptoms, your gut is ready for the right approach. Most women with similar timelines see real progress within **6-8 weeks**."
   },
 
   // =================================================
@@ -833,9 +721,9 @@ const quizContent = {
   // =================================================
   goalTexts: {
     eat_freely: 'eat whatever you want without fear',
-    travel_freedom: 'travel without planning around bathrooms',
-    social_eating: 'enjoy meals with friends and family stress-free',
-    normal_morning: 'enjoy a normal morning without symptoms'
+    travel: 'travel without bathroom anxiety',
+    social: 'enjoy meals with friends and family',
+    morning: 'have a normal, predictable morning'
   },
 
   // =================================================
@@ -854,15 +742,14 @@ const quizContent = {
   // TREATMENT LABELS
   // =================================================
   treatmentLabels: {
-    low_fodmap: 'Low FODMAP',
-    gluten_free: 'gluten-free',
-    dairy_free: 'dairy-free',
     probiotics: 'probiotics',
-    enzymes: 'digestive enzymes',
-    prescription: 'prescription medications',
-    sibo_antibiotics: 'SIBO antibiotics',
-    herbal: 'herbal antimicrobials',
     elimination: 'elimination diets',
+    low_fodmap: 'Low FODMAP',
+    fiber: 'fiber supplements',
+    otc_meds: 'OTC medications',
+    prescription: 'prescription medications',
+    testing: 'functional testing',
+    practitioner: 'practitioner guidance',
     nothing: 'none'
   },
 
@@ -878,13 +765,36 @@ const quizContent = {
   },
 
   // =================================================
+  // DURATION TEXT (for timeline predictions)
+  // =================================================
+  durationText: {
+    '5_plus_years': 'over 5 years',
+    '3_5_years': '3-5 years',
+    '1_3_years': '1-3 years',
+    '6_12_months': '6-12 months',
+    '3_6_months': '3-6 months'
+  },
+
+  // =================================================
   // RED FLAG MESSAGES
   // =================================================
   redFlagMessages: {
-    safety_weight_loss: 'Unexplained weight loss of more than 10 lbs',
     safety_blood: 'Blood in stool',
-    safety_family: 'Family history of colon cancer or IBD'
-  }
+    safety_weight: 'Unexplained weight loss of more than 10 lbs'
+  },
+
+  // =================================================
+  // PHASES FOR PROGRESS BAR
+  // =================================================
+  phases: [
+    { id: 1, label: 'Your Goals', screens: ['future_vision', 'timeline', 'primary_complaint', 'duration', 'validation_duration'] },
+    { id: 2, label: 'Your Symptoms', screens: ['bm_relief', 'flare_frequency', 'stool_changes', 'progress_validation', 'treatments_tried', 'diagnosis_history', 'name_capture'] },
+    { id: 3, label: 'Why This Works', screens: ['why_different', 'testimonial'] },
+    { id: 4, label: 'Quick Gut Check', screens: ['knowledge_intro', 'knowledge_eating_speed', 'knowledge_eating_response', 'knowledge_fodmap', 'knowledge_fodmap_response'] },
+    { id: 5, label: 'Your Profile', screens: ['stress_connection', 'stress_validation'] },
+    { id: 6, label: 'Final Questions', screens: ['safety_blood', 'safety_weight', 'safety_warning'] },
+    { id: 7, label: 'Your Results', screens: ['life_impact', 'email_capture', 'vision_optional'] }
+  ]
 };
 
 // Export for use in script.js
