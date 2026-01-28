@@ -13,8 +13,8 @@ const CONFIG = {
   SUPABASE_URL: 'https://mwabljnngygkmahjgvps.supabase.co',
   SUPABASE_ANON_KEY: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im13YWJsam5uZ3lna21haGpndnBzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDcwNzQ1NzIsImV4cCI6MjA2MjY1MDU3Mn0.nFiAK8bLfNB0lG6SbDa6ReJjr1K1468g_uZfvmh_h1w',
   AUTO_ADVANCE_DELAY: 400,
-  TOTAL_SCREENS: 30,
-  TOTAL_BLOCKS: 7
+  TOTAL_SCREENS: 25,
+  TOTAL_BLOCKS: 6
 };
 
 // =================================================
@@ -71,7 +71,7 @@ try {
   console.log('Supabase not available');
 }
 
-// Screen order mapping
+// Screen order mapping (Gut-Brain section skipped per user request)
 const screenOrder = [
   // Block 1: Goals & Context (1-5)
   { block: 0, screenKey: 'goal_selection' },
@@ -87,60 +87,52 @@ const screenOrder = [
   { block: 1, screenKey: 'diagnosis_history' },
   // Goal Reminder 1
   { block: 1, screenKey: 'goal_reminder_1', type: 'goal_reminder' },
-  // Block 3: Why Different (11)
+  // Block 3: Why Different
   { block: 2, screenKey: 'why_programs_fail' },
-  // Block 4: Gut-Brain (12-16)
-  { block: 3, screenKey: 'gut_brain_intro' },
-  { block: 3, screenKey: 'slider_stress_gut' },
-  { block: 3, screenKey: 'slider_food_anxiety' },
-  { block: 3, screenKey: 'slider_mood_impact' },
-  { block: 3, screenKey: 'slider_thought_frequency' },
-  // Block 5: Knowledge Quiz (17-20)
-  { block: 4, screenKey: 'knowledge_intro' },
-  { block: 4, screenKey: 'knowledge_eating_speed' },
-  { block: 4, screenKey: 'knowledge_fodmap' },
-  { block: 4, screenKey: 'knowledge_meal_timing' },
+  // Block 4: Knowledge Quiz (Gut-Brain section skipped)
+  { block: 3, screenKey: 'knowledge_intro' },
+  { block: 3, screenKey: 'knowledge_eating_speed' },
+  { block: 3, screenKey: 'knowledge_fodmap' },
+  { block: 3, screenKey: 'knowledge_meal_timing' },
   // Goal Reminder 2
-  { block: 4, screenKey: 'goal_reminder_2', type: 'goal_reminder' },
-  // Block 6: Safety (21-24)
-  { block: 5, screenKey: 'safety_intro' },
-  { block: 5, screenKey: 'safety_weight_loss' },
-  { block: 5, screenKey: 'safety_blood' },
-  { block: 5, screenKey: 'safety_family' },
-  // Block 7: Email & Final (25-28)
-  { block: 6, screenKey: 'email_capture' },
-  { block: 6, screenKey: 'life_impact' },
-  { block: 6, screenKey: 'vision' },
-  { block: 6, screenKey: 'name_collection' },
-  // Loading & Results (29-30)
-  { block: 6, screenKey: 'loading_sequence', type: 'loading' },
-  { block: 6, screenKey: 'results_page', type: 'results' }
+  { block: 3, screenKey: 'goal_reminder_2', type: 'goal_reminder' },
+  // Block 5: Safety
+  { block: 4, screenKey: 'safety_intro' },
+  { block: 4, screenKey: 'safety_weight_loss' },
+  { block: 4, screenKey: 'safety_blood' },
+  { block: 4, screenKey: 'safety_family' },
+  // Block 6: Email & Final
+  { block: 5, screenKey: 'email_capture' },
+  { block: 5, screenKey: 'life_impact' },
+  { block: 5, screenKey: 'vision' },
+  { block: 5, screenKey: 'name_collection' },
+  // Loading & Results
+  { block: 5, screenKey: 'loading_sequence', type: 'loading' },
+  { block: 5, screenKey: 'results_page', type: 'results' }
 ];
 
-// Block mapping
+// Block mapping (6 blocks after removing gut-brain section)
 const blocks = [
   quizContent.block1,
   quizContent.block2,
   quizContent.block3,
-  quizContent.block4,
-  quizContent.block5,
-  quizContent.block6,
-  quizContent.block7
+  quizContent.block5,  // Knowledge quiz (was block5)
+  quizContent.block6,  // Safety (was block6)
+  quizContent.block7   // Final (was block7)
 ];
 
-// Section labels for each block
+// Section labels for each block (6 blocks now)
 const SECTION_LABELS = [
   'YOUR GOALS',
   'SYMPTOMS',
   'WHY THIS WORKS',
-  'GUT-BRAIN',
   'KNOWLEDGE',
   'SAFETY CHECK',
   'FINAL STEPS'
 ];
 
-// Questions per section for progress calculation
-const QUESTIONS_PER_SECTION = [5, 6, 1, 5, 5, 4, 5];
+// Questions per section for progress calculation (6 sections)
+const QUESTIONS_PER_SECTION = [5, 6, 1, 5, 4, 5];
 
 // DOM Elements
 let contentEl;
@@ -930,10 +922,16 @@ function renderTextInput(container, screen) {
         placeholder="${screen.placeholder}" rows="4"></textarea>
       ${hint ? `<p class="input-hint">${hint}</p>` : ''}
     `;
+  } else if (screen.storeAs === 'user_name') {
+    // Single line name input with simpler styling
+    html += `
+      <input type="text" class="name-input" id="textInput"
+        placeholder="${screen.placeholder}" autocomplete="given-name">
+    `;
   } else {
     html += `
       <input type="text" class="text-input" id="textInput"
-        placeholder="${screen.placeholder}" autocomplete="given-name">
+        placeholder="${screen.placeholder}">
     `;
   }
 
@@ -1065,12 +1063,6 @@ function renderJourneyMap(container, reminder, goalText) {
     <div class="question-container journey-map-screen">
       <h2 class="question-text">${reminder.headline}</h2>
 
-      <!-- Goal Statement -->
-      <div class="journey-goal-statement">
-        <span class="journey-goal-icon">🎯</span>
-        <span>${reminder.template.replace('{goal}', goalText)}</span>
-      </div>
-
       <!-- Journey Timeline -->
       <div class="journey-timeline">
         <!-- PAST -->
@@ -1141,31 +1133,43 @@ function renderJourneyMap(container, reminder, goalText) {
 function renderLoadingScreen(container) {
   const loading = quizContent.loadingSequence;
 
+  // Show a popup overlay with comparison loading
   let html = `
-    <div class="question-container loading-screen">
-      <h2 class="question-text">${loading.headline}</h2>
-      <div class="loading-progress-list">
+    <div class="comparison-popup-overlay">
+      <div class="comparison-popup">
+        <h2 class="comparison-popup-title">${loading.headline}</h2>
+        <p class="comparison-popup-subtitle">Comparing your profile to our database...</p>
+
+        <div class="comparison-progress-list">
   `;
 
-  loading.steps.forEach((step, index) => {
+  // Generate comparison items with percentages
+  const comparisonSteps = [
+    { text: 'Analyzing your symptom patterns', targetPercent: 100 },
+    { text: 'Matching with similar profiles', targetPercent: 100 },
+    { text: 'Cross-referencing successful protocols', targetPercent: 100 },
+    { text: 'Calculating your match score', targetPercent: 100 },
+    { text: 'Generating personalized recommendations', targetPercent: 100 }
+  ];
+
+  comparisonSteps.forEach((step, index) => {
     html += `
-      <div class="loading-item" id="loadingItem${index}">
-        <span class="loading-item-text">${step.text}</span>
-        <div class="loading-bar">
-          <div class="loading-bar-fill" id="loadingFill${index}"></div>
+      <div class="comparison-item" id="comparisonItem${index}">
+        <div class="comparison-item-header">
+          <span class="comparison-item-text">${step.text}</span>
+          <span class="comparison-item-percent" id="comparisonPercent${index}">0%</span>
         </div>
-        <div class="loading-item-check">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
-            <polyline points="20 6 9 17 4 12"></polyline>
-          </svg>
+        <div class="comparison-bar">
+          <div class="comparison-bar-fill" id="comparisonFill${index}"></div>
         </div>
       </div>
     `;
   });
 
   html += `
+        </div>
+        <div id="loadingPopupContainer"></div>
       </div>
-      <div id="loadingPopupContainer"></div>
     </div>
   `;
 
@@ -1185,7 +1189,89 @@ function renderLoadingScreen(container) {
   });
 
   // Start loading animation
-  startLoadingAnimation();
+  startComparisonAnimation(comparisonSteps);
+}
+
+async function startComparisonAnimation(steps) {
+  const loading = quizContent.loadingSequence;
+  const stepDurations = [1800, 2000, 2200, 1500, 2000];
+
+  for (let i = 0; i < steps.length; i++) {
+    const item = document.getElementById(`comparisonItem${i}`);
+    const fill = document.getElementById(`comparisonFill${i}`);
+    const percentEl = document.getElementById(`comparisonPercent${i}`);
+
+    if (!item || !fill || !percentEl) continue;
+
+    item.classList.add('active');
+
+    // Check for popup questions at specific steps
+    if (i === 1) {
+      const popupQuestion = loading.popupQuestions[0];
+      if (popupQuestion && !state.answers[popupQuestion.storeAs]) {
+        await showLoadingPopup(popupQuestion);
+      }
+    } else if (i === 3) {
+      const popupQuestion = loading.popupQuestions[1];
+      if (popupQuestion && !state.answers[popupQuestion.storeAs]) {
+        await showLoadingPopup(popupQuestion);
+      }
+    }
+
+    // Animate progress bar with percentage counter
+    await animateComparisonBar(fill, percentEl, stepDurations[i], steps[i].targetPercent);
+
+    item.classList.remove('active');
+    item.classList.add('completed');
+  }
+
+  // Show completion message
+  setTimeout(() => {
+    const popup = document.querySelector('.comparison-popup');
+    if (popup) {
+      const completionDiv = document.createElement('div');
+      completionDiv.className = 'comparison-complete';
+      completionDiv.innerHTML = `
+        <div class="comparison-complete-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="20 6 9 17 4 12"></polyline>
+          </svg>
+        </div>
+        <span>${quizContent.loadingSequence.completionMessage}</span>
+      `;
+      popup.appendChild(completionDiv);
+    }
+
+    // Submit final data
+    submitFinalData();
+
+    // Auto-advance after brief delay
+    setTimeout(advanceToNextScreen, 1500);
+  }, 500);
+}
+
+function animateComparisonBar(fill, percentEl, duration, targetPercent) {
+  return new Promise(resolve => {
+    const startTime = Date.now();
+    const animate = () => {
+      const elapsed = Date.now() - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+
+      // Easing function for smooth animation
+      const easedProgress = 1 - Math.pow(1 - progress, 3);
+      const currentPercent = Math.round(easedProgress * targetPercent);
+
+      fill.style.width = currentPercent + '%';
+      percentEl.textContent = currentPercent + '%';
+
+      if (progress < 1 && !state.loadingPaused) {
+        requestAnimationFrame(animate);
+      } else if (!state.loadingPaused) {
+        resolve();
+      }
+    };
+    animate();
+  });
 }
 
 async function startLoadingAnimation() {
@@ -1529,17 +1615,9 @@ function renderRedFlagResults(container) {
         — ${practitioner.name}, ${practitioner.credentials}
       </p>
 
-      <div class="red-flag-followup mt-xl">
-        <div class="red-flag-followup-title">Want us to follow up?</div>
-        <p class="validation-text">Enter your email and we'll send you a checklist of questions to ask your doctor, plus follow up in 30 days to see if you're ready to start.</p>
-        ${!state.emailCaptured ? `
-          <div class="input-container mt-md">
-            <input type="email" class="email-input" id="followupEmail" placeholder="your@email.com">
-          </div>
-          <button class="btn btn-primary mt-md" id="sendChecklistBtn">Send Me the Checklist</button>
-        ` : `
-          <p class="validation-text mt-md">We'll follow up at ${state.userData.email}</p>
-        `}
+      <div class="red-flag-actions mt-xl">
+        <button class="btn-secondary" id="exitBtn">I'll return after seeing my doctor</button>
+        <button class="btn-primary mt-md" id="continueAnywayBtn">I've already been evaluated and cleared</button>
       </div>
     </div>
   `;
@@ -1550,21 +1628,18 @@ function renderRedFlagResults(container) {
   state.quizCompleted = true;
   trackQuizComplete();
 
-  // Handle follow-up email
-  if (!state.emailCaptured) {
-    document.getElementById('sendChecklistBtn')?.addEventListener('click', () => {
-      const email = document.getElementById('followupEmail').value.trim();
-      if (isValidEmail(email)) {
-        state.userData.email = email;
-        state.emailCaptured = true;
-        submitFinalData();
+  // Handle exit button
+  document.getElementById('exitBtn').addEventListener('click', () => {
+    window.location.href = '/';
+  });
 
-        document.querySelector('.red-flag-followup').innerHTML = `
-          <p class="validation-text">✓ We'll send your checklist and follow up at ${email}</p>
-        `;
-      }
-    });
-  }
+  // Handle "already cleared" button - continue to normal results
+  document.getElementById('continueAnywayBtn').addEventListener('click', () => {
+    state.redFlagsBypassed = true;
+    state.answers.red_flag_evaluated_cleared = true;
+    // Re-render as normal results
+    renderNormalResults(container);
+  });
 }
 
 // =================================================
@@ -1620,11 +1695,17 @@ function calculateProtocol() {
 // NAVIGATION
 // =================================================
 function advanceToNextScreen() {
-  // Save to history
-  state.history.push({
-    screenIndex: state.currentScreenIndex,
-    blockIndex: state.currentBlockIndex
-  });
+  // Prevent duplicate history entries - only push if this screen isn't already at the top of history
+  const lastHistoryEntry = state.history[state.history.length - 1];
+  const shouldPushHistory = !lastHistoryEntry ||
+    lastHistoryEntry.screenIndex !== state.currentScreenIndex;
+
+  if (shouldPushHistory) {
+    state.history.push({
+      screenIndex: state.currentScreenIndex,
+      blockIndex: state.currentBlockIndex
+    });
+  }
 
   // Move to next screen
   state.currentScreenIndex++;
@@ -1651,7 +1732,14 @@ function handleBack() {
   state.showingFeedback = false;
   state.currentFeedbackCorrect = null;
 
-  const prev = state.history.pop();
+  // Pop from history until we get to a different screen
+  let prev = state.history.pop();
+
+  // Skip any duplicate entries (shouldn't happen with the guard above, but just in case)
+  while (state.history.length > 0 && prev.screenIndex === state.currentScreenIndex) {
+    prev = state.history.pop();
+  }
+
   state.currentScreenIndex = prev.screenIndex;
   state.currentBlockIndex = prev.blockIndex;
 
