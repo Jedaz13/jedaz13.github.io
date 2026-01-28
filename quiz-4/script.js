@@ -72,9 +72,11 @@ try {
 }
 
 // Screen order mapping (Gut-Brain section skipped per user request)
+// Name collection moved early for personalization
 const screenOrder = [
   // Block 1: Goals & Context (1-5)
   { block: 0, screenKey: 'goal_selection' },
+  { block: 0, screenKey: 'name_collection' },  // Moved early for personalization
   { block: 0, screenKey: 'timeline_setting' },
   { block: 0, screenKey: 'primary_complaint' },
   { block: 0, screenKey: 'frequency' },
@@ -105,7 +107,6 @@ const screenOrder = [
   { block: 5, screenKey: 'email_capture' },
   { block: 5, screenKey: 'life_impact' },
   { block: 5, screenKey: 'vision' },
-  { block: 5, screenKey: 'name_collection' },
   // Loading & Results
   { block: 5, screenKey: 'loading_sequence', type: 'loading' },
   { block: 5, screenKey: 'results_page', type: 'results' }
@@ -132,7 +133,13 @@ const SECTION_LABELS = [
 ];
 
 // Questions per section for progress calculation (6 sections)
-const QUESTIONS_PER_SECTION = [5, 6, 1, 5, 4, 5];
+// Block 0: goal_selection, name_collection, timeline_setting, primary_complaint, frequency, duration = 6
+// Block 1: bm_relief, flare_frequency, stool_changes, treatments_tried, diagnosis_history, goal_reminder_1 = 6
+// Block 2: why_programs_fail = 1
+// Block 3: knowledge_intro, knowledge_eating_speed, knowledge_fodmap, knowledge_meal_timing, goal_reminder_2 = 5
+// Block 4: safety_intro, safety_weight_loss, safety_blood, safety_family = 4
+// Block 5: email_capture, life_impact, vision, loading_sequence, results_page = 5
+const QUESTIONS_PER_SECTION = [6, 6, 1, 5, 4, 5];
 
 // DOM Elements
 let contentEl;
@@ -380,21 +387,21 @@ function renderTimelineGraphic() {
   return `
     <div class="timeline-graphic">
       <div class="timeline-bar">
-        <div class="timeline-segment"></div>
-        <div class="timeline-segment"></div>
-        <div class="timeline-segment"></div>
+        <div class="timeline-segment animate-week" style="animation-delay: 0.2s"></div>
+        <div class="timeline-segment animate-week" style="animation-delay: 0.5s"></div>
+        <div class="timeline-segment animate-week" style="animation-delay: 0.8s"></div>
       </div>
       <div class="timeline-labels">
-        <div class="timeline-label">
-          <div class="timeline-label-week">Week 1-2</div>
+        <div class="timeline-label animate-week" style="animation-delay: 0.2s">
+          <div class="timeline-label-week">WEEK 1-2</div>
           <div class="timeline-label-text">First improvements<br>(bloating reduces, more predictable)</div>
         </div>
-        <div class="timeline-label">
-          <div class="timeline-label-week">Week 3-4</div>
+        <div class="timeline-label animate-week" style="animation-delay: 0.5s">
+          <div class="timeline-label-week">WEEK 3-4</div>
           <div class="timeline-label-text">Patterns emerge<br>(you know your triggers)</div>
         </div>
-        <div class="timeline-label">
-          <div class="timeline-label-week">Month 2-3</div>
+        <div class="timeline-label animate-week" style="animation-delay: 0.8s">
+          <div class="timeline-label-week">MONTH 2-3</div>
           <div class="timeline-label-text">Real control<br>(symptoms are the exception)</div>
         </div>
       </div>
@@ -679,14 +686,40 @@ function renderInfoScreen(container, screen) {
 
   if (screen.comparison) {
     html += `
-      <div class="comparison-container">
-        <div class="comparison-card problem">
-          <div class="comparison-title">${screen.comparison.problem.title}</div>
-          <div class="comparison-text">${screen.comparison.problem.text}</div>
+      <div class="cycle-comparison-container">
+        <!-- The Old Cycle -->
+        <div class="cycle-card cycle-stuck animate-phase" style="animation-delay: 0.1s">
+          <div class="cycle-header stuck">
+            <span class="cycle-icon">🔄</span>
+            <span class="cycle-title">The Cycle You've Been Stuck In</span>
+          </div>
+          <div class="cycle-flow stuck">
+            <div class="cycle-step">Try something new</div>
+            <div class="cycle-arrow">→</div>
+            <div class="cycle-step">Do it alone</div>
+            <div class="cycle-arrow">→</div>
+            <div class="cycle-step">Is it working?</div>
+            <div class="cycle-arrow">→</div>
+            <div class="cycle-step">Give up or stick too long</div>
+            <div class="cycle-arrow cycle-loop">↻</div>
+          </div>
         </div>
-        <div class="comparison-card solution">
-          <div class="comparison-title">${screen.comparison.solution.title}</div>
-          <div class="comparison-text">${screen.comparison.solution.text}</div>
+
+        <!-- The Escape Path -->
+        <div class="cycle-card cycle-escape animate-phase" style="animation-delay: 0.4s">
+          <div class="cycle-header escape">
+            <span class="cycle-icon">✨</span>
+            <span class="cycle-title">How You Escape This Time</span>
+          </div>
+          <div class="cycle-flow escape">
+            <div class="cycle-step highlight">Get your protocol</div>
+            <div class="cycle-arrow">→</div>
+            <div class="cycle-step highlight">Track daily (3 min)</div>
+            <div class="cycle-arrow">→</div>
+            <div class="cycle-step highlight">Practitioners review</div>
+            <div class="cycle-arrow">→</div>
+            <div class="cycle-step highlight success">Real progress</div>
+          </div>
         </div>
       </div>
     `;
@@ -1020,18 +1053,54 @@ function renderGoalReminder(container, reminderKey) {
     return;
   }
 
-  let message = reminder.template
-    .replace('{goal}', goalText)
-    .replace('{name}', name);
+  // Get relevant data for achievement diagram
+  const complaint = quizContent.complaintLabels[state.answers.primary_complaint] || 'your symptoms';
+  const treatments = state.treatmentsTried || [];
+  const treatmentCount = treatments.filter(t => t !== 'nothing').length;
 
   const html = `
-    <div class="question-container">
-      <div class="goal-reminder">
+    <div class="question-container goal-reminder-v2">
+      <div class="goal-reminder-header">
         <div class="goal-reminder-icon">🎯</div>
-        <h2 class="goal-reminder-title">Remember your goal</h2>
-        <p class="goal-reminder-text">${message.replace(/\n/g, '<br>')}</p>
+        <h2 class="goal-reminder-title">${name}, you're almost there</h2>
       </div>
-      <button class="btn-primary" id="continueBtn">Continue</button>
+
+      <div class="achievement-diagram">
+        <div class="achievement-step animate-phase" style="animation-delay: 0.1s">
+          <div class="achievement-icon">📋</div>
+          <div class="achievement-content">
+            <div class="achievement-label">YOUR CHALLENGE</div>
+            <div class="achievement-value">${complaint}</div>
+          </div>
+        </div>
+        <div class="achievement-connector animate-phase" style="animation-delay: 0.2s">+</div>
+        <div class="achievement-step animate-phase" style="animation-delay: 0.3s">
+          <div class="achievement-icon">💪</div>
+          <div class="achievement-content">
+            <div class="achievement-label">YOUR EFFORT</div>
+            <div class="achievement-value">${treatmentCount > 0 ? treatmentCount + ' approaches tried' : 'Ready to start'}</div>
+          </div>
+        </div>
+        <div class="achievement-connector animate-phase" style="animation-delay: 0.4s">+</div>
+        <div class="achievement-step animate-phase" style="animation-delay: 0.5s">
+          <div class="achievement-icon">👩‍⚕️</div>
+          <div class="achievement-content">
+            <div class="achievement-label">THE MISSING PIECE</div>
+            <div class="achievement-value">Expert guidance</div>
+          </div>
+        </div>
+        <div class="achievement-connector animate-phase" style="animation-delay: 0.6s">=</div>
+        <div class="achievement-step achievement-goal animate-phase" style="animation-delay: 0.7s">
+          <div class="achievement-icon">✨</div>
+          <div class="achievement-content">
+            <div class="achievement-label">YOUR GOAL</div>
+            <div class="achievement-value">${goalText}</div>
+          </div>
+        </div>
+      </div>
+
+      <p class="goal-reminder-subtext animate-phase" style="animation-delay: 0.9s">Just a few more questions and your personalized protocol will be ready.</p>
+      <button class="btn-primary animate-phase" style="animation-delay: 1s" id="continueBtn">Continue</button>
     </div>
   `;
 
@@ -1066,7 +1135,7 @@ function renderJourneyMap(container, reminder, goalText) {
       <!-- Journey Timeline -->
       <div class="journey-timeline">
         <!-- PAST -->
-        <div class="journey-phase past">
+        <div class="journey-phase past animate-phase" style="animation-delay: 0.1s">
           <div class="journey-phase-label">WHAT YOU'VE TRIED</div>
           <div class="journey-phase-content">
             ${hasTriedThings ? `
@@ -1074,7 +1143,7 @@ function renderJourneyMap(container, reminder, goalText) {
                 ${treatmentLabels.map(t => `<span class="journey-tried-item">${t}</span>`).join('')}
                 ${treatments.length > 4 ? `<span class="journey-tried-more">+${treatments.length - 4} more</span>` : ''}
               </div>
-              <p class="journey-phase-note">These can work — they just needed the right sequence.</p>
+              <p class="journey-phase-note">Your dedication shows you're ready for this.</p>
             ` : `
               <p class="journey-phase-note">Starting fresh gives us a clear baseline.</p>
             `}
@@ -1082,25 +1151,25 @@ function renderJourneyMap(container, reminder, goalText) {
         </div>
 
         <!-- Arrow -->
-        <div class="journey-arrow">→</div>
+        <div class="journey-arrow animate-phase" style="animation-delay: 0.3s">↓</div>
 
         <!-- NOW -->
-        <div class="journey-phase now">
+        <div class="journey-phase now animate-phase" style="animation-delay: 0.5s">
           <div class="journey-phase-label">THE MISSING PIECE</div>
           <div class="journey-phase-content">
             <div class="journey-missing-piece">
               <span class="journey-piece-icon">📊</span>
               <span>Tracking + Practitioner Reviews</span>
             </div>
-            <p class="journey-phase-note">Someone who adjusts based on YOUR response.</p>
+            <p class="journey-phase-note">Registered nutritionists adjust based on YOUR response.</p>
           </div>
         </div>
 
         <!-- Arrow -->
-        <div class="journey-arrow">→</div>
+        <div class="journey-arrow animate-phase" style="animation-delay: 0.7s">↓</div>
 
         <!-- FUTURE -->
-        <div class="journey-phase future">
+        <div class="journey-phase future animate-phase" style="animation-delay: 0.9s">
           <div class="journey-phase-label">YOUR GOAL</div>
           <div class="journey-phase-content">
             <div class="journey-goal-destination">
@@ -1111,7 +1180,7 @@ function renderJourneyMap(container, reminder, goalText) {
         </div>
       </div>
 
-      <button class="btn-primary" id="continueBtn">Continue</button>
+      <button class="btn-primary animate-phase" style="animation-delay: 1.1s" id="continueBtn">Continue</button>
     </div>
   `;
 
@@ -1132,35 +1201,36 @@ function renderJourneyMap(container, reminder, goalText) {
 // =================================================
 function renderLoadingScreen(container) {
   const loading = quizContent.loadingSequence;
+  const name = state.userData.name || 'Friend';
 
   // Show a popup overlay with comparison loading
   let html = `
     <div class="comparison-popup-overlay">
-      <div class="comparison-popup">
-        <h2 class="comparison-popup-title">${loading.headline}</h2>
-        <p class="comparison-popup-subtitle">Comparing your profile to our database...</p>
+      <div class="comparison-popup comparison-popup-large">
+        <h2 class="comparison-popup-title-large">CREATING YOUR PERSONALIZED PROTOCOL</h2>
+        <p class="comparison-popup-subtitle">${name}, we're matching your profile with similar success stories...</p>
 
         <div class="comparison-progress-list">
   `;
 
-  // Generate comparison items with percentages
+  // Generate comparison items with percentages and unique colors
   const comparisonSteps = [
-    { text: 'Analyzing your symptom patterns', targetPercent: 100 },
-    { text: 'Matching with similar profiles', targetPercent: 100 },
-    { text: 'Cross-referencing successful protocols', targetPercent: 100 },
-    { text: 'Calculating your match score', targetPercent: 100 },
-    { text: 'Generating personalized recommendations', targetPercent: 100 }
+    { text: 'Analyzing your symptom patterns', targetPercent: 100, color: '#F59E0B' },
+    { text: 'Finding members with similar profiles', targetPercent: 100, color: '#10B981' },
+    { text: 'Cross-referencing successful protocols', targetPercent: 100, color: '#3B82F6' },
+    { text: 'Calculating your match score', targetPercent: 100, color: '#8B5CF6' },
+    { text: 'Generating your recommendations', targetPercent: 100, color: '#2ECC71' }
   ];
 
   comparisonSteps.forEach((step, index) => {
     html += `
-      <div class="comparison-item" id="comparisonItem${index}">
+      <div class="comparison-item" id="comparisonItem${index}" data-color="${step.color}">
         <div class="comparison-item-header">
           <span class="comparison-item-text">${step.text}</span>
           <span class="comparison-item-percent" id="comparisonPercent${index}">0%</span>
         </div>
         <div class="comparison-bar">
-          <div class="comparison-bar-fill" id="comparisonFill${index}"></div>
+          <div class="comparison-bar-fill" id="comparisonFill${index}" style="background: ${step.color}"></div>
         </div>
       </div>
     `;
@@ -1362,9 +1432,10 @@ function showLoadingPopup(question) {
     const popupContainer = document.getElementById('loadingPopupContainer');
 
     let html = `
-      <div class="loading-popup">
-        <p class="loading-popup-question">${question.question}</p>
-        <div class="loading-popup-options">
+      <div class="loading-popup-center">
+        <div class="loading-popup-card">
+          <p class="loading-popup-question">${question.question}</p>
+          <div class="loading-popup-options">
     `;
 
     question.options.forEach(option => {
@@ -1374,6 +1445,7 @@ function showLoadingPopup(question) {
     });
 
     html += `
+          </div>
         </div>
       </div>
     `;
