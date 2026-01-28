@@ -1077,9 +1077,88 @@ async function startComparisonAnimation(bars, colors) {
     // Submit final data
     submitFinalData();
 
-    // Auto-advance after brief delay
-    setTimeout(advanceToNextScreen, 1500);
+    // Start animated reveal sequence after brief delay
+    setTimeout(() => {
+      startAnimatedReveal();
+    }, 1200);
   }, 500);
+}
+
+// =================================================
+// ANIMATED REVEAL SEQUENCE
+// =================================================
+function startAnimatedReveal() {
+  const container = contentEl;
+  const name = state.userData.name || 'Friend';
+  const goalText = quizContent.goalTexts[state.answers.future_vision] || 'feel better';
+  const timelineText = getTimelinePrediction().replace(/\*\*(.*?)\*\*/g, '$1');
+
+  // Hide quiz header during reveal
+  const quizHeader = document.getElementById('quizHeader');
+  const progressContainer = document.getElementById('progressContainer');
+  if (quizHeader) quizHeader.style.display = 'none';
+  if (progressContainer) progressContainer.style.display = 'none';
+
+  container.innerHTML = `
+    <div class="animated-reveal">
+      <!-- Step 1: Logo -->
+      <div class="reveal-step reveal-logo" id="revealStep1">
+        <img src="/assets/Logo.png" alt="Gut Healing Academy" class="reveal-logo-img" onerror="this.style.display='none'">
+      </div>
+
+      <!-- Step 2: Protocol Ready -->
+      <div class="reveal-step reveal-ready" id="revealStep2">
+        <div class="reveal-icon">✨</div>
+        <h2 class="reveal-headline">${name}, your personalized protocol is ready.</h2>
+      </div>
+
+      <!-- Step 3: Goal Connection -->
+      <div class="reveal-step reveal-goal" id="revealStep3">
+        <p class="reveal-goal-text">Built to help you <strong>${goalText}</strong></p>
+      </div>
+
+      <!-- Step 4: Timeline -->
+      <div class="reveal-step reveal-timeline" id="revealStep4">
+        <div class="reveal-timeline-card">
+          <div class="reveal-timeline-icon">📅</div>
+          <p class="reveal-timeline-text">${timelineText}</p>
+        </div>
+      </div>
+
+      <!-- Step 5: Let's Begin -->
+      <div class="reveal-step reveal-begin" id="revealStep5">
+        <p class="reveal-begin-text">Let's see what we built for you.</p>
+        <button class="btn-primary reveal-cta" id="revealContinueBtn">Show My Results</button>
+      </div>
+    </div>
+  `;
+
+  // Timing sequence (in ms)
+  const timings = [0, 1500, 3000, 4500, 7000];
+
+  // Animate each step
+  timings.forEach((delay, index) => {
+    setTimeout(() => {
+      const step = document.getElementById(`revealStep${index + 1}`);
+      if (step) {
+        step.classList.add('visible');
+      }
+    }, delay);
+  });
+
+  // Add click handler to continue button
+  setTimeout(() => {
+    const continueBtn = document.getElementById('revealContinueBtn');
+    if (continueBtn) {
+      continueBtn.addEventListener('click', () => {
+        // Show header again
+        if (quizHeader) quizHeader.style.display = '';
+        if (progressContainer) progressContainer.style.display = '';
+
+        advanceToNextScreen();
+      });
+    }
+  }, 7000);
 }
 
 function animateComparisonBar(fill, percentEl, duration, targetPercent, startPercent = 0) {
@@ -1161,10 +1240,12 @@ function renderResultsScreen(container) {
 function renderNormalResults(container) {
   const protocol = quizContent.protocols[state.calculatedProtocol];
   const gutType = quizContent.gutTypes[state.calculatedProtocol];
-  const practitioner = quizContent.practitioners.rebecca;
   const goalText = quizContent.goalTexts[state.answers.future_vision] || 'feel better';
   const name = state.userData.name || 'Friend';
   const scarcityPercent = quizContent.scarcityPercentages[state.calculatedProtocol] || 20;
+
+  // Get contextual Rebecca quote
+  const rebeccaQuote = getContextualRebeccaQuote();
 
   // Get timeline prediction
   const timelinePrediction = getTimelinePrediction();
@@ -1174,11 +1255,16 @@ function renderNormalResults(container) {
 
   let html = `
     <div class="question-container results-screen">
-      <!-- Header with Gut Type -->
+      <!-- Header - Outcome Focused -->
       <div class="results-header">
-        <p class="results-greeting">${name}, you're a</p>
+        <p class="results-label">YOUR GUT TYPE</p>
         <h1 class="gut-type-name" style="border-color: ${gutType.color}">${gutType.name}</h1>
-        <p class="gut-type-description">${gutType.description}</p>
+      </div>
+
+      <!-- How This Protocol Is Built Section -->
+      <div class="protocol-explanation">
+        <h2 class="protocol-explanation-title">How this protocol is built for your gut:</h2>
+        <p class="protocol-explanation-text">${gutType.description}</p>
       </div>
 
       <!-- Protocol Card -->
@@ -1188,48 +1274,57 @@ function renderNormalResults(container) {
         ${state.hasGutBrainOverlay ? `<span class="protocol-overlay">${quizContent.nervousSystemOverlay.name}</span>` : ''}
 
         <ul class="protocol-includes">
-          ${protocol.includes.map(item => `<li>${item}</li>`).join('')}
+          ${protocol.includes.map(item => `<li><span class="include-check">✓</span> ${item}</li>`).join('')}
         </ul>
       </div>
 
-      <!-- Timeline Prediction -->
-      <div class="timeline-prediction">
-        <h3 class="timeline-header">When you can expect to feel better:</h3>
-        <p class="timeline-text">${formattedTimeline}</p>
+      <!-- What Changes Section -->
+      <div class="what-changes-section">
+        <h3 class="what-changes-title">What this means for you:</h3>
+        <div class="outcome-card">
+          <div class="outcome-icon">🎯</div>
+          <p class="outcome-text">A clear path to <strong>${goalText}</strong></p>
+        </div>
+        <div class="outcome-card">
+          <div class="outcome-icon">📅</div>
+          <p class="outcome-text">${formattedTimeline}</p>
+        </div>
+        <div class="outcome-card">
+          <div class="outcome-icon">👩‍⚕️</div>
+          <p class="outcome-text">Real practitioner support — not another app to use alone</p>
+        </div>
+      </div>
+
+      <!-- Personalization Summary -->
+      <div class="personalization-summary">
+        <h3 class="personalization-title">We built this protocol around:</h3>
+        <ul class="personalization-list">
+          <li><span class="pers-bullet">•</span> Your primary concern: <strong>${quizContent.complaintLabels[state.answers.primary_complaint] || 'gut issues'}</strong></li>
+          <li><span class="pers-bullet">•</span> ${quizContent.durationLabels[state.answers.symptom_duration] || 'Your history'} of dealing with this</li>
+          <li><span class="pers-bullet">•</span> The <strong>${state.treatmentsCount}</strong> approaches you've already tried</li>
+          ${state.hasGutBrainOverlay ? `<li><span class="pers-bullet">•</span> Your gut-brain connection (nervous system support included)</li>` : ''}
+        </ul>
       </div>
 
       <!-- Scarcity Message -->
       <div class="scarcity-message">
-        <p>Only <strong>${scarcityPercent}%</strong> of women who take this quiz match the ${protocol.displayName}.</p>
+        <p>Only <strong>${scarcityPercent}%</strong> of women match your exact profile.</p>
         <p class="scarcity-subtext">You've qualified for personalized practitioner support.</p>
       </div>
 
-      <!-- Analysis Section -->
-      <div class="analysis-card">
-        <h3 class="analysis-title">Your Assessment Summary:</h3>
-        <ul class="analysis-list">
-          <li>Primary concern: <strong>${quizContent.complaintLabels[state.answers.primary_complaint] || 'gut issues'}</strong></li>
-          <li>Duration: <strong>${quizContent.durationLabels[state.answers.symptom_duration] || 'some time'}</strong></li>
-          <li>Approaches tried: <strong>${state.treatmentsCount}</strong></li>
-          ${state.hasGutBrainOverlay ? `<li>Stress connection: <strong>Significant</strong> — includes nervous system support</li>` : ''}
-        </ul>
-      </div>
-
-      <!-- Practitioner Quote -->
+      <!-- Practitioner Quote - Contextual -->
       <div class="practitioner-quote">
-        <img src="${practitioner.photo}" alt="${practitioner.name}" class="practitioner-photo" onerror="this.style.display='none'">
+        <img src="/about/practitioner-rebecca.png" alt="Rebecca Taylor" class="practitioner-photo" onerror="this.style.display='none'">
         <div class="practitioner-content">
-          <p class="practitioner-text">"${practitioner.quote}"</p>
-          <p class="practitioner-name">— ${practitioner.name}, ${practitioner.credentials}</p>
+          <p class="practitioner-text">"${rebeccaQuote}"</p>
+          <p class="practitioner-name">— Rebecca Taylor, BSc, MS, RNutr</p>
         </div>
       </div>
 
       <!-- CTA Section -->
       <div class="cta-section">
-        <h3 class="cta-headline">Start Your $1 Trial</h3>
-        <p class="cta-subtext">7-day full access to your protocol + practitioner support</p>
-        <button class="btn btn-coral" id="ctaBtn">Claim My Protocol →</button>
-        <p class="cta-guarantee">Cancel anytime. No questions asked.</p>
+        <button class="btn btn-coral" id="ctaBtn">Continue</button>
+        <p class="cta-guarantee">See your protocol details →</p>
       </div>
     </div>
   `;
@@ -1266,6 +1361,46 @@ function getTimelinePrediction() {
   }
 
   return quizContent.timelinePredictions.default;
+}
+
+// Get contextual Rebecca quote based on user's answers
+function getContextualRebeccaQuote() {
+  const complaint = state.answers.primary_complaint;
+  const duration = state.answers.symptom_duration;
+  const treatmentsCount = state.treatmentsCount || 0;
+  const hasStress = state.hasGutBrainOverlay;
+
+  // Priority 1: Long duration (5+ years) with many treatments tried
+  if ((duration === '5_plus_years' || duration === '3_5_years') && treatmentsCount >= 4) {
+    return "After years of trial and error, your gut needs a different approach — one that adapts to your specific response patterns. That's exactly what this protocol does.";
+  }
+
+  // Priority 2: Stress connection
+  if (hasStress) {
+    return "Your gut-brain connection is significant. Most programs ignore this completely — but yours includes specific nervous system support because your gut won't heal without it.";
+  }
+
+  // Priority 3: Primary complaint specific
+  const complaintQuotes = {
+    bloating: "Bloating that won't quit usually signals something specific about how your gut processes certain foods. Your protocol targets exactly that mechanism.",
+    constipation: "Slow transit isn't just about fiber — it's about gut motility patterns. Your protocol addresses the underlying rhythm, not just the symptoms.",
+    diarrhea: "Urgency and loose stools often mean your gut is overreacting to triggers. Your protocol helps calm that response while supporting your microbiome.",
+    mixed: "Alternating patterns are actually the trickiest to solve with generic advice. That's why your protocol adapts based on what phase you're in.",
+    pain: "Gut pain that comes and goes usually has specific triggers. Your protocol helps identify and address those patterns systematically.",
+    gas: "Excessive gas is often about fermentation patterns — not just what you eat, but how your gut breaks it down. Your protocol addresses both."
+  };
+
+  if (complaintQuotes[complaint]) {
+    return complaintQuotes[complaint];
+  }
+
+  // Priority 4: Many treatments tried
+  if (treatmentsCount >= 5) {
+    return `You've tried ${treatmentsCount} different approaches. That persistence matters — it means you know what doesn't work. Now let's find what does.`;
+  }
+
+  // Default
+  return "I've reviewed profiles like yours many times. The pattern is clear — you need someone tracking your response and adjusting as you go, not another diet to try alone.";
 }
 
 function renderRedFlagResults(container) {
