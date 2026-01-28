@@ -223,22 +223,84 @@ WHERE created_at > NOW() - INTERVAL '30 minutes'
 GROUP BY session_id, quiz_source
 ORDER BY last_activity DESC;
 
--- 9. Grant permissions for anonymous access (needed for client-side tracking)
-GRANT SELECT ON quiz_events TO anon;
-GRANT INSERT ON quiz_events TO anon;
+-- 9. Grant permissions
+-- Anonymous users can only execute the insert function (not direct table access)
 GRANT EXECUTE ON FUNCTION insert_quiz_event(JSONB) TO anon;
-GRANT SELECT ON quiz_funnel_stats TO anon;
-GRANT SELECT ON quiz_daily_stats TO anon;
-GRANT SELECT ON quiz_dropoff_analysis TO anon;
-GRANT SELECT ON quiz_active_sessions TO anon;
 
--- 10. Enable Row Level Security (optional but recommended)
--- ALTER TABLE quiz_events ENABLE ROW LEVEL SECURITY;
--- CREATE POLICY "Allow anonymous inserts" ON quiz_events FOR INSERT TO anon WITH CHECK (true);
--- CREATE POLICY "Allow anonymous reads" ON quiz_events FOR SELECT TO anon USING (true);
+-- Authenticated users get table access (RLS will restrict to admins)
+GRANT SELECT ON quiz_events TO authenticated;
+GRANT SELECT ON quiz_funnel_stats TO authenticated;
+GRANT SELECT ON quiz_daily_stats TO authenticated;
+GRANT SELECT ON quiz_dropoff_analysis TO authenticated;
+GRANT SELECT ON quiz_active_sessions TO authenticated;
+
+-- 10. Enable Row Level Security
+ALTER TABLE quiz_events ENABLE ROW LEVEL SECURITY;
+
+-- 11. Create RLS Policies
+
+-- Policy: Allow inserts via the SECURITY DEFINER function only
+-- (The insert_quiz_event function bypasses RLS because it's SECURITY DEFINER)
+-- No direct INSERT policy needed for anon - they use the function
+
+-- Policy: Only admins can read quiz events
+CREATE POLICY "Admins can read quiz events"
+ON quiz_events
+FOR SELECT
+TO authenticated
+USING (
+  EXISTS (
+    SELECT 1 FROM users
+    WHERE users.id = auth.uid()
+    AND users.is_admin = true
+  )
+);
+
+-- Policy: Only admins can delete quiz events (for cleanup)
+CREATE POLICY "Admins can delete quiz events"
+ON quiz_events
+FOR DELETE
+TO authenticated
+USING (
+  EXISTS (
+    SELECT 1 FROM users
+    WHERE users.id = auth.uid()
+    AND users.is_admin = true
+  )
+);
+
+-- 12. Create secure views for admin access
+-- These views inherit RLS from the underlying table
+
+-- Alternative: If you want views accessible without RLS check,
+-- you can use SECURITY DEFINER functions instead.
+-- But the current setup requires admin login to the admin panel.
+
+-- 13. Create helper function to check admin status
+CREATE OR REPLACE FUNCTION is_admin()
+RETURNS BOOLEAN
+LANGUAGE sql
+SECURITY DEFINER
+STABLE
+AS $$
+  SELECT EXISTS (
+    SELECT 1 FROM users
+    WHERE users.id = auth.uid()
+    AND users.is_admin = true
+  );
+$$;
+
+-- Grant execute on helper function
+GRANT EXECUTE ON FUNCTION is_admin() TO authenticated;
 
 -- =====================================================
 -- USAGE NOTES:
+--
+-- SECURITY MODEL:
+-- - Quiz visitors (anonymous) can INSERT events via insert_quiz_event()
+-- - Only authenticated admins (is_admin=true) can READ events
+-- - The admin panel must authenticate users via Supabase Auth
+-- - Views inherit RLS from the underlying quiz_events table
 --
 -- After running this SQL, the quiz will automatically track:
 -- - Every screen view with timing
@@ -247,9 +309,20 @@ GRANT SELECT ON quiz_active_sessions TO anon;
 -- - Quiz completion events
 -- - Quiz abandonment events
 --
--- You can query the data using:
+-- ADMIN QUERIES (must be authenticated as admin):
 -- 1. quiz_funnel_stats - See how many reach each screen
 -- 2. quiz_daily_stats - Daily conversion rates
 -- 3. quiz_dropoff_analysis - Where people leave
 -- 4. quiz_active_sessions - Real-time quiz takers
+--
+-- IMPORTANT: If you already ran the old version without RLS,
+-- run these commands to add security:
+--
+-- ALTER TABLE quiz_events ENABLE ROW LEVEL SECURITY;
+--
+-- CREATE POLICY "Admins can read quiz events"
+-- ON quiz_events FOR SELECT TO authenticated
+-- USING (EXISTS (SELECT 1 FROM users WHERE users.id = auth.uid() AND users.is_admin = true));
+--
+-- REVOKE SELECT ON quiz_events FROM anon;
 -- =====================================================
