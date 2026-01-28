@@ -19,7 +19,7 @@
   // APPLICATION STATE
   // =====================================================
   const state = {
-    selectedPrice: 1,  // Default to $1
+    selectedPrice: 5,  // Default to $5
     userData: {
       name: 'Friend',
       email: '',
@@ -279,15 +279,33 @@
   // NAVIGATION
   // =====================================================
   function initNavigation() {
+    // Check if we should start on step 2 (coming back from Stripe)
+    if (window.location.hash === '#checkout' || sessionStorage.getItem('offer4_step') === '2') {
+      showStep(2, false); // Don't push state on initial load
+      syncDropdownWithSelection();
+    }
+
     // Continue to Step 2
     const continueBtn = document.getElementById('continueToStep2');
     if (continueBtn) {
       continueBtn.addEventListener('click', function() {
-        showStep(2);
+        showStep(2, true); // Push state to history
         syncDropdownWithSelection();
         trackStepView('step2');
       });
     }
+
+    // Handle browser back/forward buttons
+    window.addEventListener('popstate', function(event) {
+      if (event.state && event.state.step) {
+        showStep(event.state.step, false);
+        if (event.state.step === 2) {
+          syncDropdownWithSelection();
+        }
+      } else {
+        showStep(1, false);
+      }
+    });
 
     // Custom price dropdown in Step 2
     initCustomDropdown();
@@ -370,7 +388,7 @@
     });
   }
 
-  function showStep(stepNumber) {
+  function showStep(stepNumber, pushState) {
     // Hide all steps
     document.querySelectorAll('.step').forEach(function(step) {
       step.classList.remove('active');
@@ -380,6 +398,17 @@
     const targetStep = document.getElementById('step' + stepNumber);
     if (targetStep) {
       targetStep.classList.add('active');
+    }
+
+    // Save step to sessionStorage for persistence
+    sessionStorage.setItem('offer4_step', stepNumber.toString());
+
+    // Update browser history (if requested)
+    if (pushState) {
+      const newUrl = stepNumber === 2
+        ? window.location.pathname + window.location.search + '#checkout'
+        : window.location.pathname + window.location.search;
+      history.pushState({ step: stepNumber }, '', newUrl);
     }
 
     // Scroll to top
@@ -394,6 +423,14 @@
     if (startBtn) {
       startBtn.addEventListener('click', function(e) {
         e.preventDefault();
+
+        // Ensure step 2 is saved so user returns here on back button
+        sessionStorage.setItem('offer4_step', '2');
+
+        // Update URL hash to #checkout (helps with back navigation)
+        if (!window.location.hash.includes('checkout')) {
+          history.replaceState({ step: 2 }, '', window.location.pathname + window.location.search + '#checkout');
+        }
 
         // Get the appropriate Stripe link based on selected price
         const stripeKey = 'trial_' + state.selectedPrice;
