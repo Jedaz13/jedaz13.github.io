@@ -21,10 +21,10 @@ const quizContent = {
         type: 'single_select',
         question: 'If your gut worked perfectly tomorrow, what would you do first?',
         options: [
-          { icon: '🍽️', text: 'Eat whatever I want without fear', value: 'eat_freely' },
-          { icon: '✈️', text: 'Travel without bathroom anxiety', value: 'travel' },
-          { icon: '👥', text: 'Enjoy meals with friends & family', value: 'social' },
-          { icon: '☀️', text: 'Have a normal, predictable morning', value: 'morning' }
+          { text: 'Eat whatever I want without fear', value: 'eat_freely' },
+          { text: 'Travel without bathroom anxiety', value: 'travel' },
+          { text: 'Enjoy meals with friends & family', value: 'social' },
+          { text: 'Have a normal, predictable morning', value: 'morning' }
         ],
         storeAs: 'future_vision'
       },
@@ -36,10 +36,10 @@ const quizContent = {
         type: 'single_select',
         question: 'When do you want to feel in control of your gut?',
         options: [
-          { icon: '🚀', text: "As soon as possible — I'm ready now", value: 'asap' },
-          { icon: '📅', text: 'Within the next few weeks', value: 'few_weeks' },
-          { icon: '🎯', text: "I'm focused on long-term change", value: 'long_term' },
-          { icon: '🗓️', text: 'Before a specific event or date', value: 'event' }
+          { text: "As soon as possible — I'm ready now", value: 'asap' },
+          { text: 'Within the next few weeks', value: 'few_weeks' },
+          { text: "I'm focused on long-term change", value: 'long_term' },
+          { text: 'Before a specific event or date', value: 'event' }
         ],
         storeAs: 'user_timeline'
       },
@@ -52,12 +52,12 @@ const quizContent = {
         question: "What's your #1 struggle right now?",
         subtitle: 'Choose the one that bothers you most',
         options: [
-          { icon: '🎈', text: 'Bloating & distension', value: 'bloating', protocol: 'bloat_reset' },
-          { icon: '🧱', text: 'Constipation', value: 'constipation', protocol: 'regularity' },
-          { icon: '💨', text: 'Diarrhea or urgency', value: 'diarrhea', protocol: 'calm_gut' },
-          { icon: '🔄', text: 'It alternates (sometimes both)', value: 'mixed', protocol: 'stability' },
-          { icon: '⚡', text: 'Abdominal pain or cramping', value: 'pain', protocol: 'bloat_reset' },
-          { icon: '💭', text: 'Excessive gas', value: 'gas', protocol: 'bloat_reset' }
+          { text: 'Bloating & distension', value: 'bloating', protocol: 'bloat_reset' },
+          { text: 'Constipation', value: 'constipation', protocol: 'regularity' },
+          { text: 'Diarrhea or urgency', value: 'diarrhea', protocol: 'calm_gut' },
+          { text: 'It alternates (sometimes both)', value: 'mixed', protocol: 'stability' },
+          { text: 'Abdominal pain or cramping', value: 'pain', protocol: 'bloat_reset' },
+          { text: 'Excessive gas', value: 'gas', protocol: 'bloat_reset' }
         ],
         storeAs: 'primary_complaint'
       },
@@ -170,9 +170,9 @@ const quizContent = {
         screenNumber: 9,
         type: 'info',
         icon: '📊',
-        headline: "Perfect. We're building your profile.",
-        body: "These questions help us match you with the right protocol. 83% of women with your symptom pattern see improvement within 6 weeks with the right approach.",
-        statHighlight: '83%',
+        headline: "We're building your profile.",
+        body: "These questions help us match you with the right protocol. Most women with your symptom pattern start noticing changes within the first month.",
+        statHighlight: null,
         buttonText: 'Continue'
       },
 
@@ -269,10 +269,10 @@ const quizContent = {
         screenNumber: 14,
         type: 'testimonial',
         headlineTemplate: "{firstName}, meet Sarah.",
-        quote: "I tried low FODMAP for 6 months. Probiotics. Expensive tests. Nothing worked until I found my actual gut type. 4 weeks later, I ate at a restaurant without panic for the first time in 3 years.",
+        quote: "I tried low FODMAP for 6 months. Probiotics. Expensive tests. Nothing worked until I found my actual gut type. A few months later, I ate at a restaurant without panic for the first time in 3 years.",
         author: "Sarah, 47",
         authorDetail: "Bloat-Dominant Responder",
-        authorImage: '/assets/testimonial-sarah.png',
+        authorImage: '/quiz-4/assets/testimonial-sarah.png',
         buttonText: 'Find my gut type'
       }
     ]
@@ -522,7 +522,7 @@ const quizContent = {
         screenNumber: 26,
         type: 'text_input_optional',
         question: "One last thing — if your gut worked perfectly, what's the FIRST thing you'd do?",
-        subtitle: "(Optional — skip if you'd rather see your results now)",
+        subtitle: null,
         placeholder: "e.g., Eat pizza without worry, Travel to Italy...",
         storeAs: 'user_vision',
         required: false,
@@ -692,9 +692,9 @@ const quizContent = {
   // TIMELINE PREDICTIONS
   // =================================================
   timelinePredictions: {
-    default: "Women with your profile typically see noticeable improvement in **4-6 weeks**.",
-    high_impact: "Given how much this has affected your life, you may notice changes even sooner — many women report feeling different within the **first 2 weeks**.",
-    long_duration: "After {duration} of symptoms, your gut is ready for the right approach. Most women with similar timelines see real progress within **6-8 weeks**."
+    default: "Women with your profile typically start noticing changes within the **first month**.",
+    high_impact: "Given how much this has affected your life, having a clear protocol can make a real difference. Most women start seeing progress within the **first 4-6 weeks**.",
+    long_duration: "After {duration} of symptoms, your gut is ready for the right approach. Most women with similar timelines start noticing changes within **4-8 weeks**."
   },
 
   // =================================================
