@@ -124,8 +124,8 @@
       primary_complaint_label: params.primary_complaint_label || COMPLAINT_LABELS[params.primary_complaint] || 'digestive issues',
       duration: params.duration || '',
       treatments_tried_count: countTreatments(params),
-      gut_brain_score: parseFloat(params.gut_brain_score) || 0,
-      gut_brain: params.gut_brain || (parseFloat(params.gut_brain_score) >= 3.5),
+      gut_brain_score: calculateGutBrainScore(params),
+      gut_brain: params.gut_brain === 'true' || calculateGutBrainScore(params) >= 3.5,
       vision: params.vision || '',
       goal_selection: params.goal_selection || '',
       stress_level: params.stress_level || ''
@@ -141,6 +141,29 @@
     // Track page view
     trackPageView();
   });
+
+  // =====================================================
+  // CALCULATE GUT-BRAIN SCORE FROM STRESS LEVEL
+  // =====================================================
+  function calculateGutBrainScore(params) {
+    // First check if gut_brain_score is provided directly
+    if (params.gut_brain_score && !isNaN(parseFloat(params.gut_brain_score))) {
+      return parseFloat(params.gut_brain_score);
+    }
+
+    // Otherwise calculate from stress_level
+    const stressLevel = params.stress_level || '';
+    switch (stressLevel.toLowerCase()) {
+      case 'significant':
+        return 4.5;
+      case 'some':
+        return 3.0;
+      case 'none':
+        return 1.0;
+      default:
+        return 0;
+    }
+  }
 
   // =====================================================
   // COUNT TREATMENTS
