@@ -311,11 +311,11 @@ const quizContent = {
         storeAs: 'treatments_tried',
         validationMessages: {
           range_0_1: "Starting fresh gives us a clear baseline to work from.",
-          range_2_3: "You've done your research. Let's build on what you've learned.",
-          range_4_5: "You've put in real effort. Most of these work — they just need the right sequence and someone tracking your response.",
-          range_6_plus: "You've tried <strong>{count} different approaches</strong>. That's not failure — that's data. Our practitioners use exactly this kind of history to find what your gut actually needs."
+          range_2_3: "You've done your research — that initiative shows you're ready to solve this.",
+          range_4_5: "You've put in serious effort. That dedication is exactly what leads to breakthroughs with the right guidance.",
+          range_6_plus: "You've tried <strong>{count} different approaches</strong>. That persistence is remarkable — and it gives us valuable data to work with."
         },
-        reinforcementMessage: "Most of these CAN work — they just need the right sequence and someone tracking your response. That's what's been missing."
+        reinforcementMessage: "Your efforts weren't wasted — they've taught you what doesn't work alone. Now let's add the guidance piece."
       },
 
       // Screen 10: Diagnosis History
@@ -482,8 +482,8 @@ const quizContent = {
         id: 'knowledge_intro',
         screenNumber: 17,
         type: 'info',
-        headline: 'QUICK GUT CHECK',
-        body: "You might learn something new about your gut here.\n\nTest your gut instincts.",
+        headline: 'QUICK GUT CHECK 🧠',
+        body: "This helps us understand your current knowledge so we can personalize your protocol — no repeating what you already know.\n\nYou might learn something new! Test your gut instincts.",
         buttonText: 'Let\'s Go'
       },
 
@@ -505,13 +505,13 @@ const quizContent = {
           correct: {
             icon: '🎉',
             title: "You're right!",
-            text: "When you eat quickly, you swallow excess air (called aerophagia) which gets trapped in your digestive system.\n\nThis is one of the first things we address in your protocol — most people see bloating reduce by 30-40% just by changing HOW they eat, not WHAT they eat."
+            text: "Eating quickly traps excess air in your gut. Most see 30-40% less bloating by changing HOW they eat."
           },
           incorrect: {
             icon: '💡',
-            title: "Good guess! Here's what's actually happening:",
-            text: "When you eat quickly, you swallow excess air (called aerophagia) which gets trapped in your digestive system.\n\nThis is one of the first things we address in your protocol — most people see bloating reduce by 30-40% just by changing HOW they eat, not WHAT they eat.",
-            tip: "Don't worry — this is exactly why you'll have access to our practitioner team. When you're unsure about something, you can ask.\n\nNo more Googling at 2am wondering if you're doing it right."
+            title: "Good guess!",
+            text: "Eating quickly traps excess air in your gut. Most see 30-40% less bloating by changing HOW they eat.",
+            tip: "This is why you'll have access to our practitioners — ask whenever you're unsure."
           }
         }
       },
@@ -534,21 +534,21 @@ const quizContent = {
           correct: {
             icon: '🎉',
             title: "You know your stuff!",
-            text: "Apples ARE a common trigger — they're high in FODMAPs, which feed gut bacteria and produce gas.\n\nMeanwhile, white rice, eggs, and chicken are LOW-FODMAP and usually well-tolerated.\n\nYour protocol will build on what you already know and fill in the gaps.",
+            text: "Apples are high in FODMAPs — common triggers despite being \"healthy.\" Rice, eggs, and chicken are usually safe.",
             tip: {
               title: 'GUT RESPONSE SYSTEM',
               items: [
-                { color: 'green', text: '🟢 GREEN (Usually Safe): Rice, eggs, chicken, fish' },
-                { color: 'yellow', text: '🟡 YELLOW (Test Carefully): Oats, sweet potato, some fruits' },
-                { color: 'red', text: '🔴 RED (Common Triggers): Apples, onion, garlic, wheat' }
+                { color: 'green', text: '🟢 GREEN: Rice, eggs, chicken, fish' },
+                { color: 'yellow', text: '🟡 YELLOW: Oats, sweet potato' },
+                { color: 'red', text: '🔴 RED: Apples, onion, garlic' }
               ]
             }
           },
           incorrect: {
             icon: '🍎',
-            title: "Tricky one! Here's why:",
-            text: "Apples are HIGH in FODMAPs — fermentable sugars that feed gut bacteria and produce gas. They're one of the most common triggers, even though they're \"healthy.\"\n\nRice, chicken, and eggs are usually well-tolerated because they're low-FODMAP.",
-            tip: "Here's the thing: you're not supposed to know this already.\n\nMost people have never been taught how their gut actually works. That's not your fault.\n\nYour protocol includes:\n✓ Your personalized Green/Yellow/Red food list\n✓ Clear explanations of WHY certain foods trigger YOU\n✓ Direct access to practitioners when you're unsure\n\nYou won't be Googling \"is [food] okay for IBS?\" anymore."
+            title: "Tricky one!",
+            text: "Apples are high in FODMAPs and trigger gas — even though they're \"healthy.\" Rice, eggs, and chicken are usually safe.",
+            tip: "Your protocol includes a personalized Green/Yellow/Red food list — no more Googling."
           }
         }
       },
@@ -571,13 +571,13 @@ const quizContent = {
           correct: {
             icon: '🎉',
             title: "Exactly right!",
-            text: "Spacing meals 4-5 hours apart allows your gut's \"cleaning wave\" (the MMC) to sweep out bacteria and debris.\n\nConstant snacking keeps your gut in \"digestion mode\" and never lets this cleaning cycle complete.\n\nThis is why our protocols include specific meal timing — not just food choices."
+            text: "4-5 hours between meals lets your gut's \"cleaning wave\" sweep out bacteria. Constant snacking blocks this."
           },
           incorrect: {
             icon: '💡',
-            title: "This one surprises most people:",
-            text: "Spacing meals 4-5 hours apart allows your gut's \"cleaning wave\" (called the Migrating Motor Complex) to sweep out bacteria and debris between meals.\n\nConstant snacking keeps your gut in \"digestion mode\" and never lets this cleaning cycle complete — which often makes bloating WORSE.",
-            tip: "This is the kind of thing that's easy to get wrong on your own.\n\nIn your protocol, you'll have clear meal timing guidelines — and if you're unsure whether something applies to YOUR situation, you can ask our practitioners directly."
+            title: "This surprises most people!",
+            text: "4-5 hours between meals lets your gut's \"cleaning wave\" sweep out bacteria. Constant snacking blocks this — making bloating worse.",
+            tip: "Your protocol includes clear meal timing guidelines tailored to you."
           }
         },
         isLastKnowledgeQuiz: true
