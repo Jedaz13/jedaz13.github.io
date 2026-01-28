@@ -59,8 +59,18 @@ const state = {
 
   // Knowledge quiz state
   lastKnowledgeAnswer: null,
-  lastKnowledgeCorrect: null
+  lastKnowledgeCorrect: null,
+
+  // Session tracking (for Supabase events)
+  sessionId: null
 };
+
+// =================================================
+// SESSION ID GENERATOR
+// =================================================
+function generateSessionId() {
+  return 'q4_' + Date.now() + '_' + Math.random().toString(36).substring(2, 11);
+}
 
 // Initialize Supabase client
 let supabaseClient = null;
@@ -158,11 +168,17 @@ function initQuiz() {
   state.quizStartTime = new Date();
   state.screenStartTime = new Date();
 
+  // Generate unique session ID for tracking
+  state.sessionId = generateSessionId();
+
   // Track quiz start
   trackEvent('quiz_start', {
     quiz_version: 'v4',
     timestamp: state.quizStartTime.toISOString()
   });
+
+  // Track quiz start to Supabase
+  trackQuizEvent('quiz_start');
 
   // Track page view
   trackPixelEvent('PageView');
@@ -795,6 +811,9 @@ function renderEmailInput(container, screen) {
       quiz_version: 'v4',
       screen_number: screen.screenNumber
     });
+
+    // Track email capture to Supabase
+    trackQuizEvent('email_capture');
 
     // Track pixel lead event
     trackPixelEvent('Lead', {
@@ -1904,6 +1923,63 @@ function trackEvent(eventName, data) {
   console.log('DataLayer push:', eventName, data);
 }
 
+// =================================================
+// SUPABASE EVENT TRACKING
+// =================================================
+async function trackQuizEvent(eventType, additionalData = {}) {
+  if (!supabaseClient) {
+    console.log('Supabase not available for event tracking');
+    return;
+  }
+
+  const screenInfo = screenOrder[state.currentScreenIndex] || {};
+  const screen = getScreenContent(screenInfo.screenKey);
+
+  const eventData = {
+    session_id: state.sessionId,
+    quiz_source: CONFIG.SOURCE_TRACKING,
+    event_type: eventType,
+    screen_index: state.currentScreenIndex,
+    screen_id: screenInfo.screenKey || null,
+    screen_name: screen?.question || screen?.headline || screenInfo.screenKey || null,
+    phase_index: state.currentPhaseIndex,
+    phase_name: SECTION_LABELS[state.currentPhaseIndex] || null,
+    time_on_screen_seconds: state.screenStartTime
+      ? Math.round((new Date() - state.screenStartTime) / 1000)
+      : 0,
+    time_since_start_seconds: state.quizStartTime
+      ? Math.round((new Date() - state.quizStartTime) / 1000)
+      : 0,
+    user_name: state.userData.name || null,
+    user_email: state.userData.email || null,
+    protocol_key: state.calculatedProtocol || null,
+    protocol_name: state.calculatedProtocol
+      ? quizContent.protocols[state.calculatedProtocol]?.name
+      : null,
+    has_gut_brain: state.hasGutBrainOverlay || false,
+    primary_complaint: state.answers.primary_complaint || null,
+    treatments_count: state.treatmentsCount || 0,
+    has_red_flags: state.hasRedFlags || false,
+    user_agent: navigator.userAgent,
+    referrer: document.referrer || null,
+    ...additionalData
+  };
+
+  try {
+    const { error } = await supabaseClient.rpc('insert_quiz_event', {
+      event_data: eventData
+    });
+
+    if (error) {
+      console.error('Supabase event tracking error:', error);
+    } else {
+      console.log('Quiz event tracked:', eventType, eventData.screen_id);
+    }
+  } catch (e) {
+    console.error('Error tracking quiz event:', e);
+  }
+}
+
 function trackScreenView(screen) {
   const timeOnPrevious = state.screenStartTime ?
     Math.round((new Date() - state.screenStartTime) / 1000) : 0;
@@ -1917,6 +1993,9 @@ function trackScreenView(screen) {
     phase_number: state.currentPhaseIndex + 1,
     time_on_previous_screen_seconds: timeOnPrevious
   });
+
+  // Track to Supabase
+  trackQuizEvent('screen_view');
 }
 
 function trackAnswer(screen, value, answerText, isCorrect = null) {
@@ -1932,6 +2011,13 @@ function trackAnswer(screen, value, answerText, isCorrect = null) {
     answer_text: answerText,
     is_correct: isCorrect,
     time_to_answer_seconds: timeToAnswer
+  });
+
+  // Track to Supabase
+  trackQuizEvent('answer', {
+    answer_value: Array.isArray(value) ? value.join(',') : value,
+    answer_text: answerText,
+    is_correct: isCorrect
   });
 }
 
@@ -1954,6 +2040,9 @@ function trackQuizComplete() {
     knowledge_score: state.knowledgeScore,
     gut_brain_overlay: state.hasGutBrainOverlay
   });
+
+  // Track to Supabase
+  trackQuizEvent('quiz_complete');
 
   // Track pixel complete registration
   trackPixelEvent('CompleteRegistration', {
@@ -1992,5 +2081,36 @@ function handlePageUnload() {
 
     // Also push to dataLayer
     trackEvent('quiz_abandon', data);
+
+    // Track abandonment to Supabase via sendBeacon
+    if (navigator.sendBeacon && supabaseClient) {
+      const eventData = {
+        session_id: state.sessionId,
+        quiz_source: CONFIG.SOURCE_TRACKING,
+        event_type: 'quiz_abandon',
+        screen_index: state.currentScreenIndex,
+        screen_id: screenOrder[state.currentScreenIndex]?.screenKey || null,
+        phase_index: state.currentPhaseIndex,
+        phase_name: SECTION_LABELS[state.currentPhaseIndex] || null,
+        time_since_start_seconds: totalTime,
+        user_name: state.userData.name || null,
+        user_email: state.userData.email || null,
+        primary_complaint: state.answers.primary_complaint || null,
+        treatments_count: state.treatmentsCount || 0,
+        has_red_flags: state.hasRedFlags || false
+      };
+
+      // Use fetch with keepalive for better reliability on page unload
+      fetch(`${CONFIG.SUPABASE_URL}/rest/v1/rpc/insert_quiz_event`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'apikey': CONFIG.SUPABASE_ANON_KEY,
+          'Authorization': `Bearer ${CONFIG.SUPABASE_ANON_KEY}`
+        },
+        body: JSON.stringify({ event_data: eventData }),
+        keepalive: true
+      }).catch(() => {});
+    }
   }
 }
