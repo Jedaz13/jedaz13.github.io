@@ -157,7 +157,8 @@ const CONFIG = {
   SOURCE_TRACKING: 'quiz-X',  // Used for GTM, Supabase, and URL params
   WEBHOOK_URL: 'https://hook.eu1.make.com/5uubblyocz70syh9xptkg248ycauy5pd',
   SUPABASE_URL: 'https://mwabljnngygkmahjgvps.supabase.co',
-  SUPABASE_ANON_KEY: '...'
+  // IMPORTANT: Always use this exact anon key for all quizzes
+  SUPABASE_ANON_KEY: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im13YWJsam5uZ3lna21haGpndnBzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU1MjQ3MzgsImV4cCI6MjA4MTEwMDczOH0.rbZYj1aXui_xZ0qkg7QONdHppnJghT2r0ycZwtr3a-E'
 };
 ```
 
