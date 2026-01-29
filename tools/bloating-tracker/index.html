@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bloating After Eating Calculator: Track Your Patterns | Gut Healing Academy</title>
+    <meta name="description" content="Track when bloating occurs after eating to identify your triggers. This calculator analyzes timing patterns to determine if fermentation, motility, or other factors are causing your bloating.">
+    <link rel="canonical" href="https://www.guthealingacademy.com/tools/bloating-tracker/">
+    <meta name="robots" content="index, follow">
+
+    <!-- Google Tag Manager -->
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-KQ3LKTBL');</script>
+    <!-- End Google Tag Manager -->
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/styles.css">
+
+    <!-- Schema.org Markup -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "MedicalWebPage",
+        "name": "Bloating After Eating Calculator",
+        "description": "Track when bloating occurs after eating to identify your triggers and determine the likely cause.",
+        "url": "https://www.guthealingacademy.com/tools/bloating-tracker/",
+        "datePublished": "2025-01-29",
+        "dateModified": "2025-01-29",
+        "author": {
+            "@type": "Person",
+            "name": "Rebecca Taylor",
+            "jobTitle": "Registered Nutritionist (RNutr)",
+            "affiliation": {
+                "@type": "Organization",
+                "name": "Gut Healing Academy"
+            }
+        },
+        "publisher": {
+            "@type": "Organization",
+            "name": "Gut Healing Academy",
+            "url": "https://www.guthealingacademy.com"
+        },
+        "medicalAudience": {
+            "@type": "MedicalAudience",
+            "audienceType": "Patient"
+        }
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+            {
+                "@type": "Question",
+                "name": "Why does timing matter for bloating?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Different parts of your digestive system process food at different times. Bloating immediately after eating points to upper GI issues (stomach, swallowed air). Bloating 2-3 hours later suggests fermentation in the small intestine (FODMAP-related or SIBO). Bloating many hours later is often large intestine fermentation or slow transit."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "What if my bloating timing varies?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Variation is common! Track multiple meals to see patterns. Different foods, portion sizes, and eating speeds all affect timing. Look for your most common pattern across 5-7 meals."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "Is some bloating after eating normal?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Yes! Some degree of abdominal distension after eating is physiologically normal - your stomach needs to expand. Concerning bloating is when it's painful, extreme, or significantly impacts quality of life."
+                }
+            }
+        ]
+    }
+    </script>
+</head>
+<body>
+    <!-- Google Tag Manager (noscript) -->
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KQ3LKTBL"
+    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <!-- End Google Tag Manager (noscript) -->
+
+    <header class="header">
+        <div class="header-content">
+            <a href="https://www.guthealingacademy.com" class="logo">
+                <img src="../../assets/Logo.png" alt="Gut Healing Academy">
+            </a>
+            <nav class="header-nav">
+                <a href="https://www.guthealingacademy.com/about">About</a>
+                <a href="https://www.guthealingacademy.com/tools/">Tools</a>
+                <a href="https://www.guthealingacademy.com/quiz-4/" class="header-cta">Take the Quiz</a>
+            </nav>
+            <button class="mobile-menu-toggle" aria-label="Toggle menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="container">
+            <h1>Bloating After Eating Calculator</h1>
+            <p>When does your bloating start after eating? The timing tells us a lot about what's causing it.</p>
+        </div>
+    </section>
+
+    <section class="tool-section">
+        <div class="tool-card">
+            <div class="info-box" style="margin-bottom: 24px;">
+                <p><strong>Why Timing Matters:</strong> Different parts of your digestive system process food at different rates. The time between eating and bloating can reveal whether the issue is in your stomach, small intestine, or large intestine.</p>
+            </div>
+
+            <form id="bloating-form">
+                <div class="form-group">
+                    <label for="meal-time">When did you finish eating?</label>
+                    <input type="time" id="meal-time" class="time-input" required>
+                </div>
+
+                <div class="form-group">
+                    <label>What did you eat? (Select all that apply)</label>
+                    <div class="checkbox-grid">
+                        <label class="option-item">
+                            <input type="checkbox" name="food" value="high_fodmap">
+                            <span>High FODMAP foods (garlic, onion, wheat, beans)</span>
+                        </label>
+                        <label class="option-item">
+                            <input type="checkbox" name="food" value="dairy">
+                            <span>Dairy products</span>
+                        </label>
+                        <label class="option-item">
+                            <input type="checkbox" name="food" value="carbonated">
+                            <span>Carbonated drinks</span>
+                        </label>
+                        <label class="option-item">
+                            <input type="checkbox" name="food" value="large_portion">
+                            <span>Large portion size</span>
+                        </label>
+                        <label class="option-item">
+                            <input type="checkbox" name="food" value="high_fiber">
+                            <span>High fiber foods</span>
+                        </label>
+                        <label class="option-item">
+                            <input type="checkbox" name="food" value="high_fat">
+                            <span>High fat foods</span>
+                        </label>
+                        <label class="option-item">
+                            <input type="checkbox" name="food" value="ate_quickly">
+                            <span>I ate quickly (under 15 minutes)</span>
+                        </label>
+                        <label class="option-item">
+                            <input type="checkbox" name="food" value="unknown">
+                            <span>None of the above / Don't know</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="bloat-time">When did bloating start?</label>
+                    <input type="time" id="bloat-time" class="time-input" required>
+                </div>
+
+                <div class="form-group">
+                    <label>How would you describe the bloating?</label>
+                    <div class="options-list">
+                        <label class="option-item">
+                            <input type="radio" name="bloat_type" value="distension" required>
+                            <span>Visible distension (belly sticks out)</span>
+                        </label>
+                        <label class="option-item">
+                            <input type="radio" name="bloat_type" value="fullness">
+                            <span>Feeling of fullness/pressure</span>
+                        </label>
+                        <label class="option-item">
+                            <input type="radio" name="bloat_type" value="pain">
+                            <span>Sharp pains or cramping</span>
+                        </label>
+                        <label class="option-item">
+                            <input type="radio" name="bloat_type" value="gurgling">
+                            <span>Gurgling/gas sounds</span>
+                        </label>
+                        <label class="option-item">
+                            <input type="radio" name="bloat_type" value="all">
+                            <span>All of the above</span>
+                        </label>
+                    </div>
+                </div>
+
+                <button type="submit" class="primary-btn">Analyze My Pattern</button>
+            </form>
+
+            <div class="results-section" id="results-section">
+                <!-- Results populated by JavaScript -->
+            </div>
+        </div>
+
+        <div class="author-box container">
+            <img src="../../assets/practitioners/rebecca.jpg" alt="Rebecca Taylor, RNutr" class="author-photo">
+            <div class="author-info">
+                <p class="author-name">Reviewed by Rebecca Taylor, RNutr</p>
+                <p class="author-credentials">Registered Nutritionist specializing in digestive health</p>
+            </div>
+        </div>
+
+        <div class="disclaimer container">
+            <strong>Medical Disclaimer:</strong> This tool provides educational information only and is not a substitute for professional medical advice. If you have severe symptoms, blood in stool, unexplained weight loss, or symptoms that concern you, please consult your doctor.
+        </div>
+    </section>
+
+    <section class="cta-section">
+        <div class="cta-content">
+            <h2>Want a Complete Bloating Protocol?</h2>
+            <p>Our practitioners have developed specific approaches for each type of bloating, including meal timing strategies, food modifications, and supplement support.</p>
+            <a href="https://www.guthealingacademy.com/quiz-4/" class="primary-btn">Get My Bloating Protocol</a>
+        </div>
+    </section>
+
+    <section class="faq-section">
+        <h2>Frequently Asked Questions</h2>
+        <div class="faq-list">
+            <div class="faq-item">
+                <p class="faq-question">Why does timing matter for bloating?</p>
+                <p class="faq-answer">Different parts of your digestive system process food at different times. Bloating immediately after eating points to upper GI issues (stomach, swallowed air). Bloating 2-3 hours later suggests fermentation in the small intestine (FODMAP-related or SIBO). Bloating many hours later is often large intestine fermentation or slow transit.</p>
+            </div>
+            <div class="faq-item">
+                <p class="faq-question">What if my bloating timing varies?</p>
+                <p class="faq-answer">Variation is common! Track multiple meals to see patterns. Different foods, portion sizes, and eating speeds all affect timing. Look for your most common pattern across 5-7 meals.</p>
+            </div>
+            <div class="faq-item">
+                <p class="faq-question">Is some bloating after eating normal?</p>
+                <p class="faq-answer">Yes! Some degree of abdominal distension after eating is physiologically normal - your stomach needs to expand. Concerning bloating is when it's painful, extreme, or significantly impacts quality of life.</p>
+            </div>
+        </div>
+    </section>
+
+    <p class="updated">Last updated: January 2025 · Reviewed by Rebecca Taylor, RNutr</p>
+
+    <footer class="footer">
+        <div class="footer-links">
+            <a href="https://www.guthealingacademy.com/about">About</a>
+            <a href="https://www.guthealingacademy.com/legal/privacy">Privacy</a>
+            <a href="https://www.guthealingacademy.com/legal/terms">Terms</a>
+        </div>
+        <p class="copyright">© 2025 Gut Healing Academy. Educational content only - not medical advice.</p>
+    </footer>
+
+    <script>
+    // Form handling
+    const form = document.getElementById('bloating-form');
+    const resultsSection = document.getElementById('results-section');
+
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        const mealTime = document.getElementById('meal-time').value;
+        const bloatTime = document.getElementById('bloat-time').value;
+        const foodFactors = Array.from(document.querySelectorAll('input[name="food"]:checked')).map(cb => cb.value);
+        const bloatType = document.querySelector('input[name="bloat_type"]:checked')?.value;
+
+        if (!mealTime || !bloatTime || !bloatType) {
+            alert('Please fill in all required fields.');
+            return;
+        }
+
+        // Calculate minutes between meals
+        const [mealHour, mealMin] = mealTime.split(':').map(Number);
+        const [bloatHour, bloatMin] = bloatTime.split(':').map(Number);
+
+        let mealMinutes = mealHour * 60 + mealMin;
+        let bloatMinutes = bloatHour * 60 + bloatMin;
+
+        // Handle if bloating was next day (crossed midnight)
+        if (bloatMinutes < mealMinutes) {
+            bloatMinutes += 24 * 60;
+        }
+
+        const minutes = bloatMinutes - mealMinutes;
+        const result = analyzeBloating(minutes, foodFactors, bloatType);
+        showResults(result, minutes);
+    });
+
+    function analyzeBloating(minutes, foodFactors, bloatType) {
+        let result = {
+            timing_category: "",
+            likely_cause: "",
+            explanation: "",
+            recommendations: [],
+            protocol_relevance: "",
+            status_class: ""
+        };
+
+        if (minutes <= 30) {
+            result.timing_category = "Immediate (0-30 minutes)";
+            result.likely_cause = "Upper GI / Mechanical";
+            result.status_class = "moderate";
+            result.explanation = "Bloating this quickly is usually not from fermentation (that takes time). Common causes: swallowed air from eating fast, carbonation, or mechanical issues like delayed stomach emptying.";
+            result.recommendations = [
+                "Eat more slowly (aim for 20+ minutes per meal)",
+                "Avoid carbonated beverages",
+                "Try smaller portions",
+                "Avoid lying down after eating",
+                "Consider digestive bitters before meals"
+            ];
+            result.protocol_relevance = "Focus on eating behavior first, then FODMAP if no improvement.";
+        } else if (minutes <= 90) {
+            result.timing_category = "Early (30-90 minutes)";
+            result.likely_cause = "Stomach/Upper Small Intestine";
+            result.status_class = "moderate";
+            result.explanation = "Bloating in this window often relates to how the stomach is handling the meal - either delayed emptying or rapid dumping. Fat and fiber can slow emptying.";
+            result.recommendations = [
+                "Note if high-fat meals correlate with this timing",
+                "Ginger tea may support stomach emptying",
+                "Ensure thorough chewing (30 chews per bite)",
+                "Avoid tight clothing around waist after eating",
+                "Walk gently for 10 minutes after meals"
+            ];
+            result.protocol_relevance = "May benefit from motility support. Consider the Bloating-Dominant protocol.";
+        } else if (minutes <= 180) {
+            result.timing_category = "Classic FODMAP Window (90-180 minutes)";
+            result.likely_cause = "Small Intestine Fermentation";
+            result.status_class = "high";
+            result.explanation = "This is the classic timing for FODMAP fermentation. Food has reached the small intestine where bacteria (if present, as in SIBO) or rapid transit can cause fermentation of carbohydrates.";
+            result.recommendations = [
+                "Track which specific foods trigger this timing",
+                "Consider a low FODMAP trial",
+                "Meal spacing: wait 4 hours between meals",
+                "If this pattern persists, SIBO testing may be warranted",
+                "Peppermint oil capsules may provide relief"
+            ];
+            result.protocol_relevance = "Strong fit for Bloating-Dominant protocol with FODMAP focus.";
+        } else if (minutes <= 360) {
+            result.timing_category = "Delayed (3-6 hours)";
+            result.likely_cause = "Large Intestine Fermentation";
+            result.status_class = "moderate";
+            result.explanation = "Bloating hours after eating typically indicates fermentation in the large intestine. This is where most gut bacteria live and ferment fiber and FODMAPs that weren't absorbed earlier.";
+            result.recommendations = [
+                "High fiber foods are a common culprit at this timing",
+                "Increase fiber gradually (not sudden increases)",
+                "Ensure adequate hydration with fiber",
+                "This timing is often normal - it's about intensity",
+                "Consider if portion sizes are too large"
+            ];
+            result.protocol_relevance = "May benefit from fiber modification in Bloating or IBS-C protocol.";
+        } else {
+            result.timing_category = "Very Delayed (6+ hours)";
+            result.likely_cause = "Slow Transit / Constipation-Related";
+            result.status_class = "moderate";
+            result.explanation = "Bloating this long after eating is often related to slow overall transit - food from previous meals may still be fermenting. Often seen alongside constipation.";
+            result.recommendations = [
+                "Check your bowel movement frequency",
+                "This may be cumulative from multiple meals",
+                "Focus on overall motility, not just individual meals",
+                "Magnesium, water, and movement may help",
+                "Consider if constipation is an underlying issue"
+            ];
+            result.protocol_relevance = "IBS-C protocol may be more relevant than pure bloating protocol.";
+        }
+
+        // Adjust based on food factors
+        if (foodFactors.includes('ate_quickly')) {
+            result.recommendations.unshift("Priority: Slow down eating to 20+ minutes minimum");
+        }
+        if (foodFactors.includes('high_fodmap') && minutes >= 90 && minutes <= 180) {
+            result.recommendations.unshift("High FODMAP foods + this timing = strong fermentation indicator");
+        }
+        if (foodFactors.includes('carbonated') && minutes <= 30) {
+            result.recommendations.unshift("Carbonated drinks are a likely contributor - try eliminating them");
+        }
+        if (foodFactors.includes('dairy')) {
+            result.recommendations.push("Consider lactose intolerance - try lactose-free dairy for 2 weeks");
+        }
+
+        return result;
+    }
+
+    function showResults(result, minutes) {
+        const hours = Math.floor(minutes / 60);
+        const mins = minutes % 60;
+        const timeDisplay = hours > 0 ? `${hours}h ${mins}m` : `${mins} minutes`;
+
+        resultsSection.innerHTML = `
+            <div class="result-card" style="margin-top: 24px;">
+                <h2 style="text-align: center; margin-bottom: 24px;">Your Bloating Analysis</h2>
+
+                <div class="info-grid">
+                    <div class="info-item">
+                        <h4>Time After Eating</h4>
+                        <p>${timeDisplay}</p>
+                    </div>
+                    <div class="info-item">
+                        <h4>Timing Category</h4>
+                        <p>${result.timing_category}</p>
+                    </div>
+                    <div class="info-item">
+                        <h4>Most Likely Cause</h4>
+                        <p>${result.likely_cause}</p>
+                    </div>
+                </div>
+
+                <div class="info-box" style="margin-top: 20px;">
+                    <p><strong>What This Means:</strong> ${result.explanation}</p>
+                </div>
+            </div>
+
+            <div class="result-card">
+                <h3 style="margin-bottom: 16px;">Recommended Actions</h3>
+                <ul class="action-list">
+                    ${result.recommendations.map(item => `<li>${item}</li>`).join('')}
+                </ul>
+            </div>
+
+            <div class="result-card" style="background: var(--citrus-pale);">
+                <h4 style="margin-bottom: 8px;">Protocol Fit</h4>
+                <p style="margin: 0;">${result.protocol_relevance}</p>
+            </div>
+        `;
+
+        resultsSection.classList.add('active');
+
+        // Scroll to results
+        resultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+        // Track in GTM
+        if (window.dataLayer) {
+            window.dataLayer.push({
+                'event': 'bloating_tracker_submit',
+                'minutes_after_meal': minutes,
+                'timing_category': result.timing_category,
+                'likely_cause': result.likely_cause
+            });
+        }
+    }
+
+    // Option item click handling
+    const optionItems = document.querySelectorAll('.option-item');
+    optionItems.forEach(item => {
+        item.addEventListener('click', function(e) {
+            if (e.target.tagName !== 'INPUT') {
+                const input = this.querySelector('input');
+                if (input.type === 'radio') {
+                    // For radio buttons, uncheck others first
+                    const name = input.name;
+                    document.querySelectorAll(`input[name="${name}"]`).forEach(radio => {
+                        radio.closest('.option-item').classList.remove('selected');
+                    });
+                    input.checked = true;
+                    this.classList.add('selected');
+                } else if (input.type === 'checkbox') {
+                    input.checked = !input.checked;
+                    this.classList.toggle('selected', input.checked);
+                }
+            }
+        });
+    });
+
+    // Mobile menu toggle
+    const mobileToggle = document.querySelector('.mobile-menu-toggle');
+    const headerNav = document.querySelector('.header-nav');
+
+    if (mobileToggle) {
+        mobileToggle.addEventListener('click', function() {
+            headerNav.classList.toggle('active');
+        });
+    }
+    </script>
+</body>
+</html>

@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bristol Stool Chart: What Does Your Poop Mean? | Gut Healing Academy</title>
+    <meta name="description" content="Interactive Bristol Stool Chart to understand what your poop says about your gut health. Get personalized insights and find out which IBS protocol matches your pattern.">
+    <link rel="canonical" href="https://www.guthealingacademy.com/tools/bristol-stool-chart/">
+    <meta name="robots" content="index, follow">
+
+    <!-- Google Tag Manager -->
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-KQ3LKTBL');</script>
+    <!-- End Google Tag Manager -->
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/styles.css">
+
+    <!-- Schema.org Markup -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "MedicalWebPage",
+        "name": "Bristol Stool Chart Interpreter",
+        "description": "Interactive Bristol Stool Chart to understand what your poop says about your gut health.",
+        "url": "https://www.guthealingacademy.com/tools/bristol-stool-chart/",
+        "datePublished": "2025-01-29",
+        "dateModified": "2025-01-29",
+        "author": {
+            "@type": "Person",
+            "name": "Rebecca Taylor",
+            "jobTitle": "Registered Nutritionist (RNutr)",
+            "affiliation": {
+                "@type": "Organization",
+                "name": "Gut Healing Academy"
+            }
+        },
+        "publisher": {
+            "@type": "Organization",
+            "name": "Gut Healing Academy",
+            "url": "https://www.guthealingacademy.com"
+        },
+        "medicalAudience": {
+            "@type": "MedicalAudience",
+            "audienceType": "Patient"
+        }
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+            {
+                "@type": "Question",
+                "name": "How often should I be having bowel movements?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "'Normal' ranges from 3 times per day to 3 times per week. More important than frequency is consistency, ease of passage, and how you feel. Type 4 stools, 1-2 times daily is often considered optimal."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "Can the Bristol Stool Chart diagnose IBS?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "The Bristol Chart is a useful tool for describing stool consistency, which is part of IBS diagnosis (Rome IV criteria), but it alone cannot diagnose IBS. Diagnosis requires a pattern of symptoms over time and ruling out other conditions."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "My stool type changes throughout the day - is that normal?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Some variation is normal, especially between morning and later bowel movements. If you swing between Types 1-2 and Types 6-7 regularly, this may indicate IBS-M (Mixed) type."
+                }
+            }
+        ]
+    }
+    </script>
+
+    <style>
+        .chart-visual-icon {
+            font-size: 1.5rem;
+            letter-spacing: -2px;
+        }
+        .type-1 .chart-visual-icon { color: #8B4513; }
+        .type-2 .chart-visual-icon { color: #8B4513; }
+        .type-3 .chart-visual-icon { color: #654321; }
+        .type-4 .chart-visual-icon { color: #5D4037; }
+        .type-5 .chart-visual-icon { color: #795548; }
+        .type-6 .chart-visual-icon { color: #A1887F; }
+        .type-7 .chart-visual-icon { color: #BCAAA4; }
+
+        .chart-item.type-4 {
+            border-color: var(--success);
+            background: var(--success-light);
+        }
+
+        .chart-item.type-4:hover {
+            border-color: var(--success);
+        }
+
+        .optimal-badge {
+            background: var(--success);
+            color: white;
+            font-size: 0.75rem;
+            padding: 2px 8px;
+            border-radius: 100px;
+            margin-left: 8px;
+        }
+
+        .transit-time {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        .transit-bar {
+            flex: 1;
+            height: 8px;
+            background: var(--divider);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .transit-fill {
+            height: 100%;
+            border-radius: 4px;
+            transition: width 0.5s ease;
+        }
+
+        .transit-fill.slow { background: var(--danger); width: 20%; }
+        .transit-fill.normal-slow { background: var(--warning); width: 40%; }
+        .transit-fill.optimal { background: var(--success); width: 60%; }
+        .transit-fill.fast { background: var(--warning); width: 80%; }
+        .transit-fill.very-fast { background: var(--danger); width: 100%; }
+    </style>
+</head>
+<body>
+    <!-- Google Tag Manager (noscript) -->
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KQ3LKTBL"
+    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <!-- End Google Tag Manager (noscript) -->
+
+    <header class="header">
+        <div class="header-content">
+            <a href="https://www.guthealingacademy.com" class="logo">
+                <img src="../../assets/Logo.png" alt="Gut Healing Academy">
+            </a>
+            <nav class="header-nav">
+                <a href="https://www.guthealingacademy.com/about">About</a>
+                <a href="https://www.guthealingacademy.com/tools/">Tools</a>
+                <a href="https://www.guthealingacademy.com/quiz-4/" class="header-cta">Take the Quiz</a>
+            </nav>
+            <button class="mobile-menu-toggle" aria-label="Toggle menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="container">
+            <h1>What Does Your Poop Mean?</h1>
+            <p>Use the Bristol Stool Chart to understand your digestive health and find the right approach for your symptoms.</p>
+        </div>
+    </section>
+
+    <section class="tool-section">
+        <div class="tool-card">
+            <h2 style="margin-bottom: 8px;">Bristol Stool Chart</h2>
+            <p style="color: var(--text-muted); margin-bottom: 20px;">Select the type that best matches your typical bowel movement:</p>
+
+            <div class="chart-grid" id="chart-grid">
+                <div class="chart-item type-1" data-type="1">
+                    <div class="chart-visual">
+                        <span class="chart-visual-icon">●●●●●</span>
+                    </div>
+                    <div class="chart-info">
+                        <h4>Type 1</h4>
+                        <p>Separate hard lumps, like nuts</p>
+                    </div>
+                </div>
+
+                <div class="chart-item type-2" data-type="2">
+                    <div class="chart-visual">
+                        <span class="chart-visual-icon">⬮⬮⬮</span>
+                    </div>
+                    <div class="chart-info">
+                        <h4>Type 2</h4>
+                        <p>Sausage-shaped but lumpy</p>
+                    </div>
+                </div>
+
+                <div class="chart-item type-3" data-type="3">
+                    <div class="chart-visual">
+                        <span class="chart-visual-icon">━━━</span>
+                    </div>
+                    <div class="chart-info">
+                        <h4>Type 3</h4>
+                        <p>Sausage with cracks on surface</p>
+                    </div>
+                </div>
+
+                <div class="chart-item type-4" data-type="4">
+                    <div class="chart-visual">
+                        <span class="chart-visual-icon">━━━</span>
+                    </div>
+                    <div class="chart-info">
+                        <h4>Type 4 <span class="optimal-badge">Optimal</span></h4>
+                        <p>Smooth, soft sausage or snake</p>
+                    </div>
+                </div>
+
+                <div class="chart-item type-5" data-type="5">
+                    <div class="chart-visual">
+                        <span class="chart-visual-icon">◆ ◆ ◆</span>
+                    </div>
+                    <div class="chart-info">
+                        <h4>Type 5</h4>
+                        <p>Soft blobs with clear edges</p>
+                    </div>
+                </div>
+
+                <div class="chart-item type-6" data-type="6">
+                    <div class="chart-visual">
+                        <span class="chart-visual-icon">~ ~ ~</span>
+                    </div>
+                    <div class="chart-info">
+                        <h4>Type 6</h4>
+                        <p>Fluffy pieces, ragged edges, mushy</p>
+                    </div>
+                </div>
+
+                <div class="chart-item type-7" data-type="7">
+                    <div class="chart-visual">
+                        <span class="chart-visual-icon">≈≈≈</span>
+                    </div>
+                    <div class="chart-info">
+                        <h4>Type 7</h4>
+                        <p>Watery, no solid pieces</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="results-section" id="results-section">
+                <!-- Results populated by JavaScript -->
+            </div>
+        </div>
+
+        <div class="author-box container">
+            <img src="../../assets/practitioners/rebecca.jpg" alt="Rebecca Taylor, RNutr" class="author-photo">
+            <div class="author-info">
+                <p class="author-name">Reviewed by Rebecca Taylor, RNutr</p>
+                <p class="author-credentials">Registered Nutritionist specializing in digestive health</p>
+            </div>
+        </div>
+
+        <div class="disclaimer container">
+            <strong>Medical Disclaimer:</strong> This tool provides educational information only and is not a substitute for professional medical advice. If you have severe symptoms, blood in stool, unexplained weight loss, or symptoms that concern you, please consult your doctor.
+        </div>
+    </section>
+
+    <section class="cta-section">
+        <div class="cta-content">
+            <h2>Get a Personalized Protocol</h2>
+            <p>Understanding your stool type is the first step. Our 5-minute quiz provides a complete protocol designed for your specific pattern.</p>
+            <a href="https://www.guthealingacademy.com/quiz-4/" class="primary-btn">Find My Gut Type</a>
+        </div>
+    </section>
+
+    <section class="faq-section">
+        <h2>Frequently Asked Questions</h2>
+        <div class="faq-list">
+            <div class="faq-item">
+                <p class="faq-question">How often should I be having bowel movements?</p>
+                <p class="faq-answer">"Normal" ranges from 3 times per day to 3 times per week. More important than frequency is consistency, ease of passage, and how you feel. Type 4 stools, 1-2 times daily is often considered optimal.</p>
+            </div>
+            <div class="faq-item">
+                <p class="faq-question">Can the Bristol Stool Chart diagnose IBS?</p>
+                <p class="faq-answer">The Bristol Chart is a useful tool for describing stool consistency, which is part of IBS diagnosis (Rome IV criteria), but it alone cannot diagnose IBS. Diagnosis requires a pattern of symptoms over time and ruling out other conditions.</p>
+            </div>
+            <div class="faq-item">
+                <p class="faq-question">My stool type changes throughout the day - is that normal?</p>
+                <p class="faq-answer">Some variation is normal, especially between morning and later bowel movements. If you swing between Types 1-2 and Types 6-7 regularly, this may indicate IBS-M (Mixed) type.</p>
+            </div>
+        </div>
+    </section>
+
+    <p class="updated">Last updated: January 2025 · Reviewed by Rebecca Taylor, RNutr</p>
+
+    <footer class="footer">
+        <div class="footer-links">
+            <a href="https://www.guthealingacademy.com/about">About</a>
+            <a href="https://www.guthealingacademy.com/legal/privacy">Privacy</a>
+            <a href="https://www.guthealingacademy.com/legal/terms">Terms</a>
+        </div>
+        <p class="copyright">© 2025 Gut Healing Academy. Educational content only - not medical advice.</p>
+    </footer>
+
+    <script>
+    // Bristol Stool Data
+    const BRISTOL_DATA = {
+        "1": {
+            name: "Type 1: Separate Hard Lumps",
+            visual: "Hard pellets, like rabbit droppings",
+            transit_time: "Very slow (100+ hours)",
+            transit_class: "slow",
+            meaning: "Severe constipation. Stool has been in the colon too long, losing most of its water content.",
+            hydration: "Poor - needs significant increase",
+            fiber_status: "Likely too low OR too much insoluble fiber",
+            protocol_match: "IBS-C (Constipation-Dominant)",
+            status_class: "high",
+            action_items: [
+                "Increase water intake to 2-3 liters daily",
+                "Add soluble fiber gradually (start with 1 tsp psyllium)",
+                "Consider magnesium citrate before bed (200-400mg)",
+                "Walk 10 minutes after each meal",
+                "Don't ignore the urge - respond within 5 minutes"
+            ],
+            when_to_worry: "If accompanied by blood, severe pain, or this is a sudden change from your normal pattern, see a doctor."
+        },
+        "2": {
+            name: "Type 2: Lumpy Sausage",
+            visual: "Log-shaped but with distinct lumps",
+            transit_time: "Slow (70-100 hours)",
+            transit_class: "slow",
+            meaning: "Mild to moderate constipation. Better than Type 1 but still indicates slow transit.",
+            hydration: "Below optimal",
+            fiber_status: "Could benefit from more soluble fiber",
+            protocol_match: "IBS-C (Constipation-Dominant)",
+            status_class: "moderate",
+            action_items: [
+                "Increase water, especially morning and between meals",
+                "Add flaxseed (1 tbsp) to breakfast",
+                "Morning routine: warm water + movement",
+                "Ensure adequate healthy fats (olive oil, avocado)",
+                "Consider increasing prunes or kiwi fruit"
+            ],
+            when_to_worry: "If straining is painful or causing hemorrhoids, speak with a healthcare provider."
+        },
+        "3": {
+            name: "Type 3: Cracked Sausage",
+            visual: "Log with surface cracks",
+            transit_time: "Normal-slow (40-70 hours)",
+            transit_class: "normal-slow",
+            meaning: "Normal-ish but on the slower side. Acceptable but could be better hydrated.",
+            hydration: "Adequate but could improve",
+            fiber_status: "Reasonable",
+            protocol_match: "May not need a specific protocol, or mild IBS-C tendencies",
+            status_class: "moderate",
+            action_items: [
+                "Maintain current fiber intake",
+                "Slight increase in water may help",
+                "This is acceptable - don't over-correct",
+                "Focus on consistency rather than perfection"
+            ],
+            when_to_worry: "This is generally a healthy stool type. Only concern if it's a change from your normal."
+        },
+        "4": {
+            name: "Type 4: Smooth Sausage",
+            visual: "Like a smooth snake or sausage",
+            transit_time: "Optimal (24-48 hours)",
+            transit_class: "optimal",
+            meaning: "Ideal stool. This is the gold standard for healthy bowel movements.",
+            hydration: "Optimal",
+            fiber_status: "Well-balanced",
+            protocol_match: "You're in a good place! Focus on maintenance.",
+            status_class: "optimal",
+            action_items: [
+                "Keep doing what you're doing",
+                "Note what foods support this",
+                "Maintain regular meal timing",
+                "This is your target - remember what got you here"
+            ],
+            when_to_worry: "No concerns with Type 4. This is healthy."
+        },
+        "5": {
+            name: "Type 5: Soft Blobs",
+            visual: "Soft pieces with clear-cut edges",
+            transit_time: "Slightly fast (24-40 hours)",
+            transit_class: "fast",
+            meaning: "Bordering on diarrhea. May indicate mild food intolerance or slightly fast transit.",
+            hydration: "May be losing more than absorbing",
+            fiber_status: "May need more soluble fiber to add bulk",
+            protocol_match: "IBS-D tendencies or IBS-M",
+            status_class: "moderate",
+            action_items: [
+                "Identify recent trigger foods",
+                "Add binding foods (rice, banana, toast)",
+                "Reduce caffeine and alcohol",
+                "Check for lactose intolerance",
+                "Consider food diary to find patterns"
+            ],
+            when_to_worry: "If persistent, keeping a food diary can help identify triggers."
+        },
+        "6": {
+            name: "Type 6: Mushy Stool",
+            visual: "Fluffy, mushy pieces with ragged edges",
+            transit_time: "Fast (15-24 hours)",
+            transit_class: "fast",
+            meaning: "Mild diarrhea. Food is moving through too quickly for proper water absorption.",
+            hydration: "Risk of dehydration - increase fluids",
+            fiber_status: "May need soluble fiber to slow things down",
+            protocol_match: "IBS-D (Diarrhea-Dominant)",
+            status_class: "high",
+            action_items: [
+                "Avoid caffeine, alcohol, and spicy foods",
+                "Focus on BRAT+ foods (banana, rice, toast, potatoes)",
+                "Consider Saccharomyces boulardii probiotic",
+                "Eat smaller, more frequent meals",
+                "Practice stress reduction (gut-brain connection)"
+            ],
+            when_to_worry: "If lasting more than 2-3 days, with fever, or severe cramping, see a doctor."
+        },
+        "7": {
+            name: "Type 7: Liquid Stool",
+            visual: "Entirely liquid, no solid pieces",
+            transit_time: "Very fast (under 10 hours)",
+            transit_class: "very-fast",
+            meaning: "Severe diarrhea. The colon didn't have time to absorb water. Could be infection, food poisoning, or severe IBS-D flare.",
+            hydration: "Dehydration risk is HIGH",
+            fiber_status: "Not the immediate concern - focus on hydration",
+            protocol_match: "IBS-D (severe) or may need medical evaluation",
+            status_class: "high",
+            action_items: [
+                "Priority: prevent dehydration (water + electrolytes)",
+                "Avoid all food triggers",
+                "Rest the gut with clear liquids initially",
+                "Gradually reintroduce bland foods",
+                "Track how long this lasts"
+            ],
+            when_to_worry: "If lasting more than 24-48 hours, bloody, with high fever, or severe pain - seek medical attention. This could indicate infection requiring treatment."
+        }
+    };
+
+    // DOM Elements
+    const chartGrid = document.getElementById('chart-grid');
+    const resultsSection = document.getElementById('results-section');
+    const chartItems = document.querySelectorAll('.chart-item');
+
+    // Add click handlers to chart items
+    chartItems.forEach(item => {
+        item.addEventListener('click', function() {
+            // Remove selected class from all items
+            chartItems.forEach(i => i.classList.remove('selected'));
+            // Add selected class to clicked item
+            this.classList.add('selected');
+            // Show results
+            const type = this.dataset.type;
+            showResults(type);
+        });
+    });
+
+    // Show results
+    function showResults(type) {
+        const data = BRISTOL_DATA[type];
+
+        const statusLabels = {
+            'high': 'Needs Attention',
+            'moderate': 'Monitor',
+            'optimal': 'Healthy',
+            'low': 'Good'
+        };
+
+        resultsSection.innerHTML = `
+            <div class="result-card" style="margin-top: 24px;">
+                <div class="result-header">
+                    <h3 class="result-title">${data.name}</h3>
+                    <span class="status-badge ${data.status_class}">${statusLabels[data.status_class]}</span>
+                </div>
+
+                <div class="transit-time">
+                    <span style="font-size: 0.9rem; color: var(--text-muted);">Transit Time:</span>
+                    <div class="transit-bar">
+                        <div class="transit-fill ${data.transit_class}"></div>
+                    </div>
+                    <span style="font-size: 0.9rem; font-weight: 500;">${data.transit_time}</span>
+                </div>
+
+                <div class="info-box">
+                    <p><strong>What This Means:</strong> ${data.meaning}</p>
+                </div>
+
+                <div class="info-grid">
+                    <div class="info-item">
+                        <h4>Hydration Status</h4>
+                        <p>${data.hydration}</p>
+                    </div>
+                    <div class="info-item">
+                        <h4>Fiber Status</h4>
+                        <p>${data.fiber_status}</p>
+                    </div>
+                    <div class="info-item">
+                        <h4>Protocol Match</h4>
+                        <p>${data.protocol_match}</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="result-card">
+                <h3 style="margin-bottom: 16px;">Recommended Actions</h3>
+                <ul class="action-list">
+                    ${data.action_items.map(item => `<li>${item}</li>`).join('')}
+                </ul>
+            </div>
+
+            ${data.when_to_worry ? `
+            <div class="warning-box">
+                <p><strong>When to See a Doctor:</strong> ${data.when_to_worry}</p>
+            </div>
+            ` : ''}
+        `;
+
+        resultsSection.classList.add('active');
+
+        // Scroll to results
+        resultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+        // Track in GTM
+        if (window.dataLayer) {
+            window.dataLayer.push({
+                'event': 'bristol_chart_selection',
+                'bristol_type': type,
+                'protocol_match': data.protocol_match
+            });
+        }
+    }
+
+    // Mobile menu toggle
+    const mobileToggle = document.querySelector('.mobile-menu-toggle');
+    const headerNav = document.querySelector('.header-nav');
+
+    if (mobileToggle) {
+        mobileToggle.addEventListener('click', function() {
+            headerNav.classList.toggle('active');
+        });
+    }
+    </script>
+</body>
+</html>

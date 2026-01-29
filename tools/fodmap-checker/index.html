@@ -1,0 +1,1092 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Is This Food Low FODMAP? Free Food Checker | Gut Healing Academy</title>
+    <meta name="description" content="Check if any food is low FODMAP safe for IBS. Instant results with serving sizes, alternatives, and protocol-specific guidance from registered nutritionists.">
+    <link rel="canonical" href="https://www.guthealingacademy.com/tools/fodmap-checker/">
+    <meta name="robots" content="index, follow">
+
+    <!-- Google Tag Manager -->
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-KQ3LKTBL');</script>
+    <!-- End Google Tag Manager -->
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/styles.css">
+
+    <!-- Schema.org Markup -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "MedicalWebPage",
+        "name": "FODMAP Food Checker",
+        "description": "Check if any food is low FODMAP safe for IBS. Get serving sizes, alternatives, and protocol-specific guidance.",
+        "url": "https://www.guthealingacademy.com/tools/fodmap-checker/",
+        "datePublished": "2025-01-29",
+        "dateModified": "2025-01-29",
+        "author": {
+            "@type": "Person",
+            "name": "Rebecca Taylor",
+            "jobTitle": "Registered Nutritionist (RNutr)",
+            "affiliation": {
+                "@type": "Organization",
+                "name": "Gut Healing Academy"
+            }
+        },
+        "publisher": {
+            "@type": "Organization",
+            "name": "Gut Healing Academy",
+            "url": "https://www.guthealingacademy.com"
+        },
+        "medicalAudience": {
+            "@type": "MedicalAudience",
+            "audienceType": "Patient"
+        }
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+            {
+                "@type": "Question",
+                "name": "What does FODMAP stand for?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "FODMAP stands for Fermentable Oligosaccharides, Disaccharides, Monosaccharides, and Polyols - types of carbohydrates that can trigger digestive symptoms in sensitive individuals."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "How do I know my safe serving size?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Safe servings vary by food and individual tolerance. Start with the 'safe' amounts listed and adjust based on your response. Working with a qualified practitioner can help you identify your personal thresholds."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "Can I eat high FODMAP foods ever?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Many people can reintroduce some high FODMAP foods after the elimination phase. The key is understanding your specific triggers and tolerance levels."
+                }
+            }
+        ]
+    }
+    </script>
+</head>
+<body>
+    <!-- Google Tag Manager (noscript) -->
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KQ3LKTBL"
+    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <!-- End Google Tag Manager (noscript) -->
+
+    <header class="header">
+        <div class="header-content">
+            <a href="https://www.guthealingacademy.com" class="logo">
+                <img src="../../assets/Logo.png" alt="Gut Healing Academy">
+            </a>
+            <nav class="header-nav">
+                <a href="https://www.guthealingacademy.com/about">About</a>
+                <a href="https://www.guthealingacademy.com/tools/">Tools</a>
+                <a href="https://www.guthealingacademy.com/quiz-4/" class="header-cta">Take the Quiz</a>
+            </nav>
+            <button class="mobile-menu-toggle" aria-label="Toggle menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="container">
+            <h1>Is This Food Low FODMAP?</h1>
+            <p>Check any food instantly. Get safe serving sizes and alternatives for your gut type.</p>
+        </div>
+    </section>
+
+    <section class="tool-section">
+        <div class="tool-card">
+            <div class="form-group">
+                <label for="food-search">Enter a food to check</label>
+                <div class="search-wrapper">
+                    <input type="text" id="food-search" class="form-input" placeholder="e.g., garlic, apple, coffee..." autocomplete="off">
+                    <button type="button" id="search-btn" class="search-btn">Check Food</button>
+                    <div class="autocomplete-list" id="autocomplete-list"></div>
+                </div>
+            </div>
+
+            <div class="results-section" id="results-section">
+                <!-- Results populated by JavaScript -->
+            </div>
+        </div>
+
+        <div class="author-box container">
+            <img src="../../assets/practitioners/rebecca.jpg" alt="Rebecca Taylor, RNutr" class="author-photo">
+            <div class="author-info">
+                <p class="author-name">Reviewed by Rebecca Taylor, RNutr</p>
+                <p class="author-credentials">Registered Nutritionist specializing in digestive health</p>
+            </div>
+        </div>
+
+        <div class="disclaimer container">
+            <strong>Medical Disclaimer:</strong> This tool provides educational information only and is not a substitute for professional medical advice. If you have severe symptoms, blood in stool, unexplained weight loss, or symptoms that concern you, please consult your doctor.
+        </div>
+    </section>
+
+    <section class="cta-section">
+        <div class="cta-content">
+            <h2>Not Sure Which Gut Type You Are?</h2>
+            <p>Take our 5-minute quiz to get your personalized protocol with food lists, meal timing, and supplement recommendations.</p>
+            <a href="https://www.guthealingacademy.com/quiz-4/" class="primary-btn">Find My Gut Type</a>
+        </div>
+    </section>
+
+    <section class="faq-section">
+        <h2>Frequently Asked Questions</h2>
+        <div class="faq-list">
+            <div class="faq-item">
+                <p class="faq-question">What does FODMAP stand for?</p>
+                <p class="faq-answer">FODMAP stands for Fermentable Oligosaccharides, Disaccharides, Monosaccharides, and Polyols - types of carbohydrates that can trigger digestive symptoms in sensitive individuals.</p>
+            </div>
+            <div class="faq-item">
+                <p class="faq-question">How do I know my safe serving size?</p>
+                <p class="faq-answer">Safe servings vary by food and individual tolerance. Start with the "safe" amounts listed and adjust based on your response. Working with a qualified practitioner can help you identify your personal thresholds.</p>
+            </div>
+            <div class="faq-item">
+                <p class="faq-question">Can I eat high FODMAP foods ever?</p>
+                <p class="faq-answer">Many people can reintroduce some high FODMAP foods after the elimination phase. The key is understanding your specific triggers and tolerance levels.</p>
+            </div>
+        </div>
+    </section>
+
+    <p class="updated">Last updated: January 2025 · Reviewed by Rebecca Taylor, RNutr</p>
+
+    <footer class="footer">
+        <div class="footer-links">
+            <a href="https://www.guthealingacademy.com/about">About</a>
+            <a href="https://www.guthealingacademy.com/legal/privacy">Privacy</a>
+            <a href="https://www.guthealingacademy.com/legal/terms">Terms</a>
+        </div>
+        <p class="copyright">© 2025 Gut Healing Academy. Educational content only - not medical advice.</p>
+    </footer>
+
+    <script>
+    // FODMAP Database
+    const FODMAP_DATABASE = {
+        "garlic": {
+            status: "High",
+            fodmap_type: "Fructans (oligosaccharides)",
+            safe_serving: "Garlic-infused oil only (fructans don't dissolve in oil)",
+            unsafe_serving: "Any amount of fresh garlic, garlic powder, or garlic salt",
+            note: "One of the highest FODMAP foods. The fructans cause fermentation and gas. Use garlic-infused oil as a safe alternative.",
+            protocols: {
+                bloating: { verdict: "Avoid", reason: "Major trigger for fermentation and gas" },
+                ibs_c: { verdict: "Avoid", reason: "Avoid during elimination phase" },
+                ibs_d: { verdict: "Avoid", reason: "Worsens urgency and symptoms" },
+                ibs_m: { verdict: "Avoid", reason: "Avoid during flare-ups" },
+                post_sibo: { verdict: "Avoid", reason: "Feeds bacterial overgrowth" },
+                gut_brain: { verdict: "Avoid", reason: "Avoid if stress-reactive" }
+            }
+        },
+        "onion": {
+            status: "High",
+            fodmap_type: "Fructans (oligosaccharides)",
+            safe_serving: "Green parts of spring onion only",
+            unsafe_serving: "Any amount of white/brown onion, shallots, leeks (white part)",
+            note: "Like garlic, onions are very high in fructans. The green tops of spring onions are low FODMAP.",
+            protocols: {
+                bloating: { verdict: "Avoid", reason: "Causes significant fermentation" },
+                ibs_c: { verdict: "Avoid", reason: "Avoid during elimination" },
+                ibs_d: { verdict: "Avoid", reason: "Triggers urgency" },
+                ibs_m: { verdict: "Avoid", reason: "Avoid when symptomatic" },
+                post_sibo: { verdict: "Avoid", reason: "Feeds bacterial overgrowth" },
+                gut_brain: { verdict: "Avoid", reason: "Avoid if reactive" }
+            }
+        },
+        "coffee": {
+            status: "Low",
+            fodmap_type: "N/A (issue is caffeine stimulation, not FODMAPs)",
+            safe_serving: "1 small cup (180ml) black coffee or with lactose-free milk",
+            unsafe_serving: "Multiple cups, coffee with regular milk, sweetened coffee drinks",
+            note: "Coffee is technically low FODMAP but the caffeine stimulates gut motility. Effect varies significantly by IBS type.",
+            protocols: {
+                bloating: { verdict: "Limit", reason: "Limit to 1 cup - speeds digestion" },
+                ibs_c: { verdict: "OK", reason: "May help - stimulates motility" },
+                ibs_d: { verdict: "Avoid", reason: "Worsens urgency significantly" },
+                ibs_m: { verdict: "Limit", reason: "Monitor your response carefully" },
+                post_sibo: { verdict: "Limit", reason: "Limit during recovery phase" },
+                gut_brain: { verdict: "Limit", reason: "May increase anxiety symptoms" }
+            }
+        },
+        "apple": {
+            status: "High",
+            fodmap_type: "Excess fructose, sorbitol (polyol)",
+            safe_serving: "None during strict elimination",
+            unsafe_serving: "Any amount of fresh apple, apple juice, dried apple",
+            note: "Apples contain multiple FODMAPs. Consider low FODMAP fruits like strawberries, oranges, or grapes instead.",
+            protocols: {
+                bloating: { verdict: "Avoid", reason: "Double FODMAP load causes fermentation" },
+                ibs_c: { verdict: "Avoid", reason: "Avoid during elimination" },
+                ibs_d: { verdict: "Avoid", reason: "Sorbitol has laxative effect" },
+                ibs_m: { verdict: "Avoid", reason: "Avoid during flare-ups" },
+                post_sibo: { verdict: "Avoid", reason: "Feeds bacterial overgrowth" },
+                gut_brain: { verdict: "Avoid", reason: "Avoid if stress-reactive" }
+            }
+        },
+        "banana": {
+            status: "Low",
+            fodmap_type: "Unripe = resistant starch (fermentable), Ripe = low FODMAP",
+            safe_serving: "1 medium ripe banana (with brown spots)",
+            unsafe_serving: "Green/unripe bananas, more than 1 banana at a time",
+            note: "Ripeness matters! Ripe bananas with spots are low FODMAP. Green bananas contain resistant starch that ferments.",
+            protocols: {
+                bloating: { verdict: "OK", reason: "OK if ripe - easy to digest" },
+                ibs_c: { verdict: "OK", reason: "Good gentle fiber source" },
+                ibs_d: { verdict: "OK", reason: "Good - has binding effect" },
+                ibs_m: { verdict: "OK", reason: "Good middle ground food" },
+                post_sibo: { verdict: "OK", reason: "Good for gentle introduction" },
+                gut_brain: { verdict: "OK", reason: "Good - calming carbs" }
+            }
+        },
+        "milk": {
+            status: "High",
+            fodmap_type: "Lactose (disaccharide)",
+            safe_serving: "Lactose-free milk, or up to 30ml regular milk",
+            unsafe_serving: "More than 30ml regular milk, cream",
+            note: "Most people with IBS have some degree of lactose intolerance. Lactose-free dairy is usually well tolerated.",
+            protocols: {
+                bloating: { verdict: "Avoid", reason: "Use lactose-free alternatives" },
+                ibs_c: { verdict: "Avoid", reason: "Causes bloating and discomfort" },
+                ibs_d: { verdict: "Avoid", reason: "Worsens diarrhea symptoms" },
+                ibs_m: { verdict: "Avoid", reason: "Avoid regular milk" },
+                post_sibo: { verdict: "Avoid", reason: "Avoid during recovery" },
+                gut_brain: { verdict: "Limit", reason: "Lactose-free is OK" }
+            }
+        },
+        "bread": {
+            status: "High",
+            fodmap_type: "Fructans (oligosaccharides) from wheat",
+            safe_serving: "Sourdough spelt bread (2 slices) or certified gluten-free bread",
+            unsafe_serving: "Regular wheat bread, whole wheat bread, rye bread",
+            note: "It's the fructans in wheat, not gluten, that cause issues for most. Sourdough fermentation reduces FODMAPs.",
+            protocols: {
+                bloating: { verdict: "Avoid", reason: "Choose sourdough spelt instead" },
+                ibs_c: { verdict: "Limit", reason: "Sourdough OK - gentle fiber" },
+                ibs_d: { verdict: "Limit", reason: "Limit bread - binding effect" },
+                ibs_m: { verdict: "Limit", reason: "Sourdough spelt OK in moderation" },
+                post_sibo: { verdict: "Limit", reason: "Limit during recovery phase" },
+                gut_brain: { verdict: "Limit", reason: "Sourdough OK if not reactive" }
+            }
+        },
+        "rice": {
+            status: "Low",
+            fodmap_type: "N/A - naturally low FODMAP",
+            safe_serving: "Unlimited - 1 cup cooked is standard serving",
+            unsafe_serving: "N/A - no FODMAP concerns",
+            note: "Rice is one of the safest starches for IBS. White rice is gentler than brown. Great foundation food.",
+            protocols: {
+                bloating: { verdict: "Excellent", reason: "Easy to digest" },
+                ibs_c: { verdict: "OK", reason: "OK - add fiber elsewhere" },
+                ibs_d: { verdict: "Excellent", reason: "Binding and gentle" },
+                ibs_m: { verdict: "Excellent", reason: "Safe foundation food" },
+                post_sibo: { verdict: "Excellent", reason: "Safe carb source" },
+                gut_brain: { verdict: "OK", reason: "Calming and predictable" }
+            }
+        },
+        "broccoli": {
+            status: "Moderate",
+            fodmap_type: "Oligosaccharides (GOS) in florets, fructans in stalks",
+            safe_serving: "3/4 cup (75g) of heads/florets only",
+            unsafe_serving: "More than 3/4 cup, or eating the stalks",
+            note: "Heads are lower FODMAP than stalks. Cooking reduces but doesn't eliminate FODMAPs. Portion control is key.",
+            protocols: {
+                bloating: { verdict: "Limit", reason: "Limit to 3/4 cup - still ferments" },
+                ibs_c: { verdict: "Limit", reason: "OK in small amounts for fiber" },
+                ibs_d: { verdict: "Limit", reason: "Can worsen symptoms" },
+                ibs_m: { verdict: "Limit", reason: "Small portions only" },
+                post_sibo: { verdict: "Avoid", reason: "Avoid or limit initially" },
+                gut_brain: { verdict: "OK", reason: "OK if not reactive" }
+            }
+        },
+        "eggs": {
+            status: "Low",
+            fodmap_type: "N/A - no FODMAPs (protein/fat)",
+            safe_serving: "Unlimited - no FODMAP concerns",
+            unsafe_serving: "N/A - cooking method matters more than quantity",
+            note: "Eggs are protein and fat with no carbohydrates, so no FODMAPs. Safe for all IBS types. Prepare without high FODMAP additions.",
+            protocols: {
+                bloating: { verdict: "Excellent", reason: "FODMAP-free protein source" },
+                ibs_c: { verdict: "OK", reason: "Good - add with fiber foods" },
+                ibs_d: { verdict: "Excellent", reason: "Gentle protein option" },
+                ibs_m: { verdict: "Excellent", reason: "Safe foundation food" },
+                post_sibo: { verdict: "Excellent", reason: "Safe protein source" },
+                gut_brain: { verdict: "OK", reason: "Provides stable energy" }
+            }
+        },
+        "avocado": {
+            status: "Moderate",
+            fodmap_type: "Sorbitol (polyol)",
+            safe_serving: "1/8 avocado (20g)",
+            unsafe_serving: "More than 1/8 avocado at a time",
+            note: "Very small safe portion! The sorbitol content increases with ripeness. Most people eat too much.",
+            protocols: {
+                bloating: { verdict: "Limit", reason: "Tiny portion only - ferments" },
+                ibs_c: { verdict: "Limit", reason: "Tiny portion - fats help" },
+                ibs_d: { verdict: "Avoid", reason: "Sorbitol has laxative effect" },
+                ibs_m: { verdict: "Limit", reason: "Very small portions only" },
+                post_sibo: { verdict: "Avoid", reason: "Avoid initially" },
+                gut_brain: { verdict: "Limit", reason: "Small amounts if tolerated" }
+            }
+        },
+        "chicken": {
+            status: "Low",
+            fodmap_type: "N/A - no FODMAPs (pure protein)",
+            safe_serving: "Unlimited - no FODMAP concerns",
+            unsafe_serving: "N/A - watch marinades/sauces for hidden FODMAPs",
+            note: "Plain chicken is safe. The issue is usually what it's cooked with (garlic, onion, sauces). Season with herbs and garlic-infused oil.",
+            protocols: {
+                bloating: { verdict: "Excellent", reason: "Easy protein source" },
+                ibs_c: { verdict: "OK", reason: "Good - add fiber sides" },
+                ibs_d: { verdict: "Excellent", reason: "Gentle and binding" },
+                ibs_m: { verdict: "Excellent", reason: "Safe protein choice" },
+                post_sibo: { verdict: "Excellent", reason: "Clean protein source" },
+                gut_brain: { verdict: "OK", reason: "Provides stable energy" }
+            }
+        },
+        "oats": {
+            status: "Low",
+            fodmap_type: "N/A at standard servings (avenin is not a FODMAP)",
+            safe_serving: "1/2 cup (52g) dry oats",
+            unsafe_serving: "More than 1/2 cup dry, or instant oats with added ingredients",
+            note: "Oats are low FODMAP at standard servings. Larger portions can cause issues due to fiber load, not FODMAPs.",
+            protocols: {
+                bloating: { verdict: "OK", reason: "Soluble fiber, start slow" },
+                ibs_c: { verdict: "OK", reason: "Fiber helps motility" },
+                ibs_d: { verdict: "OK", reason: "May help - absorbs water" },
+                ibs_m: { verdict: "OK", reason: "Good middle ground food" },
+                post_sibo: { verdict: "Limit", reason: "Introduce slowly" },
+                gut_brain: { verdict: "OK", reason: "Calming, steady energy" }
+            }
+        },
+        "tomato": {
+            status: "Low",
+            fodmap_type: "N/A at standard servings",
+            safe_serving: "1 small tomato, 1/2 cup cherry tomatoes, 2 tbsp paste",
+            unsafe_serving: "Large amounts of tomato paste/sauce (concentrated fructose)",
+            note: "Fresh tomatoes are low FODMAP. Concentrated products like paste can be high in fructose. Canned tomatoes in moderation.",
+            protocols: {
+                bloating: { verdict: "OK", reason: "OK fresh - limit paste" },
+                ibs_c: { verdict: "OK", reason: "OK - gentle acidity" },
+                ibs_d: { verdict: "Limit", reason: "Acidity may irritate" },
+                ibs_m: { verdict: "OK", reason: "Fresh OK in moderation" },
+                post_sibo: { verdict: "OK", reason: "Fresh tomatoes OK" },
+                gut_brain: { verdict: "OK", reason: "OK if not acid-sensitive" }
+            }
+        },
+        "potato": {
+            status: "Low",
+            fodmap_type: "N/A - naturally low FODMAP",
+            safe_serving: "Unlimited - no FODMAP concerns",
+            unsafe_serving: "N/A - watch toppings (butter OK, sour cream limit)",
+            note: "All potatoes are low FODMAP - white, red, sweet potato (1/2 cup). Great safe carb for all IBS types.",
+            protocols: {
+                bloating: { verdict: "OK", reason: "Easy to digest" },
+                ibs_c: { verdict: "OK", reason: "Good - add skin for fiber" },
+                ibs_d: { verdict: "OK", reason: "Binding and gentle" },
+                ibs_m: { verdict: "Excellent", reason: "Safe starch option" },
+                post_sibo: { verdict: "OK", reason: "Gentle carb source" },
+                gut_brain: { verdict: "OK", reason: "Comforting and safe" }
+            }
+        },
+        "yogurt": {
+            status: "Moderate",
+            fodmap_type: "Lactose (varies by type)",
+            safe_serving: "Lactose-free yogurt unlimited, Greek yogurt 3/4 cup (200g)",
+            unsafe_serving: "Regular yogurt more than small amounts, flavored yogurts with HFCS",
+            note: "Greek yogurt is lower lactose due to straining. Lactose-free is safest. Avoid sweetened varieties.",
+            protocols: {
+                bloating: { verdict: "Limit", reason: "Lactose-free only recommended" },
+                ibs_c: { verdict: "OK", reason: "Lactose-free may help gut" },
+                ibs_d: { verdict: "Limit", reason: "Lactose-free if tolerated" },
+                ibs_m: { verdict: "Limit", reason: "Lactose-free recommended" },
+                post_sibo: { verdict: "Limit", reason: "Introduce carefully" },
+                gut_brain: { verdict: "OK", reason: "May support gut-brain axis" }
+            }
+        },
+        "honey": {
+            status: "High",
+            fodmap_type: "Excess fructose",
+            safe_serving: "None during elimination",
+            unsafe_serving: "Any amount - high excess fructose",
+            note: "Honey has more fructose than glucose, making it high FODMAP. Use maple syrup or rice malt syrup instead.",
+            protocols: {
+                bloating: { verdict: "Avoid", reason: "Ferments quickly" },
+                ibs_c: { verdict: "Avoid", reason: "Avoid during elimination" },
+                ibs_d: { verdict: "Avoid", reason: "Worsens symptoms" },
+                ibs_m: { verdict: "Avoid", reason: "Avoid during flares" },
+                post_sibo: { verdict: "Avoid", reason: "Feeds bacteria" },
+                gut_brain: { verdict: "Avoid", reason: "Avoid if reactive" }
+            }
+        },
+        "mushroom": {
+            status: "High",
+            fodmap_type: "Mannitol (polyol)",
+            safe_serving: "Canned/dried mushrooms only in small amounts (3 button mushrooms)",
+            unsafe_serving: "Most fresh mushrooms, especially shiitake, portobello",
+            note: "Mushrooms are high in polyols. Canning/drying reduces but doesn't eliminate. Use sparingly for flavor.",
+            protocols: {
+                bloating: { verdict: "Avoid", reason: "Polyols ferment significantly" },
+                ibs_c: { verdict: "Avoid", reason: "Avoid during elimination" },
+                ibs_d: { verdict: "Avoid", reason: "Laxative effect" },
+                ibs_m: { verdict: "Avoid", reason: "Avoid or tiny amounts" },
+                post_sibo: { verdict: "Avoid", reason: "Avoid initially" },
+                gut_brain: { verdict: "Avoid", reason: "Avoid if reactive" }
+            }
+        },
+        "spinach": {
+            status: "Low",
+            fodmap_type: "N/A - naturally low FODMAP",
+            safe_serving: "Unlimited - no FODMAP concerns",
+            unsafe_serving: "N/A - watch what you add to it",
+            note: "Spinach is safe and nutritious for IBS. Raw or cooked both fine. Great way to add greens.",
+            protocols: {
+                bloating: { verdict: "OK", reason: "Gentle greens" },
+                ibs_c: { verdict: "OK", reason: "Fiber and magnesium" },
+                ibs_d: { verdict: "OK", reason: "Gentle and nutritious" },
+                ibs_m: { verdict: "Excellent", reason: "Safe vegetable" },
+                post_sibo: { verdict: "OK", reason: "Safe greens option" },
+                gut_brain: { verdict: "OK", reason: "Magnesium for calm" }
+            }
+        },
+        "cheese": {
+            status: "Moderate",
+            fodmap_type: "Lactose (varies by type)",
+            safe_serving: "Hard aged cheeses unlimited (cheddar, parmesan), soft cheeses limit 2 tbsp",
+            unsafe_serving: "Ricotta, cottage cheese in large amounts, cream cheese",
+            note: "Aged hard cheeses have minimal lactose. The longer aged, the less lactose. Soft fresh cheeses are higher.",
+            protocols: {
+                bloating: { verdict: "OK", reason: "Hard cheese OK - aged is best" },
+                ibs_c: { verdict: "OK", reason: "Hard cheese OK" },
+                ibs_d: { verdict: "OK", reason: "Hard cheese easy to digest" },
+                ibs_m: { verdict: "OK", reason: "Hard cheese OK" },
+                post_sibo: { verdict: "OK", reason: "Hard cheese if tolerated" },
+                gut_brain: { verdict: "OK", reason: "OK - comfort food" }
+            }
+        },
+        "wheat": {
+            status: "High",
+            fodmap_type: "Fructans (oligosaccharides)",
+            safe_serving: "Sourdough wheat bread (2 slices) has reduced FODMAPs",
+            unsafe_serving: "Regular wheat bread, pasta, cereals, crackers",
+            note: "Wheat fructans, not gluten, cause issues for most IBS sufferers. Sourdough fermentation reduces FODMAP content.",
+            protocols: {
+                bloating: { verdict: "Avoid", reason: "Major trigger for fermentation" },
+                ibs_c: { verdict: "Avoid", reason: "Avoid during elimination" },
+                ibs_d: { verdict: "Avoid", reason: "Can worsen symptoms" },
+                ibs_m: { verdict: "Avoid", reason: "Avoid during flares" },
+                post_sibo: { verdict: "Avoid", reason: "Feeds bacteria" },
+                gut_brain: { verdict: "Avoid", reason: "Avoid if reactive" }
+            }
+        },
+        "beans": {
+            status: "High",
+            fodmap_type: "GOS (galacto-oligosaccharides)",
+            safe_serving: "Canned, rinsed chickpeas (1/4 cup), canned lentils (1/2 cup)",
+            unsafe_serving: "Dried beans, kidney beans, black beans, baked beans",
+            note: "Beans are high in GOS. Canning and rinsing reduces FODMAPs significantly. Start with small portions.",
+            protocols: {
+                bloating: { verdict: "Avoid", reason: "Major gas producer" },
+                ibs_c: { verdict: "Limit", reason: "Small canned amounts may help" },
+                ibs_d: { verdict: "Avoid", reason: "Can worsen symptoms" },
+                ibs_m: { verdict: "Avoid", reason: "Avoid during flares" },
+                post_sibo: { verdict: "Avoid", reason: "Feeds bacteria" },
+                gut_brain: { verdict: "Avoid", reason: "Avoid if reactive" }
+            }
+        },
+        "watermelon": {
+            status: "High",
+            fodmap_type: "Excess fructose, mannitol (polyol)",
+            safe_serving: "None during elimination",
+            unsafe_serving: "Any amount of watermelon",
+            note: "Watermelon contains multiple FODMAPs. Try cantaloupe or honeydew melon (1/2 cup) as alternatives.",
+            protocols: {
+                bloating: { verdict: "Avoid", reason: "Multiple FODMAP types" },
+                ibs_c: { verdict: "Avoid", reason: "Avoid during elimination" },
+                ibs_d: { verdict: "Avoid", reason: "Can worsen symptoms" },
+                ibs_m: { verdict: "Avoid", reason: "Avoid during flares" },
+                post_sibo: { verdict: "Avoid", reason: "Feeds bacteria" },
+                gut_brain: { verdict: "Avoid", reason: "Avoid if reactive" }
+            }
+        },
+        "mango": {
+            status: "High",
+            fodmap_type: "Excess fructose",
+            safe_serving: "None during elimination",
+            unsafe_serving: "Any amount of fresh or dried mango",
+            note: "Mango is high in fructose. Try papaya, pineapple, or strawberries as tropical fruit alternatives.",
+            protocols: {
+                bloating: { verdict: "Avoid", reason: "High fructose content" },
+                ibs_c: { verdict: "Avoid", reason: "Avoid during elimination" },
+                ibs_d: { verdict: "Avoid", reason: "Can worsen symptoms" },
+                ibs_m: { verdict: "Avoid", reason: "Avoid during flares" },
+                post_sibo: { verdict: "Avoid", reason: "Feeds bacteria" },
+                gut_brain: { verdict: "Avoid", reason: "Avoid if reactive" }
+            }
+        },
+        "pear": {
+            status: "High",
+            fodmap_type: "Excess fructose, sorbitol (polyol)",
+            safe_serving: "None during elimination",
+            unsafe_serving: "Any amount of fresh or canned pear",
+            note: "Pears contain both fructose and sorbitol. Try oranges, strawberries, or grapes instead.",
+            protocols: {
+                bloating: { verdict: "Avoid", reason: "Multiple FODMAP types" },
+                ibs_c: { verdict: "Avoid", reason: "Avoid during elimination" },
+                ibs_d: { verdict: "Avoid", reason: "Sorbitol is laxative" },
+                ibs_m: { verdict: "Avoid", reason: "Avoid during flares" },
+                post_sibo: { verdict: "Avoid", reason: "Feeds bacteria" },
+                gut_brain: { verdict: "Avoid", reason: "Avoid if reactive" }
+            }
+        },
+        "orange": {
+            status: "Low",
+            fodmap_type: "N/A at standard servings",
+            safe_serving: "1 medium orange",
+            unsafe_serving: "More than 1 orange at a time, orange juice in large amounts",
+            note: "Oranges are low FODMAP at normal portions. Fresh is better than juice. Great vitamin C source.",
+            protocols: {
+                bloating: { verdict: "OK", reason: "Safe fruit choice" },
+                ibs_c: { verdict: "OK", reason: "Good for hydration" },
+                ibs_d: { verdict: "Limit", reason: "Acidity may irritate some" },
+                ibs_m: { verdict: "OK", reason: "Generally well tolerated" },
+                post_sibo: { verdict: "OK", reason: "Safe fruit option" },
+                gut_brain: { verdict: "OK", reason: "Vitamin C for stress" }
+            }
+        },
+        "strawberry": {
+            status: "Low",
+            fodmap_type: "N/A at standard servings",
+            safe_serving: "10 medium strawberries",
+            unsafe_serving: "Very large quantities only",
+            note: "Strawberries are one of the safest fruits for IBS. Great for sweetness without FODMAP concerns.",
+            protocols: {
+                bloating: { verdict: "OK", reason: "Safe low FODMAP fruit" },
+                ibs_c: { verdict: "OK", reason: "Good fiber content" },
+                ibs_d: { verdict: "OK", reason: "Generally well tolerated" },
+                ibs_m: { verdict: "OK", reason: "Safe fruit choice" },
+                post_sibo: { verdict: "OK", reason: "Safe fruit option" },
+                gut_brain: { verdict: "OK", reason: "Antioxidants support health" }
+            }
+        },
+        "blueberry": {
+            status: "Low",
+            fodmap_type: "N/A at standard servings",
+            safe_serving: "1/4 cup (40g) blueberries",
+            unsafe_serving: "More than 1/2 cup at a time",
+            note: "Blueberries are low FODMAP in moderate portions. High in antioxidants. Watch portion size.",
+            protocols: {
+                bloating: { verdict: "OK", reason: "Safe in moderation" },
+                ibs_c: { verdict: "OK", reason: "Good fiber content" },
+                ibs_d: { verdict: "OK", reason: "Generally well tolerated" },
+                ibs_m: { verdict: "OK", reason: "Safe fruit choice" },
+                post_sibo: { verdict: "OK", reason: "Safe fruit option" },
+                gut_brain: { verdict: "OK", reason: "Brain-healthy antioxidants" }
+            }
+        },
+        "grapes": {
+            status: "Low",
+            fodmap_type: "N/A at standard servings",
+            safe_serving: "1 cup (150g) grapes",
+            unsafe_serving: "Very large quantities only",
+            note: "Grapes are low FODMAP and well tolerated. Both red and green varieties are safe.",
+            protocols: {
+                bloating: { verdict: "OK", reason: "Safe fruit choice" },
+                ibs_c: { verdict: "OK", reason: "Good hydration source" },
+                ibs_d: { verdict: "OK", reason: "Generally well tolerated" },
+                ibs_m: { verdict: "OK", reason: "Safe fruit option" },
+                post_sibo: { verdict: "OK", reason: "Safe fruit choice" },
+                gut_brain: { verdict: "OK", reason: "Easy to digest" }
+            }
+        },
+        "cauliflower": {
+            status: "High",
+            fodmap_type: "Mannitol (polyol)",
+            safe_serving: "1/2 cup (65g) maximum",
+            unsafe_serving: "More than 1/2 cup, cauliflower rice in large amounts",
+            note: "Cauliflower is high in polyols. Small portions may be tolerated. Common in 'low carb' foods - be careful.",
+            protocols: {
+                bloating: { verdict: "Limit", reason: "Can cause significant gas" },
+                ibs_c: { verdict: "Limit", reason: "Small portions only" },
+                ibs_d: { verdict: "Avoid", reason: "Polyols are laxative" },
+                ibs_m: { verdict: "Limit", reason: "Very small portions" },
+                post_sibo: { verdict: "Avoid", reason: "Avoid initially" },
+                gut_brain: { verdict: "Limit", reason: "Small amounts if tolerated" }
+            }
+        },
+        "carrot": {
+            status: "Low",
+            fodmap_type: "N/A - naturally low FODMAP",
+            safe_serving: "Unlimited - no FODMAP concerns",
+            unsafe_serving: "N/A",
+            note: "Carrots are safe raw or cooked. Great vegetable for IBS sufferers. Cooked may be easier to digest.",
+            protocols: {
+                bloating: { verdict: "OK", reason: "Gentle vegetable" },
+                ibs_c: { verdict: "OK", reason: "Good fiber source" },
+                ibs_d: { verdict: "OK", reason: "Cooked carrots are binding" },
+                ibs_m: { verdict: "Excellent", reason: "Safe vegetable choice" },
+                post_sibo: { verdict: "OK", reason: "Safe vegetable" },
+                gut_brain: { verdict: "OK", reason: "Easy to digest" }
+            }
+        },
+        "celery": {
+            status: "High",
+            fodmap_type: "Mannitol (polyol)",
+            safe_serving: "Less than 5cm stalk",
+            unsafe_serving: "Full celery stalks, celery juice",
+            note: "Celery is surprisingly high FODMAP. Celery juice is very high. Use sparingly for flavor only.",
+            protocols: {
+                bloating: { verdict: "Avoid", reason: "High polyol content" },
+                ibs_c: { verdict: "Avoid", reason: "Can cause discomfort" },
+                ibs_d: { verdict: "Avoid", reason: "Polyols are laxative" },
+                ibs_m: { verdict: "Avoid", reason: "Avoid or tiny amounts" },
+                post_sibo: { verdict: "Avoid", reason: "Avoid" },
+                gut_brain: { verdict: "Avoid", reason: "Avoid if reactive" }
+            }
+        },
+        "cucumber": {
+            status: "Low",
+            fodmap_type: "N/A at standard servings",
+            safe_serving: "Up to 1 cup chopped cucumber",
+            unsafe_serving: "Very large amounts only",
+            note: "Cucumber is low FODMAP and refreshing. Good for salads and snacks. Peel if sensitive.",
+            protocols: {
+                bloating: { verdict: "OK", reason: "Gentle and hydrating" },
+                ibs_c: { verdict: "OK", reason: "High water content" },
+                ibs_d: { verdict: "OK", reason: "Generally well tolerated" },
+                ibs_m: { verdict: "OK", reason: "Safe vegetable" },
+                post_sibo: { verdict: "OK", reason: "Safe choice" },
+                gut_brain: { verdict: "OK", reason: "Cooling and calming" }
+            }
+        },
+        "lettuce": {
+            status: "Low",
+            fodmap_type: "N/A - naturally low FODMAP",
+            safe_serving: "Unlimited - no FODMAP concerns",
+            unsafe_serving: "N/A",
+            note: "All lettuce varieties are low FODMAP. Safe base for salads. Iceberg, romaine, butter lettuce all fine.",
+            protocols: {
+                bloating: { verdict: "OK", reason: "Very gentle" },
+                ibs_c: { verdict: "OK", reason: "Some fiber content" },
+                ibs_d: { verdict: "OK", reason: "Well tolerated" },
+                ibs_m: { verdict: "Excellent", reason: "Safe choice" },
+                post_sibo: { verdict: "OK", reason: "Safe vegetable" },
+                gut_brain: { verdict: "OK", reason: "Easy to digest" }
+            }
+        },
+        "zucchini": {
+            status: "Low",
+            fodmap_type: "N/A at standard servings",
+            safe_serving: "1/2 cup chopped (65g)",
+            unsafe_serving: "Large portions may have fiber issues",
+            note: "Zucchini is low FODMAP and versatile. Great pasta substitute. Cooked is usually easier to digest.",
+            protocols: {
+                bloating: { verdict: "OK", reason: "Gentle vegetable" },
+                ibs_c: { verdict: "OK", reason: "Good fiber source" },
+                ibs_d: { verdict: "OK", reason: "Easily digestible" },
+                ibs_m: { verdict: "OK", reason: "Safe vegetable" },
+                post_sibo: { verdict: "OK", reason: "Safe choice" },
+                gut_brain: { verdict: "OK", reason: "Easy to digest" }
+            }
+        },
+        "bell pepper": {
+            status: "Low",
+            fodmap_type: "N/A at standard servings",
+            safe_serving: "1/2 cup chopped (75g)",
+            unsafe_serving: "Very large amounts only",
+            note: "Bell peppers (capsicum) are low FODMAP. All colors are safe. Good source of vitamin C.",
+            protocols: {
+                bloating: { verdict: "OK", reason: "Generally well tolerated" },
+                ibs_c: { verdict: "OK", reason: "Good vegetable choice" },
+                ibs_d: { verdict: "OK", reason: "Usually well tolerated" },
+                ibs_m: { verdict: "OK", reason: "Safe vegetable" },
+                post_sibo: { verdict: "OK", reason: "Safe choice" },
+                gut_brain: { verdict: "OK", reason: "Vitamin C for stress" }
+            }
+        },
+        "asparagus": {
+            status: "High",
+            fodmap_type: "Fructans, excess fructose",
+            safe_serving: "None during elimination",
+            unsafe_serving: "Any amount",
+            note: "Asparagus is high in multiple FODMAPs. Avoid during elimination. Try green beans instead.",
+            protocols: {
+                bloating: { verdict: "Avoid", reason: "Multiple FODMAP types" },
+                ibs_c: { verdict: "Avoid", reason: "Avoid during elimination" },
+                ibs_d: { verdict: "Avoid", reason: "Can worsen symptoms" },
+                ibs_m: { verdict: "Avoid", reason: "Avoid during flares" },
+                post_sibo: { verdict: "Avoid", reason: "Feeds bacteria" },
+                gut_brain: { verdict: "Avoid", reason: "Avoid if reactive" }
+            }
+        },
+        "green beans": {
+            status: "Low",
+            fodmap_type: "N/A at standard servings",
+            safe_serving: "1/2 cup (75g)",
+            unsafe_serving: "Very large portions",
+            note: "Green beans are low FODMAP and a great vegetable choice. Unlike other beans, they're safe.",
+            protocols: {
+                bloating: { verdict: "OK", reason: "Safe vegetable choice" },
+                ibs_c: { verdict: "OK", reason: "Good fiber content" },
+                ibs_d: { verdict: "OK", reason: "Gentle on digestion" },
+                ibs_m: { verdict: "OK", reason: "Safe choice" },
+                post_sibo: { verdict: "OK", reason: "Safe vegetable" },
+                gut_brain: { verdict: "OK", reason: "Easy to digest" }
+            }
+        },
+        "sweet potato": {
+            status: "Low",
+            fodmap_type: "N/A at standard servings",
+            safe_serving: "1/2 cup (75g)",
+            unsafe_serving: "Large portions (over 1 cup)",
+            note: "Sweet potato is low FODMAP in moderate portions. Great source of nutrients. Watch portion size.",
+            protocols: {
+                bloating: { verdict: "OK", reason: "Generally well tolerated" },
+                ibs_c: { verdict: "OK", reason: "Good fiber content" },
+                ibs_d: { verdict: "OK", reason: "Gentle carb source" },
+                ibs_m: { verdict: "OK", reason: "Safe starch choice" },
+                post_sibo: { verdict: "OK", reason: "Safe carb option" },
+                gut_brain: { verdict: "OK", reason: "Calming, nutritious" }
+            }
+        },
+        "salmon": {
+            status: "Low",
+            fodmap_type: "N/A - no FODMAPs (protein/fat)",
+            safe_serving: "Unlimited - no FODMAP concerns",
+            unsafe_serving: "N/A - watch sauces and marinades",
+            note: "All fish is FODMAP-free. Salmon provides omega-3s which may reduce gut inflammation.",
+            protocols: {
+                bloating: { verdict: "Excellent", reason: "Anti-inflammatory omega-3s" },
+                ibs_c: { verdict: "OK", reason: "Good protein, add fiber sides" },
+                ibs_d: { verdict: "Excellent", reason: "Omega-3s may help" },
+                ibs_m: { verdict: "Excellent", reason: "Safe protein choice" },
+                post_sibo: { verdict: "Excellent", reason: "Clean protein source" },
+                gut_brain: { verdict: "Excellent", reason: "Omega-3s support brain health" }
+            }
+        },
+        "beef": {
+            status: "Low",
+            fodmap_type: "N/A - no FODMAPs (protein/fat)",
+            safe_serving: "Unlimited - no FODMAP concerns",
+            unsafe_serving: "N/A - watch seasonings and sauces",
+            note: "Plain beef is FODMAP-free. Good protein source. Avoid processed meats with garlic/onion.",
+            protocols: {
+                bloating: { verdict: "OK", reason: "Protein doesn't ferment" },
+                ibs_c: { verdict: "OK", reason: "Good protein, add fiber" },
+                ibs_d: { verdict: "OK", reason: "Binding, safe protein" },
+                ibs_m: { verdict: "OK", reason: "Safe protein choice" },
+                post_sibo: { verdict: "OK", reason: "Clean protein" },
+                gut_brain: { verdict: "OK", reason: "Iron supports energy" }
+            }
+        },
+        "tofu": {
+            status: "Low",
+            fodmap_type: "N/A - firm tofu is low FODMAP",
+            safe_serving: "2/3 cup (160g) firm tofu",
+            unsafe_serving: "Silken tofu in large amounts",
+            note: "Firm tofu is low FODMAP. Silken tofu is higher. Great plant protein for IBS.",
+            protocols: {
+                bloating: { verdict: "OK", reason: "Firm tofu is safe" },
+                ibs_c: { verdict: "OK", reason: "Good plant protein" },
+                ibs_d: { verdict: "OK", reason: "Gentle protein source" },
+                ibs_m: { verdict: "OK", reason: "Safe protein option" },
+                post_sibo: { verdict: "OK", reason: "Plant protein option" },
+                gut_brain: { verdict: "OK", reason: "Easy to digest" }
+            }
+        },
+        "quinoa": {
+            status: "Low",
+            fodmap_type: "N/A at standard servings",
+            safe_serving: "1 cup cooked (155g)",
+            unsafe_serving: "Very large portions only",
+            note: "Quinoa is low FODMAP and a complete protein. Great alternative to wheat-based grains.",
+            protocols: {
+                bloating: { verdict: "OK", reason: "Generally well tolerated" },
+                ibs_c: { verdict: "OK", reason: "Good fiber content" },
+                ibs_d: { verdict: "OK", reason: "Usually well tolerated" },
+                ibs_m: { verdict: "OK", reason: "Safe grain alternative" },
+                post_sibo: { verdict: "OK", reason: "Safe carb option" },
+                gut_brain: { verdict: "OK", reason: "Complete protein" }
+            }
+        },
+        "almond": {
+            status: "Moderate",
+            fodmap_type: "GOS (galacto-oligosaccharides)",
+            safe_serving: "10 almonds maximum",
+            unsafe_serving: "More than 10 almonds, almond meal/flour in large amounts",
+            note: "Almonds are moderate FODMAP. Small portions OK. Almond milk (if not sweetened) is low FODMAP.",
+            protocols: {
+                bloating: { verdict: "Limit", reason: "Small portions only" },
+                ibs_c: { verdict: "Limit", reason: "Small amounts OK for fiber" },
+                ibs_d: { verdict: "Limit", reason: "Watch portions carefully" },
+                ibs_m: { verdict: "Limit", reason: "10 almonds maximum" },
+                post_sibo: { verdict: "Limit", reason: "Small amounts only" },
+                gut_brain: { verdict: "OK", reason: "Good snack if tolerated" }
+            }
+        },
+        "peanut": {
+            status: "Low",
+            fodmap_type: "N/A at standard servings",
+            safe_serving: "32 peanuts or 2 tbsp peanut butter",
+            unsafe_serving: "Very large amounts",
+            note: "Peanuts are technically legumes but are low FODMAP. Peanut butter is a great protein source.",
+            protocols: {
+                bloating: { verdict: "OK", reason: "Generally well tolerated" },
+                ibs_c: { verdict: "OK", reason: "Good fat and fiber" },
+                ibs_d: { verdict: "OK", reason: "Usually well tolerated" },
+                ibs_m: { verdict: "OK", reason: "Safe snack option" },
+                post_sibo: { verdict: "OK", reason: "Safe nut choice" },
+                gut_brain: { verdict: "OK", reason: "Stable energy source" }
+            }
+        },
+        "ginger": {
+            status: "Low",
+            fodmap_type: "N/A - naturally low FODMAP",
+            safe_serving: "Unlimited fresh ginger",
+            unsafe_serving: "N/A",
+            note: "Ginger is low FODMAP and actually helps digestion. Great for nausea and motility. Use freely.",
+            protocols: {
+                bloating: { verdict: "Excellent", reason: "Supports digestion" },
+                ibs_c: { verdict: "Excellent", reason: "Promotes motility" },
+                ibs_d: { verdict: "OK", reason: "May help nausea" },
+                ibs_m: { verdict: "Excellent", reason: "Digestive support" },
+                post_sibo: { verdict: "Excellent", reason: "Prokinetic properties" },
+                gut_brain: { verdict: "OK", reason: "Calming for stomach" }
+            }
+        },
+        "lemon": {
+            status: "Low",
+            fodmap_type: "N/A at standard servings",
+            safe_serving: "Juice of 1 lemon, unlimited zest",
+            unsafe_serving: "N/A at normal culinary amounts",
+            note: "Lemon is low FODMAP. Great for flavoring. Lemon water in the morning can support digestion.",
+            protocols: {
+                bloating: { verdict: "OK", reason: "Aids digestion" },
+                ibs_c: { verdict: "OK", reason: "May help morning routine" },
+                ibs_d: { verdict: "Limit", reason: "Acidity may irritate some" },
+                ibs_m: { verdict: "OK", reason: "Generally well tolerated" },
+                post_sibo: { verdict: "OK", reason: "Good for digestion" },
+                gut_brain: { verdict: "OK", reason: "Refreshing, calming" }
+            }
+        },
+        "maple syrup": {
+            status: "Low",
+            fodmap_type: "N/A at standard servings",
+            safe_serving: "2 tablespoons",
+            unsafe_serving: "Very large amounts",
+            note: "Maple syrup is low FODMAP and a great sweetener alternative to honey. Use pure maple syrup.",
+            protocols: {
+                bloating: { verdict: "OK", reason: "Safe sweetener option" },
+                ibs_c: { verdict: "OK", reason: "Better than honey" },
+                ibs_d: { verdict: "OK", reason: "Generally well tolerated" },
+                ibs_m: { verdict: "OK", reason: "Safe sweetener" },
+                post_sibo: { verdict: "OK", reason: "Better than sugar" },
+                gut_brain: { verdict: "OK", reason: "Natural sweetener" }
+            }
+        },
+        "chocolate": {
+            status: "Moderate",
+            fodmap_type: "Lactose (milk chocolate), fructans (large amounts)",
+            safe_serving: "Dark chocolate (70%+) 30g, milk chocolate 20g",
+            unsafe_serving: "Large amounts, chocolate with high FODMAP fillings",
+            note: "Dark chocolate is better than milk. Watch portion sizes and avoid high FODMAP additions like honey or nuts.",
+            protocols: {
+                bloating: { verdict: "Limit", reason: "Small dark chocolate portions" },
+                ibs_c: { verdict: "Limit", reason: "Dark chocolate in moderation" },
+                ibs_d: { verdict: "Limit", reason: "Caffeine may stimulate" },
+                ibs_m: { verdict: "Limit", reason: "Small portions only" },
+                post_sibo: { verdict: "Limit", reason: "Small amounts if tolerated" },
+                gut_brain: { verdict: "OK", reason: "Dark chocolate for mood" }
+            }
+        }
+    };
+
+    // DOM Elements
+    const searchInput = document.getElementById('food-search');
+    const searchBtn = document.getElementById('search-btn');
+    const autocompleteList = document.getElementById('autocomplete-list');
+    const resultsSection = document.getElementById('results-section');
+
+    // Get all food names for autocomplete
+    const foodNames = Object.keys(FODMAP_DATABASE);
+
+    // Autocomplete functionality
+    searchInput.addEventListener('input', function() {
+        const value = this.value.toLowerCase().trim();
+        autocompleteList.innerHTML = '';
+
+        if (value.length < 2) {
+            autocompleteList.classList.remove('active');
+            return;
+        }
+
+        const matches = foodNames.filter(food => food.includes(value)).slice(0, 6);
+
+        if (matches.length > 0) {
+            matches.forEach(food => {
+                const item = document.createElement('div');
+                item.className = 'autocomplete-item';
+                item.textContent = food.charAt(0).toUpperCase() + food.slice(1);
+                item.addEventListener('click', () => {
+                    searchInput.value = food;
+                    autocompleteList.classList.remove('active');
+                    showResults(food);
+                });
+                autocompleteList.appendChild(item);
+            });
+            autocompleteList.classList.add('active');
+        } else {
+            autocompleteList.classList.remove('active');
+        }
+    });
+
+    // Close autocomplete on click outside
+    document.addEventListener('click', function(e) {
+        if (!searchInput.contains(e.target) && !autocompleteList.contains(e.target)) {
+            autocompleteList.classList.remove('active');
+        }
+    });
+
+    // Search button click
+    searchBtn.addEventListener('click', function() {
+        const food = searchInput.value.toLowerCase().trim();
+        if (food) {
+            showResults(food);
+        }
+    });
+
+    // Enter key to search
+    searchInput.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            const food = this.value.toLowerCase().trim();
+            if (food) {
+                autocompleteList.classList.remove('active');
+                showResults(food);
+            }
+        }
+    });
+
+    // Show results
+    function showResults(foodName) {
+        const food = FODMAP_DATABASE[foodName.toLowerCase()];
+
+        if (!food) {
+            resultsSection.innerHTML = `
+                <div class="result-card">
+                    <h3>Food Not Found</h3>
+                    <p>We don't have "${foodName}" in our database yet. Try searching for a similar food or check the spelling.</p>
+                    <p style="margin-top: 16px; font-size: 0.9rem; color: var(--text-muted);">
+                        <strong>Tip:</strong> Search for common foods like: garlic, onion, apple, banana, milk, bread, rice, eggs, chicken, coffee
+                    </p>
+                </div>
+            `;
+            resultsSection.classList.add('active');
+            return;
+        }
+
+        const statusClass = food.status.toLowerCase();
+        const displayName = foodName.charAt(0).toUpperCase() + foodName.slice(1);
+
+        let protocolsHtml = '';
+        const protocolLabels = {
+            bloating: 'Bloating-Dominant',
+            ibs_c: 'IBS-C (Constipation)',
+            ibs_d: 'IBS-D (Diarrhea)',
+            ibs_m: 'IBS-M (Mixed)',
+            post_sibo: 'Post-SIBO Recovery',
+            gut_brain: 'Gut-Brain Connection'
+        };
+
+        for (const [key, label] of Object.entries(protocolLabels)) {
+            const protocol = food.protocols[key];
+            const verdictClass = protocol.verdict.toLowerCase().replace(' ', '-');
+            protocolsHtml += `
+                <div class="protocol-item">
+                    <div class="protocol-info">
+                        <p class="protocol-name">${label}</p>
+                        <p class="protocol-reason">${protocol.reason}</p>
+                    </div>
+                    <span class="protocol-verdict ${verdictClass}">${protocol.verdict}</span>
+                </div>
+            `;
+        }
+
+        resultsSection.innerHTML = `
+            <div class="result-card">
+                <div class="result-header">
+                    <h3 class="result-title">${displayName}</h3>
+                    <span class="status-badge ${statusClass}">${food.status} FODMAP</span>
+                </div>
+
+                <div class="info-grid">
+                    <div class="info-item">
+                        <h4>FODMAP Type</h4>
+                        <p>${food.fodmap_type}</p>
+                    </div>
+                    <div class="info-item">
+                        <h4>Safe Serving</h4>
+                        <p>${food.safe_serving}</p>
+                    </div>
+                    <div class="info-item">
+                        <h4>Unsafe Serving</h4>
+                        <p>${food.unsafe_serving}</p>
+                    </div>
+                </div>
+
+                <div class="info-box">
+                    <p><strong>Note:</strong> ${food.note}</p>
+                </div>
+            </div>
+
+            <div class="protocol-section">
+                <h3>How This Affects Different Gut Types</h3>
+                <div class="protocol-grid">
+                    ${protocolsHtml}
+                </div>
+            </div>
+        `;
+
+        resultsSection.classList.add('active');
+
+        // Track search in GTM
+        if (window.dataLayer) {
+            window.dataLayer.push({
+                'event': 'fodmap_search',
+                'food_searched': foodName,
+                'fodmap_status': food.status
+            });
+        }
+    }
+
+    // Mobile menu toggle
+    const mobileToggle = document.querySelector('.mobile-menu-toggle');
+    const headerNav = document.querySelector('.header-nav');
+
+    if (mobileToggle) {
+        mobileToggle.addEventListener('click', function() {
+            headerNav.classList.toggle('active');
+        });
+    }
+    </script>
+</body>
+</html>
