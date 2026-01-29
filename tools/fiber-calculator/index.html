@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How Much Fiber Should I Eat with IBS? Calculator | Gut Healing Academy</title>
+    <meta name="description" content="Calculate your optimal fiber intake for IBS. Get personalized recommendations based on your symptoms - whether you have IBS-C, IBS-D, or mixed patterns.">
+    <link rel="canonical" href="https://www.guthealingacademy.com/tools/fiber-calculator/">
+    <meta name="robots" content="index, follow">
+
+    <!-- Google Tag Manager -->
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-KQ3LKTBL');</script>
+    <!-- End Google Tag Manager -->
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/styles.css">
+
+    <!-- Schema.org Markup -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "MedicalWebPage",
+        "name": "Fiber Calculator for IBS",
+        "description": "Calculate your optimal fiber intake for IBS based on your symptoms and IBS type.",
+        "url": "https://www.guthealingacademy.com/tools/fiber-calculator/",
+        "datePublished": "2025-01-29",
+        "dateModified": "2025-01-29",
+        "author": {
+            "@type": "Person",
+            "name": "Rebecca Taylor",
+            "jobTitle": "Registered Nutritionist (RNutr)",
+            "affiliation": {
+                "@type": "Organization",
+                "name": "Gut Healing Academy"
+            }
+        },
+        "publisher": {
+            "@type": "Organization",
+            "name": "Gut Healing Academy",
+            "url": "https://www.guthealingacademy.com"
+        },
+        "medicalAudience": {
+            "@type": "MedicalAudience",
+            "audienceType": "Patient"
+        }
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+            {
+                "@type": "Question",
+                "name": "Why do some high-fiber foods make my IBS worse?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Many high-fiber foods are also high in FODMAPs (fermentable carbohydrates). It's not always the fiber itself causing problems - it might be the fructans in wheat or the GOS in beans. Low-FODMAP fiber sources like psyllium and oats are often better tolerated."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "Should I take fiber supplements or eat whole foods?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Both can work, but supplements like psyllium give you more control over the amount and type. Start with supplements to establish tolerance, then gradually add whole food sources."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "How long before I notice a difference from changing my fiber intake?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Most people notice changes within 1-2 weeks, but it takes 4-6 weeks for your gut bacteria to fully adjust. Don't judge too quickly, and don't change too fast."
+                }
+            }
+        ]
+    }
+    </script>
+
+    <style>
+        .fiber-source {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--divider);
+        }
+        .fiber-source:last-child {
+            border-bottom: none;
+        }
+        .fiber-source .food {
+            color: var(--text-olive);
+        }
+        .fiber-source .amount {
+            font-weight: 600;
+            color: var(--forest);
+        }
+        .fiber-category {
+            margin-bottom: 24px;
+        }
+        .fiber-category h4 {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid var(--citrus);
+        }
+        .week-plan {
+            background: var(--citrus-pale);
+            padding: 20px;
+            border-radius: 12px;
+            margin-top: 16px;
+        }
+        .week-plan h4 {
+            color: var(--text-forest);
+            margin-bottom: 12px;
+        }
+        .week-plan p {
+            margin: 8px 0;
+            font-size: 0.95rem;
+        }
+        .unit-toggle {
+            display: flex;
+            gap: 8px;
+            margin-top: 8px;
+        }
+        .unit-btn {
+            padding: 8px 16px;
+            border: 1px solid var(--divider);
+            background: var(--white);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .unit-btn.active {
+            background: var(--forest);
+            color: var(--white);
+            border-color: var(--forest);
+        }
+    </style>
+</head>
+<body>
+    <!-- Google Tag Manager (noscript) -->
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KQ3LKTBL"
+    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <!-- End Google Tag Manager (noscript) -->
+
+    <header class="header">
+        <div class="header-content">
+            <a href="https://www.guthealingacademy.com" class="logo">
+                <img src="../../assets/Logo.png" alt="Gut Healing Academy">
+            </a>
+            <nav class="header-nav">
+                <a href="https://www.guthealingacademy.com/about">About</a>
+                <a href="https://www.guthealingacademy.com/tools/">Tools</a>
+                <a href="https://www.guthealingacademy.com/quiz-4/" class="header-cta">Take the Quiz</a>
+            </nav>
+            <button class="mobile-menu-toggle" aria-label="Toggle menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="container">
+            <h1>How Much Fiber Should I Eat with IBS?</h1>
+            <p>Fiber is tricky with IBS. Too little can worsen constipation, too much can cause bloating. Let's find YOUR right amount.</p>
+        </div>
+    </section>
+
+    <section class="tool-section">
+        <div class="tool-card">
+            <form id="fiber-form">
+                <div class="form-group">
+                    <label>What's your current fiber intake? (estimate)</label>
+                    <div class="options-list">
+                        <label class="option-item">
+                            <input type="radio" name="current_intake" value="low" required>
+                            <span>Less than 10g daily (minimal fiber foods)</span>
+                        </label>
+                        <label class="option-item">
+                            <input type="radio" name="current_intake" value="low_moderate">
+                            <span>10-15g daily (some fruits/veg, mostly processed foods)</span>
+                        </label>
+                        <label class="option-item">
+                            <input type="radio" name="current_intake" value="moderate">
+                            <span>15-25g daily (regular fruits, vegetables, some whole grains)</span>
+                        </label>
+                        <label class="option-item">
+                            <input type="radio" name="current_intake" value="high">
+                            <span>25g+ daily (lots of whole grains, beans, high-fiber foods)</span>
+                        </label>
+                        <label class="option-item">
+                            <input type="radio" name="current_intake" value="unknown">
+                            <span>I don't know</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>What's your dominant symptom pattern?</label>
+                    <div class="options-list">
+                        <label class="option-item">
+                            <input type="radio" name="symptom_pattern" value="constipation" required>
+                            <span>Constipation (hard, infrequent stools)</span>
+                        </label>
+                        <label class="option-item">
+                            <input type="radio" name="symptom_pattern" value="diarrhea">
+                            <span>Diarrhea (loose, frequent stools)</span>
+                        </label>
+                        <label class="option-item">
+                            <input type="radio" name="symptom_pattern" value="mixed">
+                            <span>Mixed/Alternating</span>
+                        </label>
+                        <label class="option-item">
+                            <input type="radio" name="symptom_pattern" value="bloating">
+                            <span>Primarily bloating</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>How does your gut currently react to fiber-rich foods?</label>
+                    <div class="options-list">
+                        <label class="option-item">
+                            <input type="radio" name="tolerance" value="good" required>
+                            <span>I tolerate them well</span>
+                        </label>
+                        <label class="option-item">
+                            <input type="radio" name="tolerance" value="some_issues">
+                            <span>Some bloating but manageable</span>
+                        </label>
+                        <label class="option-item">
+                            <input type="radio" name="tolerance" value="significant_issues">
+                            <span>Significant bloating, gas, or discomfort</span>
+                        </label>
+                        <label class="option-item">
+                            <input type="radio" name="tolerance" value="makes_worse">
+                            <span>They make my symptoms much worse</span>
+                        </label>
+                        <label class="option-item">
+                            <input type="radio" name="tolerance" value="unknown">
+                            <span>I haven't really paid attention</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="weight">Your weight (for personalized calculation)</label>
+                    <div style="display: flex; align-items: center; gap: 12px;">
+                        <input type="number" id="weight" class="form-input" style="width: 120px;" min="30" max="300" required placeholder="Enter weight">
+                        <div class="unit-toggle">
+                            <button type="button" class="unit-btn active" data-unit="kg">kg</button>
+                            <button type="button" class="unit-btn" data-unit="lbs">lbs</button>
+                        </div>
+                    </div>
+                </div>
+
+                <button type="submit" class="primary-btn">Calculate My Fiber Target</button>
+            </form>
+
+            <div class="results-section" id="results-section">
+                <!-- Results populated by JavaScript -->
+            </div>
+        </div>
+
+        <div class="author-box container">
+            <img src="../../assets/practitioners/rebecca.jpg" alt="Rebecca Taylor, RNutr" class="author-photo">
+            <div class="author-info">
+                <p class="author-name">Reviewed by Rebecca Taylor, RNutr</p>
+                <p class="author-credentials">Registered Nutritionist specializing in digestive health</p>
+            </div>
+        </div>
+
+        <div class="disclaimer container">
+            <strong>Medical Disclaimer:</strong> This tool provides educational information only and is not a substitute for professional medical advice. If you have severe symptoms, blood in stool, unexplained weight loss, or symptoms that concern you, please consult your doctor.
+        </div>
+    </section>
+
+    <section class="cta-section">
+        <div class="cta-content">
+            <h2>Get Your Complete Protocol</h2>
+            <p>Fiber is just one piece of the puzzle. Your IBS type determines not just how much fiber you need, but also meal timing, supplements, and which foods to avoid.</p>
+            <a href="https://www.guthealingacademy.com/quiz-4/" class="primary-btn">Get My Complete Protocol</a>
+        </div>
+    </section>
+
+    <section class="faq-section">
+        <h2>Frequently Asked Questions</h2>
+        <div class="faq-list">
+            <div class="faq-item">
+                <p class="faq-question">Why do some high-fiber foods make my IBS worse?</p>
+                <p class="faq-answer">Many high-fiber foods are also high in FODMAPs (fermentable carbohydrates). It's not always the fiber itself causing problems - it might be the fructans in wheat or the GOS in beans. Low-FODMAP fiber sources like psyllium and oats are often better tolerated.</p>
+            </div>
+            <div class="faq-item">
+                <p class="faq-question">Should I take fiber supplements or eat whole foods?</p>
+                <p class="faq-answer">Both can work, but supplements like psyllium give you more control over the amount and type. Start with supplements to establish tolerance, then gradually add whole food sources.</p>
+            </div>
+            <div class="faq-item">
+                <p class="faq-question">How long before I notice a difference from changing my fiber intake?</p>
+                <p class="faq-answer">Most people notice changes within 1-2 weeks, but it takes 4-6 weeks for your gut bacteria to fully adjust. Don't judge too quickly, and don't change too fast.</p>
+            </div>
+        </div>
+    </section>
+
+    <p class="updated">Last updated: January 2025 · Reviewed by Rebecca Taylor, RNutr</p>
+
+    <footer class="footer">
+        <div class="footer-links">
+            <a href="https://www.guthealingacademy.com/about">About</a>
+            <a href="https://www.guthealingacademy.com/legal/privacy">Privacy</a>
+            <a href="https://www.guthealingacademy.com/legal/terms">Terms</a>
+        </div>
+        <p class="copyright">© 2025 Gut Healing Academy. Educational content only - not medical advice.</p>
+    </footer>
+
+    <script>
+    // Unit toggle
+    let currentUnit = 'kg';
+    const unitBtns = document.querySelectorAll('.unit-btn');
+
+    unitBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+            unitBtns.forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+            currentUnit = this.dataset.unit;
+        });
+    });
+
+    // Option item click handling
+    const optionItems = document.querySelectorAll('.option-item');
+    optionItems.forEach(item => {
+        item.addEventListener('click', function(e) {
+            if (e.target.tagName !== 'INPUT') {
+                const input = this.querySelector('input');
+                if (input.type === 'radio') {
+                    const name = input.name;
+                    document.querySelectorAll(`input[name="${name}"]`).forEach(radio => {
+                        radio.closest('.option-item').classList.remove('selected');
+                    });
+                    input.checked = true;
+                    this.classList.add('selected');
+                }
+            }
+        });
+    });
+
+    // Form handling
+    const form = document.getElementById('fiber-form');
+    const resultsSection = document.getElementById('results-section');
+
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        const currentIntake = document.querySelector('input[name="current_intake"]:checked')?.value;
+        const symptomPattern = document.querySelector('input[name="symptom_pattern"]:checked')?.value;
+        const tolerance = document.querySelector('input[name="tolerance"]:checked')?.value;
+        let weight = parseFloat(document.getElementById('weight').value);
+
+        if (!currentIntake || !symptomPattern || !tolerance || !weight) {
+            alert('Please fill in all fields.');
+            return;
+        }
+
+        // Convert lbs to kg if needed
+        if (currentUnit === 'lbs') {
+            weight = weight * 0.453592;
+        }
+
+        const result = calculateFiberTarget(currentIntake, symptomPattern, tolerance, weight);
+        showResults(result, currentIntake);
+    });
+
+    function calculateFiberTarget(currentIntake, symptomPattern, tolerance, weightKg) {
+        // Base calculation: approximately 0.4g per kg body weight as starting point
+        let baseTarget = weightKg * 0.4;
+        let recommendedTarget;
+        let approach;
+        let increaseRate;
+        let fiberTypes;
+        let weekPlan;
+
+        if (symptomPattern === "constipation") {
+            recommendedTarget = Math.max(25, Math.min(35, baseTarget));
+            approach = "Gradual Increase";
+            increaseRate = "3-5g per week";
+            fiberTypes = {
+                emphasize: "Soluble fiber (psyllium, oat bran, flaxseed)",
+                limit: "Insoluble fiber initially (wheat bran, raw vegetables)",
+                reasoning: "Soluble fiber forms a gel that softens stool without adding bulk that can worsen bloating. Insoluble fiber can be added once tolerance improves."
+            };
+            weekPlan = {
+                days1_3: "Add 1 tsp psyllium husk to breakfast",
+                days4_7: "If tolerated, add 1 tbsp ground flaxseed to another meal",
+                next_week: "Increase psyllium to 2 tsp, continue monitoring"
+            };
+        } else if (symptomPattern === "diarrhea") {
+            recommendedTarget = Math.min(20, Math.max(15, baseTarget * 0.8));
+            approach = "Moderate Soluble Focus";
+            increaseRate = "2-3g per week";
+            fiberTypes = {
+                emphasize: "Soluble fiber only (psyllium, oatmeal)",
+                limit: "Insoluble fiber (can speed transit more)",
+                reasoning: "Soluble fiber absorbs water and can help firm up loose stools. Avoid insoluble fiber which speeds transit."
+            };
+            weekPlan = {
+                days1_3: "Start with 1/2 tsp psyllium in water before largest meal",
+                days4_7: "If stools firming, continue; if no change, stay at this dose",
+                next_week: "Gradually increase to 1 tsp if tolerating well"
+            };
+        } else if (symptomPattern === "mixed") {
+            recommendedTarget = Math.min(Math.max(20, baseTarget), 28);
+            approach = "Steady & Moderate";
+            increaseRate = "2-3g per week, pause if symptoms flare";
+            fiberTypes = {
+                emphasize: "Moderate soluble fiber (oats, flaxseed)",
+                limit: "Extremes in either direction",
+                reasoning: "With mixed patterns, consistency matters more than hitting a specific target. Avoid big swings in fiber intake."
+            };
+            weekPlan = {
+                days1_3: "Add 1/2 cup oatmeal to one meal",
+                days4_7: "Monitor which days are C vs D, note any correlation",
+                next_week: "If stable, add 1 tsp ground flaxseed"
+            };
+        } else { // bloating
+            recommendedTarget = Math.min(18, Math.max(12, baseTarget * 0.7));
+            approach = "Reduce Then Rebuild";
+            increaseRate = "1-2g per week, very slowly";
+            fiberTypes = {
+                emphasize: "Low-FODMAP fibers (oat bran, psyllium, firm banana)",
+                limit: "High-FODMAP fibers (inulin, chicory, beans)",
+                reasoning: "Many high-fiber foods are also high FODMAP. Start with fibers that don't ferment as much."
+            };
+            weekPlan = {
+                days1_3: "Reduce overall fiber, focus on low-FODMAP sources only",
+                days4_7: "Note bloating levels - they should decrease",
+                next_week: "Add 1/2 tsp psyllium, monitor carefully"
+            };
+        }
+
+        // Adjust based on current tolerance
+        if (tolerance === "makes_worse") {
+            recommendedTarget = Math.max(12, recommendedTarget - 5);
+            increaseRate = "1-2g per week only, after symptoms stabilize";
+        }
+
+        // Calculate range
+        const lowerTarget = Math.round(recommendedTarget - 3);
+        const upperTarget = Math.round(recommendedTarget + 2);
+
+        return {
+            currentEstimate: currentIntake,
+            targetRange: `${lowerTarget}g - ${upperTarget}g`,
+            targetMid: Math.round(recommendedTarget),
+            approach: approach,
+            increaseRate: increaseRate,
+            fiberTypes: fiberTypes,
+            weekPlan: weekPlan,
+            timeline: "4-6 weeks to reach target"
+        };
+    }
+
+    function getCurrentEstimateText(intake) {
+        const estimates = {
+            'low': 'Less than 10g',
+            'low_moderate': '10-15g',
+            'moderate': '15-25g',
+            'high': '25g+',
+            'unknown': 'Unknown'
+        };
+        return estimates[intake] || 'Unknown';
+    }
+
+    function showResults(result, currentIntake) {
+        resultsSection.innerHTML = `
+            <div class="result-card" style="margin-top: 24px; text-align: center;">
+                <h2 style="margin-bottom: 24px;">Your Fiber Recommendation</h2>
+
+                <div class="info-grid" style="text-align: left;">
+                    <div class="info-item">
+                        <h4>Current Intake (estimated)</h4>
+                        <p>${getCurrentEstimateText(currentIntake)} daily</p>
+                    </div>
+                    <div class="info-item">
+                        <h4>Your Target Range</h4>
+                        <p style="font-size: 1.2rem; color: var(--forest);">${result.targetRange} daily</p>
+                    </div>
+                    <div class="info-item">
+                        <h4>Approach</h4>
+                        <p>${result.approach}</p>
+                    </div>
+                    <div class="info-item">
+                        <h4>Increase Rate</h4>
+                        <p>${result.increaseRate}</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="result-card">
+                <h3 style="margin-bottom: 20px;">Which Fibers to Eat</h3>
+
+                <div style="margin-bottom: 20px;">
+                    <h4 style="color: var(--success); font-size: 0.95rem; margin-bottom: 8px;">Emphasize:</h4>
+                    <p style="margin: 0;">${result.fiberTypes.emphasize}</p>
+                </div>
+
+                <div style="margin-bottom: 20px;">
+                    <h4 style="color: var(--warning); font-size: 0.95rem; margin-bottom: 8px;">Limit:</h4>
+                    <p style="margin: 0;">${result.fiberTypes.limit}</p>
+                </div>
+
+                <div class="info-box">
+                    <p><strong>Why This Matters:</strong> ${result.fiberTypes.reasoning}</p>
+                </div>
+            </div>
+
+            <div class="result-card">
+                <h3 style="margin-bottom: 16px;">Practical Fiber Sources</h3>
+
+                <div class="fiber-category">
+                    <h4>Soluble Fiber (gentle)</h4>
+                    <div class="fiber-source">
+                        <span class="food">1 tbsp psyllium husk</span>
+                        <span class="amount">5g</span>
+                    </div>
+                    <div class="fiber-source">
+                        <span class="food">1/2 cup oatmeal (cooked)</span>
+                        <span class="amount">2g</span>
+                    </div>
+                    <div class="fiber-source">
+                        <span class="food">1 tbsp ground flaxseed</span>
+                        <span class="amount">2g</span>
+                    </div>
+                    <div class="fiber-source">
+                        <span class="food">1 ripe banana</span>
+                        <span class="amount">1.5g</span>
+                    </div>
+                </div>
+
+                <div class="fiber-category">
+                    <h4>Insoluble Fiber (use carefully)</h4>
+                    <div class="fiber-source">
+                        <span class="food">1 cup raw spinach</span>
+                        <span class="amount">1g</span>
+                    </div>
+                    <div class="fiber-source">
+                        <span class="food">1/2 cup brown rice</span>
+                        <span class="amount">1.5g</span>
+                    </div>
+                    <div class="fiber-source">
+                        <span class="food">1 slice whole wheat bread</span>
+                        <span class="amount">2g</span>
+                    </div>
+                    <div class="fiber-source">
+                        <span class="food">1 tbsp wheat bran</span>
+                        <span class="amount">2g</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="result-card">
+                <h3 style="margin-bottom: 12px;">Week 1 Starting Plan</h3>
+
+                <div class="week-plan">
+                    <p><strong>Days 1-3:</strong> ${result.weekPlan.days1_3}</p>
+                    <p><strong>Days 4-7:</strong> ${result.weekPlan.days4_7}</p>
+                    <p><strong>Next week:</strong> ${result.weekPlan.next_week}</p>
+                </div>
+
+                <div class="warning-box" style="margin-top: 16px;">
+                    <p><strong>Important:</strong> Increase water intake as you add fiber (aim for 2+ liters daily)</p>
+                </div>
+            </div>
+        `;
+
+        resultsSection.classList.add('active');
+
+        // Scroll to results
+        resultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+        // Track in GTM
+        if (window.dataLayer) {
+            window.dataLayer.push({
+                'event': 'fiber_calculator_submit',
+                'target_fiber': result.targetMid,
+                'symptom_pattern': document.querySelector('input[name="symptom_pattern"]:checked')?.value
+            });
+        }
+    }
+
+    // Mobile menu toggle
+    const mobileToggle = document.querySelector('.mobile-menu-toggle');
+    const headerNav = document.querySelector('.header-nav');
+
+    if (mobileToggle) {
+        mobileToggle.addEventListener('click', function() {
+            headerNav.classList.toggle('active');
+        });
+    }
+    </script>
+</body>
+</html>
