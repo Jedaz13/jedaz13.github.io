@@ -1,0 +1,493 @@
+/* ===== FOOD PAGE STYLES ===== */
+/* Based on Gut Healing Academy design system */
+
+:root {
+  /* Background Colors */
+  --bg-warm-white: #FFFDF7;
+  --bg-cream: #FBF9F3;
+  --bg-sage-subtle: #F7FAF7;
+  --white: #FFFFFF;
+
+  /* Text Colors */
+  --text-forest: #1B3329;
+  --text-olive: #3D5245;
+  --text-muted: #6B7D6E;
+  --text-light: #8A9A8E;
+
+  /* Primary - Citrus Accent */
+  --citrus: #F9C74F;
+  --citrus-bright: #FFDA6A;
+  --citrus-light: #FFF3CD;
+  --citrus-pale: #FFFBEB;
+
+  /* Secondary - Greens */
+  --forest: #1B3329;
+  --forest-light: #2A4A3A;
+  --leaf: #4A7C59;
+  --spring: #7FB069;
+  --sage: #A8C5A8;
+
+  /* Utility Colors */
+  --success: #52B788;
+  --success-light: #E8F5EE;
+  --divider: #E8EBE8;
+  --divider-dark: #D4DAD5;
+  --danger: #DC6B4D;
+  --danger-light: #FFF5F5;
+  --warning: #F4A261;
+  --warning-light: #FEF3E6;
+}
+
+/* ===== RESET ===== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Source Sans 3', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  background: var(--bg-warm-white);
+  min-height: 100vh;
+  color: var(--text-olive);
+  line-height: 1.6;
+}
+
+/* ===== HEADER ===== */
+.site-header {
+  background: var(--white);
+  border-bottom: 1px solid var(--divider);
+  padding: 0 20px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.header-container {
+  max-width: 900px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 64px;
+}
+
+.header-logo img {
+  height: 45px;
+  width: auto;
+}
+
+.header-cta {
+  display: inline-block;
+  background: var(--forest);
+  color: var(--white);
+  padding: 10px 20px;
+  border-radius: 100px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.2s;
+}
+
+.header-cta:hover {
+  background: var(--citrus);
+  color: var(--forest);
+}
+
+/* ===== MAIN CONTENT ===== */
+.food-page {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 32px 20px 60px;
+}
+
+/* Page Title */
+.page-title {
+  font-family: 'DM Serif Display', serif;
+  font-size: 2rem;
+  font-weight: 400;
+  color: var(--text-forest);
+  line-height: 1.2;
+  margin-bottom: 24px;
+}
+
+@media (min-width: 768px) {
+  .page-title {
+    font-size: 2.4rem;
+  }
+}
+
+/* Author Box */
+.author-box {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 28px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--divider);
+}
+
+.author-photo {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--citrus);
+}
+
+.author-info {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+
+.author-name {
+  font-weight: 600;
+  color: var(--text-forest);
+}
+
+/* Quick Answer Box */
+.quick-answer {
+  background: var(--citrus-pale);
+  border-left: 4px solid var(--citrus);
+  padding: 20px 24px;
+  border-radius: 0 12px 12px 0;
+  margin-bottom: 28px;
+}
+
+.quick-answer-label {
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--forest);
+  margin-bottom: 8px;
+}
+
+.quick-answer p {
+  font-size: 1.05rem;
+  line-height: 1.6;
+  color: var(--text-forest);
+  margin: 0;
+}
+
+/* CTA Box */
+.cta-box {
+  background: var(--forest);
+  color: var(--white);
+  padding: 28px 24px;
+  border-radius: 14px;
+  text-align: center;
+  margin: 32px 0;
+}
+
+.cta-box-title {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.3rem;
+  font-weight: 400;
+  margin-bottom: 8px;
+}
+
+.cta-box-text {
+  font-size: 0.95rem;
+  opacity: 0.9;
+  margin-bottom: 20px;
+}
+
+.cta-button {
+  display: inline-block;
+  background: var(--citrus);
+  color: var(--forest);
+  padding: 14px 32px;
+  border-radius: 100px;
+  font-size: 1rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.2s;
+}
+
+.cta-button:hover {
+  background: var(--citrus-bright);
+  transform: translateY(-2px);
+}
+
+.cta-inline {
+  background: var(--bg-sage-subtle);
+  border: 1px solid var(--divider);
+  padding: 20px 24px;
+  border-radius: 12px;
+  margin: 24px 0;
+}
+
+.cta-inline p {
+  margin: 0 0 12px 0;
+  color: var(--text-olive);
+}
+
+.cta-inline a {
+  color: var(--leaf);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.cta-inline a:hover {
+  text-decoration: underline;
+}
+
+/* Info Row */
+.info-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 32px;
+}
+
+.info-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  border-radius: 100px;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.fodmap-badge {
+  background: var(--bg-sage-subtle);
+  border: 1px solid var(--divider);
+  color: var(--text-forest);
+}
+
+.fodmap-badge.fodmap-low {
+  background: var(--success-light);
+  border-color: var(--success);
+}
+
+.fodmap-badge.fodmap-high {
+  background: var(--danger-light);
+  border-color: var(--danger);
+}
+
+.fodmap-badge.fodmap-moderate {
+  background: var(--warning-light);
+  border-color: var(--warning);
+}
+
+.serving-badge {
+  background: var(--white);
+  border: 1px solid var(--divider);
+  color: var(--text-olive);
+}
+
+/* Protocol Cards Section */
+.protocol-section {
+  margin-top: 40px;
+}
+
+.section-title {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.5rem;
+  font-weight: 400;
+  color: var(--text-forest);
+  margin-bottom: 20px;
+}
+
+.protocol-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.protocol-card {
+  background: var(--white);
+  border: 1px solid var(--divider);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.protocol-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 20px;
+  background: var(--bg-sage-subtle);
+  border-bottom: 1px solid var(--divider);
+}
+
+.protocol-name {
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: var(--text-forest);
+}
+
+.protocol-verdict {
+  font-size: 0.85rem;
+  font-weight: 600;
+  padding: 4px 12px;
+  border-radius: 100px;
+}
+
+.verdict-avoid {
+  background: var(--danger-light);
+  color: var(--danger);
+}
+
+.verdict-limit, .verdict-caution {
+  background: var(--warning-light);
+  color: #B5651D;
+}
+
+.verdict-ok, .verdict-good {
+  background: var(--success-light);
+  color: var(--success);
+}
+
+.verdict-excellent {
+  background: var(--success);
+  color: var(--white);
+}
+
+.protocol-body {
+  padding: 16px 20px;
+}
+
+.protocol-reason {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: var(--text-olive);
+  margin-bottom: 12px;
+}
+
+.protocol-tip {
+  font-size: 0.9rem;
+  color: var(--leaf);
+  padding-left: 20px;
+  border-left: 2px solid var(--citrus);
+}
+
+.protocol-tip strong {
+  font-weight: 600;
+}
+
+/* Disclaimer */
+.disclaimer {
+  background: var(--bg-cream);
+  padding: 20px 24px;
+  border-radius: 12px;
+  margin: 40px 0;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  line-height: 1.6;
+}
+
+.disclaimer-title {
+  font-weight: 600;
+  color: var(--text-forest);
+  margin-bottom: 8px;
+}
+
+/* Related Foods */
+.related-foods {
+  margin-top: 40px;
+  padding-top: 32px;
+  border-top: 1px solid var(--divider);
+}
+
+.related-title {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.3rem;
+  font-weight: 400;
+  color: var(--text-forest);
+  margin-bottom: 16px;
+}
+
+.related-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.related-link {
+  display: inline-block;
+  padding: 8px 16px;
+  background: var(--white);
+  border: 1px solid var(--divider);
+  border-radius: 100px;
+  font-size: 0.9rem;
+  color: var(--text-olive);
+  text-decoration: none;
+  transition: all 0.2s;
+}
+
+.related-link:hover {
+  background: var(--forest);
+  color: var(--white);
+  border-color: var(--forest);
+}
+
+/* Last Updated */
+.last-updated {
+  margin-top: 32px;
+  padding-top: 20px;
+  border-top: 1px solid var(--divider);
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+/* ===== FOOTER ===== */
+.site-footer {
+  background: var(--forest);
+  color: var(--white);
+  padding: 40px 20px;
+  margin-top: 60px;
+}
+
+.footer-container {
+  max-width: 720px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.footer-links {
+  margin-bottom: 20px;
+}
+
+.footer-links a {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 0.85rem;
+  text-decoration: none;
+  margin: 0 10px;
+}
+
+.footer-links a:hover {
+  color: var(--citrus);
+}
+
+.footer-copyright {
+  font-size: 0.8rem;
+  opacity: 0.6;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (min-width: 768px) {
+  .food-page {
+    padding: 48px 24px 80px;
+  }
+
+  .protocol-cards {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+
+  .cta-box {
+    padding: 40px 32px;
+  }
+
+  .cta-box-title {
+    font-size: 1.5rem;
+  }
+}
