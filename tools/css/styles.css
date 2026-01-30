@@ -710,11 +710,13 @@ a:hover {
 .author-box {
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: 16px;
     padding: 20px;
     background: var(--bg-cream);
     border-radius: 12px;
-    margin: 24px 0;
+    margin: 24px auto;
+    max-width: 600px;
 }
 
 .author-photo {
