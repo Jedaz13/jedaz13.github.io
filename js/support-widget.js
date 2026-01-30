@@ -25,9 +25,9 @@
     ownerName: 'Gedas',
     ownerRole: 'Founder',
     ownerAvatar: '/about/founder-gedas.png',
-    bubbleDelay: 30000, // 30 seconds
-    bubbleMessage: "What held you back from starting the gut health protocol today?",
-    promptMessage: "What held you back from starting the gut health protocol today?"
+    bubbleDelay: 0, // Disabled - no auto-popup bubble
+    bubbleMessage: "",
+    promptMessage: "Have a question? We're here to help! Ask us anything about gut health or our programs."
   };
 
   // =====================================================
@@ -77,7 +77,7 @@
           <svg class="gha-toggle-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
           </svg>
-          <span class="gha-toggle-text">Questions?</span>
+          <span class="gha-toggle-text">Have a question?</span>
         </button>
 
         <div class="gha-chat-bubble" id="gha-bubble">
@@ -342,8 +342,10 @@
       }
     }
 
-    // Start bubble timer
-    bubbleTimeout = setTimeout(showBubble, CONFIG.bubbleDelay);
+    // Start bubble timer (only if delay is set)
+    if (CONFIG.bubbleDelay > 0) {
+      bubbleTimeout = setTimeout(showBubble, CONFIG.bubbleDelay);
+    }
 
     // Event listeners
     toggle.addEventListener('click', togglePanel);
