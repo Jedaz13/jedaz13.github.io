@@ -3,3 +3,4 @@ Allow: /
 
 Sitemap: https://www.guthealingacademy.com/sitemap.xml
 Sitemap: https://www.guthealingacademy.com/sitemap-foods.xml
+Sitemap: https://www.guthealingacademy.com/sitemap-tools.xml
