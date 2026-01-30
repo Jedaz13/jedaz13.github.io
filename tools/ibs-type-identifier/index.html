@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>What Type of IBS Do I Have? Quick Quiz | Gut Healing Academy</title>
+    <meta name="description" content="Identify your IBS type in 2 minutes. Answer 7 questions to discover if you have IBS-C, IBS-D, IBS-M, or another pattern. Get matched to the right protocol.">
+    <link rel="canonical" href="https://www.guthealingacademy.com/tools/ibs-type-identifier/">
+    <meta name="robots" content="index, follow">
+
+    <!-- Google Tag Manager -->
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-KQ3LKTBL');</script>
+    <!-- End Google Tag Manager -->
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/styles.css">
+
+    <!-- Schema.org Markup -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "MedicalWebPage",
+        "name": "IBS Type Identifier Quiz",
+        "description": "Identify your IBS type with 7 quick questions. Discover if you have IBS-C, IBS-D, IBS-M, or another pattern.",
+        "url": "https://www.guthealingacademy.com/tools/ibs-type-identifier/",
+        "datePublished": "2025-01-29",
+        "dateModified": "2025-01-29",
+        "author": {
+            "@type": "Person",
+            "name": "Rebecca Taylor",
+            "jobTitle": "Registered Nutritionist (RNutr)",
+            "affiliation": {
+                "@type": "Organization",
+                "name": "Gut Healing Academy"
+            }
+        },
+        "publisher": {
+            "@type": "Organization",
+            "name": "Gut Healing Academy",
+            "url": "https://www.guthealingacademy.com"
+        },
+        "medicalAudience": {
+            "@type": "MedicalAudience",
+            "audienceType": "Patient"
+        }
+    }
+    </script>
+</head>
+<body>
+    <!-- Google Tag Manager (noscript) -->
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KQ3LKTBL"
+    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <!-- End Google Tag Manager (noscript) -->
+
+    <header class="header">
+        <div class="header-content">
+            <a href="https://www.guthealingacademy.com" class="logo">
+                <img src="../../assets/Logo.png" alt="Gut Healing Academy">
+            </a>
+            <nav class="header-nav">
+                <a href="https://www.guthealingacademy.com/about">About</a>
+                <a href="https://www.guthealingacademy.com/tools/">Tools</a>
+                <a href="https://www.guthealingacademy.com/quiz-4/" class="header-cta">Take Full Quiz</a>
+            </nav>
+            <button class="mobile-menu-toggle" aria-label="Toggle menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="container">
+            <h1>What Type of IBS Do I Have?</h1>
+            <p>Answer 7 quick questions to identify your dominant pattern. This helps determine which approach will work best for your specific symptoms.</p>
+        </div>
+    </section>
+
+    <section class="tool-section">
+        <div class="tool-card">
+            <!-- Progress Dots -->
+            <div class="quiz-progress" id="quiz-progress">
+                <div class="progress-dot active" data-step="1"></div>
+                <div class="progress-dot" data-step="2"></div>
+                <div class="progress-dot" data-step="3"></div>
+                <div class="progress-dot" data-step="4"></div>
+                <div class="progress-dot" data-step="5"></div>
+                <div class="progress-dot" data-step="6"></div>
+                <div class="progress-dot" data-step="7"></div>
+            </div>
+
+            <!-- Quiz Container -->
+            <div id="quiz-container">
+                <!-- Questions populated by JavaScript -->
+            </div>
+
+            <!-- Results Section -->
+            <div class="results-section" id="results-section">
+                <!-- Results populated by JavaScript -->
+            </div>
+        </div>
+
+        <div class="author-box container" style="margin-top: 24px;">
+            <img src="../../assets/practitioners/rebecca.jpg" alt="Rebecca Taylor, RNutr" class="author-photo">
+            <div class="author-info">
+                <p class="author-name">Reviewed by Rebecca Taylor, RNutr</p>
+                <p class="author-credentials">Registered Nutritionist specializing in digestive health</p>
+            </div>
+        </div>
+
+        <div class="disclaimer container">
+            <strong>Medical Disclaimer:</strong> This tool provides educational information only and is not a substitute for professional medical advice. If you have severe symptoms, blood in stool, unexplained weight loss, or symptoms that concern you, please consult your doctor.
+        </div>
+    </section>
+
+    <p class="updated">Last updated: January 2025 · Reviewed by Rebecca Taylor, RNutr</p>
+
+    <footer class="footer">
+        <div class="footer-links">
+            <a href="https://www.guthealingacademy.com/about">About</a>
+            <a href="https://www.guthealingacademy.com/legal/privacy">Privacy</a>
+            <a href="https://www.guthealingacademy.com/legal/terms">Terms</a>
+        </div>
+        <p class="copyright">© 2025 Gut Healing Academy. Educational content only - not medical advice.</p>
+    </footer>
+
+    <script>
+    // Quiz Questions
+    const QUESTIONS = [
+        {
+            id: 1,
+            question: "Over the past 3 months, how would you describe your typical bowel movements?",
+            options: [
+                { text: "Mostly hard, lumpy, or difficult to pass", scores: { c: 2, d: 0, m: 0 } },
+                { text: "Mostly loose, watery, or urgent", scores: { c: 0, d: 2, m: 0 } },
+                { text: "It alternates - sometimes hard, sometimes loose", scores: { c: 0, d: 0, m: 2 } },
+                { text: "Usually normal (Type 3-4 on Bristol scale)", scores: { c: 0, d: 0, m: 0, normal: 1 } }
+            ]
+        },
+        {
+            id: 2,
+            question: "How often do you experience bloating?",
+            options: [
+                { text: "Almost daily, especially by evening", scores: { bloat: 2 } },
+                { text: "Frequently, usually after certain foods", scores: { bloat: 1 } },
+                { text: "Occasionally", scores: { bloat: 0 } },
+                { text: "Rarely", scores: { bloat: 0 } }
+            ]
+        },
+        {
+            id: 3,
+            question: "When you feel the urge to go, what typically happens?",
+            options: [
+                { text: "I go, but it's often incomplete or I strain", scores: { c: 2, d: 0 } },
+                { text: "I need to go IMMEDIATELY or risk an accident", scores: { c: 0, d: 2 } },
+                { text: "Depends on the day - sometimes urgent, sometimes not", scores: { c: 0, d: 0, m: 1 } },
+                { text: "Normal - I can wait if needed", scores: { normal: 1 } }
+            ]
+        },
+        {
+            id: 4,
+            question: "How many bowel movements do you typically have per day?",
+            options: [
+                { text: "Less than 3 per week", scores: { c: 2, d: 0 } },
+                { text: "1-2 per day", scores: { normal: 1 } },
+                { text: "3 or more per day", scores: { c: 0, d: 2 } },
+                { text: "It varies wildly", scores: { m: 1 } }
+            ]
+        },
+        {
+            id: 5,
+            question: "Do your symptoms relate to stress or anxiety?",
+            options: [
+                { text: "Strongly - stress always affects my gut", scores: { gutbrain: 2 } },
+                { text: "Somewhat - I notice a connection", scores: { gutbrain: 1 } },
+                { text: "Not really - it seems random", scores: { gutbrain: 0 } }
+            ]
+        },
+        {
+            id: 6,
+            question: "Have you been diagnosed with or treated for SIBO?",
+            options: [
+                { text: "Yes, I completed treatment in the past 6 months", scores: { sibo: 2 } },
+                { text: "Yes, but it was more than 6 months ago", scores: { sibo: 1 } },
+                { text: "I suspect it but haven't been tested", scores: { sibo: 0 } },
+                { text: "No", scores: { sibo: 0 } }
+            ]
+        },
+        {
+            id: 7,
+            question: "Which symptom bothers you MOST?",
+            options: [
+                { text: "Bloating and visible distension", scores: { bloat: 2 } },
+                { text: "Straining and incomplete evacuation", scores: { c: 2 } },
+                { text: "Urgency and fear of accidents", scores: { d: 2 } },
+                { text: "The unpredictability of it all", scores: { m: 2 } },
+                { text: "The anxiety and stress it causes", scores: { gutbrain: 2 } }
+            ]
+        }
+    ];
+
+    // Results Data
+    const RESULTS = {
+        "ibs_c": {
+            title: "Your Pattern: IBS-C (Constipation-Dominant)",
+            description: "Your answers suggest a constipation-dominant pattern. This means slow transit time, hard stools, and often straining or feeling incomplete evacuation.",
+            what_helps: [
+                "Gradual increase in soluble fiber (psyllium, flaxseed)",
+                "Magnesium citrate before bed (200-400mg)",
+                "Water loading: 500ml within first hour of waking",
+                "Movement after meals (10-minute walks)",
+                "Consistent meal timing to regulate the gastrocolic reflex"
+            ],
+            what_to_avoid: [
+                "Excessive insoluble fiber without adequate water",
+                "Ignoring the urge to go",
+                "Skipping meals (disrupts motility)",
+                "Relying on stimulant laxatives long-term"
+            ],
+            protocol_name: "IBS-C Protocol"
+        },
+        "ibs_d": {
+            title: "Your Pattern: IBS-D (Diarrhea-Dominant)",
+            description: "Your answers suggest a diarrhea-dominant pattern. This typically involves loose stools, urgency, and frequent bowel movements, often with anxiety about access to bathrooms.",
+            what_helps: [
+                "Binding foods (white rice, banana, potato, oatmeal)",
+                "Saccharomyces boulardii probiotic (studied for diarrhea)",
+                "Smaller, more frequent meals",
+                "Vagus nerve activation (cold water on face, deep breathing)",
+                "Identifying and eliminating trigger foods"
+            ],
+            what_to_avoid: [
+                "Caffeine (stimulates motility)",
+                "Alcohol (irritant)",
+                "High-fat meals (stimulate bile release)",
+                "Sugar alcohols (sorbitol, xylitol - laxative effect)"
+            ],
+            protocol_name: "IBS-D Protocol"
+        },
+        "ibs_m": {
+            title: "Your Pattern: IBS-M (Mixed/Alternating)",
+            description: "Your answers suggest a mixed pattern - alternating between constipation and diarrhea. This is often the most frustrating type because what helps one day can hurt the next.",
+            what_helps: [
+                "\"Middle ground\" foods (eggs, rice, potato, cooked carrots)",
+                "Consistent meal timing (same times ±30 minutes daily)",
+                "Tracking daily patterns (C, D, or N) to identify triggers",
+                "State-based adjustments (different approach for C days vs D days)",
+                "Stress management (often a key trigger for alternation)"
+            ],
+            what_to_avoid: [
+                "Extreme dietary changes",
+                "One-size-fits-all approaches",
+                "Ignoring patterns - tracking is crucial",
+                "Giving up too quickly on interventions"
+            ],
+            protocol_name: "IBS-M Protocol"
+        },
+        "bloating": {
+            title: "Your Pattern: Bloating-Dominant",
+            description: "Your primary concern is bloating and distension, which may occur independently of constipation or diarrhea. This often relates to fermentation of certain carbohydrates (FODMAPs).",
+            what_helps: [
+                "20-minute minimum meals (eat slowly, chew thoroughly)",
+                "FODMAP awareness (especially garlic, onion, wheat)",
+                "Meal spacing (4 hours between meals to allow clearing)",
+                "Digestive support (ginger tea, peppermint after meals)",
+                "Identifying your specific trigger foods"
+            ],
+            what_to_avoid: [
+                "Rushing meals (swallowing air)",
+                "High FODMAP foods during elimination",
+                "Carbonated beverages",
+                "Large meals (especially late evening)"
+            ],
+            protocol_name: "Bloating-Dominant Protocol"
+        },
+        "post_sibo": {
+            title: "Your Pattern: Post-SIBO Recovery",
+            description: "You've completed SIBO treatment and need to focus on preventing relapse while rebuilding gut health. This requires a specific approach different from general IBS protocols.",
+            what_helps: [
+                "Prokinetic support (ginger, meal spacing for MMC)",
+                "Gradual PHGG prebiotic introduction",
+                "Strict meal spacing (4-5 hours) to support MMC",
+                "Careful prebiotic/probiotic reintroduction",
+                "Monitoring for symptom recurrence"
+            ],
+            what_to_avoid: [
+                "Jumping back to normal eating too quickly",
+                "Grazing or frequent snacking (disrupts MMC)",
+                "High-fermentation foods initially",
+                "Ignoring returning symptoms"
+            ],
+            protocol_name: "Post-SIBO Recovery Protocol"
+        },
+        "gut_brain": {
+            title: "Your Pattern: Gut-Brain Connection",
+            description: "Your symptoms are strongly connected to stress, anxiety, or emotional state. The gut-brain axis is a real physiological connection, and addressing it is key to your improvement.",
+            what_helps: [
+                "Vagus nerve activation (cold exposure, humming, gargling)",
+                "Regular stress management (even 5 minutes daily)",
+                "Gut-directed hypnotherapy (evidence-based for IBS)",
+                "Diaphragmatic breathing before meals",
+                "Addressing underlying anxiety or stress patterns"
+            ],
+            what_to_avoid: [
+                "Eating when stressed or rushed",
+                "Ignoring the mental health component",
+                "Viewing it as \"just in your head\" (it's physiological)",
+                "Only focusing on diet while neglecting stress"
+            ],
+            protocol_name: "Gut-Brain Protocol"
+        },
+        "undetermined": {
+            title: "Your Pattern: Needs Further Assessment",
+            description: "Your answers don't clearly point to a single pattern. This could mean mild symptoms, a complex presentation, or something that needs professional evaluation.",
+            what_helps: [
+                "Keep a detailed symptom diary for 2 weeks",
+                "Note timing, foods, stress levels, and stool type",
+                "Consider consulting a gastroenterologist if not already",
+                "Take our full quiz for more detailed assessment"
+            ],
+            what_to_avoid: [
+                "Self-diagnosing without clear patterns",
+                "Random elimination diets without guidance",
+                "Ignoring persistent symptoms"
+            ],
+            protocol_name: "Personalized Assessment Needed"
+        }
+    };
+
+    // State
+    let currentQuestion = 0;
+    let scores = { c: 0, d: 0, m: 0, bloat: 0, gutbrain: 0, sibo: 0, normal: 0 };
+    let answers = [];
+
+    // DOM Elements
+    const quizContainer = document.getElementById('quiz-container');
+    const resultsSection = document.getElementById('results-section');
+    const progressDots = document.querySelectorAll('.progress-dot');
+
+    // Initialize quiz
+    function initQuiz() {
+        renderQuestion(0);
+    }
+
+    // Render question
+    function renderQuestion(index) {
+        const q = QUESTIONS[index];
+
+        let optionsHtml = q.options.map((opt, i) => `
+            <label class="option-item" data-index="${i}">
+                <input type="radio" name="q${q.id}" value="${i}">
+                <span>${opt.text}</span>
+            </label>
+        `).join('');
+
+        quizContainer.innerHTML = `
+            <div class="quiz-question active">
+                <p class="question-number">Question ${index + 1} of ${QUESTIONS.length}</p>
+                <p class="question-text">${q.question}</p>
+                <div class="options-list">
+                    ${optionsHtml}
+                </div>
+            </div>
+        `;
+
+        // Add click handlers
+        const options = quizContainer.querySelectorAll('.option-item');
+        options.forEach(opt => {
+            opt.addEventListener('click', function() {
+                // Remove selected from all
+                options.forEach(o => o.classList.remove('selected'));
+                // Add selected to clicked
+                this.classList.add('selected');
+                // Check the radio
+                this.querySelector('input').checked = true;
+
+                // Wait a moment then advance
+                setTimeout(() => {
+                    handleAnswer(parseInt(this.dataset.index));
+                }, 300);
+            });
+        });
+
+        updateProgress(index);
+    }
+
+    // Handle answer
+    function handleAnswer(optionIndex) {
+        const q = QUESTIONS[currentQuestion];
+        const selected = q.options[optionIndex];
+
+        // Store answer
+        answers.push({
+            question: q.question,
+            answer: selected.text
+        });
+
+        // Add scores
+        for (const [key, value] of Object.entries(selected.scores)) {
+            if (scores[key] !== undefined) {
+                scores[key] += value;
+            }
+        }
+
+        // Next question or results
+        currentQuestion++;
+        if (currentQuestion < QUESTIONS.length) {
+            renderQuestion(currentQuestion);
+        } else {
+            showResults();
+        }
+    }
+
+    // Update progress
+    function updateProgress(index) {
+        progressDots.forEach((dot, i) => {
+            dot.classList.remove('active', 'completed');
+            if (i < index) {
+                dot.classList.add('completed');
+            } else if (i === index) {
+                dot.classList.add('active');
+            }
+        });
+    }
+
+    // Calculate IBS type
+    function calculateIBSType() {
+        // Check for specific patterns first
+        if (scores.sibo >= 2) return "post_sibo";
+        if (scores.bloat >= 3 && scores.c <= 1 && scores.d <= 1) return "bloating";
+        if (scores.gutbrain >= 3) return "gut_brain";
+        if (scores.c >= 3 && scores.d <= 1) return "ibs_c";
+        if (scores.d >= 3 && scores.c <= 1) return "ibs_d";
+        if (scores.m >= 2 || (scores.c >= 2 && scores.d >= 2)) return "ibs_m";
+        if (scores.normal >= 2) return "undetermined";
+
+        // Fallback based on highest score
+        const mainScores = { c: scores.c, d: scores.d, m: scores.m };
+        const highest = Object.entries(mainScores).sort((a, b) => b[1] - a[1])[0];
+
+        if (highest[1] >= 2) {
+            if (highest[0] === 'c') return "ibs_c";
+            if (highest[0] === 'd') return "ibs_d";
+            if (highest[0] === 'm') return "ibs_m";
+        }
+
+        return "undetermined";
+    }
+
+    // Show results
+    function showResults() {
+        const ibsType = calculateIBSType();
+        const result = RESULTS[ibsType];
+
+        // Mark all dots as completed
+        progressDots.forEach(dot => {
+            dot.classList.remove('active');
+            dot.classList.add('completed');
+        });
+
+        // Hide quiz container
+        quizContainer.style.display = 'none';
+
+        resultsSection.innerHTML = `
+            <div class="result-card" style="text-align: center; padding: 32px;">
+                <h2 class="result-title" style="margin-bottom: 16px;">${result.title}</h2>
+                <p style="color: var(--text-muted); font-size: 1.05rem; max-width: 500px; margin: 0 auto 24px;">${result.description}</p>
+            </div>
+
+            <div class="result-card">
+                <h3 style="color: var(--success); margin-bottom: 16px;">What Typically Helps</h3>
+                <ul class="action-list">
+                    ${result.what_helps.map(item => `<li>${item}</li>`).join('')}
+                </ul>
+            </div>
+
+            <div class="result-card">
+                <h3 style="color: var(--danger); margin-bottom: 16px;">What to Avoid</h3>
+                <ul class="action-list">
+                    ${result.what_to_avoid.map(item => `<li>${item}</li>`).join('')}
+                </ul>
+            </div>
+
+            <div style="background: var(--bg-sage-subtle); padding: 32px; border-radius: 16px; text-align: center; margin-top: 24px;">
+                <h3 style="margin-bottom: 12px;">Get Your Personalized ${result.protocol_name}</h3>
+                <p style="color: var(--text-muted); margin-bottom: 20px;">Our full 5-minute quiz goes deeper - asking about your history, diagnoses, and specific triggers to give you a complete protocol designed for YOUR gut.</p>
+                <a href="https://www.guthealingacademy.com/quiz-4/" class="primary-btn" style="display: inline-block; width: auto; padding: 16px 40px;">Get My Personalized Protocol</a>
+            </div>
+        `;
+
+        resultsSection.classList.add('active');
+
+        // Track in GTM
+        if (window.dataLayer) {
+            window.dataLayer.push({
+                'event': 'ibs_type_quiz_complete',
+                'ibs_type': ibsType,
+                'scores': scores
+            });
+        }
+    }
+
+    // Start quiz
+    initQuiz();
+
+    // Mobile menu toggle
+    const mobileToggle = document.querySelector('.mobile-menu-toggle');
+    const headerNav = document.querySelector('.header-nav');
+
+    if (mobileToggle) {
+        mobileToggle.addEventListener('click', function() {
+            headerNav.classList.toggle('active');
+        });
+    }
+    </script>
+</body>
+</html>
