@@ -1,0 +1,76 @@
+/* ===== GLOBAL FOOTER ===== */
+/* Shared footer styles for all pages */
+/* Include this CSS on every page that needs the standard footer */
+
+/* Variables (only set if not already defined by page CSS) */
+:root {
+  --forest: #1B3329;
+  --white: #FFFFFF;
+  --citrus: #F9C74F;
+}
+
+.site-footer {
+  padding: 40px 0;
+  background-color: var(--forest);
+  color: var(--white);
+  margin-top: auto;
+}
+
+.site-footer .container {
+  width: 100%;
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.site-footer .footer-disclaimer {
+  margin-bottom: 1.5rem;
+  padding: 0 20px;
+}
+
+.site-footer .footer-disclaimer p {
+  font-size: 0.75rem;
+  line-height: 1.6;
+  opacity: 0.7;
+  margin: 0;
+}
+
+.site-footer .footer-links {
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.site-footer .footer-links a {
+  color: var(--white);
+  opacity: 0.8;
+  font-size: 0.85rem;
+  text-decoration: none;
+  transition: opacity 0.2s ease;
+}
+
+.site-footer .footer-links a:hover {
+  opacity: 1;
+  color: var(--citrus);
+}
+
+.site-footer .footer-links .divider {
+  margin: 0 0.75rem;
+  opacity: 0.5;
+}
+
+.site-footer .footer-copyright {
+  text-align: center;
+  font-size: 0.75rem;
+  opacity: 0.6;
+  margin: 0;
+}
+
+@media (min-width: 768px) {
+  .site-footer {
+    padding: 50px 0;
+  }
+
+  .site-footer .container {
+    padding: 0 24px;
+  }
+}
