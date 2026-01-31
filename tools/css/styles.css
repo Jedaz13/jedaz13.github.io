@@ -748,6 +748,7 @@ a:hover {
     font-size: 0.9rem;
     color: var(--text-muted);
     line-height: 1.6;
+    text-align: center;
 }
 
 .disclaimer strong {
