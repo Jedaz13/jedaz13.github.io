@@ -219,7 +219,7 @@
     height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <!-- End Google Tag Manager (noscript) -->
 
-        <header class="site-header"><div class="header-container"><a href="/" class="header-logo"><img src="/assets/Logo.png" alt="Gut Healing Academy"></a><nav class="header-nav"><a href="/about/">About</a><a href="/foods/">Food Guides</a><a href="/tools/">Tools</a><a href="/legal/contact.html">Contact</a><div class="nav-divider"></div><a href="https://app.guthealingacademy.com/" class="nav-login">Members Area</a></nav><button class="mobile-menu-btn" aria-label="Toggle menu" onclick="document.querySelector('.mobile-menu').classList.toggle('active')"><span></span><span></span><span></span></button></div><div class="mobile-menu"><a href="/about/">About</a><a href="/foods/">Food Guides</a><a href="/tools/">Tools</a><a href="/legal/contact.html">Contact</a><a href="https://app.guthealingacademy.com/" class="nav-login">Members Area</a></div></header>
+        <header class="site-header"><div class="header-container"><a href="/" class="header-logo"><img src="/assets/Logo.png" alt="Gut Healing Academy"></a><nav class="header-nav"><a href="/about/">About</a><a href="/foods/">Food Guides</a><a href="/tools/">Tools</a><a href="/legal/contact.html">Contact</a></nav><button class="mobile-menu-btn" aria-label="Toggle menu" onclick="document.querySelector('.mobile-menu').classList.toggle('active')"><span></span><span></span><span></span></button></div><div class="mobile-menu"><a href="/about/">About</a><a href="/foods/">Food Guides</a><a href="/tools/">Tools</a><a href="/legal/contact.html">Contact</a></div></header>
 
     <section class="hero">
         <div class="container">
@@ -343,14 +343,28 @@
 
     <p class="updated">Last updated: January 2025 · Reviewed by Rebecca Taylor, RNutr</p>
 
-    <footer class="footer">
-        <div class="footer-links">
-            <a href="https://www.guthealingacademy.com/about">About</a>
-            <a href="https://www.guthealingacademy.com/legal/privacy">Privacy</a>
-            <a href="https://www.guthealingacademy.com/legal/terms">Terms</a>
+    <footer class="site-footer">
+        <div class="container">
+            <div class="footer-disclaimer">
+                <p>This program is for educational purposes only and does not constitute medical advice, diagnosis, or treatment. It is not a substitute for professional medical consultation. If you are experiencing severe symptoms, unexplained weight loss, blood in stool, or any symptoms that concern you, please consult a qualified healthcare provider immediately. The Gut Healing Academy does not provide medical diagnoses or treatment recommendations. Results vary based on individual factors and adherence to the program.</p>
+            </div>
+            <div class="footer-links">
+                <a href="https://www.guthealingacademy.com/legal/index.html">Privacy Policy</a>
+                <span class="divider">|</span>
+                <a href="https://www.guthealingacademy.com/legal/terms.html">Terms of Service</a>
+                <span class="divider">|</span>
+                <a href="https://www.guthealingacademy.com/legal/disclaimer.html">Medical Disclaimer</a>
+                <span class="divider">|</span>
+                <a href="https://www.guthealingacademy.com/legal/contact.html">Contact Us</a>
+                <span class="divider">|</span>
+                <a href="/about/">About Us</a>
+                <span class="divider">|</span>
+                <a href="/foods/">Food Guides</a>
+            </div>
+            <p class="footer-copyright">&copy; <span class="currentYear"></span> Gut Healing Academy. All rights reserved.</p>
         </div>
-        <p class="copyright">© 2025 Gut Healing Academy. Educational content only - not medical advice.</p>
     </footer>
+    <script>document.querySelectorAll('.currentYear').forEach(el => el.textContent = new Date().getFullYear());</script>
 
     <script>
     // Option item click handling
