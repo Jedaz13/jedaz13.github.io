@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>What Type of IBS Do I Have? Quick Quiz | Gut Healing Academy</title>
-    <meta name="description" content="Identify your IBS type in 2 minutes. Answer 7 questions to discover if you have IBS-C, IBS-D, IBS-M, or another pattern. Get matched to the right protocol.">
+    <meta name="description" content="Identify your IBS type in 2 minutes. Answer 5 questions to discover if you have IBS-C, IBS-D, IBS-M, or another pattern. Get matched to the right protocol.">
     <link rel="canonical" href="https://www.guthealingacademy.com/tools/ibs-type-identifier/">
     <meta name="robots" content="index, follow">
     <link rel="icon" type="image/png" href="/assets/favicon.png">
@@ -28,7 +28,7 @@
         "@context": "https://schema.org",
         "@type": "MedicalWebPage",
         "name": "IBS Type Identifier Quiz",
-        "description": "Identify your IBS type with 7 quick questions. Discover if you have IBS-C, IBS-D, IBS-M, or another pattern.",
+        "description": "Identify your IBS type with 5 quick questions. Discover if you have IBS-C, IBS-D, IBS-M, or another pattern.",
         "url": "https://www.guthealingacademy.com/tools/ibs-type-identifier/",
         "datePublished": "2025-01-29",
         "dateModified": "2025-01-29",
@@ -66,7 +66,7 @@
     <section class="hero">
         <div class="container">
             <h1>What Type of IBS Do I Have?</h1>
-            <p>Answer 7 quick questions to identify your dominant pattern. This helps determine which approach will work best for your specific symptoms.</p>
+            <p>Answer 5 quick questions to identify your dominant pattern. This helps determine which approach will work best for your specific symptoms.</p>
         </div>
     </section>
 
@@ -79,8 +79,6 @@
                 <div class="progress-dot" data-step="3"></div>
                 <div class="progress-dot" data-step="4"></div>
                 <div class="progress-dot" data-step="5"></div>
-                <div class="progress-dot" data-step="6"></div>
-                <div class="progress-dot" data-step="7"></div>
             </div>
 
             <!-- Quiz Container -->
@@ -139,64 +137,45 @@
             id: 1,
             question: "Over the past 3 months, how would you describe your typical bowel movements?",
             options: [
-                { text: "Mostly hard, lumpy, or difficult to pass", scores: { c: 2, d: 0, m: 0 } },
-                { text: "Mostly loose, watery, or urgent", scores: { c: 0, d: 2, m: 0 } },
-                { text: "It alternates - sometimes hard, sometimes loose", scores: { c: 0, d: 0, m: 2 } },
-                { text: "Usually normal (Type 3-4 on Bristol scale)", scores: { c: 0, d: 0, m: 0, normal: 1 } }
+                { text: "Mostly hard, lumpy, or difficult to pass", scores: { c: 3, d: 0, m: 0 } },
+                { text: "Mostly loose, watery, or urgent", scores: { c: 0, d: 3, m: 0 } },
+                { text: "It alternates - sometimes hard, sometimes loose", scores: { c: 0, d: 0, m: 3 } },
+                { text: "Usually normal (Type 3-4 on Bristol scale)", scores: { c: 0, d: 0, m: 0, normal: 2 } }
             ]
         },
         {
             id: 2,
-            question: "How often do you experience bloating?",
+            question: "When you feel the urge to go, what typically happens?",
             options: [
-                { text: "Almost daily, especially by evening", scores: { bloat: 2 } },
-                { text: "Frequently, usually after certain foods", scores: { bloat: 1 } },
-                { text: "Occasionally", scores: { bloat: 0 } },
-                { text: "Rarely", scores: { bloat: 0 } }
+                { text: "I strain and often feel incomplete evacuation", scores: { c: 2, d: 0 } },
+                { text: "I need to go IMMEDIATELY or risk an accident", scores: { c: 0, d: 2 } },
+                { text: "It depends on the day - sometimes urgent, sometimes not", scores: { m: 2 } },
+                { text: "Normal - I can wait comfortably if needed", scores: { normal: 1 } }
             ]
         },
         {
             id: 3,
-            question: "When you feel the urge to go, what typically happens?",
-            options: [
-                { text: "I go, but it's often incomplete or I strain", scores: { c: 2, d: 0 } },
-                { text: "I need to go IMMEDIATELY or risk an accident", scores: { c: 0, d: 2 } },
-                { text: "Depends on the day - sometimes urgent, sometimes not", scores: { c: 0, d: 0, m: 1 } },
-                { text: "Normal - I can wait if needed", scores: { normal: 1 } }
-            ]
-        },
-        {
-            id: 4,
-            question: "How many bowel movements do you typically have per day?",
+            question: "How many bowel movements do you typically have?",
             options: [
                 { text: "Less than 3 per week", scores: { c: 2, d: 0 } },
                 { text: "1-2 per day", scores: { normal: 1 } },
                 { text: "3 or more per day", scores: { c: 0, d: 2 } },
-                { text: "It varies wildly", scores: { m: 1 } }
+                { text: "It varies wildly - some days none, some days many", scores: { m: 2 } }
+            ]
+        },
+        {
+            id: 4,
+            question: "How often do you experience bloating or visible distension?",
+            options: [
+                { text: "Almost daily, especially by evening", scores: { bloat: 3 } },
+                { text: "Frequently, usually after certain foods", scores: { bloat: 2 } },
+                { text: "Occasionally", scores: { bloat: 1 } },
+                { text: "Rarely or never", scores: { bloat: 0 } }
             ]
         },
         {
             id: 5,
-            question: "Do your symptoms relate to stress or anxiety?",
-            options: [
-                { text: "Strongly - stress always affects my gut", scores: { gutbrain: 2 } },
-                { text: "Somewhat - I notice a connection", scores: { gutbrain: 1 } },
-                { text: "Not really - it seems random", scores: { gutbrain: 0 } }
-            ]
-        },
-        {
-            id: 6,
-            question: "Have you been diagnosed with or treated for SIBO?",
-            options: [
-                { text: "Yes, I completed treatment in the past 6 months", scores: { sibo: 2 } },
-                { text: "Yes, but it was more than 6 months ago", scores: { sibo: 1 } },
-                { text: "I suspect it but haven't been tested", scores: { sibo: 0 } },
-                { text: "No", scores: { sibo: 0 } }
-            ]
-        },
-        {
-            id: 7,
-            question: "Which symptom bothers you MOST?",
+            question: "Which symptom bothers you the MOST?",
             options: [
                 { text: "Bloating and visible distension", scores: { bloat: 2 } },
                 { text: "Straining and incomplete evacuation", scores: { c: 2 } },
@@ -281,24 +260,6 @@
             ],
             protocol_name: "Bloating-Dominant Protocol"
         },
-        "post_sibo": {
-            title: "Your Pattern: Post-SIBO Recovery",
-            description: "You've completed SIBO treatment and need to focus on preventing relapse while rebuilding gut health. This requires a specific approach different from general IBS protocols.",
-            what_helps: [
-                "Prokinetic support (ginger, meal spacing for MMC)",
-                "Gradual PHGG prebiotic introduction",
-                "Strict meal spacing (4-5 hours) to support MMC",
-                "Careful prebiotic/probiotic reintroduction",
-                "Monitoring for symptom recurrence"
-            ],
-            what_to_avoid: [
-                "Jumping back to normal eating too quickly",
-                "Grazing or frequent snacking (disrupts MMC)",
-                "High-fermentation foods initially",
-                "Ignoring returning symptoms"
-            ],
-            protocol_name: "Post-SIBO Recovery Protocol"
-        },
         "gut_brain": {
             title: "Your Pattern: Gut-Brain Connection",
             description: "Your symptoms are strongly connected to stress, anxiety, or emotional state. The gut-brain axis is a real physiological connection, and addressing it is key to your improvement.",
@@ -337,7 +298,7 @@
 
     // State
     let currentQuestion = 0;
-    let scores = { c: 0, d: 0, m: 0, bloat: 0, gutbrain: 0, sibo: 0, normal: 0 };
+    let scores = { c: 0, d: 0, m: 0, bloat: 0, gutbrain: 0, normal: 0 };
     let answers = [];
 
     // DOM Elements
@@ -351,14 +312,17 @@
     }
 
     // Render question
+    let isAdvancing = false;
+
     function renderQuestion(index) {
         const q = QUESTIONS[index];
+        isAdvancing = false;
 
         let optionsHtml = q.options.map((opt, i) => `
-            <label class="option-item" data-index="${i}">
-                <input type="radio" name="q${q.id}" value="${i}">
+            <div class="option-item" data-index="${i}">
+                <span class="option-radio"></span>
                 <span>${opt.text}</span>
-            </label>
+            </div>
         `).join('');
 
         quizContainer.innerHTML = `
@@ -375,12 +339,13 @@
         const options = quizContainer.querySelectorAll('.option-item');
         options.forEach(opt => {
             opt.addEventListener('click', function() {
+                if (isAdvancing) return;
+                isAdvancing = true;
+
                 // Remove selected from all
                 options.forEach(o => o.classList.remove('selected'));
                 // Add selected to clicked
                 this.classList.add('selected');
-                // Check the radio
-                this.querySelector('input').checked = true;
 
                 // Wait a moment then advance
                 setTimeout(() => {
@@ -433,23 +398,23 @@
 
     // Calculate IBS type
     function calculateIBSType() {
-        // Check for specific patterns first
-        if (scores.sibo >= 2) return "post_sibo";
-        if (scores.bloat >= 3 && scores.c <= 1 && scores.d <= 1) return "bloating";
-        if (scores.gutbrain >= 3) return "gut_brain";
-        if (scores.c >= 3 && scores.d <= 1) return "ibs_c";
-        if (scores.d >= 3 && scores.c <= 1) return "ibs_d";
-        if (scores.m >= 2 || (scores.c >= 2 && scores.d >= 2)) return "ibs_m";
-        if (scores.normal >= 2) return "undetermined";
+        // Check for specific patterns
+        if (scores.bloat >= 4 && scores.c <= 2 && scores.d <= 2) return "bloating";
+        if (scores.gutbrain >= 2 && scores.c <= 2 && scores.d <= 2 && scores.m <= 2) return "gut_brain";
+        if (scores.c >= 4 && scores.d <= 1) return "ibs_c";
+        if (scores.d >= 4 && scores.c <= 1) return "ibs_d";
+        if (scores.m >= 3 || (scores.c >= 3 && scores.d >= 3)) return "ibs_m";
+        if (scores.normal >= 3) return "undetermined";
 
         // Fallback based on highest score
-        const mainScores = { c: scores.c, d: scores.d, m: scores.m };
+        const mainScores = { c: scores.c, d: scores.d, m: scores.m, bloat: scores.bloat };
         const highest = Object.entries(mainScores).sort((a, b) => b[1] - a[1])[0];
 
         if (highest[1] >= 2) {
             if (highest[0] === 'c') return "ibs_c";
             if (highest[0] === 'd') return "ibs_d";
             if (highest[0] === 'm') return "ibs_m";
+            if (highest[0] === 'bloat') return "bloating";
         }
 
         return "undetermined";

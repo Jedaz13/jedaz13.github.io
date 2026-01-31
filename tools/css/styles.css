@@ -349,6 +349,22 @@ a:hover {
     accent-color: var(--forest);
 }
 
+.option-radio {
+    width: 20px;
+    height: 20px;
+    min-width: 20px;
+    margin-top: 2px;
+    border: 2px solid var(--divider);
+    border-radius: 50%;
+    box-sizing: border-box;
+}
+
+.option-item.selected .option-radio {
+    border-color: var(--forest);
+    background: var(--forest);
+    box-shadow: inset 0 0 0 3px var(--white);
+}
+
 .option-item span {
     flex: 1;
     color: var(--text-olive);
