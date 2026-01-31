@@ -349,6 +349,22 @@ a:hover {
     accent-color: var(--forest);
 }
 
+.option-radio {
+    width: 20px;
+    height: 20px;
+    min-width: 20px;
+    margin-top: 2px;
+    border: 2px solid var(--divider);
+    border-radius: 50%;
+    box-sizing: border-box;
+}
+
+.option-item.selected .option-radio {
+    border-color: var(--forest);
+    background: var(--forest);
+    box-shadow: inset 0 0 0 3px var(--white);
+}
+
 .option-item span {
     flex: 1;
     color: var(--text-olive);
@@ -744,7 +760,7 @@ a:hover {
     background: var(--bg-cream);
     padding: 20px;
     border-radius: 12px;
-    margin: 24px 0;
+    margin: 24px auto;
     font-size: 0.9rem;
     color: var(--text-muted);
     line-height: 1.6;
@@ -764,32 +780,59 @@ a:hover {
 }
 
 /* Footer */
-.footer {
-    background: var(--forest);
+.site-footer {
+    padding: 40px 0;
+    background-color: var(--forest);
     color: var(--white);
-    padding: 32px 20px;
-    text-align: center;
+    margin-top: auto;
+}
+
+.site-footer .container {
+    width: 100%;
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.site-footer .footer-disclaimer {
+    margin-bottom: 1.5rem;
+    padding: 0 20px;
+}
+
+.site-footer .footer-disclaimer p {
+    font-size: 0.75rem;
+    line-height: 1.6;
+    opacity: 0.7;
+    margin: 0;
 }
 
 .footer-links {
-    display: flex;
-    justify-content: center;
-    gap: 24px;
-    margin-bottom: 16px;
+    text-align: center;
+    margin-bottom: 1rem;
 }
 
 .footer-links a {
-    color: rgba(255,255,255,0.8);
-    font-size: 0.9rem;
+    color: var(--white);
+    opacity: 0.8;
+    font-size: 0.85rem;
+    text-decoration: none;
+    transition: opacity 0.2s ease;
 }
 
 .footer-links a:hover {
+    opacity: 1;
     color: var(--citrus);
 }
 
-.copyright {
-    font-size: 0.85rem;
-    color: rgba(255,255,255,0.6);
+.footer-links .divider {
+    margin: 0 0.75rem;
+    opacity: 0.5;
+}
+
+.footer-copyright {
+    text-align: center;
+    font-size: 0.75rem;
+    opacity: 0.6;
     margin: 0;
 }
 
