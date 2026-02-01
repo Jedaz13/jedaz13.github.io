@@ -27,19 +27,10 @@
       line-height: 1.5;
     }
 
-    .hero, .preview, .credibility, .bottom-cta {
+    .hero, .preview, .bottom-cta {
       padding: 40px 20px;
       max-width: 600px;
       margin: 0 auto;
-      text-align: center;
-    }
-
-    .email-form {
-      background-color: #E8F5E9;
-      border-radius: 12px;
-      margin: 20px auto;
-      padding: 32px 24px;
-      max-width: 600px;
       text-align: center;
     }
 
@@ -48,27 +39,29 @@
       font-weight: 700;
       line-height: 1.2;
       margin-bottom: 16px;
-      color: #2D5A3D;
+      color: #1B3329;
     }
 
     h2 {
       font-size: 22px;
       font-weight: 600;
       margin-bottom: 16px;
-      color: #2D5A3D;
+      color: #1B3329;
     }
 
     .subheadline {
       font-size: 17px;
-      color: #4A4A4A;
+      color: #3D5245;
       margin-bottom: 24px;
     }
 
+    /* CTA Button - matches homepage style */
     .cta-primary {
-      background-color: #2D5A3D;
-      color: white;
+      display: inline-block;
+      background: #1B3329;
+      color: #FFFFFF;
       border: none;
-      padding: 16px 32px;
+      padding: 18px 36px;
       font-size: 18px;
       font-weight: 600;
       border-radius: 8px;
@@ -77,17 +70,18 @@
       max-width: 320px;
       min-height: 54px;
       text-decoration: none;
-      display: inline-block;
+      transition: all 0.3s ease;
     }
 
     .cta-primary:hover {
-      background-color: #234A31;
+      background: #F9C74F;
+      color: #1B3329;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 24px rgba(249, 199, 79, 0.4);
     }
 
-    .trust-signal {
-      font-size: 14px;
-      color: #666;
-      margin-top: 16px;
+    .cta-primary:active {
+      transform: translateY(0);
     }
 
     /* Logo */
@@ -100,27 +94,68 @@
       width: auto;
     }
 
+    /* Cover Image Placeholder */
+    .cover-image {
+      margin: 24px auto;
+      max-width: 280px;
+    }
+
+    .cover-image img {
+      width: 100%;
+      height: auto;
+      border-radius: 8px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+    }
+
+    .image-placeholder {
+      width: 100%;
+      height: 320px;
+      background: linear-gradient(135deg, #E8F5E9 0%, #C8E6C9 100%);
+      border-radius: 8px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #2A4A3A;
+      font-size: 15px;
+      font-weight: 500;
+      text-align: center;
+      padding: 20px;
+    }
+
     /* Form Styles */
+    .email-form {
+      margin: 24px auto 0;
+      max-width: 400px;
+    }
+
     input[type="email"],
     input[type="text"] {
       width: 100%;
       padding: 16px;
       font-size: 16px;
-      border: 1px solid #ddd;
+      border: 1px solid #D4DAD5;
       border-radius: 8px;
       margin-bottom: 12px;
       background-color: white;
     }
 
     input:focus {
-      outline: 2px solid #2D5A3D;
+      outline: 2px solid #1B3329;
       border-color: transparent;
     }
 
     .privacy {
       font-size: 13px;
-      color: #666;
+      color: #6B7D6E;
       margin-top: 12px;
+    }
+
+    .trust-line {
+      font-size: 14px;
+      color: #6B7D6E;
+      margin-top: 16px;
+      font-style: italic;
     }
 
     /* Condition Pills */
@@ -134,54 +169,36 @@
 
     .pill {
       background-color: #E8F5E9;
-      color: #2D5A3D;
+      color: #1B3329;
       padding: 8px 16px;
       border-radius: 20px;
       font-size: 14px;
       font-weight: 500;
     }
 
-    /* Practitioner Cards */
-    .practitioner-cards {
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-      margin-top: 24px;
+    /* Sneak Peek Image */
+    .sneak-peek {
+      margin: 28px auto 0;
+      max-width: 480px;
     }
 
-    .card {
-      background: white;
-      border-radius: 12px;
-      padding: 24px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-      text-align: center;
+    .sneak-peek img {
+      width: 100%;
+      height: auto;
+      border-radius: 8px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.08);
     }
 
-    .avatar {
-      width: 80px;
-      height: 80px;
-      border-radius: 50%;
-      border: 3px solid #F4B942;
-      margin-bottom: 12px;
-      object-fit: cover;
+    .sneak-peek .image-placeholder {
+      height: 240px;
+      background: linear-gradient(135deg, #FFF3CD 0%, #FFFBEB 100%);
+      color: #3D5245;
     }
 
-    .card h3 {
-      font-size: 18px;
-      color: #1A1A1A;
-      margin-bottom: 4px;
-    }
-
-    .credentials {
-      font-size: 14px;
-      color: #2D5A3D;
-      margin-bottom: 12px;
-    }
-
-    .bio {
-      font-size: 15px;
-      color: #4A4A4A;
-      line-height: 1.5;
+    .sneak-peek-label {
+      font-size: 13px;
+      color: #6B7D6E;
+      margin-top: 8px;
     }
 
     /* Desktop Adjustments */
@@ -190,12 +207,9 @@
         font-size: 36px;
       }
 
-      .practitioner-cards {
-        flex-direction: row;
-      }
-
-      .card {
-        flex: 1;
+      .cta-primary {
+        width: auto;
+        max-width: 320px;
       }
     }
   </style>
@@ -213,19 +227,23 @@
     </div>
     <h1>Stop Guessing What to Eat</h1>
     <p class="subheadline">Get instant access to our complete IBS Food Guide &mdash; 60+ foods rated for your specific symptoms by registered nutritionists.</p>
-    <button class="cta-primary" onclick="document.getElementById('signup').scrollIntoView({behavior: 'smooth'})">Get Free Access</button>
-    <p class="trust-signal">&#10003; Reviewed by Rebecca Taylor, RNutr &amp; Paulina Andrzejewska, MSc</p>
-  </section>
 
-  <!-- Email Capture Form -->
-  <section class="email-form" id="signup">
-    <h2>Enter your email to unlock the full guide</h2>
-    <form id="lead-form">
-      <input type="email" name="email" placeholder="Your email address" required>
-      <input type="text" name="first_name" placeholder="First name (optional)">
-      <button type="submit" class="cta-primary">Send Me Access</button>
-    </form>
-    <p class="privacy">No spam. Unsubscribe anytime.</p>
+    <!-- Food Guide Cover Image -->
+    <div class="cover-image">
+      <!-- Replace src with actual cover image -->
+      <div class="image-placeholder">&#128214; Food Guide Cover<br>Replace with actual image</div>
+    </div>
+
+    <!-- Inline Email Capture Form -->
+    <div class="email-form" id="signup">
+      <form id="lead-form">
+        <input type="email" name="email" placeholder="Your email address" required>
+        <input type="text" name="first_name" placeholder="First name (optional)">
+        <button type="submit" class="cta-primary">Send Me Access</button>
+      </form>
+      <p class="privacy">No spam. Unsubscribe anytime.</p>
+      <p class="trust-line">Trusted by thousands of women dealing with IBS</p>
+    </div>
   </section>
 
   <!-- What's Inside Preview -->
@@ -241,24 +259,12 @@
       <span class="pill">Stress-Triggered</span>
     </div>
     <p>Plus preparation tips so you know exactly how to eat each food safely.</p>
-  </section>
 
-  <!-- Credibility Section -->
-  <section class="credibility">
-    <h2>Created by Gut Health Specialists</h2>
-    <div class="practitioner-cards">
-      <div class="card">
-        <img src="/offer/assets/paulina.png" alt="Paulina Andrzejewska" class="avatar">
-        <h3>Paulina Andrzejewska, MSc</h3>
-        <p class="credentials">Clinical Dietitian | Low FODMAP Specialist</p>
-        <p class="bio">Author of "SIBO and IBS Under Control." Certified by Monash University as a Low FODMAP Diet Specialist &mdash; the gold standard in IBS dietary therapy.</p>
-      </div>
-      <div class="card">
-        <img src="/offer/assets/rebecca.png" alt="Rebecca Taylor" class="avatar">
-        <h3>Rebecca Taylor, RNutr</h3>
-        <p class="credentials">Registered Clinical Nutritionist (BSc, MS)</p>
-        <p class="bio">Years of clinical experience helping women overcome chronic digestive issues with practical, evidence-based approaches.</p>
-      </div>
+    <!-- Sneak Peek Image -->
+    <div class="sneak-peek">
+      <!-- Replace src with actual screenshot of inside pages -->
+      <div class="image-placeholder">&#128248; Sneak Peek<br>Replace with screenshot of inside pages</div>
+      <p class="sneak-peek-label">A look inside the guide</p>
     </div>
   </section>
 
@@ -266,7 +272,7 @@
   <section class="bottom-cta">
     <h2>Ready to know what's safe to eat?</h2>
     <button class="cta-primary" onclick="document.getElementById('signup').scrollIntoView({behavior: 'smooth'})">
-      Get Free Access &#8594;
+      Send Me Access &#8594;
     </button>
   </section>
 
