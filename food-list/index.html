@@ -521,7 +521,76 @@
     </div>
   </section>
 
+  <!-- Supabase JS Client -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
   <script>
+    // Supabase config
+    var SUPABASE_URL = 'https://mwabljnngygkmahjgvps.supabase.co';
+    var SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im13YWJsam5uZ3lna21haGpndnBzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU1MjQ3MzgsImV4cCI6MjA4MTEwMDczOH0.rbZYj1aXui_xZ0qkg7QONdHppnJghT2r0ycZwtr3a-E';
+    var LEAD_SOURCE = 'food-list';
+
+    var supabaseClient = null;
+    try {
+      if (typeof supabase !== 'undefined') {
+        supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+      }
+    } catch (e) {
+      console.log('Supabase not available');
+    }
+
+    // Submit lead to Supabase via upsert_quiz_lead RPC
+    async function submitToSupabase(name, email) {
+      if (!supabaseClient || !email) return;
+
+      try {
+        var userRecord = {
+          name: name || null,
+          email: email,
+          quiz_source: LEAD_SOURCE,
+
+          // Fields expected by RPC - null for landing page leads
+          goal_selection: null,
+          journey_stage: null,
+          protocol: null,
+          protocol_name: null,
+          has_stress_component: false,
+          has_red_flags: false,
+          red_flag_evaluated_cleared: false,
+          red_flag_details: null,
+          primary_complaint: null,
+          symptom_frequency: null,
+          relief_after_bm: null,
+          frequency_during_flare: null,
+          stool_during_flare: null,
+          duration: null,
+          diagnoses: [],
+          treatments_tried: [],
+          stress_connection: null,
+          mental_health_impact: null,
+          sleep_quality: null,
+          life_impact_level: null,
+          hardest_part: null,
+          dream_outcome: null,
+
+          role: 'member',
+          status: 'lead'
+        };
+
+        var result = await supabaseClient.rpc('upsert_quiz_lead', {
+          user_data: userRecord
+        });
+
+        if (result.error) {
+          console.error('Supabase insert error:', result.error);
+        } else {
+          console.log('Supabase lead submitted:', LEAD_SOURCE);
+        }
+      } catch (e) {
+        console.error('Error submitting to Supabase:', e);
+      }
+    }
+
     document.getElementById('lead-form').addEventListener('submit', async function(e) {
       e.preventDefault();
 
@@ -540,9 +609,12 @@
       data.utm_source = urlParams.get('utm_source') || '';
       data.utm_medium = urlParams.get('utm_medium') || '';
       data.utm_campaign = urlParams.get('utm_campaign') || '';
-      data.source = 'food-list';
+      data.source = LEAD_SOURCE;
 
       try {
+        // Send to Supabase (upsert - will match on email if they later take quiz)
+        await submitToSupabase(data.first_name, data.email);
+
         // Send to webhook (replace YOUR_WEBHOOK_URL with actual endpoint)
         await fetch('YOUR_WEBHOOK_URL', {
           method: 'POST',
@@ -557,7 +629,7 @@
         window.dataLayer = window.dataLayer || [];
         window.dataLayer.push({
           'event': 'food_list_signup',
-          'source': 'food-list'
+          'source': LEAD_SOURCE
         });
 
         // Redirect to thank you page with UTM params preserved
