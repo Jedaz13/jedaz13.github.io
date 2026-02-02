@@ -216,6 +216,7 @@ const userRecord = {
 
   // Source tracking (REQUIRED)
   quiz_source: 'quiz-1' | 'quiz-2' | 'quiz-3' | 'quiz-X',
+  lead_source: string | null,  // First entry point, never overwritten (e.g., 'food-list', 'quiz-4')
 
   // Quiz-3+ specific (include even if null)
   goal_selection: string | null,
@@ -431,6 +432,7 @@ async function submitToSupabase(name, email) {
       name: name || null,
       email: email,
       quiz_source: LEAD_SOURCE,
+      lead_source: LEAD_SOURCE,
 
       // All RPC fields - null for landing page leads
       goal_selection: null,
@@ -480,9 +482,10 @@ await submitToSupabase(data.first_name, data.email);
 
 ### How Email Matching Works
 
-- Landing page creates a minimal record with `quiz_source: 'food-list'` and `status: 'lead'`
+- Landing page creates a minimal record with `quiz_source: 'food-list'`, `lead_source: 'food-list'`, and `status: 'lead'`
 - When the same email later takes a quiz, `upsert_quiz_lead` matches on email and updates the record with full quiz data
-- The `quiz_source` field will be overwritten to the quiz source (e.g., `quiz-4`)
+- `quiz_source` is updated to the quiz value (e.g., `'quiz-4'`) — tracks most recent quiz completed
+- `lead_source` is **never overwritten** — always keeps the original entry point (e.g., `'food-list'`)
 
 ### Landing Page Source IDs
 
