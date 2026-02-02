@@ -21,196 +21,378 @@
       padding: 0;
     }
 
+    :root {
+      --forest: #1B3329;
+      --forest-light: #2A4A3A;
+      --leaf: #4A7C59;
+      --citrus: #F9C74F;
+      --citrus-bright: #FFDA6A;
+      --bg-warm-white: #FFFDF7;
+      --bg-cream: #FBF9F3;
+      --light-green: #E8F5E9;
+      --white: #FFFFFF;
+      --text-forest: #1B3329;
+      --text-olive: #3D5245;
+      --text-muted: #6B7D6E;
+      --text-light: #8A9A8E;
+      --divider: #E8EBE8;
+      --success: #52B788;
+    }
+
     body {
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-      background-color: #FAF9F6;
-      color: #1A1A1A;
+      background-color: var(--bg-warm-white);
+      color: var(--text-forest);
       line-height: 1.5;
     }
 
-    .hero, .preview, .bottom-cta {
-      padding: 40px 20px;
-      max-width: 600px;
+    .container {
+      max-width: 520px;
       margin: 0 auto;
+    }
+
+    /* ===== HERO ===== */
+    .hero {
+      padding: 40px 20px 48px;
       text-align: center;
+    }
+
+    .logo {
+      margin-bottom: 32px;
+    }
+
+    .logo img {
+      height: 48px;
+      width: auto;
     }
 
     h1 {
       font-size: 28px;
       font-weight: 700;
+      color: var(--forest);
       line-height: 1.2;
       margin-bottom: 16px;
-      color: #1B3329;
+    }
+
+    .subheadline {
+      font-size: 17px;
+      color: var(--text-olive);
+      line-height: 1.6;
+      margin-bottom: 28px;
+    }
+
+    /* ===== FORM ===== */
+    .lead-form {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .lead-form input {
+      width: 100%;
+      padding: 16px;
+      font-size: 16px;
+      font-family: inherit;
+      border: 1px solid var(--divider);
+      border-radius: 8px;
+      background: var(--white);
+      color: var(--text-forest);
+    }
+
+    .lead-form input:focus {
+      outline: none;
+      border-color: var(--forest);
+      box-shadow: 0 0 0 3px rgba(27, 51, 41, 0.1);
+    }
+
+    .lead-form input::placeholder {
+      color: var(--text-light);
+    }
+
+    /* CTA Button - matches homepage */
+    .btn-primary {
+      display: block;
+      width: 100%;
+      padding: 18px 36px;
+      background: var(--forest);
+      color: var(--white);
+      font-size: 1.05rem;
+      font-weight: 600;
+      font-family: inherit;
+      border: none;
+      border-radius: 100px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 20px rgba(27, 51, 41, 0.2);
+      min-height: 56px;
+      text-decoration: none;
+      text-align: center;
+    }
+
+    .btn-primary:hover {
+      background: var(--citrus);
+      color: var(--forest);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 24px rgba(249, 199, 79, 0.4);
+    }
+
+    .btn-primary:active {
+      transform: translateY(0);
+    }
+
+    .privacy-text {
+      font-size: 13px;
+      color: var(--text-light);
+      margin-bottom: 8px;
+      text-align: center;
+    }
+
+    .trust-signal {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      font-size: 14px;
+      color: var(--leaf);
+      font-weight: 500;
+      text-align: center;
+    }
+
+    .trust-signal svg {
+      flex-shrink: 0;
+    }
+
+    /* ===== WHAT'S INSIDE ===== */
+    .whats-inside {
+      padding: 48px 20px;
+      text-align: center;
+      background-color: var(--bg-cream);
     }
 
     h2 {
       font-size: 22px;
       font-weight: 600;
-      margin-bottom: 16px;
-      color: #1B3329;
-    }
-
-    .subheadline {
-      font-size: 17px;
-      color: #3D5245;
-      margin-bottom: 24px;
-    }
-
-    /* CTA Button - matches homepage style */
-    .cta-primary {
-      display: inline-block;
-      background: #1B3329;
-      color: #FFFFFF;
-      border: none;
-      padding: 18px 36px;
-      font-size: 18px;
-      font-weight: 600;
-      border-radius: 8px;
-      cursor: pointer;
-      width: 100%;
-      max-width: 320px;
-      min-height: 54px;
-      text-decoration: none;
-      transition: all 0.3s ease;
-    }
-
-    .cta-primary:hover {
-      background: #F9C74F;
-      color: #1B3329;
-      transform: translateY(-2px);
-      box-shadow: 0 6px 24px rgba(249, 199, 79, 0.4);
-    }
-
-    .cta-primary:active {
-      transform: translateY(0);
-    }
-
-    /* Logo */
-    .logo {
-      margin-bottom: 24px;
-    }
-
-    .logo img {
-      height: 40px;
-      width: auto;
-    }
-
-    /* Cover Image Placeholder */
-    .cover-image {
-      margin: 24px auto;
-      max-width: 280px;
-    }
-
-    .cover-image img {
-      width: 100%;
-      height: auto;
-      border-radius: 8px;
-      box-shadow: 0 4px 16px rgba(0,0,0,0.12);
-    }
-
-    .image-placeholder {
-      width: 100%;
-      height: 320px;
-      background: linear-gradient(135deg, #E8F5E9 0%, #C8E6C9 100%);
-      border-radius: 8px;
-      box-shadow: 0 4px 16px rgba(0,0,0,0.12);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #2A4A3A;
-      font-size: 15px;
-      font-weight: 500;
-      text-align: center;
-      padding: 20px;
-    }
-
-    /* Form Styles */
-    .email-form {
-      margin: 24px auto 0;
-      max-width: 400px;
-    }
-
-    input[type="email"],
-    input[type="text"] {
-      width: 100%;
-      padding: 16px;
-      font-size: 16px;
-      border: 1px solid #D4DAD5;
-      border-radius: 8px;
+      color: var(--forest);
       margin-bottom: 12px;
-      background-color: white;
     }
 
-    input:focus {
-      outline: 2px solid #1B3329;
-      border-color: transparent;
+    .whats-inside > .container > p {
+      font-size: 16px;
+      color: var(--text-olive);
+      margin-bottom: 20px;
     }
 
-    .privacy {
-      font-size: 13px;
-      color: #6B7D6E;
-      margin-top: 12px;
-    }
-
-    .trust-line {
-      font-size: 14px;
-      color: #6B7D6E;
-      margin-top: 16px;
-      font-style: italic;
-    }
-
-    /* Condition Pills */
     .condition-pills {
       display: flex;
       flex-wrap: wrap;
-      gap: 8px;
       justify-content: center;
-      margin: 20px 0;
+      gap: 10px;
+      margin-bottom: 24px;
     }
 
     .pill {
-      background-color: #E8F5E9;
-      color: #1B3329;
-      padding: 8px 16px;
-      border-radius: 20px;
+      background-color: var(--light-green);
+      color: var(--forest);
+      padding: 10px 18px;
+      border-radius: 24px;
       font-size: 14px;
       font-weight: 500;
     }
 
-    /* Sneak Peek Image */
+    .prep-note {
+      font-size: 16px;
+      color: var(--text-olive);
+    }
+
+    /* ===== SNEAK PEEK ===== */
     .sneak-peek {
-      margin: 28px auto 0;
-      max-width: 480px;
+      padding: 0 20px 48px;
+      background-color: var(--bg-cream);
     }
 
-    .sneak-peek img {
-      width: 100%;
-      height: auto;
+    .sneak-peek-wrapper {
+      position: relative;
+      max-width: 520px;
+      margin: 0 auto;
+    }
+
+    .sneak-peek-content {
+      background: #FFFBEB;
+      border-radius: 12px;
+      padding: 24px 20px;
+      border: 1px solid var(--divider);
+    }
+
+    .preview-section {
+      margin-bottom: 20px;
+    }
+
+    .preview-section:last-child {
+      margin-bottom: 0;
+    }
+
+    .preview-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text-forest);
+      padding-bottom: 8px;
+      margin-bottom: 12px;
+      border-bottom: 2px solid var(--citrus);
+    }
+
+    .preview-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+    }
+
+    .preview-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--white);
+      padding: 10px 12px;
       border-radius: 8px;
-      box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+      font-size: 14px;
+      color: var(--text-forest);
+      border: 1px solid #eee;
     }
 
-    .sneak-peek .image-placeholder {
-      height: 240px;
-      background: linear-gradient(135deg, #FFF3CD 0%, #FFFBEB 100%);
-      color: #3D5245;
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      flex-shrink: 0;
     }
 
-    .sneak-peek-label {
+    .dot-green { background-color: #4CAF50; }
+    .dot-yellow { background-color: #F9C74F; }
+    .dot-red { background-color: #E76F51; }
+
+    .fade-overlay {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 120px;
+      background: linear-gradient(
+        to bottom,
+        rgba(251, 249, 243, 0) 0%,
+        rgba(251, 249, 243, 0.85) 50%,
+        rgba(251, 249, 243, 1) 100%
+      );
+      pointer-events: none;
+      border-radius: 0 0 12px 12px;
+    }
+
+    .sneak-peek-caption {
+      text-align: center;
       font-size: 13px;
-      color: #6B7D6E;
-      margin-top: 8px;
+      color: var(--text-light);
+      margin-top: 12px;
     }
 
-    /* Desktop Adjustments */
+    /* ===== AUTHORITY ===== */
+    .authority {
+      padding: 48px 20px;
+      text-align: center;
+    }
+
+    .practitioner-cards {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      max-width: 600px;
+      margin: 24px auto 0;
+    }
+
+    .practitioner-card {
+      background: var(--white);
+      border-radius: 12px;
+      padding: 28px 24px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+      text-align: center;
+    }
+
+    .practitioner-photo {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      border: 3px solid var(--citrus);
+      margin-bottom: 16px;
+      object-fit: cover;
+    }
+
+    .practitioner-card h3 {
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--text-forest);
+      margin-bottom: 4px;
+    }
+
+    .credentials {
+      font-size: 14px;
+      color: var(--leaf);
+      margin-bottom: 12px;
+    }
+
+    .bio {
+      font-size: 15px;
+      color: var(--text-olive);
+      line-height: 1.5;
+    }
+
+    /* ===== BOTTOM CTA ===== */
+    .bottom-cta {
+      padding: 48px 20px;
+      background-color: var(--light-green);
+      text-align: center;
+    }
+
+    .bottom-cta h2 {
+      margin-bottom: 20px;
+    }
+
+    .bottom-cta .btn-primary {
+      display: inline-block;
+      width: auto;
+      max-width: 320px;
+    }
+
+    /* ===== DESKTOP ===== */
     @media (min-width: 768px) {
+      .hero {
+        padding: 60px 20px 56px;
+      }
+
       h1 {
         font-size: 36px;
       }
 
-      .cta-primary {
+      .lead-form {
+        max-width: 400px;
+        margin-left: auto;
+        margin-right: auto;
+        margin-bottom: 16px;
+      }
+
+      .btn-primary {
         width: auto;
         max-width: 320px;
+      }
+
+      .lead-form .btn-primary {
+        width: 100%;
+        max-width: none;
+      }
+
+      .practitioner-cards {
+        flex-direction: row;
+      }
+
+      .practitioner-card {
+        flex: 1;
       }
     }
   </style>
@@ -221,85 +403,221 @@
   height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <!-- End Google Tag Manager (noscript) -->
 
-  <!-- Hero Section -->
-  <section class="hero">
-    <div class="logo">
-      <img src="/assets/Logo.png" alt="Gut Healing Academy">
-    </div>
-    <h1>Stop Guessing What to Eat</h1>
-    <p class="subheadline">Get instant access to our complete IBS Food Guide &mdash; 60+ foods rated for your specific symptoms by registered nutritionists.</p>
+  <!-- Hero + Form -->
+  <header class="hero">
+    <div class="container">
+      <div class="logo">
+        <img src="/assets/Logo.png" alt="Gut Healing Academy">
+      </div>
 
-    <!-- Food Guide Cover Image -->
-    <div class="cover-image">
-      <!-- Replace src with actual cover image -->
-      <div class="image-placeholder">&#128214; Food Guide Cover<br>Replace with actual image</div>
-    </div>
+      <h1>Stop Guessing What to Eat</h1>
+      <p class="subheadline">Get instant access to our complete IBS Food Guide &mdash; 60+ foods rated for your specific symptoms by registered nutritionists.</p>
 
-    <!-- Inline Email Capture Form -->
-    <div class="email-form" id="signup">
-      <form id="lead-form">
+      <form id="lead-form" class="lead-form">
         <input type="email" name="email" placeholder="Your email address" required>
         <input type="text" name="first_name" placeholder="First name (optional)">
-        <button type="submit" class="cta-primary">Send Me Access</button>
+        <button type="submit" class="btn-primary">Send Me Access</button>
       </form>
-      <p class="privacy">No spam. Unsubscribe anytime.</p>
-      <p class="trust-line">Trusted by thousands of women dealing with IBS</p>
+
+      <p class="privacy-text">No spam. Unsubscribe anytime.</p>
+      <p class="trust-signal">
+        <svg viewBox="0 0 20 20" fill="#4A7C59" width="16" height="16"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+        Based on Monash University FODMAP research
+      </p>
+    </div>
+  </header>
+
+  <!-- What's Inside -->
+  <section class="whats-inside">
+    <div class="container">
+      <h2>What's Inside the Food Guide?</h2>
+      <p>Every food is rated for 6 different gut conditions:</p>
+
+      <div class="condition-pills">
+        <span class="pill">Bloating-Dominant</span>
+        <span class="pill">IBS-C (Constipation)</span>
+        <span class="pill">IBS-D (Diarrhea)</span>
+        <span class="pill">IBS-M (Mixed)</span>
+        <span class="pill">Post-SIBO Recovery</span>
+        <span class="pill">Stress-Triggered</span>
+      </div>
+
+      <p class="prep-note">Plus preparation tips so you know exactly how to eat each food safely.</p>
     </div>
   </section>
 
-  <!-- What's Inside Preview -->
-  <section class="preview">
-    <h2>What's Inside the Food Guide?</h2>
-    <p>Every food is rated for 6 different gut conditions:</p>
-    <div class="condition-pills">
-      <span class="pill">Bloating-Dominant</span>
-      <span class="pill">IBS-C (Constipation)</span>
-      <span class="pill">IBS-D (Diarrhea)</span>
-      <span class="pill">IBS-M (Mixed)</span>
-      <span class="pill">Post-SIBO Recovery</span>
-      <span class="pill">Stress-Triggered</span>
-    </div>
-    <p>Plus preparation tips so you know exactly how to eat each food safely.</p>
+  <!-- Sneak Peek -->
+  <section class="sneak-peek">
+    <div class="container">
+      <div class="sneak-peek-wrapper">
+        <div class="sneak-peek-content">
 
-    <!-- Sneak Peek Image -->
-    <div class="sneak-peek">
-      <!-- Replace src with actual screenshot of inside pages -->
-      <div class="image-placeholder">&#128248; Sneak Peek<br>Replace with screenshot of inside pages</div>
-      <p class="sneak-peek-label">A look inside the guide</p>
+          <div class="preview-section">
+            <h3 class="preview-title">Proteins</h3>
+            <div class="preview-grid">
+              <div class="preview-item"><span class="dot dot-green"></span>Eggs</div>
+              <div class="preview-item"><span class="dot dot-green"></span>Chicken</div>
+              <div class="preview-item"><span class="dot dot-green"></span>Beef</div>
+              <div class="preview-item"><span class="dot dot-green"></span>Salmon</div>
+            </div>
+          </div>
+
+          <div class="preview-section">
+            <h3 class="preview-title">Vegetables</h3>
+            <div class="preview-grid">
+              <div class="preview-item"><span class="dot dot-green"></span>Carrots</div>
+              <div class="preview-item"><span class="dot dot-green"></span>Spinach</div>
+              <div class="preview-item"><span class="dot dot-yellow"></span>Broccoli</div>
+              <div class="preview-item"><span class="dot dot-yellow"></span>Cauliflower</div>
+              <div class="preview-item"><span class="dot dot-red"></span>Garlic</div>
+              <div class="preview-item"><span class="dot dot-red"></span>Onion</div>
+            </div>
+          </div>
+
+          <div class="preview-section">
+            <h3 class="preview-title">Fruits</h3>
+            <div class="preview-grid">
+              <div class="preview-item"><span class="dot dot-green"></span>Banana</div>
+              <div class="preview-item"><span class="dot dot-green"></span>Strawberries</div>
+            </div>
+          </div>
+
+        </div>
+        <div class="fade-overlay"></div>
+      </div>
+      <p class="sneak-peek-caption">A look inside the guide</p>
+    </div>
+  </section>
+
+  <!-- Authority -->
+  <section class="authority">
+    <div class="container">
+      <h2>Created by Gut Health Specialists</h2>
+
+      <div class="practitioner-cards">
+        <div class="practitioner-card">
+          <img src="/offer/assets/paulina.png" alt="Paulina Andrzejewska" class="practitioner-photo">
+          <h3>Paulina Andrzejewska, MSc</h3>
+          <p class="credentials">Clinical Dietitian | Low FODMAP Specialist</p>
+          <p class="bio">Author of &ldquo;SIBO and IBS Under Control.&rdquo; Certified by Monash University as a Low FODMAP Diet Specialist &mdash; the gold standard in IBS dietary therapy.</p>
+        </div>
+        <div class="practitioner-card">
+          <img src="/offer/assets/rebecca.png" alt="Rebecca Taylor" class="practitioner-photo">
+          <h3>Rebecca Taylor, RNutr</h3>
+          <p class="credentials">Registered Clinical Nutritionist (BSc, MS)</p>
+          <p class="bio">Years of clinical experience helping women overcome chronic digestive issues with practical, evidence-based approaches.</p>
+        </div>
+      </div>
     </div>
   </section>
 
   <!-- Bottom CTA -->
   <section class="bottom-cta">
-    <h2>Ready to know what's safe to eat?</h2>
-    <button class="cta-primary" onclick="document.getElementById('signup').scrollIntoView({behavior: 'smooth'})">
-      Send Me Access &#8594;
-    </button>
+    <div class="container">
+      <h2>Ready to know what's safe to eat?</h2>
+      <button class="btn-primary" onclick="document.getElementById('lead-form').scrollIntoView({behavior: 'smooth'})">
+        Send Me Access &rarr;
+      </button>
+    </div>
   </section>
 
+  <!-- Supabase JS Client -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
   <script>
+    // Supabase config
+    var SUPABASE_URL = 'https://mwabljnngygkmahjgvps.supabase.co';
+    var SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im13YWJsam5uZ3lna21haGpndnBzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU1MjQ3MzgsImV4cCI6MjA4MTEwMDczOH0.rbZYj1aXui_xZ0qkg7QONdHppnJghT2r0ycZwtr3a-E';
+    var LEAD_SOURCE = 'food-list';
+
+    var supabaseClient = null;
+    try {
+      if (typeof supabase !== 'undefined') {
+        supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+      }
+    } catch (e) {
+      console.log('Supabase not available');
+    }
+
+    // Submit lead to Supabase via upsert_quiz_lead RPC
+    async function submitToSupabase(name, email) {
+      if (!supabaseClient || !email) return;
+
+      try {
+        var userRecord = {
+          name: name || null,
+          email: email,
+          quiz_source: LEAD_SOURCE,
+          lead_source: LEAD_SOURCE,
+
+          // Fields expected by RPC - null for landing page leads
+          goal_selection: null,
+          journey_stage: null,
+          protocol: null,
+          protocol_name: null,
+          has_stress_component: false,
+          has_red_flags: false,
+          red_flag_evaluated_cleared: false,
+          red_flag_details: null,
+          primary_complaint: null,
+          symptom_frequency: null,
+          relief_after_bm: null,
+          frequency_during_flare: null,
+          stool_during_flare: null,
+          duration: null,
+          diagnoses: [],
+          treatments_tried: [],
+          stress_connection: null,
+          mental_health_impact: null,
+          sleep_quality: null,
+          life_impact_level: null,
+          hardest_part: null,
+          dream_outcome: null,
+
+          role: 'member',
+          status: 'lead'
+        };
+
+        var result = await supabaseClient.rpc('upsert_quiz_lead', {
+          user_data: userRecord
+        });
+
+        if (result.error) {
+          console.error('Supabase insert error:', result.error);
+        } else {
+          console.log('Supabase lead submitted:', LEAD_SOURCE);
+        }
+      } catch (e) {
+        console.error('Error submitting to Supabase:', e);
+      }
+    }
+
     document.getElementById('lead-form').addEventListener('submit', async function(e) {
       e.preventDefault();
 
       var form = e.target;
-      var formData = new FormData(form);
-      var data = {};
-      formData.forEach(function(value, key) { data[key] = value; });
+      var submitBtn = form.querySelector('button[type="submit"]');
+      var originalText = submitBtn.textContent;
 
-      // Get UTM parameters
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Sending...';
+
+      var formData = new FormData(form);
+      var data = Object.fromEntries(formData);
+
+      // Add UTM parameters
       var urlParams = new URLSearchParams(window.location.search);
       data.utm_source = urlParams.get('utm_source') || '';
       data.utm_medium = urlParams.get('utm_medium') || '';
       data.utm_campaign = urlParams.get('utm_campaign') || '';
-      data.source = 'food-list';
-
-      var submitBtn = form.querySelector('button[type="submit"]');
-      submitBtn.textContent = 'Sending...';
-      submitBtn.disabled = true;
+      data.source = LEAD_SOURCE;
 
       try {
-        // Send to webhook (replace YOUR_WEBHOOK_URL with actual endpoint)
-        await fetch('YOUR_WEBHOOK_URL', {
+        // Send to Supabase (upsert - will match on email if they later take quiz)
+        await submitToSupabase(data.first_name, data.email);
+
+        // Send to Make.com webhook
+        await fetch('https://hook.eu1.make.com/6somdu1dno8xp6qk5u788z2bgynjv7xe', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(data)
@@ -312,7 +630,7 @@
         window.dataLayer = window.dataLayer || [];
         window.dataLayer.push({
           'event': 'food_list_signup',
-          'source': 'food-list'
+          'source': LEAD_SOURCE
         });
 
         // Redirect to thank you page with UTM params preserved
@@ -320,8 +638,8 @@
 
       } catch (error) {
         console.error('Form submission error:', error);
-        submitBtn.textContent = 'Send Me Access';
         submitBtn.disabled = false;
+        submitBtn.textContent = originalText;
         alert('Something went wrong. Please try again.');
       }
     });

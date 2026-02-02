@@ -1,10 +1,22 @@
 -- Supabase RPC Function Update
--- Run this in Supabase SQL Editor to add quiz_source, goal_selection, and journey_stage support
+-- Run this in Supabase SQL Editor to add quiz_source, goal_selection, journey_stage,
+-- and lead_source support
 --
 -- This replaces the existing insert_quiz_lead function
 --
 -- IMPORTANT: This version fixes the JSONB -> text[] conversion for diagnoses and treatments_tried
 -- and adds upsert_quiz_lead for two-stage submission (email capture + completion)
+--
+-- lead_source = where the user FIRST entered (e.g., 'food-list', 'quiz-4')
+--   -> Set on first insert, NEVER overwritten on update
+-- quiz_source = which quiz they most recently completed (e.g., 'quiz-4')
+--   -> Updated each time they complete a quiz
+
+-- Step 0: Add lead_source column if it doesn't exist
+ALTER TABLE users ADD COLUMN IF NOT EXISTS lead_source TEXT;
+
+-- Backfill existing rows: set lead_source = quiz_source for any rows missing it
+UPDATE users SET lead_source = quiz_source WHERE lead_source IS NULL;
 
 -- Helper function to convert JSONB array to text array
 CREATE OR REPLACE FUNCTION jsonb_array_to_text_array(jsonb_arr JSONB)
@@ -34,6 +46,7 @@ BEGIN
 
     -- Source tracking
     quiz_source,
+    lead_source,
 
     -- Quiz-3 specific fields
     goal_selection,
@@ -76,6 +89,7 @@ BEGIN
 
     -- Source tracking
     user_data->>'quiz_source',
+    user_data->>'lead_source',
 
     -- Quiz-3 specific fields
     user_data->>'goal_selection',
@@ -124,28 +138,18 @@ SECURITY DEFINER
 AS $$
 BEGIN
   INSERT INTO users (
-    -- Contact info
     name,
     email,
-
-    -- Source tracking
     quiz_source,
-
-    -- Quiz-3 specific fields
+    lead_source,
     goal_selection,
     journey_stage,
-
-    -- Protocol info
     protocol,
     protocol_name,
     has_stress_component,
-
-    -- Red flag info
     has_red_flags,
     red_flag_evaluated_cleared,
     red_flag_details,
-
-    -- Question answers
     primary_complaint,
     symptom_frequency,
     relief_after_bm,
@@ -160,34 +164,22 @@ BEGIN
     life_impact_level,
     hardest_part,
     dream_outcome,
-
-    -- User role/status
     role,
     status
   )
   VALUES (
-    -- Contact info
     user_data->>'name',
     user_data->>'email',
-
-    -- Source tracking
     user_data->>'quiz_source',
-
-    -- Quiz-3 specific fields
+    user_data->>'lead_source',
     user_data->>'goal_selection',
     user_data->>'journey_stage',
-
-    -- Protocol info
     (user_data->>'protocol')::integer,
     user_data->>'protocol_name',
     COALESCE((user_data->>'has_stress_component')::boolean, false),
-
-    -- Red flag info
     COALESCE((user_data->>'has_red_flags')::boolean, false),
     COALESCE((user_data->>'red_flag_evaluated_cleared')::boolean, false),
     user_data->'red_flag_details',
-
-    -- Question answers
     user_data->>'primary_complaint',
     user_data->>'symptom_frequency',
     user_data->>'relief_after_bm',
@@ -202,8 +194,6 @@ BEGIN
     user_data->>'life_impact_level',
     user_data->>'hardest_part',
     user_data->>'dream_outcome',
-
-    -- User role/status
     COALESCE(user_data->>'role', 'member'),
     COALESCE(user_data->>'status', 'lead')
   )
@@ -211,6 +201,12 @@ BEGIN
   DO UPDATE SET
     -- Update name if provided
     name = COALESCE(EXCLUDED.name, users.name),
+
+    -- quiz_source: always update to latest (tracks most recent quiz completed)
+    quiz_source = COALESCE(EXCLUDED.quiz_source, users.quiz_source),
+
+    -- lead_source: NEVER overwrite — keeps the original entry point
+    lead_source = COALESCE(users.lead_source, EXCLUDED.lead_source),
 
     -- Update quiz-3 specific fields if provided
     goal_selection = COALESCE(EXCLUDED.goal_selection, users.goal_selection),

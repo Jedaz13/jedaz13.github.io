@@ -216,6 +216,7 @@ const userRecord = {
 
   // Source tracking (REQUIRED)
   quiz_source: 'quiz-1' | 'quiz-2' | 'quiz-3' | 'quiz-X',
+  lead_source: string | null,  // First entry point, never overwritten (e.g., 'food-list', 'quiz-4')
 
   // Quiz-3+ specific (include even if null)
   goal_selection: string | null,
@@ -391,6 +392,108 @@ const payload = {
 4. **This Documentation** (CLAUDE.md)
    - Update parameter tables
    - Update field references
+
+---
+
+## Landing Page Lead Capture (Supabase)
+
+All landing pages with email capture forms MUST submit leads to Supabase using the `upsert_quiz_lead` RPC. This ensures leads are stored in the same users table as quiz leads, allowing email-based matching when a lead later takes a quiz.
+
+### Required Setup
+
+1. **Load Supabase JS client** (before your script):
+```html
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+```
+
+2. **Initialize Supabase client**:
+```javascript
+var SUPABASE_URL = 'https://mwabljnngygkmahjgvps.supabase.co';
+var SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im13YWJsam5uZ3lna21haGpndnBzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU1MjQ3MzgsImV4cCI6MjA4MTEwMDczOH0.rbZYj1aXui_xZ0qkg7QONdHppnJghT2r0ycZwtr3a-E';
+var LEAD_SOURCE = 'food-list'; // Change per landing page
+
+var supabaseClient = null;
+try {
+  if (typeof supabase !== 'undefined') {
+    supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  }
+} catch (e) {
+  console.log('Supabase not available');
+}
+```
+
+3. **Submit lead function** (reuse across all landing pages, only change `LEAD_SOURCE`):
+```javascript
+async function submitToSupabase(name, email) {
+  if (!supabaseClient || !email) return;
+
+  try {
+    var userRecord = {
+      name: name || null,
+      email: email,
+      quiz_source: LEAD_SOURCE,
+      lead_source: LEAD_SOURCE,
+
+      // All RPC fields - null for landing page leads
+      goal_selection: null,
+      journey_stage: null,
+      protocol: null,
+      protocol_name: null,
+      has_stress_component: false,
+      has_red_flags: false,
+      red_flag_evaluated_cleared: false,
+      red_flag_details: null,
+      primary_complaint: null,
+      symptom_frequency: null,
+      relief_after_bm: null,
+      frequency_during_flare: null,
+      stool_during_flare: null,
+      duration: null,
+      diagnoses: [],
+      treatments_tried: [],
+      stress_connection: null,
+      mental_health_impact: null,
+      sleep_quality: null,
+      life_impact_level: null,
+      hardest_part: null,
+      dream_outcome: null,
+
+      role: 'member',
+      status: 'lead'
+    };
+
+    var result = await supabaseClient.rpc('upsert_quiz_lead', {
+      user_data: userRecord
+    });
+
+    if (result.error) {
+      console.error('Supabase insert error:', result.error);
+    }
+  } catch (e) {
+    console.error('Error submitting to Supabase:', e);
+  }
+}
+```
+
+4. **Call in form handler** (before webhook/redirect):
+```javascript
+await submitToSupabase(data.first_name, data.email);
+```
+
+### How Email Matching Works
+
+- Landing page creates a minimal record with `quiz_source: 'food-list'`, `lead_source: 'food-list'`, and `status: 'lead'`
+- When the same email later takes a quiz, `upsert_quiz_lead` matches on email and updates the record with full quiz data
+- `quiz_source` is updated to the quiz value (e.g., `'quiz-4'`) — tracks most recent quiz completed
+- `lead_source` is **never overwritten** — always keeps the original entry point (e.g., `'food-list'`)
+
+### Landing Page Source IDs
+
+| Landing Page | Source ID |
+|-------------|-----------|
+| `/food-list/` | `food-list` |
+
+**When creating a new landing page**, add its source ID to this table.
 
 ---
 

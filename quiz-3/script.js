@@ -1295,6 +1295,7 @@ async function submitToSupabasePartial() {
       name: state.userData.name || null,
       email: state.userData.email || null,
       quiz_source: CONFIG.SOURCE_TRACKING,
+      lead_source: CONFIG.SOURCE_TRACKING,
       // Quiz-3 specific fields (collected before email)
       goal_selection: state.answers.goal_selection || null,
       journey_stage: state.answers.journey_stage || null,
@@ -1355,6 +1356,7 @@ async function submitToSupabase() {
       name: state.userData.name || null,
       email: state.userData.email || null,
       quiz_source: CONFIG.SOURCE_TRACKING,
+      lead_source: CONFIG.SOURCE_TRACKING,
       // Quiz-3 specific fields
       goal_selection: state.answers.goal_selection || null,
       journey_stage: state.answers.journey_stage || null,

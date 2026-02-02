@@ -1710,6 +1710,7 @@ function buildUserRecord(isPartial) {
     name: state.userData.name || null,
     email: state.userData.email || null,
     quiz_source: CONFIG.SOURCE_TRACKING,
+    lead_source: CONFIG.SOURCE_TRACKING,
 
     // Goal info
     goal_selection: state.answers.future_vision || null,
