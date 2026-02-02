@@ -20,16 +20,32 @@
       padding: 0;
     }
 
+    :root {
+      --forest: #1B3329;
+      --forest-light: #2A4A3A;
+      --leaf: #4A7C59;
+      --citrus: #F9C74F;
+      --citrus-dark: #E5A93D;
+      --bg-warm-white: #FFFDF7;
+      --light-green: #E8F5E9;
+      --white: #FFFFFF;
+      --text-forest: #1B3329;
+      --text-olive: #3D5245;
+      --text-muted: #6B7D6E;
+      --text-light: #8A9A8E;
+      --divider: #E8EBE8;
+    }
+
     body {
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-      background-color: #FAF9F6;
-      color: #1A1A1A;
+      background-color: var(--bg-warm-white);
+      color: var(--text-forest);
       line-height: 1.5;
       min-height: 100vh;
     }
 
     .thank-you-page {
-      max-width: 500px;
+      max-width: 520px;
       margin: 0 auto;
       padding: 40px 20px;
       text-align: center;
@@ -37,146 +53,160 @@
 
     /* Logo */
     .logo {
-      margin-bottom: 32px;
+      margin-bottom: 40px;
     }
 
     .logo img {
-      height: 40px;
+      height: 48px;
       width: auto;
     }
 
-    /* Success Header */
-    .success-header {
-      margin-bottom: 32px;
-    }
-
+    /* Success Checkmark */
     .checkmark {
-      width: 60px;
-      height: 60px;
-      background-color: #2D5A3D;
-      color: white;
+      width: 64px;
+      height: 64px;
+      background-color: var(--leaf);
+      color: var(--white);
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 28px;
-      margin: 0 auto 20px;
+      margin: 0 auto 24px;
     }
 
+    .checkmark svg {
+      width: 32px;
+      height: 32px;
+    }
+
+    /* Headline */
     h1 {
       font-size: 28px;
       font-weight: 700;
-      color: #2D5A3D;
-      margin-bottom: 8px;
-    }
-
-    .subtitle {
-      font-size: 17px;
-      color: #666;
-    }
-
-    /* Options Container */
-    .options-container {
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
+      color: var(--forest);
+      line-height: 1.2;
       margin-bottom: 32px;
     }
 
     /* Option Cards */
     .option-card {
       border-radius: 12px;
-      padding: 24px;
+      padding: 28px 24px;
+      margin-bottom: 16px;
       text-align: center;
     }
 
     .option-card.primary {
-      background-color: #E8F5E9;
-      border: 2px solid #2D5A3D;
+      background-color: var(--light-green);
+      border: 2px solid var(--forest);
     }
 
     .option-card.secondary {
-      background-color: white;
-      border: 1px solid #ddd;
-      padding: 20px;
+      background-color: var(--white);
+      border: 1px solid var(--divider);
+      padding: 24px;
     }
 
     .card-icon {
-      font-size: 32px;
-      margin-bottom: 12px;
+      font-size: 36px;
+      margin-bottom: 16px;
+      line-height: 1;
     }
 
     .option-card h2 {
       font-size: 20px;
       font-weight: 600;
-      color: #1A1A1A;
+      color: var(--text-forest);
       margin-bottom: 12px;
     }
 
     .option-card p {
-      font-size: 15px;
-      color: #4A4A4A;
-      margin-bottom: 20px;
+      font-size: 16px;
+      color: var(--text-olive);
+      margin-bottom: 24px;
       line-height: 1.5;
     }
 
-    /* Primary CTA Button */
-    .cta-primary {
+    /* Primary CTA - Yellow (quiz) */
+    .btn-yellow {
       display: inline-block;
-      background-color: #F4B942;
-      color: #1A1A1A;
-      text-decoration: none;
-      padding: 16px 32px;
-      font-size: 18px;
-      font-weight: 600;
-      border-radius: 8px;
       width: 100%;
       max-width: 280px;
-      transition: background-color 0.2s;
+      padding: 18px 36px;
+      background: var(--citrus);
+      color: var(--forest);
+      font-size: 1.05rem;
+      font-weight: 600;
+      font-family: inherit;
+      border: none;
+      border-radius: 100px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 20px rgba(249, 199, 79, 0.3);
+      min-height: 56px;
+      text-decoration: none;
+      text-align: center;
     }
 
-    .cta-primary:hover {
-      background-color: #E5A93D;
+    .btn-yellow:hover {
+      background: var(--citrus-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 24px rgba(249, 199, 79, 0.5);
+    }
+
+    .btn-yellow:active {
+      transform: translateY(0);
     }
 
     .time-indicator {
       display: block;
       font-size: 13px;
-      color: #666;
+      color: var(--text-muted);
       margin-top: 12px;
     }
 
-    /* Secondary CTA */
+    /* Secondary CTA - Outlined */
     .secondary-text {
       font-size: 15px;
-      color: #666;
-      margin-bottom: 12px !important;
+      color: var(--text-muted);
+      margin-bottom: 16px !important;
     }
 
-    .cta-secondary {
+    .btn-outline {
       display: inline-block;
-      color: #2D5A3D;
-      text-decoration: none;
+      padding: 14px 28px;
+      background: var(--white);
+      color: var(--forest);
       font-size: 16px;
       font-weight: 600;
-      padding: 12px 24px;
-      border: 2px solid #2D5A3D;
-      border-radius: 8px;
-      transition: all 0.2s;
+      font-family: inherit;
+      border: 2px solid var(--forest);
+      border-radius: 100px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      text-align: center;
     }
 
-    .cta-secondary:hover {
-      background-color: #2D5A3D;
-      color: white;
+    .btn-outline:hover {
+      background: var(--forest);
+      color: var(--white);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 16px rgba(27, 51, 41, 0.2);
+    }
+
+    .btn-outline:active {
+      transform: translateY(0);
     }
 
     /* Email Note */
     .email-note {
       font-size: 14px;
-      color: #666;
+      color: var(--text-light);
+      margin-top: 32px;
     }
 
-    /* Desktop Adjustments */
+    /* Desktop */
     @media (min-width: 768px) {
       .thank-you-page {
         padding: 60px 20px;
@@ -187,7 +217,7 @@
       }
 
       .option-card.primary {
-        padding: 32px;
+        padding: 36px 32px;
       }
     }
   </style>
@@ -204,50 +234,45 @@
       <img src="/assets/Logo.png" alt="Gut Healing Academy">
     </div>
 
-    <!-- Success Header -->
-    <div class="success-header">
-      <div class="checkmark">&#10003;</div>
-      <h1>Your Food Guide is Ready!</h1>
-      <p class="subtitle">Choose how you want to get started:</p>
+    <!-- Success Checkmark -->
+    <div class="checkmark">
+      <svg viewBox="0 0 20 20" fill="white"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
     </div>
 
-    <!-- Option Cards -->
-    <div class="options-container">
+    <!-- Headline -->
+    <h1>Your Food Guide is Ready!</h1>
 
-      <!-- Primary Option: Quiz -->
-      <div class="option-card primary">
-        <div class="card-icon">&#127919;</div>
-        <h2>Not sure which foods are right for YOU?</h2>
-        <p>Take our 5-minute quiz to discover your gut type and get a personalized protocol matched to your specific symptoms.</p>
-        <a href="/quiz-4/" class="cta-primary">Take the Quiz &#8594;</a>
-        <span class="time-indicator">Takes 5 minutes</span>
-      </div>
-
-      <!-- Secondary Option: Food Guide -->
-      <div class="option-card secondary">
-        <p class="secondary-text">Just want the food list?</p>
-        <a href="/foods/" class="cta-secondary">Go to Food Guide &#8594;</a>
-      </div>
-
+    <!-- Primary: Quiz Upsell -->
+    <div class="option-card primary">
+      <div class="card-icon">&#127919;</div>
+      <h2>Tired of wondering &ldquo;can I eat this?&rdquo;</h2>
+      <p>In 5 minutes, you'll know exactly which foods to eat, which to avoid, and why your gut reacts the way it does.</p>
+      <a href="/quiz-4/" class="btn-yellow" id="quiz-btn">Find My Gut Type &rarr;</a>
+      <span class="time-indicator">Takes 5 minutes</span>
     </div>
 
-    <!-- Email Confirmation Note -->
+    <!-- Secondary: Food Guide -->
+    <div class="option-card secondary">
+      <p class="secondary-text">Just want the food list?</p>
+      <a href="/foods/" class="btn-outline" id="foods-btn">Go to Food Guide &rarr;</a>
+    </div>
+
+    <!-- Email Note -->
     <p class="email-note">&#128231; We've also sent the link to your inbox.</p>
-
   </main>
 
   <script>
     // Preserve UTM parameters for quiz link
     (function() {
-      var quizLink = document.querySelector('a[href^="/quiz-4/"]');
+      var quizBtn = document.getElementById('quiz-btn');
       var currentParams = window.location.search;
-      if (currentParams && quizLink) {
-        quizLink.href = '/quiz-4/' + currentParams;
+      if (currentParams && quizBtn) {
+        quizBtn.href = '/quiz-4/' + currentParams;
       }
     })();
 
-    // Track which option users click
-    document.querySelector('.cta-primary').addEventListener('click', function() {
+    // Track clicks
+    document.getElementById('quiz-btn').addEventListener('click', function() {
       if (typeof fbq !== 'undefined') {
         fbq('trackCustom', 'QuizStartFromThankYou');
       }
@@ -258,7 +283,7 @@
       });
     });
 
-    document.querySelector('.cta-secondary').addEventListener('click', function() {
+    document.getElementById('foods-btn').addEventListener('click', function() {
       if (typeof fbq !== 'undefined') {
         fbq('trackCustom', 'FoodGuideDirectAccess');
       }
