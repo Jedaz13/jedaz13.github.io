@@ -96,9 +96,18 @@ When making changes, test:
 
 ### Creating New Pages
 
-**IMPORTANT: All new HTML pages MUST include Google Tag Manager.**
+**IMPORTANT: All new HTML pages MUST include Google Tag Manager AND the favicon.**
 
 GTM Container ID: `GTM-KQ3LKTBL`
+
+#### Favicon
+
+Add this in `<head>` (after meta viewport):
+```html
+<link rel="icon" type="image/png" href="/assets/favicon.png">
+```
+
+#### Google Tag Manager
 
 Add this in `<head>` (right after opening `<head>` tag):
 ```html
