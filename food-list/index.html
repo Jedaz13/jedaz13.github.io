@@ -615,8 +615,8 @@
         // Send to Supabase (upsert - will match on email if they later take quiz)
         await submitToSupabase(data.first_name, data.email);
 
-        // Send to webhook (replace YOUR_WEBHOOK_URL with actual endpoint)
-        await fetch('YOUR_WEBHOOK_URL', {
+        // Send to Make.com webhook
+        await fetch('https://hook.eu1.make.com/6somdu1dno8xp6qk5u788z2bgynjv7xe', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(data)
