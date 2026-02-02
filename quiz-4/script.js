@@ -1906,6 +1906,13 @@ function redirectToOffer() {
     params.set('vision', encodeURIComponent(state.answers.user_vision.substring(0, 200)));
   }
 
+  // Referral tracking - pass ref code through to offer page
+  var ref = '';
+  var refMatch = document.cookie.match(/(?:^|;\s*)ref_code=([^;]*)/);
+  if (refMatch) ref = decodeURIComponent(refMatch[1]);
+  if (!ref) try { ref = localStorage.getItem('referral_code') || ''; } catch(e) {}
+  if (ref) params.set('ref', ref);
+
   window.location.href = `${CONFIG.OFFER_URL}?${params.toString()}`;
 }
 
