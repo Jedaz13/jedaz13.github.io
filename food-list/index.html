@@ -177,10 +177,11 @@
       margin-bottom: 12px;
     }
 
-    .whats-inside > .container > p {
+    .rated-text {
       font-size: 16px;
       color: var(--text-olive);
       margin-bottom: 20px;
+      margin-top: 24px;
     }
 
     .condition-pills {
@@ -206,12 +207,8 @@
     }
 
     /* ===== SNEAK PEEK ===== */
-    .sneak-peek {
-      padding: 0 20px 48px;
-      background-color: var(--bg-cream);
-    }
-
     .sneak-peek-wrapper {
+      margin-bottom: 0;
       position: relative;
       max-width: 520px;
       margin: 0 auto;
@@ -284,13 +281,6 @@
       );
       pointer-events: none;
       border-radius: 0 0 12px 12px;
-    }
-
-    .sneak-peek-caption {
-      text-align: center;
-      font-size: 13px;
-      color: var(--text-light);
-      margin-top: 12px;
     }
 
     /* ===== AUTHORITY ===== */
@@ -431,24 +421,8 @@
   <section class="whats-inside">
     <div class="container">
       <h2>What's Inside the Food Guide?</h2>
-      <p>Every food is rated for 6 different gut conditions:</p>
 
-      <div class="condition-pills">
-        <span class="pill">Bloating-Dominant</span>
-        <span class="pill">IBS-C (Constipation)</span>
-        <span class="pill">IBS-D (Diarrhea)</span>
-        <span class="pill">IBS-M (Mixed)</span>
-        <span class="pill">Post-SIBO Recovery</span>
-        <span class="pill">Stress-Triggered</span>
-      </div>
-
-      <p class="prep-note">Plus preparation tips so you know exactly how to eat each food safely.</p>
-    </div>
-  </section>
-
-  <!-- Sneak Peek -->
-  <section class="sneak-peek">
-    <div class="container">
+      <!-- Sneak Peek -->
       <div class="sneak-peek-wrapper">
         <div class="sneak-peek-content">
 
@@ -485,7 +459,19 @@
         </div>
         <div class="fade-overlay"></div>
       </div>
-      <p class="sneak-peek-caption">A look inside the guide</p>
+
+      <p class="rated-text">Every food is rated for 6 different gut conditions:</p>
+
+      <div class="condition-pills">
+        <span class="pill">Bloating-Dominant</span>
+        <span class="pill">IBS-C (Constipation)</span>
+        <span class="pill">IBS-D (Diarrhea)</span>
+        <span class="pill">IBS-M (Mixed)</span>
+        <span class="pill">Post-SIBO Recovery</span>
+        <span class="pill">Stress-Triggered</span>
+      </div>
+
+      <p class="prep-note">Plus preparation tips so you know exactly how to eat each food safely.</p>
     </div>
   </section>
 
