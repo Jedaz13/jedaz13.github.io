@@ -51,19 +51,20 @@
       margin: 0 auto;
     }
 
-    /* ===== HERO ===== */
-    .hero {
-      padding: 40px 20px 48px;
-      text-align: center;
-    }
-
+    /* ===== LOGO ===== */
     .logo {
-      margin-bottom: 32px;
+      padding: 12px 20px;
     }
 
     .logo img {
-      height: 48px;
+      height: 36px;
       width: auto;
+    }
+
+    /* ===== HERO ===== */
+    .hero {
+      padding: 20px 20px 48px;
+      text-align: center;
     }
 
     h1 {
@@ -177,10 +178,11 @@
       margin-bottom: 12px;
     }
 
-    .whats-inside > .container > p {
+    .rated-text {
       font-size: 16px;
       color: var(--text-olive);
       margin-bottom: 20px;
+      margin-top: 24px;
     }
 
     .condition-pills {
@@ -206,12 +208,8 @@
     }
 
     /* ===== SNEAK PEEK ===== */
-    .sneak-peek {
-      padding: 0 20px 48px;
-      background-color: var(--bg-cream);
-    }
-
     .sneak-peek-wrapper {
+      margin-bottom: 0;
       position: relative;
       max-width: 520px;
       margin: 0 auto;
@@ -286,13 +284,6 @@
       border-radius: 0 0 12px 12px;
     }
 
-    .sneak-peek-caption {
-      text-align: center;
-      font-size: 13px;
-      color: var(--text-light);
-      margin-top: 12px;
-    }
-
     /* ===== AUTHORITY ===== */
     .authority {
       padding: 48px 20px;
@@ -363,7 +354,7 @@
     /* ===== DESKTOP ===== */
     @media (min-width: 768px) {
       .hero {
-        padding: 60px 20px 56px;
+        padding: 32px 20px 56px;
       }
 
       h1 {
@@ -404,12 +395,12 @@
   <!-- End Google Tag Manager (noscript) -->
 
   <!-- Hero + Form -->
+  <div class="logo">
+    <img src="/assets/Logo.png" alt="Gut Healing Academy">
+  </div>
+
   <header class="hero">
     <div class="container">
-      <div class="logo">
-        <img src="/assets/Logo.png" alt="Gut Healing Academy">
-      </div>
-
       <h1>Stop Guessing What to Eat</h1>
       <p class="subheadline">Get instant access to our complete IBS Food Guide &mdash; 60+ foods rated for your specific symptoms by registered nutritionists.</p>
 
@@ -431,24 +422,8 @@
   <section class="whats-inside">
     <div class="container">
       <h2>What's Inside the Food Guide?</h2>
-      <p>Every food is rated for 6 different gut conditions:</p>
 
-      <div class="condition-pills">
-        <span class="pill">Bloating-Dominant</span>
-        <span class="pill">IBS-C (Constipation)</span>
-        <span class="pill">IBS-D (Diarrhea)</span>
-        <span class="pill">IBS-M (Mixed)</span>
-        <span class="pill">Post-SIBO Recovery</span>
-        <span class="pill">Stress-Triggered</span>
-      </div>
-
-      <p class="prep-note">Plus preparation tips so you know exactly how to eat each food safely.</p>
-    </div>
-  </section>
-
-  <!-- Sneak Peek -->
-  <section class="sneak-peek">
-    <div class="container">
+      <!-- Sneak Peek -->
       <div class="sneak-peek-wrapper">
         <div class="sneak-peek-content">
 
@@ -485,7 +460,19 @@
         </div>
         <div class="fade-overlay"></div>
       </div>
-      <p class="sneak-peek-caption">A look inside the guide</p>
+
+      <p class="rated-text">Every food is rated for 6 different gut conditions:</p>
+
+      <div class="condition-pills">
+        <span class="pill">Bloating-Dominant</span>
+        <span class="pill">IBS-C (Constipation)</span>
+        <span class="pill">IBS-D (Diarrhea)</span>
+        <span class="pill">IBS-M (Mixed)</span>
+        <span class="pill">Post-SIBO Recovery</span>
+        <span class="pill">Stress-Triggered</span>
+      </div>
+
+      <p class="prep-note">Plus preparation tips so you know exactly how to eat each food safely.</p>
     </div>
   </section>
 
