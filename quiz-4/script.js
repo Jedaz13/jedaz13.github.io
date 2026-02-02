@@ -1907,13 +1907,8 @@ function redirectToOffer() {
   }
 
   // Referral tracking - pass ref code through to offer page
-  var ref = '';
-  var refMatch = document.cookie.match(/(?:^|;\s*)ref_code=([^;]*)/);
-  if (refMatch) ref = decodeURIComponent(refMatch[1]);
-  if (!ref) try { ref = localStorage.getItem('referral_code') || ''; } catch(e) {}
-  if (ref) params.set('ref', ref);
-
-  window.location.href = `${CONFIG.OFFER_URL}?${params.toString()}`;
+  var offerUrl = `${CONFIG.OFFER_URL}?${params.toString()}`;
+  window.location.href = typeof GHA_Referral !== 'undefined' ? GHA_Referral.buildUrl(offerUrl) : offerUrl;
 }
 
 function formatTreatmentsList(treatments) {
