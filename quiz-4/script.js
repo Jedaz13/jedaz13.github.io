@@ -1694,6 +1694,48 @@ async function submitFinalData() {
     } catch (e) {
       console.error('Error submitting to Supabase:', e);
     }
+
+    // Track referral quiz completion
+    await trackReferralQuizCompletion();
+  }
+}
+
+async function trackReferralQuizCompletion() {
+  // Get ref code from GHA_Referral, cookie, or localStorage
+  var refCode = null;
+  if (typeof GHA_Referral !== 'undefined' && GHA_Referral.getRefCode) {
+    refCode = GHA_Referral.getRefCode();
+  }
+  if (!refCode) {
+    var match = document.cookie.match(/(?:^|;\s*)ref_code=([^;]*)/);
+    if (match) refCode = decodeURIComponent(match[1]);
+  }
+  if (!refCode) {
+    try { refCode = localStorage.getItem('referral_code') || null; } catch(e) {}
+  }
+
+  if (!refCode || !supabaseClient) return;
+
+  var referredEmail = state.userData.email || null;
+
+  try {
+    const { error } = await supabaseClient
+      .from('referrals')
+      .insert({
+        referrer_code: refCode,
+        referred_email: referredEmail,
+        quiz_completed: true,
+        trial_started: false,
+        account_activated: false
+      });
+
+    if (error) {
+      console.error('Referral tracking error:', error);
+    } else {
+      console.log('Referral quiz completion tracked for code:', refCode);
+    }
+  } catch (e) {
+    console.error('Error tracking referral:', e);
   }
 }
 
