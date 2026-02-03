@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Data Layer Initialization -->
+  <script>
+    window.dataLayer = window.dataLayer || [];
+  </script>
+
+  <!-- Meta Pixel Code -->
+  <script>
+    !function(f,b,e,v,n,t,s)
+    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+    n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];
+    s.parentNode.insertBefore(t,s)}(window, document,'script',
+    'https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', 'YOUR_PIXEL_ID');
+    fbq('track', 'PageView');
+  </script>
+  <!-- End Meta Pixel Code -->
+
+  <script>
+    // Read purchase data from URL params or localStorage
+    var urlParams = new URLSearchParams(window.location.search);
+    var purchaseName = urlParams.get('name') || '';
+    var purchaseEmail = urlParams.get('email') || '';
+    var purchaseProtocol = urlParams.get('protocol_name') || '';
+    var purchaseValue = 47; // Base protocol price
+
+    // Try localStorage for total value
+    try {
+      var storedTotal = localStorage.getItem('gha_purchase_total');
+      if (storedTotal) purchaseValue = parseFloat(storedTotal);
+    } catch (e) {}
+
+    // Meta Pixel purchase event
+    if (typeof fbq !== 'undefined') {
+      fbq('track', 'Purchase', {
+        value: purchaseValue,
+        currency: 'USD',
+        content_name: purchaseProtocol + ' Protocol',
+        content_type: 'product'
+      });
+    }
+
+    // GTM dataLayer purchase event
+    dataLayer.push({
+      'event': 'purchase',
+      'ecommerce': {
+        'transaction_id': 'txn_' + Date.now(),
+        'currency': 'USD',
+        'value': purchaseValue,
+        'items': [{
+          'item_id': 'protocol',
+          'item_name': purchaseProtocol + ' Protocol',
+          'item_category': 'protocol',
+          'price': purchaseValue,
+          'quantity': 1
+        }]
+      },
+      'protocol': purchaseProtocol,
+      'purchaseType': 'protocol'
+    });
+  </script>
+
+  <!-- Google Tag Manager -->
+  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+  new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+  j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+  'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+  })(window,document,'script','dataLayer','GTM-KQ3LKTBL');</script>
+  <!-- End Google Tag Manager -->
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="description" content="Your protocol is on its way. Check your email for access.">
+  <title>You're In | Gut Healing Academy</title>
+  <link rel="icon" type="image/png" href="/assets/favicon.png">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg-cream: #FDF8F5;
+      --bg-section: #F7F3EF;
+      --white: #FFFFFF;
+      --text-charcoal: #2D3436;
+      --text-secondary: #4a4f51;
+      --text-muted: #6b7280;
+      --forest: #2D5A3D;
+      --cta-coral: #E07A5F;
+      --cta-coral-hover: #d16a50;
+      --success: #52B788;
+      --success-light: #E8F5EE;
+      --divider: #e5e7eb;
+      --shadow-card: 0 2px 12px rgba(0, 0, 0, 0.06);
+      --radius-lg: 12px;
+      --radius-xl: 16px;
+      --font-family: 'Source Sans 3', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      --font-display: 'DM Serif Display', serif;
+      --max-content-width: 640px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: var(--font-family);
+      font-size: 16px;
+      line-height: 1.7;
+      color: var(--text-secondary);
+      background-color: var(--bg-cream);
+    }
+    a { color: var(--forest); text-decoration: none; }
+    h1, h2, h3 {
+      font-family: var(--font-display);
+      color: var(--text-charcoal);
+      font-weight: 400;
+      line-height: 1.3;
+    }
+    .container {
+      width: 100%;
+      max-width: var(--max-content-width);
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    /* Success Icon */
+    .success-icon {
+      width: 64px;
+      height: 64px;
+      margin: 0 auto 24px;
+      background: var(--success-light);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .success-icon svg {
+      width: 32px;
+      height: 32px;
+      color: var(--success);
+    }
+
+    /* Main content */
+    .thank-you-page {
+      padding: 48px 0 40px;
+      text-align: center;
+    }
+    .thank-you-page h1 {
+      font-size: 1.625rem;
+      margin-bottom: 12px;
+      color: var(--forest);
+    }
+    .thank-you-page .subtitle {
+      font-size: 1.0625rem;
+      color: var(--text-secondary);
+      margin-bottom: 32px;
+    }
+
+    /* Info card */
+    .info-card {
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      box-shadow: var(--shadow-card);
+      text-align: left;
+      margin-bottom: 32px;
+    }
+    .info-card p {
+      font-size: 0.9375rem;
+      color: var(--text-secondary);
+      margin-bottom: 12px;
+      line-height: 1.6;
+    }
+    .info-card p:last-child { margin-bottom: 0; }
+    .info-card strong { color: var(--text-charcoal); }
+    .email-highlight {
+      color: var(--forest);
+      font-weight: 600;
+    }
+
+    /* Community upsell */
+    .upsell-section {
+      padding: 32px 0;
+      background-color: var(--bg-section);
+    }
+    .upsell-card {
+      background: var(--white);
+      border-radius: var(--radius-xl);
+      padding: 28px 24px;
+      box-shadow: var(--shadow-card);
+      text-align: center;
+    }
+    .upsell-card h2 {
+      font-size: 1.25rem;
+      margin-bottom: 12px;
+    }
+    .upsell-card p {
+      font-size: 0.9375rem;
+      color: var(--text-secondary);
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    .btn-soft {
+      display: inline-block;
+      padding: 14px 28px;
+      font-family: var(--font-family);
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--white);
+      background-color: var(--forest);
+      border-radius: 100px;
+      text-decoration: none;
+      transition: all 0.2s ease;
+    }
+    .btn-soft:hover {
+      background-color: var(--cta-coral);
+      transform: translateY(-1px);
+      text-decoration: none;
+    }
+
+    /* Footer */
+    .site-footer {
+      padding: 24px 0;
+      text-align: center;
+      background-color: var(--bg-section);
+    }
+    .footer-disclaimer {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+      line-height: 1.5;
+    }
+    .footer-links { font-size: 0.8125rem; }
+    .footer-links a { color: var(--text-muted); }
+    .footer-links .divider { margin: 0 8px; color: var(--text-muted); }
+
+    @media (min-width: 768px) {
+      .thank-you-page { padding: 64px 0 48px; }
+      .thank-you-page h1 { font-size: 2rem; }
+      .upsell-card { padding: 32px 28px; }
+    }
+  </style>
+  <link rel="stylesheet" href="/css/support-widget.css">
+</head>
+<body>
+  <!-- Google Tag Manager (noscript) -->
+  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KQ3LKTBL"
+  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+  <!-- End Google Tag Manager (noscript) -->
+
+  <!-- Meta Pixel (noscript) -->
+  <noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=YOUR_PIXEL_ID&ev=PageView&noscript=1"/></noscript>
+
+  <main class="thank-you-page">
+    <div class="container">
+      <!-- Success Icon -->
+      <div class="success-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+          <polyline points="22 4 12 14.01 9 11.01"></polyline>
+        </svg>
+      </div>
+
+      <h1 id="headlineName">Friend, your Protocol is on its way.</h1>
+      <p class="subtitle" id="emailLine">Check your email — you'll have access within 5 minutes.</p>
+
+      <div class="info-card">
+        <p>Your protocol starts with Day 1 baseline measurements. Everything you need is in the PDF.</p>
+        <p>If you don't see the email within 5 minutes, check your spam/promotions folder or email <strong>hello@guthealingacademy.com</strong>.</p>
+      </div>
+    </div>
+  </main>
+
+  <!-- Community Upsell -->
+  <section class="upsell-section">
+    <div class="container">
+      <div class="upsell-card">
+        <h2>Want ongoing support from Rebecca & Paulina?</h2>
+        <p>Get weekly live Q&A, practitioner messaging, and a private community of women working through the same protocols.</p>
+        <a href="#" class="btn-soft" id="communityLink">Join the Gut Healing Community</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container">
+      <p class="footer-disclaimer">This program is for educational purposes only and is not a substitute for professional medical advice.</p>
+      <div class="footer-links">
+        <a href="/legal/">Privacy Policy</a>
+        <span class="divider">&middot;</span>
+        <a href="/legal/terms.html">Terms</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      var params = new URLSearchParams(window.location.search);
+      var name = params.get('name') || '';
+      var email = params.get('email') || '';
+      var protocolName = params.get('protocol_name') || '';
+
+      // Fallback to localStorage
+      try {
+        if (!name) name = localStorage.getItem('gha_name') || '';
+        if (!email) email = localStorage.getItem('gha_email') || '';
+        if (!protocolName) protocolName = localStorage.getItem('gha_protocol_name') || '';
+      } catch (e) {}
+
+      var displayName = name || 'Friend';
+      var displayProtocol = protocolName || 'Protocol';
+
+      // Headline
+      document.getElementById('headlineName').textContent = displayName + ', your ' + displayProtocol + ' Protocol is on its way.';
+
+      // Email line
+      if (email) {
+        document.getElementById('emailLine').innerHTML = 'Check your email at <span style="color: var(--forest); font-weight: 600;">' + email + '</span> \u2014 you\'ll have access within 5 minutes.';
+      }
+
+      // Community link with params
+      var upgradeParams = new URLSearchParams();
+      if (name) upgradeParams.set('name', name);
+      if (email) upgradeParams.set('email', email);
+      if (protocolName) upgradeParams.set('protocol_name', protocolName);
+      var upgradeUrl = '/upgrade/?' + upgradeParams.toString();
+      document.getElementById('communityLink').href = upgradeUrl;
+
+      // Store data
+      try {
+        if (name) localStorage.setItem('gha_name', name);
+        if (email) localStorage.setItem('gha_email', email);
+        if (protocolName) localStorage.setItem('gha_protocol_name', protocolName);
+      } catch (e) {}
+    });
+  </script>
+  <script src="/js/support-widget.js"></script>
+</body>
+</html>

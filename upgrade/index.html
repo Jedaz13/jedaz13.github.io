@@ -1,6 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <!-- Data Layer Initialization -->
+  <script>
+    window.dataLayer = window.dataLayer || [];
+  </script>
+
   <!-- Google Tag Manager -->
   <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
   new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
@@ -12,8 +17,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="robots" content="noindex, nofollow">
-  <title>Upgrade Your Membership | Gut Healing Academy</title>
-  <meta name="description" content="Unlock full access to practitioner messaging, Q&A questions, and learning materials.">
+  <title>Join the Gut Healing Community | Gut Healing Academy</title>
+  <meta name="description" content="Get ongoing practitioner support, weekly Q&A, and a community of women healing their gut.">
 
   <!-- Favicon -->
   <link rel="icon" type="image/png" href="/assets/favicon.png">
@@ -21,127 +26,51 @@
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
 
   <style>
-    /* ===== CSS VARIABLES ===== */
     :root {
-      --color-primary: #6B9080;
-      --color-secondary: #A4C3B2;
-      --color-background: #FDF8F5;
-      --color-cta: #E07A5F;
-      --color-cta-hover: #d16a50;
-      --color-text: #2D3436;
-      --color-trust: #264653;
-      --color-white: #FFFFFF;
-      --color-text-light: #4a4f51;
-      --color-text-muted: #6b7280;
-      --color-border: #e5e7eb;
-      --color-success: #4CAF50;
-      --color-locked: #999999;
-      --shadow-card: 0 2px 8px rgba(0, 0, 0, 0.1);
-      --shadow-elevated: 0 4px 16px rgba(0, 0, 0, 0.12);
+      --bg-cream: #FDF8F5;
+      --bg-section: #F7F3EF;
+      --white: #FFFFFF;
+      --text-charcoal: #2D3436;
+      --text-secondary: #4a4f51;
+      --text-muted: #6b7280;
+      --forest: #2D5A3D;
+      --forest-light: #3a7050;
+      --cta-coral: #E07A5F;
+      --cta-coral-hover: #d16a50;
+      --sage: #A4C3B2;
+      --success: #52B788;
+      --success-light: #E8F5EE;
+      --divider: #e5e7eb;
+      --shadow-card: 0 2px 12px rgba(0, 0, 0, 0.06);
+      --shadow-elevated: 0 4px 20px rgba(0, 0, 0, 0.1);
       --radius: 8px;
       --radius-lg: 12px;
       --radius-xl: 16px;
-      --font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      --max-content-width: 800px;
+      --font-family: 'Source Sans 3', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      --font-display: 'DM Serif Display', serif;
+      --max-content-width: 640px;
     }
 
-    /* ===== RESET & BASE ===== */
-    *, *::before, *::after {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    html {
-      scroll-behavior: smooth;
-    }
-
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
     body {
       font-family: var(--font-family);
-      font-size: 17px;
-      line-height: 1.6;
-      color: var(--color-text);
-      background-color: var(--color-background);
+      font-size: 16px;
+      line-height: 1.7;
+      color: var(--text-secondary);
+      background-color: var(--bg-cream);
     }
-
-    img {
-      max-width: 100%;
-      height: auto;
-      display: block;
-    }
-
-    a {
-      color: var(--color-primary);
-      text-decoration: none;
-    }
-
-    h1, h2, h3, h4 {
-      font-weight: 700;
+    img { max-width: 100%; height: auto; display: block; }
+    a { color: var(--forest); text-decoration: none; }
+    h1, h2, h3 {
+      font-family: var(--font-display);
+      color: var(--text-charcoal);
+      font-weight: 400;
       line-height: 1.3;
-      color: var(--color-text);
     }
-
-    /* ===== HEADER ===== */
-    .site-header {
-      background: var(--color-white);
-      border-bottom: 1px solid rgba(0, 0, 0, 0.08);
-      padding: 0 20px;
-      position: relative;
-      z-index: 100;
-    }
-
-    .header-container {
-      max-width: 1200px;
-      margin: 0 auto;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      height: 60px;
-    }
-
-    .header-logo {
-      display: flex;
-      align-items: center;
-      text-decoration: none;
-      transition: opacity 0.2s;
-    }
-
-    .header-logo:hover {
-      opacity: 0.8;
-    }
-
-    .header-logo img {
-      height: 50px;
-      width: auto;
-    }
-
-    .header-nav {
-      display: flex;
-      gap: 24px;
-      align-items: center;
-    }
-
-    .header-nav a {
-      font-size: 14px;
-      font-weight: 500;
-      color: var(--color-text);
-      text-decoration: none;
-      transition: color 0.2s;
-    }
-
-    .header-nav a:hover {
-      color: var(--color-primary);
-    }
-
-    .header-nav .nav-dashboard {
-      color: var(--color-primary);
-      font-weight: 600;
-    }
-
-    /* ===== CONTAINER ===== */
     .container {
       width: 100%;
       max-width: var(--max-content-width);
@@ -149,387 +78,225 @@
       padding: 0 20px;
     }
 
-    /* ===== HERO SECTION ===== */
+    /* Hero / Emotion */
     .hero-section {
-      padding: 48px 0 32px;
-      background-color: var(--color-background);
-      text-align: center;
-    }
-
-    .hero-section h1 {
-      font-size: 28px;
-      margin-bottom: 1rem;
-      color: var(--color-text);
-    }
-
-    .hero-subheadline {
-      font-size: 17px;
-      color: var(--color-text-light);
-      max-width: 600px;
-      margin: 0 auto;
-    }
-
-    /* ===== COMPARISON TABLE SECTION ===== */
-    .comparison-section {
-      padding: 32px 0 48px;
-      background-color: var(--color-background);
-    }
-
-    .comparison-section h2 {
-      font-size: 22px;
-      text-align: center;
-      margin-bottom: 1.5rem;
-    }
-
-    .comparison-table {
-      background: var(--color-white);
-      border-radius: var(--radius-lg);
-      box-shadow: var(--shadow-card);
-      overflow: hidden;
-    }
-
-    .comparison-header {
-      display: grid;
-      grid-template-columns: 1fr 80px 100px;
-      background: var(--color-primary);
-      color: var(--color-white);
-      font-weight: 600;
-      font-size: 14px;
-    }
-
-    .comparison-header > div {
-      padding: 12px 16px;
-      text-align: center;
-    }
-
-    .comparison-header > div:first-child {
+      padding: 40px 0 32px;
       text-align: left;
     }
-
-    .comparison-row {
-      display: grid;
-      grid-template-columns: 1fr 80px 100px;
-      border-bottom: 1px solid var(--color-border);
-      font-size: 15px;
+    .hero-section h1 {
+      font-size: 1.5rem;
+      margin-bottom: 20px;
+      color: var(--forest);
     }
-
-    .comparison-row:last-child {
-      border-bottom: none;
+    .hero-section h1 .user-name { color: var(--text-charcoal); }
+    .hero-copy {
+      font-size: 1.0625rem;
+      line-height: 1.7;
+      color: var(--text-secondary);
     }
+    .hero-copy p { margin-bottom: 16px; }
 
-    .comparison-row:nth-child(even) {
-      background-color: rgba(107, 144, 128, 0.05);
+    /* Logic — What's Inside */
+    .inside-section {
+      padding: 32px 0;
+      background-color: var(--bg-section);
     }
-
-    .comparison-row > div {
-      padding: 14px 16px;
+    .inside-section h2 {
+      font-size: 1.25rem;
+      margin-bottom: 20px;
+    }
+    .feature-list {
+      list-style: none;
+    }
+    .feature-item {
+      display: flex;
+      gap: 12px;
+      padding: 14px 0;
+      border-bottom: 1px solid var(--divider);
+      font-size: 0.9375rem;
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+    .feature-item:last-child { border-bottom: none; }
+    .feature-check {
+      flex-shrink: 0;
+      width: 22px;
+      height: 22px;
+      background: var(--success-light);
+      color: var(--success);
+      border-radius: 50%;
       display: flex;
       align-items: center;
-    }
-
-    .comparison-row > div:nth-child(2),
-    .comparison-row > div:nth-child(3) {
       justify-content: center;
-    }
-
-    .icon-check {
-      color: var(--color-success);
-      font-size: 18px;
-    }
-
-    .icon-lock {
-      color: var(--color-locked);
-      font-size: 16px;
-    }
-
-    /* ===== PRICING SECTION ===== */
-    .pricing-section {
-      padding: 48px 0;
-      background-color: var(--color-white);
-    }
-
-    .pricing-section h2 {
-      font-size: 24px;
-      text-align: center;
-      margin-bottom: 2rem;
-    }
-
-    .pricing-cards {
-      display: flex;
-      flex-direction: column;
-      gap: 1.5rem;
-      max-width: 700px;
-      margin: 0 auto;
-    }
-
-    .pricing-card {
-      background-color: var(--color-white);
-      padding: 32px 24px;
-      border-radius: var(--radius-xl);
-      text-align: center;
-      position: relative;
-      border: 2px solid var(--color-border);
-      transition: transform 0.2s, box-shadow 0.2s;
-    }
-
-    .pricing-card:hover {
-      transform: translateY(-2px);
-      box-shadow: var(--shadow-elevated);
-    }
-
-    .pricing-card-featured {
-      border-color: var(--color-cta);
-      box-shadow: var(--shadow-elevated);
-    }
-
-    .pricing-card .badge {
-      position: absolute;
-      top: -12px;
-      left: 50%;
-      transform: translateX(-50%);
-      background-color: var(--color-cta);
-      color: var(--color-white);
-      padding: 6px 20px;
-      border-radius: 20px;
       font-size: 12px;
       font-weight: 700;
-      letter-spacing: 0.5px;
-      white-space: nowrap;
+      margin-top: 1px;
     }
+    .feature-item strong { color: var(--text-charcoal); }
 
-    .pricing-card h3 {
+    /* Fear */
+    .fear-section {
+      padding: 32px 0;
+    }
+    .fear-section p {
+      font-size: 1rem;
+      line-height: 1.7;
+      color: var(--text-secondary);
+      margin-bottom: 16px;
+    }
+    .fear-section p:last-child { margin-bottom: 0; }
+    .fear-section strong { color: var(--text-charcoal); font-weight: 600; }
+
+    /* Pricing */
+    .pricing-section {
+      padding: 32px 0;
+      background-color: var(--bg-section);
+    }
+    .pricing-card {
+      background: var(--white);
+      border: 2px solid var(--forest);
+      border-radius: var(--radius-xl);
+      padding: 28px 24px;
+      text-align: center;
+      box-shadow: var(--shadow-elevated);
+      margin-bottom: 20px;
+    }
+    .pricing-card h2 {
       font-size: 1.25rem;
-      margin-bottom: 0.5rem;
-      color: var(--color-text);
+      margin-bottom: 4px;
     }
-
-    .price-amount {
-      font-size: 48px;
-      font-weight: 700;
-      color: var(--color-text);
-      line-height: 1;
-      margin-bottom: 0.25rem;
+    .pricing-card .price-display {
+      margin: 16px 0 4px;
     }
-
+    .price-original {
+      font-size: 1.125rem;
+      color: var(--text-muted);
+      text-decoration: line-through;
+    }
+    .price-current {
+      font-family: var(--font-display);
+      font-size: 2.25rem;
+      color: var(--text-charcoal);
+    }
     .price-period {
-      font-size: 18px;
-      font-weight: 400;
-      color: var(--color-text-light);
+      font-size: 1rem;
+      color: var(--text-muted);
+    }
+    .price-note {
+      font-size: 0.875rem;
+      color: var(--forest);
+      font-weight: 500;
+      margin-bottom: 20px;
+    }
+    /* Non-discount pricing */
+    .price-standard {
+      font-family: var(--font-display);
+      font-size: 2.25rem;
+      color: var(--text-charcoal);
+      margin: 16px 0 4px;
     }
 
-    .pricing-bullets {
-      list-style: none;
-      text-align: left;
-      margin: 1.5rem 0;
-      padding: 0;
-    }
-
-    .pricing-bullets li {
-      position: relative;
-      padding-left: 1.5rem;
-      margin-bottom: 0.5rem;
-      font-size: 15px;
-      color: var(--color-text-light);
-    }
-
-    .pricing-bullets li::before {
-      content: '•';
-      position: absolute;
-      left: 0.5rem;
-      color: var(--color-primary);
-    }
-
-    /* ===== BUTTONS ===== */
-    .btn {
-      display: inline-block;
-      padding: 16px 32px;
-      font-size: 16px;
+    .btn-cta {
+      display: block;
+      width: 100%;
+      padding: 18px 32px;
+      font-family: var(--font-family);
+      font-size: 1.125rem;
       font-weight: 600;
       text-align: center;
-      border-radius: var(--radius);
-      cursor: pointer;
-      transition: background-color 0.2s ease, transform 0.1s ease;
+      color: var(--white);
+      background-color: var(--cta-coral);
       border: none;
-      min-height: 48px;
+      border-radius: 100px;
+      cursor: pointer;
+      transition: all 0.2s ease;
       line-height: 1.2;
       text-decoration: none;
     }
-
-    .btn-primary {
-      background-color: var(--color-cta);
-      color: var(--color-white);
+    .btn-cta:hover {
+      background-color: var(--cta-coral-hover);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 16px rgba(224, 122, 95, 0.3);
+      text-decoration: none;
     }
-
-    .btn-primary:hover {
-      background-color: var(--color-cta-hover);
-    }
-
-    .btn-primary:active {
-      transform: scale(0.98);
-    }
-
-    .btn-block {
-      display: block;
-      width: 100%;
-    }
-
-    /* ===== TRUST SECTION ===== */
-    .trust-section {
-      padding: 32px 0 48px;
-      background-color: var(--color-white);
-    }
-
-    .trust-items {
-      max-width: 500px;
-      margin: 0 auto;
+    .cta-micro {
       text-align: center;
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+      margin-top: 12px;
     }
 
-    .trust-item {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      margin-bottom: 12px;
-      font-size: 15px;
-      color: var(--color-text);
-    }
-
-    .trust-item .icon {
-      color: var(--color-primary);
-      font-size: 18px;
-    }
-
-    .trust-email {
-      margin-top: 20px;
-      font-size: 14px;
-      color: var(--color-text-muted);
-    }
-
-    .trust-email a {
-      color: var(--color-primary);
-      text-decoration: underline;
-    }
-
-    /* ===== FOOTER ===== */
-    .site-footer {
+    /* FAQ */
+    .faq-section {
       padding: 40px 0;
-      background-color: var(--color-trust);
-      color: var(--color-white);
     }
-
-    .footer-links {
+    .faq-section h2 {
+      font-size: 1.25rem;
+      margin-bottom: 20px;
       text-align: center;
-      margin-bottom: 1rem;
     }
-
-    .footer-links a {
-      color: var(--color-white);
-      opacity: 0.8;
-      font-size: 14px;
-      transition: opacity 0.2s ease;
+    .faq-item {
+      border-bottom: 1px solid var(--divider);
     }
-
-    .footer-links a:hover {
-      opacity: 1;
+    .faq-item:first-child {
+      border-top: 1px solid var(--divider);
     }
-
-    .footer-links .divider {
-      margin: 0 0.75rem;
-      opacity: 0.5;
+    .faq-question {
+      width: 100%;
+      background: none;
+      border: none;
+      padding: 16px 0;
+      font-family: var(--font-family);
+      font-size: 0.9375rem;
+      font-weight: 600;
+      color: var(--text-charcoal);
+      text-align: left;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      line-height: 1.4;
     }
+    .faq-question:hover { color: var(--forest); }
+    .faq-arrow {
+      flex-shrink: 0;
+      width: 20px;
+      height: 20px;
+      transition: transform 0.2s ease;
+    }
+    .faq-item.open .faq-arrow { transform: rotate(180deg); }
+    .faq-answer {
+      display: none;
+      padding: 0 0 16px;
+      font-size: 0.9375rem;
+      color: var(--text-secondary);
+      line-height: 1.7;
+    }
+    .faq-item.open .faq-answer { display: block; }
 
-    .footer-copyright {
+    /* Footer */
+    .site-footer {
+      padding: 24px 0;
       text-align: center;
-      font-size: 12px;
-      opacity: 0.6;
+      background-color: var(--bg-section);
     }
+    .footer-disclaimer {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+      line-height: 1.5;
+    }
+    .footer-links { font-size: 0.8125rem; }
+    .footer-links a { color: var(--text-muted); }
+    .footer-links .divider { margin: 0 8px; color: var(--text-muted); }
 
-    /* ===== RESPONSIVE - TABLET & DESKTOP ===== */
     @media (min-width: 768px) {
-      .header-logo img {
-        height: 55px;
-      }
-
-      .hero-section {
-        padding: 64px 0 40px;
-      }
-
-      .hero-section h1 {
-        font-size: 36px;
-      }
-
-      .hero-subheadline {
-        font-size: 18px;
-      }
-
-      .comparison-section h2 {
-        font-size: 26px;
-      }
-
-      .comparison-header {
-        grid-template-columns: 1fr 100px 120px;
-        font-size: 15px;
-      }
-
-      .comparison-row {
-        grid-template-columns: 1fr 100px 120px;
-        font-size: 16px;
-      }
-
-      .pricing-section {
-        padding: 64px 0;
-      }
-
-      .pricing-section h2 {
-        font-size: 28px;
-      }
-
-      .pricing-cards {
-        flex-direction: row;
-        align-items: stretch;
-      }
-
-      .pricing-card {
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-      }
-
-      .pricing-card .btn {
-        margin-top: auto;
-      }
-
-      .pricing-card-featured {
-        transform: scale(1.03);
-      }
-
-      .pricing-card-featured:hover {
-        transform: scale(1.05);
-      }
-
-      .trust-section {
-        padding: 40px 0 64px;
-      }
-
-      .site-footer {
-        padding: 50px 0;
-      }
-    }
-
-    @media (min-width: 1024px) {
-      .hero-section h1 {
-        font-size: 40px;
-      }
-
-      .comparison-section h2,
-      .pricing-section h2 {
-        font-size: 32px;
-      }
+      .hero-section { padding: 56px 0 40px; }
+      .hero-section h1 { font-size: 1.875rem; }
+      .pricing-card { padding: 32px 28px; }
     }
   </style>
-    <link rel="stylesheet" href="/css/global-header.css">
-    <link rel="stylesheet" href="/css/global-footer.css">
   <link rel="stylesheet" href="/css/support-widget.css">
 </head>
 <body>
@@ -538,136 +305,241 @@
   height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <!-- End Google Tag Manager (noscript) -->
 
-  <!-- ===== HEADER ===== -->
-      <header class="site-header"><div class="header-container"><a href="/" class="header-logo"><img src="/assets/Logo.png" alt="Gut Healing Academy"></a><nav class="header-nav"><a href="/about/">About</a><a href="/foods/">Food Guides</a><a href="/tools/">Tools</a><a href="/legal/contact.html">Contact</a><div class="nav-divider"></div><a href="https://app.guthealingacademy.com/" class="nav-login">Members Area</a></nav><button class="mobile-menu-btn" aria-label="Toggle menu" onclick="document.querySelector('.mobile-menu').classList.toggle('active')"><span></span><span></span><span></span></button></div><div class="mobile-menu"><a href="/about/">About</a><a href="/foods/">Food Guides</a><a href="/tools/">Tools</a><a href="/legal/contact.html">Contact</a><a href="https://app.guthealingacademy.com/" class="nav-login">Members Area</a></div></header>
-
   <main>
-    <!-- ===== HERO SECTION ===== -->
+
+    <!-- EMOTION -->
     <section class="hero-section">
       <div class="container">
-        <h1>Unlock Full Access to Gut Healing Academy</h1>
-        <p class="hero-subheadline">Get unlimited practitioner support, submit Q&A questions, and access all learning materials</p>
-      </div>
-    </section>
-
-    <!-- ===== COMPARISON TABLE SECTION ===== -->
-    <section class="comparison-section">
-      <div class="container">
-        <h2>What You Unlock</h2>
-
-        <div class="comparison-table">
-          <!-- Table Header -->
-          <div class="comparison-header">
-            <div>Feature</div>
-            <div>Trial</div>
-            <div>Full Member</div>
-          </div>
-
-          <!-- Row 1: Personalized protocol -->
-          <div class="comparison-row">
-            <div>Your personalized protocol</div>
-            <div><span class="icon-check">&#10003;</span></div>
-            <div><span class="icon-check">&#10003;</span></div>
-          </div>
-
-          <!-- Row 2: Daily symptom tracking -->
-          <div class="comparison-row">
-            <div>Daily symptom tracking</div>
-            <div><span class="icon-check">&#10003;</span></div>
-            <div><span class="icon-check">&#10003;</span></div>
-          </div>
-
-          <!-- Row 3: Watch Live Q&A sessions -->
-          <div class="comparison-row">
-            <div>Watch Live Q&A sessions</div>
-            <div><span class="icon-check">&#10003;</span></div>
-            <div><span class="icon-check">&#10003;</span></div>
-          </div>
-
-          <!-- Row 4: Message your practitioner -->
-          <div class="comparison-row">
-            <div>Message your practitioner</div>
-            <div><span class="icon-lock">&#128274;</span></div>
-            <div><span class="icon-check">&#10003;</span></div>
-          </div>
-
-          <!-- Row 5: Submit Q&A questions -->
-          <div class="comparison-row">
-            <div>Submit Q&A questions</div>
-            <div><span class="icon-lock">&#128274;</span></div>
-            <div><span class="icon-check">&#10003;</span></div>
-          </div>
-
-          <!-- Row 6: Learning materials library -->
-          <div class="comparison-row">
-            <div>Learning materials library</div>
-            <div><span class="icon-lock">&#128274;</span></div>
-            <div><span class="icon-check">&#10003;</span></div>
-          </div>
-
-          <!-- Row 7: Protocol adjustments -->
-          <div class="comparison-row">
-            <div>Protocol adjustments</div>
-            <div><span class="icon-lock">&#128274;</span></div>
-            <div><span class="icon-check">&#10003;</span></div>
-          </div>
+        <h1><span class="user-name" id="userName">Friend</span>, you've taken the first step with your <span id="protocolName">Protocol</span>.</h1>
+        <div class="hero-copy">
+          <p>But here's what most women discover by Week 2: the protocol works — and then you have questions. "Is this reaction normal?" "Should I adjust the timing?" "What do I do when it stops working on vacation?"</p>
+          <p>That's where the Gut Healing Community comes in.</p>
         </div>
       </div>
     </section>
 
-    <!-- ===== PRICING SECTION ===== -->
+    <!-- LOGIC — What's Inside -->
+    <section class="inside-section">
+      <div class="container">
+        <h2>What you get inside</h2>
+        <ul class="feature-list">
+          <li class="feature-item">
+            <span class="feature-check">&#10003;</span>
+            <span><strong>Weekly live Q&A with Rebecca Taylor (RNutr) and Paulina Andrzejewska (MSc)</strong> — ask YOUR questions, get personalized answers</span>
+          </li>
+          <li class="feature-item">
+            <span class="feature-check">&#10003;</span>
+            <span><strong>Private community of women</strong> working through the same protocols — you're not doing this alone anymore</span>
+          </li>
+          <li class="feature-item">
+            <span class="feature-check">&#10003;</span>
+            <span><strong>Protocol adjustments for Weeks 2-8</strong> as your body responds and changes</span>
+          </li>
+          <li class="feature-item">
+            <span class="feature-check">&#10003;</span>
+            <span><strong>Direct practitioner messaging</strong> when you need guidance between sessions</span>
+          </li>
+          <li class="feature-item">
+            <span class="feature-check">&#10003;</span>
+            <span><strong>New protocols and resources</strong> added monthly</span>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- FEAR -->
+    <section class="fear-section">
+      <div class="container">
+        <p>You've already tried going it alone. The Googling at 2am. The Reddit threads that contradict each other. The supplements that sit half-empty in your cabinet.</p>
+        <p><strong>Your protocol gives you the plan — the community gives you the people who make sure it actually works.</strong></p>
+      </div>
+    </section>
+
+    <!-- PRICING -->
     <section class="pricing-section">
       <div class="container">
-        <h2>Choose Your Plan</h2>
-
-        <div class="pricing-cards">
-          <!-- Monthly Card -->
-          <article class="pricing-card">
-            <h3>Monthly</h3>
-            <p class="price-amount">$47<span class="price-period">/month</span></p>
-            <ul class="pricing-bullets">
-              <li>Flexible, cancel anytime</li>
-              <li>Billed monthly</li>
-            </ul>
-            <a href="https://buy.stripe.com/3cIaEY2Q172W3tCfXngA805" class="btn btn-primary btn-block">Choose Monthly</a>
-          </article>
-
-          <!-- Annual Card (Featured) -->
-          <article class="pricing-card pricing-card-featured">
-            <span class="badge">SAVE 52%</span>
-            <h3>Annual</h3>
-            <p class="price-amount">$297<span class="price-period">/year</span></p>
-            <ul class="pricing-bullets">
-              <li>Save $267 compared to monthly</li>
-              <li>Just $24.75/month</li>
-            </ul>
-            <a href="https://buy.stripe.com/fZufZieyJevo2pycLbgA804" class="btn btn-primary btn-block">Choose Annual</a>
-          </article>
+        <!-- Discounted pricing (protocol buyers) -->
+        <div class="pricing-card" id="pricingDiscounted" style="display: none;">
+          <h2>Gut Healing Community</h2>
+          <div class="price-display">
+            <span class="price-original">$47/month</span>
+            <div class="price-current">$37.60<span class="price-period">/month</span></div>
+          </div>
+          <p class="price-note">Protocol member discount (20% off)</p>
+          <p style="font-size: 0.875rem; color: var(--text-muted); margin-bottom: 20px;">Because you've already committed to your gut health.</p>
+          <a href="#" class="btn-cta" id="ctaDiscounted">Join the Community — $37.60/month</a>
         </div>
+
+        <!-- Standard pricing (cold visitors) -->
+        <div class="pricing-card" id="pricingStandard" style="display: none;">
+          <h2>Gut Healing Community</h2>
+          <div class="price-standard">$47<span class="price-period">/month</span></div>
+          <p style="font-size: 0.875rem; color: var(--text-muted); margin: 4px 0 20px;">Cancel anytime</p>
+          <a href="#" class="btn-cta" id="ctaStandard">Join the Community — $47/month</a>
+        </div>
+
+        <p class="cta-micro">Cancel anytime. No contracts. No guilt. If it's not helping, you shouldn't pay for it.</p>
       </div>
     </section>
 
-    <!-- ===== TRUST SECTION ===== -->
-    <section class="trust-section">
+    <!-- FAQ -->
+    <section class="faq-section">
       <div class="container">
-        <div class="trust-items">
-          <div class="trust-item">
-            <span class="icon">&#10003;</span>
-            <span>30-day money-back guarantee</span>
-          </div>
-          <div class="trust-item">
-            <span class="icon">&#10003;</span>
-            <span>Cancel anytime from your account</span>
-          </div>
-          <p class="trust-email">Questions? Email us at <a href="mailto:hello@guthealingacademy.com">hello@guthealingacademy.com</a></p>
+        <h2>Common Questions</h2>
+
+        <div class="faq-item" onclick="toggleFaq(this)">
+          <button class="faq-question">
+            <span>Can I cancel anytime?</span>
+            <svg class="faq-arrow" viewBox="0 0 20 20" fill="none"><path d="M5 7.5L10 12.5L15 7.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <div class="faq-answer">Yes. No contracts, no minimum commitment. Cancel from your account or email us.</div>
+        </div>
+
+        <div class="faq-item" onclick="toggleFaq(this)">
+          <button class="faq-question">
+            <span>What if I need a different protocol?</span>
+            <svg class="faq-arrow" viewBox="0 0 20 20" fill="none"><path d="M5 7.5L10 12.5L15 7.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <div class="faq-answer">Our practitioners can reassign your protocol based on your tracking data. Just message them inside the community.</div>
+        </div>
+
+        <div class="faq-item" onclick="toggleFaq(this)">
+          <button class="faq-question">
+            <span>I'm already seeing results, do I still need this?</span>
+            <svg class="faq-arrow" viewBox="0 0 20 20" fill="none"><path d="M5 7.5L10 12.5L15 7.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <div class="faq-answer">The protocol gets you started. The community helps you maintain results and handle the curve balls — travel, stress, holidays, new food reintroductions. Most relapses happen in weeks 3-6 when people go it alone.</div>
         </div>
       </div>
     </section>
+
   </main>
 
-  <!-- ===== FOOTER ===== -->
-    <footer class="site-footer"></footer>
-  <script src="/js/global-footer.js"></script>
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container">
+      <p class="footer-disclaimer">This program is for educational purposes only and is not a substitute for professional medical advice.</p>
+      <div class="footer-links">
+        <a href="/legal/">Privacy Policy</a>
+        <span class="divider">&middot;</span>
+        <a href="/legal/terms.html">Terms</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Stripe Payment Links for community membership
+    // Replace these with actual Stripe Payment Link URLs
+    var STRIPE_COMMUNITY_DISCOUNTED = 'https://buy.stripe.com/PLACEHOLDER_DISCOUNTED';  // $37.60/month
+    var STRIPE_COMMUNITY_STANDARD = 'https://buy.stripe.com/PLACEHOLDER_STANDARD';      // $47/month
+
+    var userData = {};
+
+    document.addEventListener('DOMContentLoaded', function() {
+      userData = loadUserData();
+      storeData(userData);
+      populatePage();
+      trackPageView();
+    });
+
+    function loadUserData() {
+      var params = new URLSearchParams(window.location.search);
+      var data = {
+        name: params.get('name') || '',
+        email: params.get('email') || '',
+        protocol_name: params.get('protocol_name') || ''
+      };
+
+      // Cookie fallback
+      if (!data.name) data.name = getCookie('gha_name') || '';
+      if (!data.email) data.email = getCookie('gha_email') || '';
+      if (!data.protocol_name) data.protocol_name = getCookie('gha_protocol_name') || '';
+
+      // LocalStorage fallback
+      try {
+        if (!data.name) data.name = localStorage.getItem('gha_name') || '';
+        if (!data.email) data.email = localStorage.getItem('gha_email') || '';
+        if (!data.protocol_name) data.protocol_name = localStorage.getItem('gha_protocol_name') || '';
+      } catch (e) {}
+
+      return data;
+    }
+
+    function getCookie(name) {
+      var cookies = document.cookie.split(';');
+      for (var i = 0; i < cookies.length; i++) {
+        var c = cookies[i].trim();
+        if (c.indexOf(name + '=') === 0) {
+          return decodeURIComponent(c.substring(name.length + 1));
+        }
+      }
+      return '';
+    }
+
+    function storeData(data) {
+      try {
+        for (var key in data) {
+          if (data[key]) {
+            localStorage.setItem('gha_' + key, data[key]);
+          }
+        }
+      } catch (e) {}
+      try {
+        var expires = new Date();
+        expires.setDate(expires.getDate() + 30);
+        var cookieExpiry = '; expires=' + expires.toUTCString() + '; path=/; SameSite=Lax';
+        for (var key in data) {
+          if (data[key]) {
+            document.cookie = 'gha_' + key + '=' + encodeURIComponent(data[key]) + cookieExpiry;
+          }
+        }
+      } catch (e) {}
+    }
+
+    function populatePage() {
+      var name = userData.name || 'Friend';
+      var protocolName = userData.protocol_name || '';
+      var hasProtocol = protocolName !== '';
+
+      document.getElementById('userName').textContent = name;
+      document.getElementById('protocolName').textContent = protocolName || 'Protocol';
+
+      // Show correct pricing
+      if (hasProtocol) {
+        document.getElementById('pricingDiscounted').style.display = 'block';
+        var discountLink = STRIPE_COMMUNITY_DISCOUNTED;
+        if (userData.email) {
+          discountLink += '?prefilled_email=' + encodeURIComponent(userData.email);
+        }
+        document.getElementById('ctaDiscounted').href = discountLink;
+      } else {
+        document.getElementById('pricingStandard').style.display = 'block';
+        var standardLink = STRIPE_COMMUNITY_STANDARD;
+        if (userData.email) {
+          standardLink += '?prefilled_email=' + encodeURIComponent(userData.email);
+        }
+        document.getElementById('ctaStandard').href = standardLink;
+      }
+    }
+
+    function toggleFaq(item) {
+      var isOpen = item.classList.contains('open');
+      var allItems = document.querySelectorAll('.faq-item');
+      for (var i = 0; i < allItems.length; i++) {
+        allItems[i].classList.remove('open');
+      }
+      if (!isOpen) item.classList.add('open');
+    }
+
+    function trackPageView() {
+      window.dataLayer = window.dataLayer || [];
+      window.dataLayer.push({
+        'event': 'upgrade_page_view',
+        'has_protocol': userData.protocol_name ? 'yes' : 'no',
+        'protocol': userData.protocol_name || ''
+      });
+    }
+  </script>
   <script src="/js/support-widget.js"></script>
 </body>
 </html>

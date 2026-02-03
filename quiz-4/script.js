@@ -7,7 +7,7 @@
 // CONFIGURATION
 // =================================================
 const CONFIG = {
-  OFFER_URL: '/offer-4/',
+  OFFER_URL: '/offer-protocol/',
   SOURCE_TRACKING: 'quiz-4',
   WEBHOOK_URL: 'https://hook.eu1.make.com/5uubblyocz70syh9xptkg248ycauy5pd',
   SUPABASE_URL: 'https://mwabljnngygkmahjgvps.supabase.co',
