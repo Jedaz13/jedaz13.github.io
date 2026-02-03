@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Data Layer Initialization -->
+  <script>
+    window.dataLayer = window.dataLayer || [];
+  </script>
+
+  <!-- Google Tag Manager -->
+  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+  new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+  j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+  'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+  })(window,document,'script','dataLayer','GTM-KQ3LKTBL');</script>
+  <!-- End Google Tag Manager -->
+
+  <!-- Referral Tracking -->
+  <script src="https://app.guthealingacademy.com/referral-tracker.js"></script>
+  <!-- End Referral Tracking -->
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="description" content="Your personalized gut healing protocol is ready. Built for your specific symptom pattern by registered practitioners.">
+  <title>Your Protocol Is Ready | Gut Healing Academy</title>
+  <link rel="icon" type="image/png" href="/assets/favicon.png">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="/css/support-widget.css">
+</head>
+<body>
+  <!-- Google Tag Manager (noscript) -->
+  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KQ3LKTBL"
+  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+  <!-- End Google Tag Manager (noscript) -->
+
+  <main>
+
+    <!-- ===== SECTION 1: EMOTION — The "We Know You" Headline ===== -->
+    <section class="hero-section">
+      <div class="container">
+        <h1><span class="user-name" id="userName">Friend</span>, your <span id="protocolNameHeadline">Personalized</span> Protocol is ready.</h1>
+
+        <div id="protocolHeadlineCopy" class="protocol-headline-copy">
+          <!-- Populated by JS based on protocol -->
+        </div>
+
+        <div id="personalizedParagraph" class="personalized-paragraph">
+          <!-- Populated by JS with duration, primary_complaint, vision -->
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== SECTION 2: EMOTION — Outcome Painting ===== -->
+    <section class="outcome-section">
+      <div class="container">
+        <div class="outcome-card" id="outcomeCard">
+          <!-- Populated by JS based on protocol -->
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== SECTION 3: LOGIC — What's Actually Inside ===== -->
+    <section class="inside-section">
+      <div class="container">
+        <p class="section-intro">This isn't another generic "eat more fiber" guide. Your <strong id="protocolNameInside">Protocol</strong> was built by registered practitioners for your specific symptom pattern.</p>
+
+        <div class="content-cards" id="contentCards">
+          <!-- 4 cards populated by JS based on protocol -->
+        </div>
+
+        <p class="practitioner-line">Every protocol is developed and clinically validated by Rebecca Taylor (Registered Nutritionist) and Paulina Andrzejewska (MSc, Low FODMAP Specialist). This isn't advice from someone who read a blog.</p>
+      </div>
+    </section>
+
+    <!-- ===== SECTION 4: LOGIC -> FEAR — What's at Stake ===== -->
+    <section class="stakes-section">
+      <div class="container">
+        <p>You've already spent <strong id="treatmentsCount">several</strong> rounds trying things that didn't work. The elimination diets that stole your social life. The probiotics that did nothing. The doctors who made you feel like it was all in your head.</p>
+        <p>Every month you wait is another month of avoiding restaurants, mapping bathrooms, canceling plans, and wearing stretchy pants because you don't know what your body will do today.</p>
+        <p><strong>This protocol costs less than a single functional medicine appointment</strong> — and it's actually built for your specific pattern.</p>
+      </div>
+    </section>
+
+    <!-- ===== SECTION 5: PRICING & CHECKOUT ===== -->
+    <section class="pricing-section">
+      <div class="container">
+
+        <!-- Main Offer -->
+        <div class="offer-card">
+          <h2>Your <span id="protocolNameOffer">Protocol</span></h2>
+          <p class="offer-description">Weekly structured plan + daily tracking + practitioner-validated guidance</p>
+          <p class="offer-price">$47</p>
+          <p class="offer-price-note">One-time payment — yours to keep forever</p>
+        </div>
+
+        <!-- Bump 1: Survival Guide -->
+        <div class="bump-card" id="bump1" onclick="toggleBump(1)">
+          <div class="bump-header">
+            <div class="bump-checkbox">
+              <span class="bump-checkbox-check">&#10003;</span>
+            </div>
+            <div class="bump-content">
+              <div class="bump-title">
+                <span>Add: Eating Out & Social Survival Guide</span>
+                <span class="bump-price">+$19</span>
+              </div>
+              <p class="bump-description">Stop Googling "IBS-safe restaurant options." Know exactly what to order at any restaurant, how to handle dinner parties, and what to say when people ask why you're not eating the cake.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bump 2: Meal Plan -->
+        <div class="bump-card" id="bump2" onclick="toggleBump(2)">
+          <div class="bump-header">
+            <div class="bump-checkbox">
+              <span class="bump-checkbox-check">&#10003;</span>
+            </div>
+            <div class="bump-content">
+              <div class="bump-title">
+                <span>Add: 4-Week Meal Plan for <span id="protocolNameBump">Your Protocol</span></span>
+                <span class="bump-price">+$37</span>
+              </div>
+              <p class="bump-description">28 days of breakfast, lunch, dinner, and snacks — designed to support your protocol through the reintroduction phase. No guessing what's safe to eat. Just open and follow.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Order Summary -->
+        <div class="order-summary">
+          <div class="order-line">
+            <span id="summaryProtocolName">Your Protocol</span>
+            <span>$47</span>
+          </div>
+          <div class="order-line bump-line" id="summaryBump1">
+            <span>Eating Out Survival Guide</span>
+            <span>$19</span>
+          </div>
+          <div class="order-line bump-line" id="summaryBump2">
+            <span>4-Week Meal Plan</span>
+            <span>$37</span>
+          </div>
+          <hr class="order-divider">
+          <div class="order-total">
+            <span>Total today:</span>
+            <span id="orderTotal">$47</span>
+          </div>
+        </div>
+
+        <!-- CTA -->
+        <button class="btn-cta" id="ctaButton" onclick="handleCheckout()">Get My Protocol — $47</button>
+        <p class="cta-micro">Instant access. Download immediately. 60-day money-back guarantee.</p>
+      </div>
+    </section>
+
+    <!-- ===== SECTION 6: GUARANTEE ===== -->
+    <section class="guarantee-section">
+      <div class="container">
+        <div class="guarantee-card">
+          <h2>The Gut Freedom Guarantee</h2>
+          <p>Follow your protocol for 60 days. If you don't notice a difference in your digestive comfort, email us and we'll refund every penny within 24 hours. No forms. No awkward calls. No guilt. You've been burned enough — we're not adding to it.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== SECTION 7: FAQ ===== -->
+    <section class="faq-section">
+      <div class="container">
+        <h2>Common Questions</h2>
+
+        <div class="faq-item" onclick="toggleFaq(this)">
+          <button class="faq-question">
+            <span id="faqDifferent">How is this different from the generic gut health programs I've already wasted money on?</span>
+            <svg class="faq-arrow" viewBox="0 0 20 20" fill="none"><path d="M5 7.5L10 12.5L15 7.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <div class="faq-answer" id="faqDifferentAnswer">
+            Those programs give everyone the same advice. You get a protocol built specifically for your symptom pattern — not bloating advice when your problem is diarrhea, not fiber recommendations when fiber makes you worse. Rebecca and Paulina have built this from clinical practice, not a Google search.
+          </div>
+        </div>
+
+        <div class="faq-item" onclick="toggleFaq(this)">
+          <button class="faq-question">
+            <span>Do I need to buy the meal plan too?</span>
+            <svg class="faq-arrow" viewBox="0 0 20 20" fill="none"><path d="M5 7.5L10 12.5L15 7.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <div class="faq-answer">
+            No. The protocol works on its own. The meal plan just removes the "what do I actually eat tonight?" stress — which, honestly, is half the battle for most women.
+          </div>
+        </div>
+
+        <div class="faq-item" onclick="toggleFaq(this)">
+          <button class="faq-question">
+            <span>How quickly will I see changes?</span>
+            <svg class="faq-arrow" viewBox="0 0 20 20" fill="none"><path d="M5 7.5L10 12.5L15 7.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <div class="faq-answer">
+            Most women notice their first shift within 3-5 days. Not a miracle cure — but a clear sign that something is actually different this time. Full protocol results build over the weekly structure.
+          </div>
+        </div>
+
+        <div class="faq-item" onclick="toggleFaq(this)">
+          <button class="faq-question">
+            <span>Is this safe with my medications?</span>
+            <svg class="faq-arrow" viewBox="0 0 20 20" fill="none"><path d="M5 7.5L10 12.5L15 7.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <div class="faq-answer">
+            The protocol focuses on food timing, specific foods, and lifestyle practices — not supplements or medications. That said, we always recommend sharing it with your healthcare provider, especially if you're on prescription medications. Rebecca has included safety notes throughout.
+          </div>
+        </div>
+
+        <div class="faq-item" onclick="toggleFaq(this)">
+          <button class="faq-question">
+            <span>What if I have more than one symptom pattern?</span>
+            <svg class="faq-arrow" viewBox="0 0 20 20" fill="none"><path d="M5 7.5L10 12.5L15 7.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <div class="faq-answer" id="faqMultipleAnswer">
+            Your quiz identified your primary pattern. The protocol addresses your dominant symptoms first — because trying to fix everything at once is exactly why generic programs fail.
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container">
+      <p class="footer-disclaimer">This program is for educational purposes only and is not a substitute for professional medical advice, diagnosis, or treatment. Always seek the advice of your physician or other qualified health provider.</p>
+      <div class="footer-links">
+        <a href="/legal/">Privacy Policy</a>
+        <span class="divider">&middot;</span>
+        <a href="/legal/terms.html">Terms</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/script.js"></script>
+  <script src="/js/support-widget.js"></script>
+</body>
+</html>
