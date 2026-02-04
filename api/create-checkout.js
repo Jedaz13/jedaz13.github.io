@@ -118,6 +118,7 @@ module.exports = async function handler(req, res) {
     var sessionConfig = {
       mode: 'payment',
       line_items: lineItems,
+      allow_promotion_codes: true,
       success_url: successUrl,
       cancel_url: cancelUrl,
       metadata: {
