@@ -654,7 +654,7 @@ p:last-child {
 }
 
 .secure-checkout-badge img {
-  max-height: 18px !important;
+  max-height: 40px !important;
   width: auto !important;
   height: auto;
   display: inline-block;
