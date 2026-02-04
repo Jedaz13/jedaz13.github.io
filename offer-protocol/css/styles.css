@@ -649,14 +649,22 @@ p:last-child {
 
 /* Secure Checkout Badge */
 .secure-checkout-badge {
-  margin-top: 16px;
-  text-align: center;
+  margin-top: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
 }
 
-.secure-checkout-badge img {
-  max-width: 100%;
-  height: auto;
-  display: inline-block;
+.secure-checkout-badge svg {
+  stroke: var(--text-light);
+  flex-shrink: 0;
+}
+
+.secure-checkout-badge span {
+  font-size: 0.75rem;
+  color: var(--text-light);
+  letter-spacing: 0.2px;
 }
 
 /* =====================================================
