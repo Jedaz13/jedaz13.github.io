@@ -270,6 +270,7 @@
 
       <h1 id="headlineName">Friend, your Protocol is on its way.</h1>
       <p class="subtitle" id="emailLine">Check your email — you'll have access within 5 minutes.</p>
+      <p class="subtitle" style="font-size: 0.875rem; color: var(--text-muted); margin-top: 8px;">Redirecting you to your next step...</p>
 
       <div class="info-card">
         <p>Your protocol starts with Day 1 baseline measurements. Everything you need is in the PDF.</p>
@@ -340,6 +341,18 @@
         if (email) localStorage.setItem('gha_email', email);
         if (protocolName) localStorage.setItem('gha_protocol_name', protocolName);
       } catch (e) {}
+
+      // Auto-redirect to case review page after a short delay
+      // (allows tracking pixels to fire before redirecting)
+      var caseReviewParams = new URLSearchParams();
+      if (name) caseReviewParams.set('name', name);
+      if (email) caseReviewParams.set('email', email);
+      if (protocolName) caseReviewParams.set('protocol_name', protocolName);
+      var caseReviewUrl = 'https://www.guthealingacademy.com/case-review/?' + caseReviewParams.toString();
+
+      setTimeout(function() {
+        window.location.href = caseReviewUrl;
+      }, 3000);
     });
   </script>
   <script src="/js/support-widget.js"></script>
