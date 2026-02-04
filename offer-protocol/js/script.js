@@ -162,7 +162,7 @@ function loadParams() {
   var urlParams = new URLSearchParams(window.location.search);
   var keys = [
     'source', 'name', 'email', 'protocol', 'protocol_name',
-    'gut_brain', 'gut_brain_score', 'primary_complaint',
+    'gut_brain', 'gut_brain_score', 'gut_type', 'primary_complaint',
     'primary_complaint_label', 'duration', 'diagnoses',
     'treatments', 'treatments_formatted', 'treatments_tried_count',
     'stress_level', 'life_impact', 'vision',
