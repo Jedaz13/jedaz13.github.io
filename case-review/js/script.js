@@ -84,8 +84,6 @@ document.addEventListener('DOMContentLoaded', function() {
   setupForm();
   setupUpload();
   setupDeclineLink();
-  initSpotsCounter();
-  initCountdownTimer();
   trackPageView();
 });
 
@@ -440,6 +438,10 @@ function revealPriceSection() {
   if (priceSection.style.display === 'none') {
     priceSection.style.display = 'block';
     priceSection.classList.add('revealing');
+
+    // Start urgency timer and spots counter now that elements are visible
+    initSpotsCounter();
+    initCountdownTimer();
 
     // Scroll to price section
     setTimeout(function() {
