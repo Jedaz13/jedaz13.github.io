@@ -36,19 +36,34 @@
 
   <main>
 
-    <!-- ===== SECTION 1: HEADLINE + CONTEXT ===== -->
-    <section class="headline-section">
+    <!-- ===== SECTION 1: HERO — Dark Gradient Header ===== -->
+    <section class="hero-section">
       <div class="container">
-        <h1>Get Rebecca's Personal Analysis of Your Case</h1>
-        <p class="subtitle">Rebecca Taylor, RNutr, will review your full health profile and respond to your specific questions within 48-72 hours.</p>
-        <p class="context-line">A private consultation with a registered nutritionist typically costs $200&ndash;$350. Because your assessment already gave Rebecca a detailed starting point, she goes straight to what matters &mdash; your specific questions.</p>
+        <p class="hero-confirmation">Your protocol is on its way!</p>
+        <h1>But you don't have to figure it&nbsp;all&nbsp;out&nbsp;alone</h1>
+        <div class="hero-rebecca">
+          <img src="/offer-protocol/assets/rebecca.png" alt="Rebecca Taylor, RNutr" class="rebecca-photo">
+          <div class="rebecca-info">
+            <p class="rebecca-name">Rebecca Taylor, RNutr</p>
+            <p class="rebecca-title">Registered Nutritionist specialising in IBS, SIBO, and functional gut&nbsp;disorders</p>
+          </div>
+        </div>
+        <p class="hero-subtitle">Rebecca will personally review your health profile and respond to your specific questions within&nbsp;48&#8209;72&nbsp;hours.</p>
+        <p class="hero-context">A private consultation with a registered nutritionist typically costs $200&ndash;$350. Because your assessment already gave Rebecca a detailed starting point, she goes straight to what matters&nbsp;&mdash;&nbsp;your&nbsp;questions.</p>
+      </div>
+    </section>
+
+    <!-- ===== PATTERN INTERRUPTION: Urgency Bar ===== -->
+    <section class="urgency-bar">
+      <div class="container">
+        <p><strong>This offer is only available right now</strong> &mdash; Rebecca reviews a limited number of cases each week to ensure quality.</p>
       </div>
     </section>
 
     <!-- ===== SECTION 2: HEALTH PROFILE CARD ===== -->
     <section class="profile-section">
       <div class="container">
-        <p class="section-label">Here's what Rebecca already knows about you</p>
+        <p class="section-label">Here's what Rebecca already knows about&nbsp;you</p>
 
         <div class="profile-card">
           <div class="profile-row" id="profileProtocol">
@@ -77,15 +92,15 @@
           </div>
         </div>
 
-        <p class="profile-note">This gives Rebecca a head start so she can focus entirely on your questions. If anything above has changed, you can mention it in your questions below.</p>
+        <p class="profile-note">This gives Rebecca a head start so she can focus entirely on your questions. If anything above has changed, you can mention it in your questions&nbsp;below.</p>
       </div>
     </section>
 
     <!-- ===== SECTION 3: QUESTION FORM ===== -->
     <section class="form-section" id="formSection">
       <div class="container">
-        <h2>What do you want Rebecca to help with?</h2>
-        <p class="form-instruction">Share at least 3 questions or concerns for the most useful response. The more specific you are, the more targeted Rebecca's guidance will be.</p>
+        <h2>What do you want Rebecca to&nbsp;help&nbsp;with?</h2>
+        <p class="form-instruction">Share at least 3 questions or concerns for the most useful response. The more specific you are, the more targeted Rebecca's guidance will&nbsp;be.</p>
 
         <form id="caseReviewForm" novalidate>
           <div class="form-group">
@@ -124,7 +139,7 @@
           <hr class="form-divider">
 
           <div class="form-group">
-            <label for="current_supplements">Current supplements & medications <span class="optional">(optional)</span></label>
+            <label for="current_supplements">Current supplements &amp; medications <span class="optional">(optional)</span></label>
             <textarea id="current_supplements" name="current_supplements" rows="3" placeholder="e.g., Probiotics (Culturelle), Magnesium 400mg, Omeprazole 20mg..."></textarea>
           </div>
 
@@ -136,24 +151,32 @@
           <!-- ===== SECTION 4: TEST RESULT UPLOAD ===== -->
           <hr class="form-divider">
 
-          <h3 class="upload-heading">Have test results that could help?</h3>
-          <p class="upload-instruction">Optional &mdash; If you have existing test results, Rebecca will interpret them as part of your review. No tests? No problem &mdash; your health profile provides everything needed.</p>
+          <h3 class="upload-heading">Have test results that could&nbsp;help?</h3>
+          <p class="upload-instruction">Optional &mdash; If you have existing test results, Rebecca will interpret them as part of your review. No tests? No problem &mdash; your health profile provides everything&nbsp;needed.</p>
 
           <div class="upload-zone" id="uploadZone" onclick="document.getElementById('fileInput').click();">
             <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
-            <p class="upload-text">Drag & drop files here, or <span class="upload-browse">click to browse</span></p>
-            <p class="upload-formats">PDF, JPG, PNG &mdash; max 10MB per file, up to 3 files</p>
+            <p class="upload-text">Drag &amp; drop files here, or <span class="upload-browse">click to&nbsp;browse</span></p>
+            <p class="upload-formats">PDF, JPG, PNG &mdash; max 20MB per file, up to 3&nbsp;files</p>
             <input type="file" id="fileInput" accept=".pdf,.jpg,.jpeg,.png" multiple style="display:none;">
           </div>
           <div class="upload-file-list" id="uploadFileList"></div>
-          <p class="upload-examples">Common uploads: SIBO breath test results, stool analysis, food sensitivity panels, blood work</p>
+          <p class="upload-examples">Common uploads: SIBO breath test results, stool analysis, food sensitivity panels, blood&nbsp;work</p>
 
           <!-- Validation error -->
-          <p class="form-error" id="formError" style="display:none;">Please enter at least your first question for Rebecca.</p>
+          <p class="form-error" id="formError" style="display:none;">Please enter at least your first question for&nbsp;Rebecca.</p>
 
           <!-- Submit button -->
-          <button type="submit" class="btn-submit" id="submitBtn">Submit My Questions for Rebecca</button>
+          <button type="submit" class="btn-cta" id="submitBtn">Submit My Questions for Rebecca</button>
+          <p class="submit-edit-note" id="submitEditNote" style="display:none;">Changed your mind? <a href="#" id="editQuestionsLink" onclick="enableEditing(event)">Edit your questions</a></p>
         </form>
+      </div>
+    </section>
+
+    <!-- ===== PATTERN INTERRUPTION: Social Proof ===== -->
+    <section class="social-proof-bar">
+      <div class="container">
+        <p>"Rebecca's review was worth 10x what I paid. She spotted things three doctors missed and gave me a clear plan." &mdash; <strong>Sarah M.</strong></p>
       </div>
     </section>
 
@@ -168,8 +191,8 @@
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
             </div>
             <div>
-              <h3>Personal written analysis from Rebecca Taylor, RNutr</h3>
-              <p>Every question answered with specific, actionable recommendations based on your protocol and health history.</p>
+              <h3>Personal written analysis from Rebecca&nbsp;Taylor,&nbsp;RNutr</h3>
+              <p>Every question answered with specific, actionable recommendations based on your protocol and health&nbsp;history.</p>
             </div>
           </div>
 
@@ -178,8 +201,8 @@
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
             </div>
             <div>
-              <h3>Test result interpretation (if uploaded)</h3>
-              <p>Plain-language breakdown of what your results mean and what they suggest.</p>
+              <h3>Test result interpretation (if&nbsp;uploaded)</h3>
+              <p>Plain-language breakdown of what your results mean and what they&nbsp;suggest.</p>
             </div>
           </div>
 
@@ -188,8 +211,8 @@
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg>
             </div>
             <div>
-              <h3>What to discuss with your doctor</h3>
-              <p>Specific questions and tests to bring to your next appointment so you get taken seriously.</p>
+              <h3>What to discuss with your&nbsp;doctor</h3>
+              <p>Specific questions and tests to bring to your next appointment so you get taken&nbsp;seriously.</p>
             </div>
           </div>
         </div>
@@ -200,7 +223,7 @@
     <section class="price-section" id="priceSection" style="display:none;">
       <div class="container">
         <div class="price-card">
-          <h2>Rebecca will personally review your case and respond within 48-72 hours</h2>
+          <h2>Rebecca will personally review your case and respond within&nbsp;48&#8209;72&nbsp;hours</h2>
 
           <div class="price-display">
             <span class="price-strike">$200&ndash;350</span>
@@ -209,16 +232,14 @@
           </div>
 
           <ul class="price-recap">
-            <li>Personal written analysis addressing each question</li>
-            <li>Test result interpretation (if provided)</li>
-            <li>Doctor discussion guide where relevant</li>
-            <li>Priority case &mdash; response within 48-72 hours</li>
+            <li>Personal written analysis addressing each&nbsp;question</li>
+            <li>Test result interpretation (if&nbsp;provided)</li>
+            <li>Doctor discussion guide where&nbsp;relevant</li>
+            <li>Priority case &mdash; response within&nbsp;48&#8209;72&nbsp;hours</li>
           </ul>
 
-          <a href="#" class="btn-cta" id="checkoutBtn">Get My Personal Case Review &mdash; $97</a>
+          <a href="#" class="btn-cta" id="checkoutBtn">Get My Personal Case Review&nbsp;&mdash;&nbsp;$97</a>
           <p class="cta-micro">Secure checkout powered by Stripe</p>
-
-          <a href="#" class="decline-link" id="declineLink">No thanks, continue to my protocol &rarr;</a>
         </div>
       </div>
     </section>
@@ -226,16 +247,26 @@
     <!-- ===== SECTION 7: CREDENTIAL LINE ===== -->
     <section class="credential-section">
       <div class="container">
-        <p class="credential-text">Rebecca Taylor is a Registered Nutritionist (RNutr) specialising in IBS, SIBO, and functional gut disorders.</p>
+        <div class="credential-card">
+          <img src="/offer-protocol/assets/rebecca.png" alt="Rebecca Taylor" class="credential-photo">
+          <p class="credential-text">Rebecca Taylor is a Registered Nutritionist (RNutr) specialising in IBS, SIBO, and functional gut&nbsp;disorders.</p>
+        </div>
       </div>
     </section>
 
   </main>
 
+  <!-- Decline CTA -->
+  <section class="decline-section">
+    <div class="container">
+      <a href="#" class="decline-link" id="declineLink">No thanks, I just want to get my protocol and figure it out on&nbsp;my&nbsp;own</a>
+    </div>
+  </section>
+
   <!-- Footer -->
   <footer class="site-footer">
     <div class="container">
-      <p class="footer-disclaimer">This program is for educational purposes only and is not a substitute for professional medical advice, diagnosis, or treatment. Always seek the advice of your physician or other qualified health provider.</p>
+      <p class="footer-disclaimer">This program is for educational purposes only and is not a substitute for professional medical advice, diagnosis, or treatment. Always seek the advice of your physician or other qualified health&nbsp;provider.</p>
       <div class="footer-links">
         <a href="/legal/">Privacy Policy</a>
         <span class="divider">&middot;</span>
