@@ -138,45 +138,79 @@ var COMPLAINT_MAP = {
 
 var pageParams = {};
 var bumpState = { 1: false, 2: false };
+var checkoutInProgress = false;
 
 // =================================================
 // INITIALIZATION
 // =================================================
 
 document.addEventListener('DOMContentLoaded', function() {
-  pageParams = getUrlParams();
+  pageParams = loadParams();
   storeData(pageParams);
+  restoreBumpState();
   populatePage();
   trackPageView();
 });
 
 // =================================================
-// URL PARAMS
+// PARAM LOADING: URL → Cookie → localStorage
 // =================================================
 
-function getUrlParams() {
-  var params = new URLSearchParams(window.location.search);
-  return {
-    source: params.get('source') || '',
-    name: params.get('name') || '',
-    email: params.get('email') || '',
-    protocol: params.get('protocol') || '',
-    protocol_name: params.get('protocol_name') || '',
-    gut_brain: params.get('gut_brain') === 'true',
-    gut_brain_score: params.get('gut_brain_score') || '',
-    primary_complaint: params.get('primary_complaint') || '',
-    primary_complaint_label: params.get('primary_complaint_label') || '',
-    duration: params.get('duration') || '',
-    diagnoses: params.get('diagnoses') || '',
-    treatments: params.get('treatments') || '',
-    treatments_formatted: params.get('treatments_formatted') || '',
-    treatments_tried_count: params.get('treatments_tried_count') || '',
-    stress_level: params.get('stress_level') || '',
-    life_impact: params.get('life_impact') || '',
-    vision: params.get('vision') ? decodeURIComponent(params.get('vision')) : '',
-    goal_selection: params.get('goal_selection') || '',
-    journey_stage: params.get('journey_stage') || ''
-  };
+function loadParams() {
+  var urlParams = new URLSearchParams(window.location.search);
+  var keys = [
+    'source', 'name', 'email', 'protocol', 'protocol_name',
+    'gut_brain', 'gut_brain_score', 'primary_complaint',
+    'primary_complaint_label', 'duration', 'diagnoses',
+    'treatments', 'treatments_formatted', 'treatments_tried_count',
+    'stress_level', 'life_impact', 'vision',
+    'goal_selection', 'journey_stage'
+  ];
+
+  var data = {};
+  var hasUrlParams = urlParams.has('protocol_name') || urlParams.has('name');
+
+  for (var i = 0; i < keys.length; i++) {
+    var key = keys[i];
+    var val = '';
+
+    // 1. URL params first
+    if (urlParams.has(key)) {
+      val = urlParams.get(key) || '';
+      // Decode vision if it was double-encoded
+      if (key === 'vision' && val) {
+        try { val = decodeURIComponent(val); } catch (e) {}
+      }
+    }
+
+    // 2. Cookie fallback (only if no URL params present)
+    if (!val && !hasUrlParams) {
+      val = getCookie('gha_' + key) || '';
+    }
+
+    // 3. localStorage fallback (only if no URL params present)
+    if (!val && !hasUrlParams) {
+      try { val = localStorage.getItem('gha_' + key) || ''; } catch (e) {}
+    }
+
+    data[key] = val;
+  }
+
+  // Convert gut_brain to boolean
+  data.gut_brain = data.gut_brain === 'true';
+
+  return data;
+}
+
+function getCookie(name) {
+  var cookies = document.cookie.split(';');
+  for (var i = 0; i < cookies.length; i++) {
+    var c = cookies[i].trim();
+    if (c.indexOf(name + '=') === 0) {
+      return decodeURIComponent(c.substring(name.length + 1));
+    }
+  }
+  return '';
 }
 
 // =================================================
@@ -209,6 +243,32 @@ function storeData(data) {
   } catch (e) {
     console.log('Cookies not available');
   }
+}
+
+// =================================================
+// BUMP STATE PERSISTENCE
+// =================================================
+
+function saveBumpState() {
+  try {
+    localStorage.setItem('gha_bump1', bumpState[1] ? '1' : '0');
+    localStorage.setItem('gha_bump2', bumpState[2] ? '1' : '0');
+  } catch (e) {}
+}
+
+function restoreBumpState() {
+  try {
+    var b1 = localStorage.getItem('gha_bump1');
+    var b2 = localStorage.getItem('gha_bump2');
+    if (b1 === '1') {
+      bumpState[1] = true;
+      document.getElementById('bump1').classList.add('checked');
+    }
+    if (b2 === '1') {
+      bumpState[2] = true;
+      document.getElementById('bump2').classList.add('checked');
+    }
+  } catch (e) {}
 }
 
 // =================================================
@@ -296,6 +356,7 @@ function toggleBump(num) {
   } else {
     card.classList.remove('checked');
   }
+  saveBumpState();
   updateOrderSummary();
 }
 
@@ -328,7 +389,12 @@ function updateOrderSummary() {
 // =================================================
 
 function handleCheckout() {
+  // Prevent double-clicks but allow retries
+  if (checkoutInProgress) return;
+  checkoutInProgress = true;
+
   var btn = document.getElementById('ctaButton');
+  var originalText = btn.textContent;
   btn.disabled = true;
   btn.textContent = 'Processing...';
 
@@ -342,6 +408,11 @@ function handleCheckout() {
     'total_value': 47 + (bumpState[1] ? 19 : 0) + (bumpState[2] ? 37 : 0)
   });
 
+  // Store total for thank-you page tracking
+  try {
+    localStorage.setItem('gha_purchase_total', (47 + (bumpState[1] ? 19 : 0) + (bumpState[2] ? 37 : 0)).toString());
+  } catch (e) {}
+
   var payload = {
     email: pageParams.email,
     name: pageParams.name,
@@ -349,6 +420,9 @@ function handleCheckout() {
     protocol: pageParams.protocol,
     primary_complaint: pageParams.primary_complaint,
     duration: pageParams.duration,
+    treatments_tried_count: pageParams.treatments_tried_count,
+    gut_brain_score: pageParams.gut_brain_score,
+    vision: pageParams.vision,
     include_survival_guide: bumpState[1],
     include_meal_plan: bumpState[2]
   };
@@ -359,7 +433,7 @@ function handleCheckout() {
     body: JSON.stringify(payload)
   })
   .then(function(res) {
-    if (!res.ok) throw new Error('Checkout failed');
+    if (!res.ok) throw new Error('Checkout failed: ' + res.status);
     return res.json();
   })
   .then(function(data) {
@@ -373,6 +447,12 @@ function handleCheckout() {
     console.error('Checkout error:', err);
     // Fallback: use Stripe Payment Links directly
     fallbackToPaymentLink();
+  })
+  .finally(function() {
+    // Always re-enable the button so they can retry
+    checkoutInProgress = false;
+    btn.disabled = false;
+    btn.textContent = originalText;
   });
 }
 
@@ -399,12 +479,6 @@ function fallbackToPaymentLink() {
 
   if (link) {
     window.location.href = link;
-  } else {
-    // Final fallback
-    var btn = document.getElementById('ctaButton');
-    btn.disabled = false;
-    btn.textContent = 'Get My Protocol \u2014 $' + (47 + (bumpState[1] ? 19 : 0) + (bumpState[2] ? 37 : 0));
-    alert('Something went wrong. Please try again or contact hello@guthealingacademy.com');
   }
 }
 
