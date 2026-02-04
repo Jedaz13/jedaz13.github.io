@@ -649,16 +649,71 @@ p:last-child {
 
 /* Secure Checkout Badge */
 .secure-checkout-badge {
-  margin-top: 12px;
+  margin-top: 20px;
+  background: var(--bg-cream);
+  border: 1px solid var(--divider);
+  border-radius: var(--radius-lg);
+  padding: 16px 20px;
   text-align: center;
 }
 
-.secure-checkout-badge img {
-  max-height: 40px !important;
-  width: auto !important;
-  height: auto;
+.secure-badge-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+}
+
+.secure-badge-row svg {
+  stroke: var(--text-forest);
+  flex-shrink: 0;
+}
+
+.secure-badge-row > span {
+  font-size: 0.875rem;
+  color: var(--text-olive);
+}
+
+.secure-badge-row > span strong {
+  color: var(--text-forest);
+}
+
+.stripe-pill {
+  background: var(--text-forest);
+  color: var(--white) !important;
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-size: 0.75rem !important;
+  letter-spacing: 0.3px;
+}
+
+.stripe-pill strong {
+  color: var(--white) !important;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+.card-icons {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding-top: 12px;
+  border-top: 1px solid var(--divider);
+}
+
+.card-icon {
   display: inline-block;
-  opacity: 0.5;
+  padding: 4px 10px;
+  border: 1px solid var(--divider-dark);
+  border-radius: 4px;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  background: var(--white);
+  letter-spacing: 0.5px;
 }
 
 /* =====================================================
