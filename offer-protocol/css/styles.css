@@ -647,6 +647,18 @@ p:last-child {
   color: var(--text-muted);
 }
 
+/* Secure Checkout Badge */
+.secure-checkout-badge {
+  margin-top: 16px;
+  text-align: center;
+}
+
+.secure-checkout-badge img {
+  max-width: 100%;
+  height: auto;
+  display: inline-block;
+}
+
 /* =====================================================
    Section 6: Guarantee
    ===================================================== */
@@ -815,21 +827,6 @@ p:last-child {
   stroke: var(--sage);
 }
 
-.payment-icons {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-}
-
-.payment-label {
-  font-size: 0.75rem;
-  color: var(--text-light);
-}
-
-.stripe-icon {
-  opacity: 0.6;
-}
 
 /* =====================================================
    Footer
@@ -945,18 +942,17 @@ p:last-child {
   .hero-split {
     flex-direction: row;
     justify-content: space-between;
-    align-items: center;
+    align-items: flex-start;
     gap: 40px;
   }
 
   .hero-content {
     flex: 1;
-    max-width: 55%;
   }
 
   .hero-protocol-image {
     flex: 0 0 auto;
-    max-width: 300px;
+    max-width: 280px;
     order: 2;
   }
 
