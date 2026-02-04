@@ -84,6 +84,8 @@ document.addEventListener('DOMContentLoaded', function() {
   setupForm();
   setupUpload();
   setupDeclineLink();
+  initSpotsCounter();
+  initCountdownTimer();
   trackPageView();
 });
 
@@ -646,6 +648,94 @@ function generateUUID() {
     var v = c === 'x' ? r : (r & 0x3 | 0x8);
     return v.toString(16);
   });
+}
+
+// =================================================
+// URGENCY: SPOTS COUNTER & COUNTDOWN TIMER
+// =================================================
+
+function initSpotsCounter() {
+  var el = document.getElementById('spotsLeft');
+  if (!el) return;
+
+  var storageKey = 'caseReviewSpots';
+  var stored = null;
+  try { stored = JSON.parse(localStorage.getItem(storageKey)); } catch(e) {}
+
+  var now = new Date();
+  var dayOfWeek = now.getDay(); // 0=Sun, 1=Mon, ...6=Sat
+  var todayStr = now.toISOString().slice(0, 10);
+
+  // If we have a stored value from today, use it
+  if (stored && stored.date === todayStr) {
+    el.textContent = stored.spots;
+    return;
+  }
+
+  // Calculate spots: 25 max, decrease through the week
+  // Mon=25, Tue=21, Wed=17, Thu=13, Fri=9, Sat=6, Sun=4
+  var spotsByDay = {
+    1: 25, // Monday
+    2: 21,
+    3: 17,
+    4: 13,
+    5: 9,
+    6: 6,
+    0: 4  // Sunday
+  };
+
+  var base = spotsByDay[dayOfWeek] !== undefined ? spotsByDay[dayOfWeek] : 12;
+
+  // Add slight randomness (-1 to +1) for natural feel
+  var jitter = Math.floor(Math.random() * 3) - 1;
+  var spots = Math.max(2, Math.min(25, base + jitter));
+
+  el.textContent = spots;
+
+  // Store so it's consistent for this visitor today
+  try {
+    localStorage.setItem(storageKey, JSON.stringify({ date: todayStr, spots: spots }));
+  } catch(e) {}
+}
+
+function initCountdownTimer() {
+  var el = document.getElementById('countdownTimer');
+  if (!el) return;
+
+  var storageKey = 'caseReviewTimerEnd';
+  var endTime = null;
+
+  try {
+    var stored = localStorage.getItem(storageKey);
+    if (stored) {
+      endTime = parseInt(stored, 10);
+      // If timer already expired, reset it
+      if (endTime <= Date.now()) {
+        endTime = null;
+      }
+    }
+  } catch(e) {}
+
+  // Start a fresh 15-minute timer if none stored
+  if (!endTime) {
+    endTime = Date.now() + 15 * 60 * 1000;
+    try { localStorage.setItem(storageKey, endTime.toString()); } catch(e) {}
+  }
+
+  function update() {
+    var remaining = Math.max(0, endTime - Date.now());
+    var mins = Math.floor(remaining / 60000);
+    var secs = Math.floor((remaining % 60000) / 1000);
+    el.textContent = mins + ':' + (secs < 10 ? '0' : '') + secs;
+
+    if (remaining <= 0) {
+      el.textContent = '0:00';
+      return;
+    }
+    setTimeout(update, 1000);
+  }
+
+  update();
 }
 
 // =================================================
