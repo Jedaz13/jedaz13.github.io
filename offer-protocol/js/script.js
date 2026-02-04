@@ -342,7 +342,13 @@ function populatePage() {
   // Personalized paragraph
   var durationText = DURATION_MAP[pageParams.duration] || pageParams.duration || 'months';
   var complaintText = COMPLAINT_MAP[pageParams.primary_complaint] || pageParams.primary_complaint || 'digestive issues';
-  var visionText = pageParams.vision || 'eat without fear';
+  var GOAL_MAP = {
+    'comfortable_eating': 'eat comfortably without fear',
+    'bathroom_freedom': 'stop mapping every bathroom before leaving the house',
+    'energy_focus': 'have energy and mental clarity again',
+    'understanding': 'finally understand what\'s going on in your gut'
+  };
+  var visionText = pageParams.vision || GOAL_MAP[pageParams.goal_selection] || 'eat without fear';
 
   var personalizedHtml = '<p>After ' + durationText + ' of ' + complaintText + ' — the restrictive diets that stole your social life, the doctors who said it\'s nothing, the supplements sitting half-empty in your cabinet — you deserve something that actually works for YOUR body.</p>';
   personalizedHtml += '<p>You told us you want to <strong>' + visionText + '</strong>. That\'s not too much to ask. And it starts with understanding exactly what\'s happening in YOUR gut — not someone else\'s.</p>';
