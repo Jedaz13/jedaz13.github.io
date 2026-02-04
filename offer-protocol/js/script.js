@@ -274,6 +274,28 @@ function restoreBumpState() {
 }
 
 // =================================================
+// PROTOCOL HERO IMAGES
+// =================================================
+
+var PROTOCOL_IMAGES = {
+  'bloat_reset': 'assets/Minimalist-Bloating.png',
+  'regularity': 'assets/Minimalist-constipation.png',
+  'calm_gut': 'assets/Minimalist-Diarrhea.png',
+  'stability': 'assets/Minimalist-mixed.png',
+  'rebuild': 'assets/Minimalist-Post-SIBO-recovert.png'
+};
+
+var COMPLAINT_IMAGES = {
+  'bloating': 'assets/Minimalist-Bloating.png',
+  'constipation': 'assets/Minimalist-constipation.png',
+  'diarrhea': 'assets/Minimalist-Diarrhea.png',
+  'mixed': 'assets/Minimalist-mixed.png',
+  'pain': 'assets/Minimalist-mixed.png',
+  'gas': 'assets/Minimalist-Bloating.png',
+  'reflux': 'assets/Minimalist-constipation.png'
+};
+
+// =================================================
 // PAGE POPULATION
 // =================================================
 
@@ -303,6 +325,19 @@ function populatePage() {
   document.getElementById('userName').textContent = name;
   document.getElementById('protocolNameHeadline').textContent = protocolName;
   document.getElementById('protocolHeadlineCopy').innerHTML = '<p>' + content.headline + '</p>';
+
+  // Hero protocol image
+  var heroImg = document.getElementById('heroProtocolImg');
+  if (heroImg) {
+    var imgSrc;
+    if (pageParams.gut_brain === 'true') {
+      imgSrc = 'assets/Minimalist-gut-brain.png';
+    } else {
+      imgSrc = PROTOCOL_IMAGES[content.key] || COMPLAINT_IMAGES[pageParams.primary_complaint] || 'assets/Minimalist-Bloating.png';
+    }
+    heroImg.src = imgSrc;
+    heroImg.alt = protocolName + ' Protocol';
+  }
 
   // Personalized paragraph
   var durationText = DURATION_MAP[pageParams.duration] || pageParams.duration || 'months';
