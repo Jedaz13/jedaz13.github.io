@@ -654,10 +654,11 @@ p:last-child {
 }
 
 .secure-checkout-badge img {
-  height: 16px;
-  width: auto;
+  max-height: 18px !important;
+  width: auto !important;
+  height: auto;
   display: inline-block;
-  opacity: 0.45;
+  opacity: 0.5;
 }
 
 /* =====================================================
