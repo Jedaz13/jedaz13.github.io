@@ -2,8 +2,8 @@
 // CASE REVIEW UPSELL PAGE — Script
 // =================================================
 
-// Stripe Payment Link (replace with actual link)
-var STRIPE_CASE_REVIEW_LINK = 'REPLACE_WITH_STRIPE_LINK';
+// Stripe Payment Link
+var STRIPE_CASE_REVIEW_LINK = 'https://buy.stripe.com/bJe8wQ9ep72WfckbH7gA80h';
 
 // Decline redirect (next upsell or thank-you)
 var DECLINE_REDIRECT = '/thank-you-protocol/';
@@ -271,12 +271,56 @@ function showNextQuestion(e) {
 window.showNextQuestion = showNextQuestion;
 
 // =================================================
+// ENABLE EDITING (re-edit after submission)
+// =================================================
+
+function enableEditing(e) {
+  if (e) e.preventDefault();
+
+  formSubmitted = false;
+
+  // Re-enable textareas
+  var textareas = document.querySelectorAll('#caseReviewForm textarea');
+  for (var j = 0; j < textareas.length; j++) {
+    textareas[j].readOnly = false;
+  }
+
+  // Show add question link if under 6
+  if (visibleQuestions < 6) {
+    var addLink = document.getElementById('addQuestionLink');
+    if (addLink) addLink.style.display = 'inline-block';
+  }
+
+  // Reset submit button
+  var submitBtn = document.getElementById('submitBtn');
+  if (submitBtn) {
+    submitBtn.textContent = 'Resubmit My Questions';
+    submitBtn.disabled = false;
+    submitBtn.classList.remove('submitted');
+  }
+
+  // Hide edit note
+  var editNote = document.getElementById('submitEditNote');
+  if (editNote) editNote.style.display = 'none';
+
+  // Re-enable upload zone
+  var uploadZone = document.getElementById('uploadZone');
+  if (uploadZone) {
+    uploadZone.style.pointerEvents = 'auto';
+    uploadZone.style.opacity = '1';
+  }
+
+  // Focus first question
+  var q1 = document.getElementById('question_1');
+  if (q1) q1.focus();
+}
+window.enableEditing = enableEditing;
+
+// =================================================
 // FORM SUBMISSION
 // =================================================
 
 function handleFormSubmit() {
-  if (formSubmitted) return;
-
   var q1 = document.getElementById('question_1');
   if (!q1 || !q1.value.trim()) {
     var errorEl = document.getElementById('formError');
@@ -291,8 +335,10 @@ function handleFormSubmit() {
 
   formSubmitted = true;
 
-  // Generate review ID
-  reviewId = generateUUID();
+  // Generate review ID (only on first submission)
+  if (!reviewId) {
+    reviewId = generateUUID();
+  }
 
   // Collect form data
   var formData = {
@@ -353,7 +399,11 @@ function handleFormSubmit() {
     submitBtn.classList.add('submitted');
   }
 
-  // Hide upload zone interaction
+  // Show edit note
+  var editNote = document.getElementById('submitEditNote');
+  if (editNote) editNote.style.display = 'block';
+
+  // Disable upload zone interaction
   var uploadZone = document.getElementById('uploadZone');
   if (uploadZone) {
     uploadZone.style.pointerEvents = 'none';
@@ -384,13 +434,16 @@ function revealPriceSection() {
   var priceSection = document.getElementById('priceSection');
   if (!priceSection) return;
 
-  priceSection.style.display = 'block';
-  priceSection.classList.add('revealing');
+  // Only animate on first reveal
+  if (priceSection.style.display === 'none') {
+    priceSection.style.display = 'block';
+    priceSection.classList.add('revealing');
 
-  // Scroll to price section
-  setTimeout(function() {
-    priceSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
-  }, 300);
+    // Scroll to price section
+    setTimeout(function() {
+      priceSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }, 300);
+  }
 }
 
 // =================================================
@@ -401,7 +454,11 @@ function setupCheckoutButton(formData) {
   var checkoutBtn = document.getElementById('checkoutBtn');
   if (!checkoutBtn) return;
 
-  checkoutBtn.addEventListener('click', function(e) {
+  // Remove old listeners by cloning
+  var newBtn = checkoutBtn.cloneNode(true);
+  checkoutBtn.parentNode.replaceChild(newBtn, checkoutBtn);
+
+  newBtn.addEventListener('click', function(e) {
     e.preventDefault();
 
     // Track checkout click
@@ -505,7 +562,7 @@ function handleFiles(files) {
   if (formSubmitted) return;
 
   var allowed = ['application/pdf', 'image/jpeg', 'image/png'];
-  var maxSize = 10 * 1024 * 1024; // 10MB
+  var maxSize = 20 * 1024 * 1024; // 20MB
   var maxFiles = 3;
 
   for (var i = 0; i < files.length; i++) {
@@ -557,7 +614,7 @@ function renderFileList() {
     html += '<div class="upload-file-item">';
     html += '<span class="file-name">';
     html += '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg> ';
-    html += f.name + ' <span style="color:#718096;font-size:0.8125rem;">(' + sizeDisplay + ')</span>';
+    html += f.name + ' <span style="color:#6B7D6E;font-size:0.8125rem;">(' + sizeDisplay + ')</span>';
     html += '</span>';
 
     if (!formSubmitted) {
