@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Data Layer Initialization -->
+  <script>
+    window.dataLayer = window.dataLayer || [];
+  </script>
+
+  <!-- Google Tag Manager -->
+  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+  new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+  j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+  'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+  })(window,document,'script','dataLayer','GTM-KQ3LKTBL');</script>
+  <!-- End Google Tag Manager -->
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/png" href="/assets/favicon.png">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="description" content="Get Rebecca Taylor's personal analysis of your gut health case. A registered nutritionist reviews your full health profile and answers your specific questions.">
+  <title>Rebecca's Personal Case Review | Gut Healing Academy</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <!-- Google Tag Manager (noscript) -->
+  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KQ3LKTBL"
+  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+  <!-- End Google Tag Manager (noscript) -->
+
+  <main>
+
+    <!-- ===== SECTION 1: HEADLINE + CONTEXT ===== -->
+    <section class="headline-section">
+      <div class="container">
+        <h1>Get Rebecca's Personal Analysis of Your Case</h1>
+        <p class="subtitle">Rebecca Taylor, RNutr, will review your full health profile and respond to your specific questions within 48-72 hours.</p>
+        <p class="context-line">A private consultation with a registered nutritionist typically costs $200&ndash;$350. Because your assessment already gave Rebecca a detailed starting point, she goes straight to what matters &mdash; your specific questions.</p>
+      </div>
+    </section>
+
+    <!-- ===== SECTION 2: HEALTH PROFILE CARD ===== -->
+    <section class="profile-section">
+      <div class="container">
+        <p class="section-label">Here's what Rebecca already knows about you</p>
+
+        <div class="profile-card">
+          <div class="profile-row" id="profileProtocol">
+            <span class="profile-key">Your protocol</span>
+            <span class="profile-value" id="profileProtocolValue">--</span>
+          </div>
+          <div class="profile-row" id="profileSymptoms">
+            <span class="profile-key">Primary symptoms</span>
+            <span class="profile-value" id="profileSymptomsValue">--</span>
+          </div>
+          <div class="profile-row" id="profileDuration">
+            <span class="profile-key">Duration</span>
+            <span class="profile-value" id="profileDurationValue">--</span>
+          </div>
+          <div class="profile-row" id="profileTried">
+            <span class="profile-key">What you've tried</span>
+            <span class="profile-value" id="profileTriedValue">--</span>
+          </div>
+          <div class="profile-row" id="profileGutBrain" style="display:none;">
+            <span class="profile-key">Gut-brain connection</span>
+            <span class="profile-value" id="profileGutBrainValue">--</span>
+          </div>
+          <div class="profile-row" id="profileGoal">
+            <span class="profile-key">Your goal</span>
+            <span class="profile-value" id="profileGoalValue">--</span>
+          </div>
+        </div>
+
+        <p class="profile-note">This gives Rebecca a head start so she can focus entirely on your questions. If anything above has changed, you can mention it in your questions below.</p>
+      </div>
+    </section>
+
+    <!-- ===== SECTION 3: QUESTION FORM ===== -->
+    <section class="form-section" id="formSection">
+      <div class="container">
+        <h2>What do you want Rebecca to help with?</h2>
+        <p class="form-instruction">Share at least 3 questions or concerns for the most useful response. The more specific you are, the more targeted Rebecca's guidance will be.</p>
+
+        <form id="caseReviewForm" novalidate>
+          <div class="form-group">
+            <label for="question_1">Question 1 <span class="required">*</span></label>
+            <textarea id="question_1" name="question_1" rows="3" placeholder="e.g., Why does my bloating get worse in the evening even when I eat carefully?" required></textarea>
+          </div>
+
+          <div class="form-group">
+            <label for="question_2">Question 2</label>
+            <textarea id="question_2" name="question_2" rows="3" placeholder="e.g., Should I try low FODMAP again if it didn't work last time?"></textarea>
+          </div>
+
+          <div class="form-group">
+            <label for="question_3">Question 3</label>
+            <textarea id="question_3" name="question_3" rows="3" placeholder="e.g., Could my anxiety medication be affecting my gut?"></textarea>
+          </div>
+
+          <!-- Additional questions (hidden by default) -->
+          <div class="form-group extra-question" id="q4Group" style="display:none;">
+            <label for="question_4">Question 4</label>
+            <textarea id="question_4" name="question_4" rows="3" placeholder="e.g., What does my SIBO breath test result actually mean?"></textarea>
+          </div>
+
+          <div class="form-group extra-question" id="q5Group" style="display:none;">
+            <label for="question_5">Question 5</label>
+            <textarea id="question_5" name="question_5" rows="3" placeholder="e.g., How do I know if I should push for more testing?"></textarea>
+          </div>
+
+          <div class="form-group extra-question" id="q6Group" style="display:none;">
+            <label for="question_6">Question 6</label>
+            <textarea id="question_6" name="question_6" rows="3" placeholder="e.g., Is it safe to try probiotics after antibiotics?"></textarea>
+          </div>
+
+          <a href="#" class="add-question-link" id="addQuestionLink" onclick="showNextQuestion(event)">+ Add another question</a>
+
+          <hr class="form-divider">
+
+          <div class="form-group">
+            <label for="current_supplements">Current supplements & medications <span class="optional">(optional)</span></label>
+            <textarea id="current_supplements" name="current_supplements" rows="3" placeholder="e.g., Probiotics (Culturelle), Magnesium 400mg, Omeprazole 20mg..."></textarea>
+          </div>
+
+          <div class="form-group">
+            <label for="additional_notes">Anything else Rebecca should know? <span class="optional">(optional)</span></label>
+            <textarea id="additional_notes" name="additional_notes" rows="3" placeholder="e.g., Recent diet changes, upcoming appointments, family history..."></textarea>
+          </div>
+
+          <!-- ===== SECTION 4: TEST RESULT UPLOAD ===== -->
+          <hr class="form-divider">
+
+          <h3 class="upload-heading">Have test results that could help?</h3>
+          <p class="upload-instruction">Optional &mdash; If you have existing test results, Rebecca will interpret them as part of your review. No tests? No problem &mdash; your health profile provides everything needed.</p>
+
+          <div class="upload-zone" id="uploadZone" onclick="document.getElementById('fileInput').click();">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+            <p class="upload-text">Drag & drop files here, or <span class="upload-browse">click to browse</span></p>
+            <p class="upload-formats">PDF, JPG, PNG &mdash; max 10MB per file, up to 3 files</p>
+            <input type="file" id="fileInput" accept=".pdf,.jpg,.jpeg,.png" multiple style="display:none;">
+          </div>
+          <div class="upload-file-list" id="uploadFileList"></div>
+          <p class="upload-examples">Common uploads: SIBO breath test results, stool analysis, food sensitivity panels, blood work</p>
+
+          <!-- Validation error -->
+          <p class="form-error" id="formError" style="display:none;">Please enter at least your first question for Rebecca.</p>
+
+          <!-- Submit button -->
+          <button type="submit" class="btn-submit" id="submitBtn">Submit My Questions for Rebecca</button>
+        </form>
+      </div>
+    </section>
+
+    <!-- ===== SECTION 5: WHAT YOU'LL RECEIVE ===== -->
+    <section class="receive-section">
+      <div class="container">
+        <h2>What happens next</h2>
+
+        <div class="receive-cards">
+          <div class="receive-card">
+            <div class="receive-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
+            </div>
+            <div>
+              <h3>Personal written analysis from Rebecca Taylor, RNutr</h3>
+              <p>Every question answered with specific, actionable recommendations based on your protocol and health history.</p>
+            </div>
+          </div>
+
+          <div class="receive-card">
+            <div class="receive-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+            </div>
+            <div>
+              <h3>Test result interpretation (if uploaded)</h3>
+              <p>Plain-language breakdown of what your results mean and what they suggest.</p>
+            </div>
+          </div>
+
+          <div class="receive-card">
+            <div class="receive-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg>
+            </div>
+            <div>
+              <h3>What to discuss with your doctor</h3>
+              <p>Specific questions and tests to bring to your next appointment so you get taken seriously.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== SECTION 6: PRICE REVEAL (Hidden until submission) ===== -->
+    <section class="price-section" id="priceSection" style="display:none;">
+      <div class="container">
+        <div class="price-card">
+          <h2>Rebecca will personally review your case and respond within 48-72 hours</h2>
+
+          <div class="price-display">
+            <span class="price-strike">$200&ndash;350</span>
+            <span class="price-amount">$97</span>
+            <span class="price-note">vs. typical private consultation</span>
+          </div>
+
+          <ul class="price-recap">
+            <li>Personal written analysis addressing each question</li>
+            <li>Test result interpretation (if provided)</li>
+            <li>Doctor discussion guide where relevant</li>
+            <li>Priority case &mdash; response within 48-72 hours</li>
+          </ul>
+
+          <a href="#" class="btn-cta" id="checkoutBtn">Get My Personal Case Review &mdash; $97</a>
+          <p class="cta-micro">Secure checkout powered by Stripe</p>
+
+          <a href="#" class="decline-link" id="declineLink">No thanks, continue to my protocol &rarr;</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== SECTION 7: CREDENTIAL LINE ===== -->
+    <section class="credential-section">
+      <div class="container">
+        <p class="credential-text">Rebecca Taylor is a Registered Nutritionist (RNutr) specialising in IBS, SIBO, and functional gut disorders.</p>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container">
+      <p class="footer-disclaimer">This program is for educational purposes only and is not a substitute for professional medical advice, diagnosis, or treatment. Always seek the advice of your physician or other qualified health provider.</p>
+      <div class="footer-links">
+        <a href="/legal/">Privacy Policy</a>
+        <span class="divider">&middot;</span>
+        <a href="/legal/terms.html">Terms</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/script.js"></script>
+</body>
+</html>
