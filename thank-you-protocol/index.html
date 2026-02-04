@@ -305,49 +305,56 @@
   <script>
     document.addEventListener('DOMContentLoaded', function() {
       var params = new URLSearchParams(window.location.search);
-      var name = params.get('name') || '';
-      var email = params.get('email') || '';
-      var protocolName = params.get('protocol_name') || '';
 
-      // Fallback to localStorage
-      try {
-        if (!name) name = localStorage.getItem('gha_name') || '';
-        if (!email) email = localStorage.getItem('gha_email') || '';
-        if (!protocolName) protocolName = localStorage.getItem('gha_protocol_name') || '';
-      } catch (e) {}
+      // All personalization keys to pass through
+      var allKeys = ['name', 'email', 'protocol_name', 'protocol',
+        'primary_complaint', 'primary_complaint_label', 'duration',
+        'vision', 'goal_selection', 'stress_level', 'diagnoses',
+        'treatments_formatted', 'gut_brain'];
 
-      var displayName = name || 'Friend';
-      var displayProtocol = protocolName || 'Protocol';
+      // Load from URL params, fallback to localStorage
+      var data = {};
+      for (var i = 0; i < allKeys.length; i++) {
+        var key = allKeys[i];
+        var val = params.get(key) || '';
+        if (!val) {
+          try { val = localStorage.getItem('gha_' + key) || ''; } catch (e) {}
+        }
+        data[key] = val;
+      }
+
+      var displayName = data.name || 'Friend';
+      var displayProtocol = data.protocol_name || 'Protocol';
 
       // Headline
       document.getElementById('headlineName').textContent = displayName + ', your ' + displayProtocol + ' Protocol is on its way.';
 
       // Email line
-      if (email) {
-        document.getElementById('emailLine').innerHTML = 'Check your email at <span style="color: var(--forest); font-weight: 600;">' + email + '</span> \u2014 you\'ll have access within 5 minutes.';
+      if (data.email) {
+        document.getElementById('emailLine').innerHTML = 'Check your email at <span style="color: var(--forest); font-weight: 600;">' + data.email + '</span> \u2014 you\'ll have access within 5 minutes.';
       }
 
       // Community link with params
       var upgradeParams = new URLSearchParams();
-      if (name) upgradeParams.set('name', name);
-      if (email) upgradeParams.set('email', email);
-      if (protocolName) upgradeParams.set('protocol_name', protocolName);
+      if (data.name) upgradeParams.set('name', data.name);
+      if (data.email) upgradeParams.set('email', data.email);
+      if (data.protocol_name) upgradeParams.set('protocol_name', data.protocol_name);
       var upgradeUrl = '/upgrade/?' + upgradeParams.toString();
       document.getElementById('communityLink').href = upgradeUrl;
 
       // Store data
       try {
-        if (name) localStorage.setItem('gha_name', name);
-        if (email) localStorage.setItem('gha_email', email);
-        if (protocolName) localStorage.setItem('gha_protocol_name', protocolName);
+        for (var j = 0; j < allKeys.length; j++) {
+          if (data[allKeys[j]]) localStorage.setItem('gha_' + allKeys[j], data[allKeys[j]]);
+        }
       } catch (e) {}
 
       // Auto-redirect to case review page after a short delay
       // (allows tracking pixels to fire before redirecting)
       var caseReviewParams = new URLSearchParams();
-      if (name) caseReviewParams.set('name', name);
-      if (email) caseReviewParams.set('email', email);
-      if (protocolName) caseReviewParams.set('protocol_name', protocolName);
+      for (var k = 0; k < allKeys.length; k++) {
+        if (data[allKeys[k]]) caseReviewParams.set(allKeys[k], data[allKeys[k]]);
+      }
       var caseReviewUrl = 'https://www.guthealingacademy.com/case-review/?' + caseReviewParams.toString();
 
       setTimeout(function() {

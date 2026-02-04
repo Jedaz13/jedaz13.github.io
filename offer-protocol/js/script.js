@@ -154,6 +154,26 @@ document.addEventListener('DOMContentLoaded', function() {
   trackPageView();
 });
 
+// Reset state when page is restored from bfcache (browser back/forward)
+window.addEventListener('pageshow', function(event) {
+  if (event.persisted) {
+    // Page was restored from bfcache — reset checkout state
+    checkoutInProgress = false;
+    var btn = document.getElementById('ctaButton');
+    var stickyBtn = document.getElementById('stickyCtaButton');
+    if (btn) {
+      btn.disabled = false;
+    }
+    if (stickyBtn) {
+      stickyBtn.disabled = false;
+    }
+    // Re-sync bump state from DOM and update summary
+    bumpState[1] = document.getElementById('bump1').classList.contains('checked');
+    bumpState[2] = document.getElementById('bump2').classList.contains('checked');
+    updateOrderSummary();
+  }
+});
+
 // =================================================
 // PARAM LOADING: URL → Cookie → localStorage
 // =================================================
@@ -443,23 +463,38 @@ function handleCheckout() {
   checkoutInProgress = true;
 
   var btn = document.getElementById('ctaButton');
+  var stickyBtn = document.getElementById('stickyCtaButton');
   var originalText = btn.textContent;
   btn.disabled = true;
   btn.textContent = 'Processing...';
+  if (stickyBtn) {
+    stickyBtn.disabled = true;
+    stickyBtn.textContent = 'Processing...';
+  }
+
+  // Read bump state fresh from DOM to avoid stale state
+  var bump1Active = document.getElementById('bump1').classList.contains('checked');
+  var bump2Active = document.getElementById('bump2').classList.contains('checked');
+
+  // Sync bumpState with DOM
+  bumpState[1] = bump1Active;
+  bumpState[2] = bump2Active;
+
+  var totalValue = 47 + (bump1Active ? 19 : 0) + (bump2Active ? 37 : 0);
 
   // Track checkout click
   window.dataLayer = window.dataLayer || [];
   window.dataLayer.push({
     'event': 'checkout_click',
     'protocol': pageParams.protocol_name,
-    'include_survival_guide': bumpState[1],
-    'include_meal_plan': bumpState[2],
-    'total_value': 47 + (bumpState[1] ? 19 : 0) + (bumpState[2] ? 37 : 0)
+    'include_survival_guide': bump1Active,
+    'include_meal_plan': bump2Active,
+    'total_value': totalValue
   });
 
   // Store total for thank-you page tracking
   try {
-    localStorage.setItem('gha_purchase_total', (47 + (bumpState[1] ? 19 : 0) + (bumpState[2] ? 37 : 0)).toString());
+    localStorage.setItem('gha_purchase_total', totalValue.toString());
   } catch (e) {}
 
   var payload = {
@@ -468,17 +503,26 @@ function handleCheckout() {
     protocol_name: pageParams.protocol_name,
     protocol: pageParams.protocol,
     primary_complaint: pageParams.primary_complaint,
+    primary_complaint_label: pageParams.primary_complaint_label,
     duration: pageParams.duration,
     treatments_tried_count: pageParams.treatments_tried_count,
+    gut_brain: pageParams.gut_brain,
     gut_brain_score: pageParams.gut_brain_score,
     vision: pageParams.vision,
-    include_survival_guide: bumpState[1],
-    include_meal_plan: bumpState[2]
+    goal_selection: pageParams.goal_selection,
+    stress_level: pageParams.stress_level,
+    diagnoses: pageParams.diagnoses,
+    treatments_formatted: pageParams.treatments_formatted,
+    include_survival_guide: bump1Active,
+    include_meal_plan: bump2Active
   };
+
+  console.log('Checkout payload:', JSON.stringify(payload));
 
   fetch(CHECKOUT_API, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
+    cache: 'no-store',
     body: JSON.stringify(payload)
   })
   .then(function(res) {
@@ -495,17 +539,24 @@ function handleCheckout() {
   .catch(function(err) {
     console.error('Checkout error:', err);
     // Fallback: use Stripe Payment Links directly
-    fallbackToPaymentLink();
+    fallbackToPaymentLink(bump1Active, bump2Active);
   })
   .finally(function() {
     // Always re-enable the button so they can retry
     checkoutInProgress = false;
     btn.disabled = false;
     btn.textContent = originalText;
+    if (stickyBtn) {
+      stickyBtn.disabled = false;
+      stickyBtn.textContent = originalText;
+    }
   });
 }
 
-function fallbackToPaymentLink() {
+function fallbackToPaymentLink(bump1Active, bump2Active) {
+  // Fallback opens multiple payment links if bumps are selected.
+  // Since payment links can't be combined, we open the protocol link
+  // and alert about bumps if selected.
   var protocolName = pageParams.protocol_name || 'Bloating-Dominant';
   var content = PROTOCOL_CONTENT[protocolName];
 
@@ -524,6 +575,18 @@ function fallbackToPaymentLink() {
 
   if (link && pageParams.email) {
     link += '?prefilled_email=' + encodeURIComponent(pageParams.email);
+  }
+
+  // If bumps were selected, open their payment links in new tabs first
+  if (bump1Active && STRIPE_LINKS['survival_guide']) {
+    var survivalLink = STRIPE_LINKS['survival_guide'];
+    if (pageParams.email) survivalLink += '?prefilled_email=' + encodeURIComponent(pageParams.email);
+    window.open(survivalLink, '_blank');
+  }
+  if (bump2Active && STRIPE_LINKS['meal_plan']) {
+    var mealLink = STRIPE_LINKS['meal_plan'];
+    if (pageParams.email) mealLink += '?prefilled_email=' + encodeURIComponent(pageParams.email);
+    window.open(mealLink, '_blank');
   }
 
   if (link) {
