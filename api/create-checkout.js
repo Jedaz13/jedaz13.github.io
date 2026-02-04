@@ -85,11 +85,23 @@ module.exports = async function handler(req, res) {
       lineItems.push({ price: STRIPE_PRICE_MEALPLAN, quantity: 1 });
     }
 
-    // Build success URL with params
+    // Build success URL with params for personalization on case-review
     var successParams = new URLSearchParams();
     if (name) successParams.set('name', name);
     if (email) successParams.set('email', email);
     if (protocolName) successParams.set('protocol_name', protocolName);
+    if (protocol) successParams.set('protocol', protocol);
+    if (primaryComplaint) successParams.set('primary_complaint', primaryComplaint);
+    if (duration) successParams.set('duration', duration);
+
+    // Pass through personalization params
+    var successPassthrough = ['primary_complaint_label', 'vision', 'goal_selection',
+      'stress_level', 'diagnoses', 'treatments_formatted', 'gut_brain'];
+    for (var k = 0; k < successPassthrough.length; k++) {
+      if (body[successPassthrough[k]]) {
+        successParams.set(successPassthrough[k], body[successPassthrough[k]]);
+      }
+    }
 
     var successUrl = 'https://www.guthealingacademy.com/thank-you-protocol/?' + successParams.toString();
 
