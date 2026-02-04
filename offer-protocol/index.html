@@ -44,14 +44,21 @@
     <!-- ===== SECTION 1: EMOTION — The "We Know You" Headline ===== -->
     <section class="hero-section">
       <div class="container">
-        <h1><span class="user-name" id="userName">Friend</span>, your <span id="protocolNameHeadline">Personalized</span> Protocol is ready.</h1>
+        <div class="hero-split">
+          <div class="hero-content">
+            <h1><span class="user-name" id="userName">Friend</span>, your <span id="protocolNameHeadline">Personalized</span> Protocol is ready.</h1>
 
-        <div id="protocolHeadlineCopy" class="protocol-headline-copy">
-          <!-- Populated by JS based on protocol -->
-        </div>
+            <div id="protocolHeadlineCopy" class="protocol-headline-copy">
+              <!-- Populated by JS based on protocol -->
+            </div>
 
-        <div id="personalizedParagraph" class="personalized-paragraph">
-          <!-- Populated by JS with duration, primary_complaint, vision -->
+            <div id="personalizedParagraph" class="personalized-paragraph">
+              <!-- Populated by JS with duration, primary_complaint, vision -->
+            </div>
+          </div>
+          <div class="hero-protocol-image">
+            <img src="assets/Minimalist-Bloating.png" alt="Your Protocol" id="heroProtocolImg">
+          </div>
         </div>
       </div>
     </section>
@@ -88,6 +95,7 @@
     <!-- ===== SECTION 3.5: SOCIAL PROOF — Testimonial ===== -->
     <section class="testimonial-section">
       <div class="container">
+        <h2>Real results from real women</h2>
         <div class="testimonial-card" id="testimonialCard">
           <!-- Populated by JS based on primary_complaint -->
         </div>
@@ -182,8 +190,10 @@
             <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
             <span>60 Days</span>
           </div>
-          <h2>The Gut Freedom Guarantee</h2>
-          <p>Follow your protocol for 60 days. If you don't notice a difference in your digestive comfort, email us and we'll refund every penny within 24 hours. No forms. No awkward calls. No guilt. You've been burned enough — we're not adding to it.</p>
+          <div class="guarantee-content">
+            <h2>The Gut Freedom Guarantee</h2>
+            <p>Follow your protocol for 60 days. If you don't notice a difference in your digestive comfort, email us and we'll refund every penny within 24 hours. No forms. No awkward calls. No guilt. You've been burned enough — we're not adding to it.</p>
+          </div>
         </div>
       </div>
     </section>
