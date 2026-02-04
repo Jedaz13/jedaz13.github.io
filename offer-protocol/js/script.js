@@ -149,6 +149,8 @@ document.addEventListener('DOMContentLoaded', function() {
   storeData(pageParams);
   restoreBumpState();
   populatePage();
+  populateTestimonial();
+  initStickyCta();
   trackPageView();
 });
 
@@ -382,6 +384,12 @@ function updateOrderSummary() {
 
   document.getElementById('orderTotal').textContent = '$' + total;
   document.getElementById('ctaButton').textContent = 'Get My Protocol \u2014 $' + total;
+
+  // Sync sticky CTA
+  var stickyBtn = document.getElementById('stickyCtaButton');
+  if (stickyBtn) {
+    stickyBtn.textContent = 'Get My Protocol \u2014 $' + total;
+  }
 }
 
 // =================================================
@@ -499,6 +507,103 @@ function toggleFaq(item) {
   if (!isOpen) {
     item.classList.add('open');
   }
+}
+
+// =================================================
+// TESTIMONIAL DATA
+// =================================================
+
+var TESTIMONIALS = {
+  bloating: {
+    name: 'Suzy',
+    photo: 'assets/suzy.png',
+    quote: "I used to look 6 months pregnant by dinner every single night. Within the first week of following the protocol, I could actually button my jeans after eating. By week 3, the daily bloating was gone. I cried the first time I wore a fitted dress to dinner.",
+    label: 'Suzy, bloating for 4+ years'
+  },
+  constipation: {
+    name: 'Amanda',
+    photo: 'assets/amanda.png',
+    quote: "I went from going once every 4-5 days — with straining, pain, and brain fog — to comfortable, regular mornings. The protocol didn't just tell me to 'eat more fiber.' It gave me a system that actually worked for MY body. I wish I'd found this years ago.",
+    label: 'Amanda, constipation for 3 years'
+  },
+  diarrhea: {
+    name: 'Cheryl',
+    photo: 'assets/cheryl.png',
+    quote: "I had every bathroom mapped within a 10-mile radius. I couldn't drive more than 20 minutes without planning stops. After the protocol, I went on a road trip — a ROAD TRIP — without a single emergency. That was the moment I knew my life had actually changed.",
+    label: 'Cheryl, urgency and diarrhea for 5+ years'
+  },
+  mixed: {
+    name: 'Cheryl',
+    photo: 'assets/cheryl.png',
+    quote: "Some days I couldn't go at all. Other days I couldn't stop. The unpredictability was the worst part — I never knew which body I was waking up to. The protocol gave me stability I didn't think was possible. My gut finally picked a lane.",
+    label: 'Cheryl, mixed IBS symptoms'
+  },
+  pain: {
+    name: 'Amanda',
+    photo: 'assets/amanda.png',
+    quote: "The cramping would hit out of nowhere — sometimes so bad I'd have to lie on the floor at work. The protocol helped me identify my exact triggers and gave me a plan. Within two weeks, the cramping episodes dropped from daily to maybe once a week.",
+    label: 'Amanda, chronic gut pain'
+  },
+  gas: {
+    name: 'Suzy',
+    photo: 'assets/suzy.png',
+    quote: "I stopped accepting dinner invitations because of the gas. The embarrassment was constant. The protocol showed me exactly which foods were fermenting and the meal spacing trick alone cut my symptoms in half within days.",
+    label: 'Suzy, gas and discomfort'
+  },
+  reflux: {
+    name: 'Amanda',
+    photo: 'assets/amanda.png',
+    quote: "I was afraid to eat anything because the burning would start within minutes. Sleeping propped up, avoiding everything acidic, living on antacids. The protocol gave me a structured approach and within 3 weeks I was eating meals without fear again.",
+    label: 'Amanda, chronic reflux'
+  }
+};
+
+// =================================================
+// TESTIMONIAL POPULATION
+// =================================================
+
+function populateTestimonial() {
+  var complaint = pageParams.primary_complaint || 'bloating';
+  var testimonial = TESTIMONIALS[complaint] || TESTIMONIALS['bloating'];
+
+  var html = '<div class="testimonial-author-row">';
+  html += '<img src="' + testimonial.photo + '" alt="' + testimonial.name + '" class="testimonial-photo">';
+  html += '<div class="testimonial-stars">';
+  for (var i = 0; i < 5; i++) {
+    html += '<svg width="16" height="16" viewBox="0 0 24 24" fill="#E07A5F" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>';
+  }
+  html += '</div></div>';
+  html += '<blockquote class="testimonial-quote">"' + testimonial.quote + '"</blockquote>';
+  html += '<p class="testimonial-label">' + testimonial.label + '</p>';
+
+  document.getElementById('testimonialCard').innerHTML = html;
+}
+
+// =================================================
+// STICKY CTA
+// =================================================
+
+function initStickyCta() {
+  var stickyCta = document.getElementById('stickyCta');
+  var ctaButton = document.getElementById('ctaButton');
+  if (!stickyCta || !ctaButton) return;
+
+  function checkScroll() {
+    var ctaRect = ctaButton.getBoundingClientRect();
+    var windowHeight = window.innerHeight;
+
+    // Show sticky when main CTA is scrolled out of view (either above or below viewport)
+    if (ctaRect.bottom < 0 || ctaRect.top > windowHeight) {
+      stickyCta.classList.add('visible');
+      document.body.classList.add('has-sticky-cta');
+    } else {
+      stickyCta.classList.remove('visible');
+      document.body.classList.remove('has-sticky-cta');
+    }
+  }
+
+  window.addEventListener('scroll', checkScroll, { passive: true });
+  checkScroll();
 }
 
 // =================================================

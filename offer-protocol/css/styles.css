@@ -18,10 +18,12 @@
   /* Brand Colors */
   --forest: #2D5A3D;
   --forest-light: #3a7050;
+  --forest-dark: #1B3329;
   --cta-coral: #E07A5F;
   --cta-coral-hover: #d16a50;
   --sage: #A4C3B2;
   --sage-light: #d4e6db;
+  --amber: #fbbf24;
 
   /* Utility */
   --success: #52B788;
@@ -32,6 +34,7 @@
   /* Shadows */
   --shadow-card: 0 2px 12px rgba(0, 0, 0, 0.06);
   --shadow-elevated: 0 4px 20px rgba(0, 0, 0, 0.1);
+  --shadow-sticky: 0 -4px 20px rgba(0, 0, 0, 0.1);
 
   /* Border Radius */
   --radius: 8px;
@@ -44,6 +47,7 @@
 
   /* Layout */
   --max-content-width: 640px;
+  --sticky-height: 72px;
 }
 
 /* Reset */
@@ -63,6 +67,10 @@ body {
   line-height: 1.7;
   color: var(--text-secondary);
   background-color: var(--bg-cream);
+}
+
+body.has-sticky-cta {
+  padding-bottom: var(--sticky-height);
 }
 
 img {
@@ -143,7 +151,7 @@ h1, h2, h3 {
   border-radius: var(--radius-lg);
   padding: 28px 24px;
   box-shadow: var(--shadow-card);
-  border-left: 4px solid var(--forest);
+  border-left: 4px solid var(--cta-coral);
 }
 
 .outcome-card p {
@@ -180,7 +188,7 @@ h1, h2, h3 {
   display: flex;
   flex-direction: column;
   gap: 16px;
-  margin-bottom: 24px;
+  margin-bottom: 28px;
 }
 
 .content-card {
@@ -188,14 +196,17 @@ h1, h2, h3 {
   border-radius: var(--radius-lg);
   padding: 20px;
   box-shadow: var(--shadow-card);
-  border: 1px solid var(--border);
+  border-left: 4px solid var(--sage);
+  border-top: none;
+  border-right: none;
+  border-bottom: none;
 }
 
 .content-card h3 {
   font-family: var(--font-family);
   font-size: 1rem;
   font-weight: 600;
-  color: var(--text-charcoal);
+  color: var(--forest);
   margin-bottom: 8px;
 }
 
@@ -205,13 +216,102 @@ h1, h2, h3 {
   line-height: 1.6;
 }
 
+/* Practitioner Credibility Card */
+.practitioners-card {
+  background: var(--white);
+  border-radius: var(--radius-lg);
+  padding: 20px;
+  box-shadow: var(--shadow-card);
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.practitioners-photos {
+  display: flex;
+  flex-shrink: 0;
+}
+
+.practitioner-photo {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid var(--white);
+  box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+}
+
+.practitioner-photo:nth-child(2) {
+  margin-left: -12px;
+}
+
 .practitioner-line {
-  font-size: 0.875rem;
+  font-size: 0.8125rem;
   color: var(--text-muted);
+  line-height: 1.5;
+}
+
+.practitioner-line strong {
+  color: var(--text-charcoal);
+  font-weight: 600;
+}
+
+/* =====================================================
+   Section 3.5: Testimonial
+   ===================================================== */
+.testimonial-section {
+  padding: 32px 0;
+  background-color: var(--bg-section);
+}
+
+.testimonial-card {
+  background: var(--white);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  box-shadow: var(--shadow-card);
+  border-left: 4px solid var(--cta-coral);
+}
+
+.testimonial-quote {
+  font-size: 0.9375rem;
   font-style: italic;
-  line-height: 1.6;
-  padding-top: 8px;
-  border-top: 1px solid var(--divider);
+  line-height: 1.7;
+  color: var(--text-secondary);
+  margin-bottom: 16px;
+}
+
+.testimonial-author {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.testimonial-author-photo {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.testimonial-author-info {
+  flex: 1;
+}
+
+.testimonial-author-name {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text-charcoal);
+}
+
+.testimonial-author-detail {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.testimonial-stars {
+  color: var(--amber);
+  font-size: 14px;
+  letter-spacing: 2px;
 }
 
 /* =====================================================
@@ -219,7 +319,6 @@ h1, h2, h3 {
    ===================================================== */
 .stakes-section {
   padding: 32px 0;
-  background-color: var(--bg-section);
 }
 
 .stakes-section p {
@@ -243,6 +342,7 @@ h1, h2, h3 {
    ===================================================== */
 .pricing-section {
   padding: 40px 0;
+  background-color: var(--bg-section);
 }
 
 /* Main offer card */
@@ -367,7 +467,8 @@ h1, h2, h3 {
 
 /* Order Summary */
 .order-summary {
-  background: var(--bg-section);
+  background: var(--white);
+  border: 1px solid var(--divider);
   border-radius: var(--radius-lg);
   padding: 20px;
   margin-bottom: 20px;
@@ -450,15 +551,41 @@ h1, h2, h3 {
    ===================================================== */
 .guarantee-section {
   padding: 32px 0;
-  background-color: var(--bg-section);
 }
 
 .guarantee-card {
   background: var(--white);
+  border: 2px solid var(--cta-coral);
   border-radius: var(--radius-lg);
   padding: 24px;
   box-shadow: var(--shadow-card);
   text-align: center;
+}
+
+.guarantee-badge {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--cta-coral), #d16a50);
+  color: var(--white);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 16px;
+  gap: 2px;
+}
+
+.guarantee-badge svg {
+  stroke: var(--white);
+  width: 22px;
+  height: 22px;
+}
+
+.guarantee-badge span {
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
 }
 
 .guarantee-card h2 {
@@ -478,6 +605,7 @@ h1, h2, h3 {
    ===================================================== */
 .faq-section {
   padding: 40px 0;
+  background-color: var(--bg-section);
 }
 
 .faq-section h2 {
@@ -540,17 +668,62 @@ h1, h2, h3 {
 }
 
 /* =====================================================
+   Trust Section
+   ===================================================== */
+.trust-section {
+  padding: 24px 0;
+  text-align: center;
+}
+
+.trust-row {
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+
+.trust-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.8125rem;
+  color: var(--text-muted);
+}
+
+.trust-item svg {
+  stroke: var(--sage);
+}
+
+.payment-icons {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.payment-label {
+  font-size: 0.75rem;
+  color: var(--text-light);
+}
+
+.stripe-icon {
+  opacity: 0.6;
+}
+
+/* =====================================================
    Footer
    ===================================================== */
 .site-footer {
   padding: 24px 0;
   text-align: center;
-  background-color: var(--bg-section);
+  background-color: var(--forest-dark);
+  color: rgba(255, 255, 255, 0.7);
 }
 
 .footer-disclaimer {
   font-size: 0.75rem;
-  color: var(--text-muted);
+  color: rgba(255, 255, 255, 0.5);
   margin-bottom: 12px;
   line-height: 1.5;
 }
@@ -560,12 +733,67 @@ h1, h2, h3 {
 }
 
 .footer-links a {
-  color: var(--text-muted);
+  color: rgba(255, 255, 255, 0.6);
+  transition: color 0.2s ease;
+}
+
+.footer-links a:hover {
+  color: rgba(255, 255, 255, 0.9);
 }
 
 .footer-links .divider {
   margin: 0 8px;
-  color: var(--text-light);
+  color: rgba(255, 255, 255, 0.3);
+}
+
+/* =====================================================
+   Sticky Mobile CTA
+   ===================================================== */
+.sticky-cta {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  background: var(--white);
+  padding: 12px 16px;
+  box-shadow: var(--shadow-sticky);
+  transform: translateY(100%);
+  opacity: 0;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.sticky-cta.visible {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.btn-cta-sticky {
+  display: block;
+  width: 100%;
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 14px 24px;
+  font-family: var(--font-family);
+  font-size: 1rem;
+  font-weight: 600;
+  text-align: center;
+  color: var(--white);
+  background-color: var(--cta-coral);
+  border: none;
+  border-radius: 100px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  line-height: 1.2;
+}
+
+.btn-cta-sticky:hover {
+  background-color: var(--cta-coral-hover);
+}
+
+.btn-cta-sticky:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
 }
 
 /* =====================================================
@@ -600,6 +828,23 @@ h1, h2, h3 {
     padding: 24px;
   }
 
+  .practitioners-card {
+    padding: 24px;
+  }
+
+  .practitioner-photo {
+    width: 56px;
+    height: 56px;
+  }
+
+  .testimonial-section {
+    padding: 40px 0;
+  }
+
+  .testimonial-card {
+    padding: 28px;
+  }
+
   .pricing-section {
     padding: 48px 0;
   }
@@ -614,6 +859,11 @@ h1, h2, h3 {
 
   .faq-section {
     padding: 48px 0;
+  }
+
+  /* Hide sticky CTA on desktop */
+  .sticky-cta {
+    display: none;
   }
 }
 
