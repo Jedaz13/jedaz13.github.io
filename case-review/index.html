@@ -37,26 +37,28 @@
   <main>
 
     <!-- ===== SECTION 1: HERO — Dark Gradient Header ===== -->
-    <section class="hero-section">
+    <section class="hero-section" style="background:linear-gradient(135deg,#1B3329 0%,#2A4A3A 100%);padding:48px 0 40px;text-align:center;position:relative;">
       <div class="container">
-        <p class="hero-confirmation">Your protocol is on its way!</p>
-        <h1>But you don't have to figure it&nbsp;all&nbsp;out&nbsp;alone</h1>
-        <div class="hero-rebecca">
-          <img src="/offer-protocol/assets/rebecca.png" alt="Rebecca Taylor, RNutr" class="rebecca-photo">
-          <div class="rebecca-info">
-            <p class="rebecca-name">Rebecca Taylor, RNutr</p>
-            <p class="rebecca-title">Registered Nutritionist specialising in IBS, SIBO, and functional gut&nbsp;disorders</p>
+        <p class="hero-confirmation" style="display:inline-block;background:rgba(249,199,79,0.2);border:1px solid rgba(249,199,79,0.4);border-radius:100px;padding:8px 20px;font-size:0.9375rem;font-weight:600;color:#F9C74F;margin-bottom:20px;">Your protocol is on its&nbsp;way!</p>
+        <h1 style="font-family:'DM Serif Display',serif;font-size:1.75rem;color:#FFFFFF;margin-bottom:28px;font-weight:400;line-height:1.3;">But you don't have to figure it&nbsp;all&nbsp;out&nbsp;alone</h1>
+
+        <div class="hero-rebecca" style="display:flex;align-items:center;gap:16px;background:rgba(255,255,255,0.1);border-radius:14px;padding:16px 20px;margin:0 auto 24px;text-align:left;max-width:420px;">
+          <img src="/offer-protocol/assets/rebecca.png" alt="Rebecca Taylor, RNutr" width="64" height="64" style="width:64px;height:64px;border-radius:50%;object-fit:cover;border:3px solid #F9C74F;flex-shrink:0;">
+          <div>
+            <p style="font-size:1rem;font-weight:600;color:#FFFFFF;margin:0 0 2px;">Rebecca Taylor, RNutr</p>
+            <p style="font-size:0.8125rem;color:rgba(255,255,255,0.75);line-height:1.4;margin:0;">Registered Nutritionist specialising in IBS, SIBO, and functional gut&nbsp;disorders</p>
           </div>
         </div>
-        <p class="hero-subtitle">Rebecca will personally review your health profile and respond to your specific questions within&nbsp;48&#8209;72&nbsp;hours.</p>
-        <p class="hero-context">A private consultation with a registered nutritionist typically costs $200&ndash;$350. Because your assessment already gave Rebecca a detailed starting point, she goes straight to what matters&nbsp;&mdash;&nbsp;your&nbsp;questions.</p>
+
+        <p style="font-size:1.0625rem;line-height:1.7;color:rgba(255,255,255,0.9);margin-bottom:20px;">Rebecca will personally review your health profile and respond to your specific questions within&nbsp;48&#8209;72&nbsp;hours.</p>
+        <p style="font-size:0.9375rem;color:rgba(255,255,255,0.65);line-height:1.7;padding-top:20px;border-top:1px solid rgba(255,255,255,0.15);margin:0;">A private consultation with a registered nutritionist typically costs $200&ndash;$350. Because your assessment already gave Rebecca a detailed starting point, she goes straight to what matters&nbsp;&mdash;&nbsp;your&nbsp;questions.</p>
       </div>
     </section>
 
     <!-- ===== PATTERN INTERRUPTION: Urgency Bar ===== -->
-    <section class="urgency-bar">
+    <section style="padding:14px 0;background-color:#F9C74F;text-align:center;">
       <div class="container">
-        <p><strong>This offer is only available right now</strong> &mdash; Rebecca reviews a limited number of cases each week to ensure quality.</p>
+        <p style="font-size:0.875rem;color:#1B3329;margin:0;line-height:1.5;"><strong style="font-weight:700;">This offer is only available right now</strong> &mdash; Rebecca reviews a limited number of cases each week to ensure&nbsp;quality.</p>
       </div>
     </section>
 
@@ -118,7 +120,6 @@
             <textarea id="question_3" name="question_3" rows="3" placeholder="e.g., Could my anxiety medication be affecting my gut?"></textarea>
           </div>
 
-          <!-- Additional questions (hidden by default) -->
           <div class="form-group extra-question" id="q4Group" style="display:none;">
             <label for="question_4">Question 4</label>
             <textarea id="question_4" name="question_4" rows="3" placeholder="e.g., What does my SIBO breath test result actually mean?"></textarea>
@@ -148,7 +149,6 @@
             <textarea id="additional_notes" name="additional_notes" rows="3" placeholder="e.g., Recent diet changes, upcoming appointments, family history..."></textarea>
           </div>
 
-          <!-- ===== SECTION 4: TEST RESULT UPLOAD ===== -->
           <hr class="form-divider">
 
           <h3 class="upload-heading">Have test results that could&nbsp;help?</h3>
@@ -163,10 +163,8 @@
           <div class="upload-file-list" id="uploadFileList"></div>
           <p class="upload-examples">Common uploads: SIBO breath test results, stool analysis, food sensitivity panels, blood&nbsp;work</p>
 
-          <!-- Validation error -->
           <p class="form-error" id="formError" style="display:none;">Please enter at least your first question for&nbsp;Rebecca.</p>
 
-          <!-- Submit button -->
           <button type="submit" class="btn-cta" id="submitBtn">Submit My Questions for Rebecca</button>
           <p class="submit-edit-note" id="submitEditNote" style="display:none;">Changed your mind? <a href="#" id="editQuestionsLink" onclick="enableEditing(event)">Edit your questions</a></p>
         </form>
@@ -174,9 +172,9 @@
     </section>
 
     <!-- ===== PATTERN INTERRUPTION: Social Proof ===== -->
-    <section class="social-proof-bar">
+    <section style="padding:20px 0;background-color:#1B3329;text-align:center;">
       <div class="container">
-        <p>"Rebecca's review was worth 10x what I paid. She spotted things three doctors missed and gave me a clear plan." &mdash; <strong>Sarah M.</strong></p>
+        <p style="font-size:0.9375rem;color:rgba(255,255,255,0.9);font-style:italic;line-height:1.6;margin:0;">"Rebecca's review was worth 10x what I paid. She spotted things three doctors missed and gave me a clear&nbsp;plan." &mdash; <strong style="color:#F9C74F;font-style:normal;">Sarah&nbsp;M.</strong></p>
       </div>
     </section>
 
@@ -247,8 +245,8 @@
     <!-- ===== SECTION 7: CREDENTIAL LINE ===== -->
     <section class="credential-section">
       <div class="container">
-        <div class="credential-card">
-          <img src="/offer-protocol/assets/rebecca.png" alt="Rebecca Taylor" class="credential-photo">
+        <div class="credential-card" style="display:flex;align-items:center;gap:14px;justify-content:center;">
+          <img src="/offer-protocol/assets/rebecca.png" alt="Rebecca Taylor" width="40" height="40" style="width:40px;height:40px;border-radius:50%;object-fit:cover;border:2px solid #F9C74F;flex-shrink:0;">
           <p class="credential-text">Rebecca Taylor is a Registered Nutritionist (RNutr) specialising in IBS, SIBO, and functional gut&nbsp;disorders.</p>
         </div>
       </div>
