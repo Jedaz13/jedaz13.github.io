@@ -8,6 +8,19 @@ var STRIPE_CASE_REVIEW_LINK = 'https://buy.stripe.com/bJe8wQ9ep72WfckbH7gA80h';
 // Decline redirect (next upsell or thank-you)
 var DECLINE_REDIRECT = '/thank-you-protocol/';
 
+// Supabase
+var SUPABASE_URL = 'https://mwabljnngygkmahjgvps.supabase.co';
+var SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im13YWJsam5uZ3lna21haGpndnBzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU1MjQ3MzgsImV4cCI6MjA4MTEwMDczOH0.rbZYj1aXui_xZ0qkg7QONdHppnJghT2r0ycZwtr3a-E';
+
+var supabaseClient = null;
+try {
+  if (typeof supabase !== 'undefined') {
+    supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  }
+} catch (e) {
+  console.log('Supabase not available');
+}
+
 // =================================================
 // PROTOCOL FRIENDLY NAMES
 // =================================================
@@ -237,9 +250,9 @@ function setupForm() {
   var form = document.getElementById('caseReviewForm');
   if (!form) return;
 
-  form.addEventListener('submit', function(e) {
+  form.addEventListener('submit', async function(e) {
     e.preventDefault();
-    handleFormSubmit();
+    await handleFormSubmit();
   });
 }
 
@@ -320,7 +333,7 @@ window.enableEditing = enableEditing;
 // FORM SUBMISSION
 // =================================================
 
-function handleFormSubmit() {
+async function handleFormSubmit() {
   var q1 = document.getElementById('question_1');
   if (!q1 || !q1.value.trim()) {
     var errorEl = document.getElementById('formError');
@@ -381,6 +394,9 @@ function handleFormSubmit() {
     console.log('localStorage not available');
   }
 
+  // Submit to Supabase (non-blocking — errors won't prevent price reveal)
+  await submitCaseReviewToSupabase(formData);
+
   // Gray out form fields
   var textareas = document.querySelectorAll('#caseReviewForm textarea');
   for (var j = 0; j < textareas.length; j++) {
@@ -424,6 +440,57 @@ function handleFormSubmit() {
     'has_supplements': !!formData.current_supplements,
     'has_files': formData.uploaded_file_names.length > 0
   });
+}
+
+// =================================================
+// SUPABASE: SAVE CASE REVIEW (pre-payment)
+// =================================================
+
+async function submitCaseReviewToSupabase(formData) {
+  if (!supabaseClient) {
+    console.log('Supabase client not available — skipping case review insert');
+    return;
+  }
+
+  try {
+    var record = {
+      id: formData.review_id,
+      email: formData.quiz_context.email || null,
+      name: formData.quiz_context.name || null,
+      user_id: null,
+      question_1: formData.questions[0] || null,
+      question_2: formData.questions[1] || null,
+      question_3: formData.questions[2] || null,
+      question_4: formData.questions[3] || null,
+      question_5: formData.questions[4] || null,
+      question_6: formData.questions[5] || null,
+      current_supplements: formData.current_supplements || null,
+      treatment_history: formData.quiz_context.treatments_formatted || null,
+      additional_notes: formData.additional_notes || null,
+      uploaded_files: JSON.stringify(formData.uploaded_file_names),
+      protocol: formData.quiz_context.protocol || null,
+      protocol_name: formData.quiz_context.protocol_name || null,
+      primary_complaint: formData.quiz_context.primary_complaint || null,
+      primary_complaint_label: formData.quiz_context.primary_complaint_label || null,
+      duration: formData.quiz_context.duration || null,
+      diagnoses: formData.quiz_context.diagnoses || null,
+      stress_level: formData.quiz_context.stress_level || null,
+      life_impact: formData.quiz_context.life_impact || null,
+      status: 'pending_payment'
+    };
+
+    var result = await supabaseClient
+      .from('case_reviews')
+      .upsert(record, { onConflict: 'id' });
+
+    if (result.error) {
+      console.error('Supabase case_reviews insert error:', result.error);
+    } else {
+      console.log('Case review saved to Supabase (pending_payment):', formData.review_id);
+    }
+  } catch (e) {
+    console.error('Error submitting case review to Supabase:', e);
+  }
 }
 
 // =================================================
