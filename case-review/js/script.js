@@ -83,6 +83,7 @@ var GOAL_MAP = {
 
 var pageParams = {};
 var uploadedFiles = [];
+var uploadedFileObjects = [];
 var visibleQuestions = 3;
 var formSubmitted = false;
 var reviewId = '';
@@ -415,6 +416,10 @@ async function handleFormSubmit() {
     console.log('localStorage not available');
   }
 
+  // Upload files to Supabase Storage, then save review with file URLs
+  var fileUrls = await uploadFilesToStorage(formData.review_id);
+  formData.uploaded_file_urls = fileUrls;
+
   // Submit to Supabase (non-blocking — errors won't prevent price reveal)
   await submitCaseReviewToSupabase(formData);
 
@@ -464,6 +469,62 @@ async function handleFormSubmit() {
 }
 
 // =================================================
+// SUPABASE STORAGE: UPLOAD FILES
+// =================================================
+
+async function uploadFilesToStorage(caseReviewId) {
+  if (!supabaseClient || uploadedFileObjects.length === 0) {
+    return [];
+  }
+
+  var fileUrls = [];
+  var bucketName = 'case-review-files';
+
+  for (var i = 0; i < uploadedFileObjects.length; i++) {
+    var file = uploadedFileObjects[i];
+    try {
+      // Create a unique path: case-reviews/{reviewId}/{timestamp}_{filename}
+      var safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, '_');
+      var filePath = 'case-reviews/' + caseReviewId + '/' + Date.now() + '_' + safeName;
+
+      var result = await supabaseClient.storage
+        .from(bucketName)
+        .upload(filePath, file, {
+          cacheControl: '3600',
+          upsert: false
+        });
+
+      if (result.error) {
+        console.error('File upload error (' + file.name + '):', result.error);
+        // Fall back to just the filename
+        fileUrls.push({ name: file.name, error: true });
+        continue;
+      }
+
+      // Get public URL
+      var urlResult = supabaseClient.storage
+        .from(bucketName)
+        .getPublicUrl(filePath);
+
+      fileUrls.push({
+        name: file.name,
+        path: filePath,
+        url: urlResult.data.publicUrl,
+        size: file.size,
+        type: file.type
+      });
+
+      console.log('Uploaded file:', file.name);
+    } catch (e) {
+      console.error('Error uploading file (' + file.name + '):', e);
+      fileUrls.push({ name: file.name, error: true });
+    }
+  }
+
+  return fileUrls;
+}
+
+// =================================================
 // SUPABASE: SAVE CASE REVIEW (pre-payment)
 // =================================================
 
@@ -487,7 +548,9 @@ async function submitCaseReviewToSupabase(formData) {
       current_supplements: formData.current_supplements || null,
       treatment_history: formData.quiz_context.treatments_formatted || null,
       additional_notes: formData.additional_notes || null,
-      uploaded_files: formData.uploaded_file_names || [],
+      uploaded_files: formData.uploaded_file_urls && formData.uploaded_file_urls.length > 0
+        ? formData.uploaded_file_urls
+        : formData.uploaded_file_names || [],
       protocol: formData.quiz_context.protocol || null,
       protocol_name: formData.quiz_context.protocol_name || null,
       primary_complaint: formData.quiz_context.primary_complaint || null,
@@ -682,6 +745,7 @@ function handleFiles(files) {
     if (duplicate) continue;
 
     uploadedFiles.push({ name: file.name, size: file.size, type: file.type });
+    uploadedFileObjects.push(file);
   }
 
   renderFileList();
@@ -719,6 +783,7 @@ function renderFileList() {
 
 function removeFile(index) {
   uploadedFiles.splice(index, 1);
+  uploadedFileObjects.splice(index, 1);
   renderFileList();
 }
 window.removeFile = removeFile;
