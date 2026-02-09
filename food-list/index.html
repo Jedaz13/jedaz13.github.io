@@ -610,7 +610,7 @@
         await submitToSupabase(data.first_name, data.email);
 
         // Send to Make.com webhook (non-blocking - don't let failure prevent redirect)
-        fetch('https://hook.eu1.make.com/6somdu1dno8xp6qk5u788z2bgynjv7xe', {
+        fetch('https://hook.eu1.make.com/3diaa7auhk4z66olqy4c3m1cqusa5dvf', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(data)
