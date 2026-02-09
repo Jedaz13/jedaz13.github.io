@@ -457,7 +457,6 @@ async function submitCaseReviewToSupabase(formData) {
       id: formData.review_id,
       email: formData.quiz_context.email || null,
       name: formData.quiz_context.name || null,
-      user_id: null,
       question_1: formData.questions[0] || null,
       question_2: formData.questions[1] || null,
       question_3: formData.questions[2] || null,
@@ -479,9 +478,9 @@ async function submitCaseReviewToSupabase(formData) {
       status: 'pending_payment'
     };
 
-    var result = await supabaseClient
-      .from('case_reviews')
-      .upsert(record, { onConflict: 'id' });
+    var result = await supabaseClient.rpc('upsert_case_review', {
+      review_data: record
+    });
 
     if (result.error) {
       console.error('Supabase case_reviews insert error:', result.error);
