@@ -93,6 +93,7 @@ var reviewId = '';
 
 document.addEventListener('DOMContentLoaded', function() {
   pageParams = loadParams();
+  persistParams(pageParams);
   populateProfile();
   setupForm();
   setupUpload();
@@ -146,6 +147,26 @@ function loadParams() {
   data.gut_brain = data.gut_brain === 'true';
 
   return data;
+}
+
+function persistParams(data) {
+  try {
+    var keys = [
+      'source', 'name', 'email', 'protocol', 'protocol_name',
+      'primary_complaint', 'primary_complaint_label',
+      'duration', 'diagnoses', 'treatments', 'treatments_formatted',
+      'stress_level', 'life_impact', 'vision',
+      'goal_selection', 'journey_stage', 'gut_brain'
+    ];
+    for (var i = 0; i < keys.length; i++) {
+      var val = data[keys[i]];
+      if (val !== undefined && val !== '' && val !== null) {
+        localStorage.setItem('gha_' + keys[i], String(val));
+      }
+    }
+  } catch (e) {
+    console.log('localStorage not available for param persistence');
+  }
 }
 
 function getCookie(name) {
@@ -466,7 +487,7 @@ async function submitCaseReviewToSupabase(formData) {
       current_supplements: formData.current_supplements || null,
       treatment_history: formData.quiz_context.treatments_formatted || null,
       additional_notes: formData.additional_notes || null,
-      uploaded_files: JSON.stringify(formData.uploaded_file_names),
+      uploaded_files: formData.uploaded_file_names || [],
       protocol: formData.quiz_context.protocol || null,
       protocol_name: formData.quiz_context.protocol_name || null,
       primary_complaint: formData.quiz_context.primary_complaint || null,
