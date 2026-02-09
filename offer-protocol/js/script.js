@@ -497,11 +497,21 @@ function handleCheckout() {
     localStorage.setItem('gha_purchase_total', totalValue.toString());
   } catch (e) {}
 
+  // Derive protocol key from protocol_name if not set in URL
+  var protocolKey = pageParams.protocol;
+  if (!protocolKey && pageParams.protocol_name && PROTOCOL_CONTENT[pageParams.protocol_name]) {
+    protocolKey = PROTOCOL_CONTENT[pageParams.protocol_name].key;
+  }
+  // Fallback to bloat_reset if still not found
+  if (!protocolKey) {
+    protocolKey = 'bloat_reset';
+  }
+
   var payload = {
     email: pageParams.email,
     name: pageParams.name,
     protocol_name: pageParams.protocol_name,
-    protocol: pageParams.protocol,
+    protocol: protocolKey,
     primary_complaint: pageParams.primary_complaint,
     primary_complaint_label: pageParams.primary_complaint_label,
     duration: pageParams.duration,
@@ -577,16 +587,9 @@ function fallbackToPaymentLink(bump1Active, bump2Active) {
     link += '?prefilled_email=' + encodeURIComponent(pageParams.email);
   }
 
-  // If bumps were selected, open their payment links in new tabs first
-  if (bump1Active && STRIPE_LINKS['survival_guide']) {
-    var survivalLink = STRIPE_LINKS['survival_guide'];
-    if (pageParams.email) survivalLink += '?prefilled_email=' + encodeURIComponent(pageParams.email);
-    window.open(survivalLink, '_blank');
-  }
-  if (bump2Active && STRIPE_LINKS['meal_plan']) {
-    var mealLink = STRIPE_LINKS['meal_plan'];
-    if (pageParams.email) mealLink += '?prefilled_email=' + encodeURIComponent(pageParams.email);
-    window.open(mealLink, '_blank');
+  // Bumps are not supported in fallback mode — Payment Links can't combine products
+  if (bump1Active || bump2Active) {
+    console.warn('Fallback mode: bump add-ons (survival guide / meal plan) cannot be included via Payment Links. Only the protocol will be purchased.');
   }
 
   if (link) {
