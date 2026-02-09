@@ -609,14 +609,16 @@
         // Send to Supabase (upsert - will match on email if they later take quiz)
         await submitToSupabase(data.first_name, data.email);
 
-        // Send to Make.com webhook (non-blocking - don't let failure prevent redirect)
-        fetch('https://hook.eu1.make.com/3diaa7auhk4z66olqy4c3m1cqusa5dvf', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(data)
-        }).catch(function(err) {
+        // Send to Make.com webhook (await so it completes before redirect)
+        try {
+          await fetch('https://hook.eu1.make.com/3diaa7auhk4z66olqy4c3m1cqusa5dvf', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+          });
+        } catch (err) {
           console.warn('Webhook send failed (non-critical):', err);
-        });
+        }
 
         // Fire tracking events
         if (typeof fbq !== 'undefined') {
