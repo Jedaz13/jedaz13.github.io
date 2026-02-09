@@ -466,7 +466,7 @@ async function submitCaseReviewToSupabase(formData) {
       current_supplements: formData.current_supplements || null,
       treatment_history: formData.quiz_context.treatments_formatted || null,
       additional_notes: formData.additional_notes || null,
-      uploaded_files: JSON.stringify(formData.uploaded_file_names),
+      uploaded_files: formData.uploaded_file_names || [],
       protocol: formData.quiz_context.protocol || null,
       protocol_name: formData.quiz_context.protocol_name || null,
       primary_complaint: formData.quiz_context.primary_complaint || null,
