@@ -33,15 +33,9 @@
       <!-- Left: Video -->
       <div class="hero-video">
         <div class="video-container" id="video-container">
-          <!--
-            OPTION 1: Self-hosted MP4 (recommended)
-            Upload your video to /webinar/assets/intro.mp4
-            Optionally add a poster image: poster="assets/poster.jpg"
-          -->
           <video
             id="hero-video"
-            src="assets/intro.mp4"
-            poster=""
+            src="intro.mp4"
             playsinline
             preload="metadata"
           ></video>
@@ -356,12 +350,28 @@
     (function() {
       var taken = 47;
       var total = 75;
-      var left = total - taken;
-      var pct = (taken / total) * 100;
+      var takenEl = document.getElementById('spots-taken');
+      var leftEl = document.getElementById('spots-left');
+      var fillEl = document.getElementById('progress-fill');
+      var finalSpotsEl = document.querySelector('.final-spots strong');
 
-      document.getElementById('spots-taken').textContent = taken;
-      document.getElementById('spots-left').textContent = left;
-      document.getElementById('progress-fill').style.width = pct + '%';
+      function update() {
+        var left = total - taken;
+        takenEl.textContent = taken;
+        leftEl.textContent = left;
+        fillEl.style.width = (taken / total * 100) + '%';
+        if (finalSpotsEl) finalSpotsEl.textContent = left;
+      }
+
+      update();
+
+      // Decrease spots left by 1 every 15 seconds
+      setInterval(function() {
+        if (taken < total - 1) {
+          taken++;
+          update();
+        }
+      }, 15000);
     })();
 
     // ===== FORM SUBMISSION =====
