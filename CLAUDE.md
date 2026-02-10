@@ -493,6 +493,7 @@ await submitToSupabase(data.first_name, data.email);
 |-------------|-----------|
 | `/food-list/` | `food-list` |
 | `/toolkit/` | `toolkit` |
+| `/webinar/` | `webinar` |
 
 **When creating a new landing page**, add its source ID to this table.
 
