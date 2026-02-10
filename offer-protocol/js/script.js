@@ -112,13 +112,39 @@ var PROTOCOL_CONTENT = {
   }
 };
 
+// Map primary_complaint to PROTOCOL_CONTENT key
+var COMPLAINT_TO_PROTOCOL = {
+  'bloating': 'Bloating-Dominant',
+  'constipation': 'Constipation-Dominant',
+  'diarrhea': 'Diarrhea-Dominant',
+  'mixed': 'Mixed-Alternating',
+  'pain': 'Mixed-Alternating',
+  'gas': 'Bloating-Dominant',
+  'reflux': 'Constipation-Dominant'
+};
+
+// Map keywords found in protocol_name to PROTOCOL_CONTENT key
+var PROTOCOL_NAME_KEYWORDS = {
+  'bloat': 'Bloating-Dominant',
+  'regularity': 'Constipation-Dominant',
+  'calm': 'Diarrhea-Dominant',
+  'stability': 'Mixed-Alternating',
+  'rebuild': 'Post-SIBO Recovery',
+  'sibo': 'Post-SIBO Recovery',
+  'brain': 'Gut-Brain'
+};
+
 // Duration display mapping
 var DURATION_MAP = {
   'less_than_6_months': 'less than 6 months',
   '6-12_months': '6-12 months',
+  '6_12_months': '6-12 months',
   '1-3_years': '1-3 years',
+  '1_3_years': '1-3 years',
   '3-5_years': '3-5 years',
-  '5+_years': 'over 5 years'
+  '3_5_years': '3-5 years',
+  '5+_years': 'over 5 years',
+  '5_years': 'over 5 years'
 };
 
 // Complaint display mapping
@@ -240,11 +266,17 @@ function getCookie(name) {
 // =================================================
 
 function storeData(data) {
+  var urlParams = new URLSearchParams(window.location.search);
+  var hasUrlParams = urlParams.has('protocol_name') || urlParams.has('name');
+
   // LocalStorage
   try {
     for (var key in data) {
       if (data[key] !== '' && data[key] !== false) {
         localStorage.setItem('gha_' + key, typeof data[key] === 'boolean' ? data[key].toString() : data[key]);
+      } else if (hasUrlParams) {
+        // Clear stale values when fresh URL params are present
+        localStorage.removeItem('gha_' + key);
       }
     }
   } catch (e) {
@@ -256,10 +288,14 @@ function storeData(data) {
     var expires = new Date();
     expires.setDate(expires.getDate() + 30);
     var cookieExpiry = '; expires=' + expires.toUTCString() + '; path=/; SameSite=Lax';
+    var pastDate = 'Thu, 01 Jan 1970 00:00:00 GMT';
     for (var key in data) {
       if (data[key] !== '' && data[key] !== false) {
         var val = typeof data[key] === 'boolean' ? data[key].toString() : data[key];
         document.cookie = 'gha_' + key + '=' + encodeURIComponent(val) + cookieExpiry;
+      } else if (hasUrlParams) {
+        // Clear stale cookies when fresh URL params are present
+        document.cookie = 'gha_' + key + '=; expires=' + pastDate + '; path=/; SameSite=Lax';
       }
     }
   } catch (e) {
@@ -325,13 +361,34 @@ function populatePage() {
   var content = PROTOCOL_CONTENT[protocolName];
 
   // If no exact match, try to find by protocol key
-  if (!content) {
+  if (!content && pageParams.protocol) {
     for (var pName in PROTOCOL_CONTENT) {
       if (PROTOCOL_CONTENT[pName].key === pageParams.protocol) {
         content = PROTOCOL_CONTENT[pName];
         protocolName = pName;
         break;
       }
+    }
+  }
+
+  // Try matching by keywords in the protocol_name URL param
+  if (!content && pageParams.protocol_name) {
+    var lowerName = pageParams.protocol_name.toLowerCase();
+    for (var keyword in PROTOCOL_NAME_KEYWORDS) {
+      if (lowerName.indexOf(keyword) !== -1) {
+        protocolName = PROTOCOL_NAME_KEYWORDS[keyword];
+        content = PROTOCOL_CONTENT[protocolName];
+        break;
+      }
+    }
+  }
+
+  // Try matching by primary_complaint
+  if (!content && pageParams.primary_complaint) {
+    var mappedName = COMPLAINT_TO_PROTOCOL[pageParams.primary_complaint];
+    if (mappedName && PROTOCOL_CONTENT[mappedName]) {
+      protocolName = mappedName;
+      content = PROTOCOL_CONTENT[protocolName];
     }
   }
 
