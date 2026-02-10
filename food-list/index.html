@@ -14,6 +14,7 @@
   <title>Free IBS Food Guide - 60+ Foods Rated | Gut Healing Academy</title>
   <meta name="description" content="Get instant access to our complete IBS Food Guide. 60+ foods rated for Bloating, IBS-C, IBS-D, IBS-M, Post-SIBO, and Stress-Triggered symptoms by registered nutritionists.">
   <link rel="canonical" href="https://guthealingacademy.com/food-list/">
+  <link rel="stylesheet" href="/css/global-footer.css">
   <style>
     * {
       box-sizing: border-box;
@@ -341,20 +342,7 @@
       max-width: 320px;
     }
 
-    /* ===== DISCLAIMER ===== */
-    .disclaimer {
-      padding: 32px 20px;
-      text-align: center;
-      border-top: 1px solid var(--divider);
-    }
-
-    .disclaimer p {
-      font-size: 12px;
-      color: var(--text-light);
-      line-height: 1.6;
-      max-width: 520px;
-      margin: 0 auto;
-    }
+    /* ===== FOOTER (uses global footer CSS + JS) ===== */
 
     /* ===== DESKTOP ===== */
     @media (min-width: 768px) {
@@ -509,10 +497,8 @@
     </div>
   </section>
 
-  <!-- Disclaimer -->
-  <footer class="disclaimer">
-    <p>This program is for educational purposes only and does not constitute medical advice, diagnosis, or treatment. It is not a substitute for professional medical consultation. If you are experiencing severe symptoms, unexplained weight loss, blood in stool, or any symptoms that concern you, please consult a qualified healthcare provider immediately. The Gut Healing Academy does not provide medical diagnoses or treatment recommendations. Results vary based on individual factors and adherence to the program.</p>
-  </footer>
+  <!-- Footer (injected by global-footer.js) -->
+  <footer class="site-footer"></footer>
 
   <!-- Supabase JS Client -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -641,5 +627,6 @@
       }
     });
   </script>
+  <script src="/js/global-footer.js"></script>
 </body>
 </html>
