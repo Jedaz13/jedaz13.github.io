@@ -352,6 +352,42 @@ var COMPLAINT_IMAGES = {
 };
 
 // =================================================
+// RESOLVE PROTOCOL KEY HELPER
+// =================================================
+
+function resolveProtocolKey() {
+  // 1. Explicit protocol param from URL
+  if (pageParams.protocol) {
+    return pageParams.protocol;
+  }
+
+  // 2. Exact protocol_name match in PROTOCOL_CONTENT
+  if (pageParams.protocol_name && PROTOCOL_CONTENT[pageParams.protocol_name]) {
+    return PROTOCOL_CONTENT[pageParams.protocol_name].key;
+  }
+
+  // 3. Keyword match in protocol_name
+  if (pageParams.protocol_name) {
+    var lowerName = pageParams.protocol_name.toLowerCase();
+    for (var keyword in PROTOCOL_NAME_KEYWORDS) {
+      if (lowerName.indexOf(keyword) !== -1) {
+        var mappedProtocol = PROTOCOL_NAME_KEYWORDS[keyword];
+        return PROTOCOL_CONTENT[mappedProtocol].key;
+      }
+    }
+  }
+
+  // 4. Match by primary_complaint
+  if (pageParams.primary_complaint && COMPLAINT_TO_PROTOCOL[pageParams.primary_complaint]) {
+    var complaintProtocol = COMPLAINT_TO_PROTOCOL[pageParams.primary_complaint];
+    return PROTOCOL_CONTENT[complaintProtocol].key;
+  }
+
+  // 5. Fallback
+  return 'bloat_reset';
+}
+
+// =================================================
 // PAGE POPULATION
 // =================================================
 
@@ -554,15 +590,8 @@ function handleCheckout() {
     localStorage.setItem('gha_purchase_total', totalValue.toString());
   } catch (e) {}
 
-  // Derive protocol key from protocol_name if not set in URL
-  var protocolKey = pageParams.protocol;
-  if (!protocolKey && pageParams.protocol_name && PROTOCOL_CONTENT[pageParams.protocol_name]) {
-    protocolKey = PROTOCOL_CONTENT[pageParams.protocol_name].key;
-  }
-  // Fallback to bloat_reset if still not found
-  if (!protocolKey) {
-    protocolKey = 'bloat_reset';
-  }
+  // Derive protocol key using shared resolver
+  var protocolKey = resolveProtocolKey();
 
   var payload = {
     email: pageParams.email,
@@ -624,20 +653,7 @@ function fallbackToPaymentLink(bump1Active, bump2Active) {
   // Fallback opens multiple payment links if bumps are selected.
   // Since payment links can't be combined, we open the protocol link
   // and alert about bumps if selected.
-  var protocolName = pageParams.protocol_name || 'Bloating-Dominant';
-  var content = PROTOCOL_CONTENT[protocolName];
-
-  // Try to find content by protocol key if name didn't match
-  if (!content) {
-    for (var pName in PROTOCOL_CONTENT) {
-      if (PROTOCOL_CONTENT[pName].key === pageParams.protocol) {
-        content = PROTOCOL_CONTENT[pName];
-        break;
-      }
-    }
-  }
-
-  var protocolKey = content ? content.key : 'bloat_reset';
+  var protocolKey = resolveProtocolKey();
   var link = STRIPE_LINKS[protocolKey];
 
   if (link && pageParams.email) {
