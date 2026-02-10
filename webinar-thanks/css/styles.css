@@ -169,31 +169,14 @@ h1, h2, h3 {
   cursor: pointer;
   text-align: center;
   text-decoration: none;
-  transition: transform 0.15s, box-shadow 0.15s;
+  transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
   margin-top: 12px;
 }
 
 .cta-btn:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 4px 16px rgba(212, 168, 67, 0.35);
-}
-
-/* ===== SECONDARY LINK ===== */
-.secondary-link {
-  padding: 0 0 48px;
-  text-align: center;
-}
-
-.secondary-link a {
-  font-size: 13px;
-  color: #A0AFA5;
-  text-decoration: underline;
-  text-underline-offset: 2px;
-  transition: color 0.2s;
-}
-
-.secondary-link a:hover {
-  color: var(--forest-light);
+  transform: translateY(-3px);
+  background: linear-gradient(135deg, #E8C064, #F5D780);
+  box-shadow: 0 8px 28px rgba(212, 168, 67, 0.5), 0 2px 8px rgba(0, 0, 0, 0.12);
 }
 
 /* ===== FOOTER ===== */
