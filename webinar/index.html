@@ -89,7 +89,7 @@
       <!-- Right: Form -->
       <div class="hero-form-col">
         <p class="eyebrow">FREE LIVE TRAINING · REBECCA TAYLOR, RNutr</p>
-        <h1>Why Cutting Foods for Bloating Often Backfires</h1>
+        <h1>Why Cutting Foods for Bloating Often&nbsp;Backfires</h1>
 
         <div class="event-info">
           <div class="event-row">
@@ -357,15 +357,31 @@
         if (finalSpotsEl) finalSpotsEl.textContent = left;
       }
 
+      function rand(min, max) {
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+      }
+
+      function scheduleNext() {
+        if (taken >= total - 1) return;
+        var delay = rand(60, 90) * 1000;
+        setTimeout(function() {
+          taken++;
+          update();
+          scheduleNext();
+        }, delay);
+      }
+
       update();
 
-      // Decrease spots left by 1 every 15 seconds
-      setInterval(function() {
+      // First spot drops after 20-30 seconds
+      setTimeout(function() {
         if (taken < total - 1) {
           taken++;
           update();
+          // Then 1 more every 60-90 seconds (randomized)
+          scheduleNext();
         }
-      }, 15000);
+      }, rand(20, 30) * 1000);
     })();
 
     // ===== FORM SUBMISSION =====
