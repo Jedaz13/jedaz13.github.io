@@ -908,14 +908,19 @@
         await submitToSupabase(data.first_name, data.email);
 
         // Send to Make.com webhook
-        try {
-          await fetch('https://hook.eu2.make.com/YOUR_WEBHOOK_ID', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(data)
-          });
-        } catch (err) {
-          console.warn('Webhook send failed (non-critical):', err);
+        var webhookPayload = {
+          email: data.email,
+          name: data.first_name || '',
+          source: 'toolkit-lead-magnet',
+          timestamp: new Date().toISOString()
+        };
+        var webhookRes = await fetch('https://hook.eu1.make.com/lav7ba2xroxgt30w2qchqcxocsurggt2', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(webhookPayload)
+        });
+        if (!webhookRes.ok) {
+          throw new Error('Webhook request failed');
         }
 
         // Fire tracking events

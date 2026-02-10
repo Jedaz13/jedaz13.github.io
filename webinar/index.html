@@ -403,8 +403,8 @@
 
         var payload = {
           email: email,
-          name: name || null,
-          question: question || null,
+          name: name || '',
+          question: question || '',
           event_date: '2026-02-13T16:00:00Z',
           source: 'webinar-registration',
           timestamp: new Date().toISOString()
@@ -417,12 +417,13 @@
           'webinar_source': 'webinar-registration'
         });
 
-        fetch('https://hook.eu2.make.com/YOUR_WEBHOOK_ID', {
+        fetch('https://hook.eu1.make.com/2lluygmyjiiqgw9hcuuevnfn8073blid', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(payload)
         })
-        .then(function() {
+        .then(function(res) {
+          if (!res.ok) throw new Error('Webhook request failed');
           var params = new URLSearchParams();
           params.set('name', name || '');
           params.set('email', email);
@@ -430,12 +431,9 @@
           window.location.href = '/webinar-thanks/?' + params.toString();
         })
         .catch(function() {
-          // Still redirect on error — don't block the user
-          var params = new URLSearchParams();
-          params.set('name', name || '');
-          params.set('email', email);
-          if (question) params.set('question', question);
-          window.location.href = '/webinar-thanks/?' + params.toString();
+          btn.disabled = false;
+          btn.textContent = 'Save My Free Spot →';
+          alert('Something went wrong. Please try again.');
         });
       });
     })();
