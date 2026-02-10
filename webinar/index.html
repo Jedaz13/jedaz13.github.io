@@ -33,13 +33,38 @@
       <!-- Left: Video -->
       <div class="hero-video">
         <div class="video-container" id="video-container">
-          <div class="video-placeholder">
+          <!--
+            OPTION 1: Self-hosted MP4 (recommended)
+            Upload your video to /webinar/assets/intro.mp4
+            Optionally add a poster image: poster="assets/poster.jpg"
+          -->
+          <video
+            id="hero-video"
+            src="assets/intro.mp4"
+            poster=""
+            playsinline
+            preload="metadata"
+          ></video>
+          <div class="video-overlay" id="video-overlay">
             <div class="play-btn">
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
                 <path d="M8 5v14l11-7L8 5z" fill="#FDFAF5"/>
               </svg>
             </div>
           </div>
+
+          <!--
+            OPTION 2: YouTube/Vimeo/Loom embed
+            Delete the <video> and .video-overlay above, then uncomment:
+          -->
+          <!--
+          <iframe
+            src="https://www.youtube.com/embed/YOUR_VIDEO_ID"
+            frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen
+          ></iframe>
+          -->
         </div>
         <p class="video-caption">Watch Rebecca explain what this training covers</p>
       </div>
@@ -198,6 +223,26 @@
   <script src="/js/global-footer.js"></script>
   <script src="/js/support-widget.js"></script>
   <script>
+    // ===== VIDEO PLAYER =====
+    (function() {
+      var video = document.getElementById('hero-video');
+      var overlay = document.getElementById('video-overlay');
+      if (!video || !overlay) return;
+
+      overlay.addEventListener('click', function() {
+        video.play();
+        overlay.classList.add('hidden');
+      });
+
+      video.addEventListener('pause', function() {
+        overlay.classList.remove('hidden');
+      });
+
+      video.addEventListener('ended', function() {
+        overlay.classList.remove('hidden');
+      });
+    })();
+
     // ===== SPOTS COUNTER =====
     (function() {
       var taken = 47;
