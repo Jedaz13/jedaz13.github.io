@@ -584,11 +584,11 @@ function populatePage() {
   if (durationEmpathy) {
     bridgeHtml += '<p class="duration-empathy">' + durationEmpathy + '</p>';
   }
-  bridgeHtml += '<p>After ' + durationText + ' of ' + complaintText + ' \u2014 the restrictive diets that stole your social life, the doctors who said it\'s nothing, the supplements sitting half-empty in your cabinet \u2014 you deserve something that actually works for YOUR body.</p>';
+  bridgeHtml += '<p>After <strong>' + durationText + ' of ' + complaintText + '</strong> \u2014 the restrictive diets that stole your social life, the doctors who said it\'s nothing, the supplements sitting half-empty in your cabinet \u2014 you deserve something that actually works for <strong>YOUR body</strong>.</p>';
   if (!hasDreamCallback) {
-    bridgeHtml += '<p>You told us you want to <strong>' + visionText + '</strong>. That\'s not too much to ask. And it starts with understanding exactly what\'s happening in YOUR gut \u2014 not someone else\'s.</p>';
+    bridgeHtml += '<p>You told us you want to <strong>' + visionText + '</strong>. That\'s not too much to ask. And it starts with understanding exactly what\'s happening in <strong>YOUR gut</strong> \u2014 not someone else\'s.</p>';
   } else {
-    bridgeHtml += '<p>It starts with understanding exactly what\'s happening in YOUR gut \u2014 not someone else\'s.</p>';
+    bridgeHtml += '<p>It starts with understanding exactly what\'s happening in <strong>YOUR gut</strong> \u2014 not someone else\'s.</p>';
   }
   document.getElementById('personalizedParagraph').innerHTML = bridgeHtml;
 
