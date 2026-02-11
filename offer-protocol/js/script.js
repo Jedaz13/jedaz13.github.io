@@ -549,13 +549,8 @@ function populatePage() {
     subtitleEl.innerHTML = 'Your <strong>' + friendlyName + '</strong> is ready \u2014 built by registered practitioners for your specific symptom pattern.';
   }
 
-  // Duration empathy line (prepended before protocol headline copy)
-  var durationEmpathyHtml = '';
-  var durationEmpathy = DURATION_EMPATHY[pageParams.duration];
-  if (durationEmpathy) {
-    durationEmpathyHtml = '<p class="duration-empathy">' + durationEmpathy + '</p>';
-  }
-  document.getElementById('protocolHeadlineCopy').innerHTML = durationEmpathyHtml + '<p>' + content.headline + '</p>';
+  // Protocol headline copy — just the visceral pain paragraph, clean and punchy
+  document.getElementById('protocolHeadlineCopy').innerHTML = '<p>' + content.headline + '</p>';
 
   // Hero protocol image
   var heroImg = document.getElementById('heroProtocolImg');
@@ -570,7 +565,8 @@ function populatePage() {
     heroImg.alt = protocolName + ' Protocol';
   }
 
-  // Personalized paragraph
+  // Bridge section — duration empathy, personalized content, dream callback
+  // These elements sit just below the fold, bridging into the Imagine block
   var durationText = DURATION_MAP[pageParams.duration] || pageParams.duration || 'months';
   var complaintText = COMPLAINT_MAP[pageParams.primary_complaint] || pageParams.primary_complaint || 'digestive issues';
   var GOAL_MAP = {
@@ -582,14 +578,19 @@ function populatePage() {
   var visionText = pageParams.vision || GOAL_MAP[pageParams.goal_selection] || 'eat without fear';
   var hasDreamCallback = pageParams.vision && pageParams.vision.length >= 5;
 
-  var personalizedHtml = '<p>After ' + durationText + ' of ' + complaintText + ' \u2014 the restrictive diets that stole your social life, the doctors who said it\'s nothing, the supplements sitting half-empty in your cabinet \u2014 you deserve something that actually works for YOUR body.</p>';
-  if (!hasDreamCallback) {
-    personalizedHtml += '<p>You told us you want to <strong>' + visionText + '</strong>. That\'s not too much to ask. And it starts with understanding exactly what\'s happening in YOUR gut \u2014 not someone else\'s.</p>';
-  } else {
-    personalizedHtml += '<p>It starts with understanding exactly what\'s happening in YOUR gut \u2014 not someone else\'s.</p>';
+  // Duration empathy line leads this section
+  var durationEmpathy = DURATION_EMPATHY[pageParams.duration];
+  var bridgeHtml = '';
+  if (durationEmpathy) {
+    bridgeHtml += '<p class="duration-empathy">' + durationEmpathy + '</p>';
   }
-  personalizedHtml += '<p class="hero-guarantee-line">If you don\'t feel a difference in 60 days, you\'ll get a full refund and a free personal case review with Rebecca. But most women won\'t need either.</p>';
-  document.getElementById('personalizedParagraph').innerHTML = personalizedHtml;
+  bridgeHtml += '<p>After ' + durationText + ' of ' + complaintText + ' \u2014 the restrictive diets that stole your social life, the doctors who said it\'s nothing, the supplements sitting half-empty in your cabinet \u2014 you deserve something that actually works for YOUR body.</p>';
+  if (!hasDreamCallback) {
+    bridgeHtml += '<p>You told us you want to <strong>' + visionText + '</strong>. That\'s not too much to ask. And it starts with understanding exactly what\'s happening in YOUR gut \u2014 not someone else\'s.</p>';
+  } else {
+    bridgeHtml += '<p>It starts with understanding exactly what\'s happening in YOUR gut \u2014 not someone else\'s.</p>';
+  }
+  document.getElementById('personalizedParagraph').innerHTML = bridgeHtml;
 
   // Section 2: Outcome painting
   var outcomeHtml = '';
