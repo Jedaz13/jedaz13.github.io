@@ -1,6 +1,6 @@
 /* =====================================================
    Quiz v4 Content - Gut Healing Academy
-   28 Screens - Updated Structure
+   29 Screens - Updated Structure (added secondary symptoms)
    ===================================================== */
 
 const quizContent = {
@@ -8,7 +8,7 @@ const quizContent = {
   memberCount: null,
 
   // =================================================
-  // PHASE 1: EMOTIONAL HOOK (Screens 1-5)
+  // PHASE 1: EMOTIONAL HOOK (Screens 1-6)
   // =================================================
   phase1: {
     id: 'emotional_hook',
@@ -62,10 +62,32 @@ const quizContent = {
         storeAs: 'primary_complaint'
       },
 
-      // Screen 4: Duration
+      // Screen 4: Secondary Symptoms (multi-select, dynamically excludes primary)
+      {
+        id: 'secondary_symptoms',
+        screenNumber: 4,
+        type: 'multi_select_dynamic',
+        question: 'Do you also experience any of these?',
+        subtitle: 'Select all that apply',
+        options: [
+          { text: 'Bloating & distension', value: 'bloating', excludeWhenPrimary: 'bloating' },
+          { text: 'Constipation', value: 'constipation', excludeWhenPrimary: 'constipation' },
+          { text: 'Diarrhea or urgency', value: 'diarrhea', excludeWhenPrimary: 'diarrhea' },
+          { text: 'It alternates (sometimes both)', value: 'alternating', excludeWhenPrimary: 'mixed' },
+          { text: 'Abdominal pain or cramping', value: 'pain', excludeWhenPrimary: 'pain' },
+          { text: 'Excessive gas', value: 'gas', excludeWhenPrimary: 'gas' },
+          { text: 'Brain fog or fatigue', value: 'brain_fog' },
+          { text: 'Anxiety around food or eating out', value: 'anxiety_food' },
+          { text: 'None of these', value: 'none', exclusive: true }
+        ],
+        storeAs: 'secondary_symptoms',
+        excludeBasedOn: 'primary_complaint'
+      },
+
+      // Screen 5: Duration
       {
         id: 'duration',
-        screenNumber: 4,
+        screenNumber: 5,
         type: 'single_select',
         question: 'How long have you been dealing with this?',
         options: [
@@ -78,10 +100,10 @@ const quizContent = {
         storeAs: 'symptom_duration'
       },
 
-      // Screen 5: Validation Duration (INFO SCREEN)
+      // Screen 6: Validation Duration (INFO SCREEN)
       {
         id: 'validation_duration',
-        screenNumber: 5,
+        screenNumber: 6,
         type: 'info_dynamic',
         dynamicContent: {
           '5_plus_years': {
@@ -112,16 +134,16 @@ const quizContent = {
   },
 
   // =================================================
-  // PHASE 2: CLINICAL ASSESSMENT (Screens 6-12)
+  // PHASE 2: CLINICAL ASSESSMENT (Screens 7-13)
   // =================================================
   phase2: {
     id: 'clinical_assessment',
     label: 'Your Symptoms',
     screens: [
-      // Screen 6: BM Relief
+      // Screen 7: BM Relief
       {
         id: 'bm_relief',
-        screenNumber: 6,
+        screenNumber: 7,
         type: 'single_select',
         question: 'When you have a bowel movement, does your discomfort get better?',
         subtitle: 'This helps us understand your symptom pattern',
@@ -134,10 +156,10 @@ const quizContent = {
         storeAs: 'bm_relief'
       },
 
-      // Screen 7: Flare Frequency
+      // Screen 8: Flare Frequency
       {
         id: 'flare_frequency',
-        screenNumber: 7,
+        screenNumber: 8,
         type: 'single_select',
         question: 'During a flare, what happens to your bathroom frequency?',
         options: [
@@ -149,10 +171,10 @@ const quizContent = {
         storeAs: 'flare_frequency'
       },
 
-      // Screen 8: Stool Changes
+      // Screen 9: Stool Changes
       {
         id: 'stool_changes',
-        screenNumber: 8,
+        screenNumber: 9,
         type: 'single_select',
         question: 'What about your stool during flares — what changes?',
         options: [
@@ -164,10 +186,10 @@ const quizContent = {
         storeAs: 'stool_changes'
       },
 
-      // Screen 9: Progress Validation (INFO SCREEN)
+      // Screen 10: Progress Validation (INFO SCREEN)
       {
         id: 'progress_validation',
-        screenNumber: 9,
+        screenNumber: 10,
         type: 'info',
         icon: '📊',
         headline: "We're building your profile.",
@@ -176,10 +198,10 @@ const quizContent = {
         buttonText: 'Continue'
       },
 
-      // Screen 10: Treatments Tried
+      // Screen 11: Treatments Tried
       {
         id: 'treatments_tried',
-        screenNumber: 10,
+        screenNumber: 11,
         type: 'multi_select',
         question: 'What have you already tried?',
         subtitle: 'Select all that apply',
@@ -198,10 +220,10 @@ const quizContent = {
         countTreatments: true
       },
 
-      // Screen 11: Diagnosis History
+      // Screen 12: Diagnosis History
       {
         id: 'diagnosis_history',
-        screenNumber: 11,
+        screenNumber: 12,
         type: 'multi_select',
         question: 'Have you received any of these diagnoses?',
         subtitle: 'Select all that apply',
@@ -218,10 +240,10 @@ const quizContent = {
         storeAs: 'diagnoses'
       },
 
-      // Screen 12: Name Capture (WITH VALIDATION)
+      // Screen 13: Name Capture (WITH VALIDATION)
       {
         id: 'name_capture',
-        screenNumber: 12,
+        screenNumber: 13,
         type: 'text_input_with_validation',
         dynamicContent: {
           high_count: {
@@ -246,16 +268,16 @@ const quizContent = {
   },
 
   // =================================================
-  // PHASE 3: THE BRIDGE (Screens 13-14)
+  // PHASE 3: THE BRIDGE (Screens 14-15)
   // =================================================
   phase3: {
     id: 'the_bridge',
     label: 'Why This Works',
     screens: [
-      // Screen 13: Why Different (INFO ANIMATED)
+      // Screen 14: Why Different (INFO ANIMATED)
       {
         id: 'why_different',
-        screenNumber: 13,
+        screenNumber: 14,
         type: 'info_animated',
         headline: "HERE'S WHY NOTHING HAS WORKED",
         animation: 'stuck_loop_vs_escape',
@@ -263,10 +285,10 @@ const quizContent = {
         buttonText: 'Show me how'
       },
 
-      // Screen 14: Testimonial
+      // Screen 15: Testimonial
       {
         id: 'testimonial',
-        screenNumber: 14,
+        screenNumber: 15,
         type: 'testimonial',
         headlineTemplate: "{firstName}, meet Sarah.",
         quote: "I tried low FODMAP for 6 months. Probiotics. Expensive tests. Nothing worked until I found my actual gut type. A few months later, I ate at a restaurant without panic for the first time in 3 years.",
@@ -279,16 +301,16 @@ const quizContent = {
   },
 
   // =================================================
-  // PHASE 4: KNOWLEDGE QUIZ (Screens 15-19)
+  // PHASE 4: KNOWLEDGE QUIZ (Screens 16-20)
   // =================================================
   phase4: {
     id: 'knowledge_quiz',
     label: 'Quick Gut Check',
     screens: [
-      // Screen 15: Knowledge Intro
+      // Screen 16: Knowledge Intro
       {
         id: 'knowledge_intro',
-        screenNumber: 15,
+        screenNumber: 16,
         type: 'info',
         icon: '🧠',
         headline: 'QUICK GUT CHECK',
@@ -297,10 +319,10 @@ const quizContent = {
         buttonText: "Let's go"
       },
 
-      // Screen 16: Knowledge - Eating Speed
+      // Screen 17: Knowledge - Eating Speed
       {
         id: 'knowledge_eating_speed',
-        screenNumber: 16,
+        screenNumber: 17,
         type: 'knowledge_quiz',
         question: 'When you eat quickly, what happens in your gut?',
         backgroundColor: '#f0f9f4',
@@ -313,10 +335,10 @@ const quizContent = {
         correctAnswer: 'air'
       },
 
-      // Screen 17: Knowledge Eating Response (CONDITIONAL INFO)
+      // Screen 18: Knowledge Eating Response (CONDITIONAL INFO)
       {
         id: 'knowledge_eating_response',
-        screenNumber: 17,
+        screenNumber: 18,
         type: 'knowledge_response',
         backgroundColor: '#f0f9f4',
         content: {
@@ -336,10 +358,10 @@ const quizContent = {
         basedOn: 'knowledge_eating_speed'
       },
 
-      // Screen 18: Knowledge - FODMAP
+      // Screen 19: Knowledge - FODMAP
       {
         id: 'knowledge_fodmap',
-        screenNumber: 18,
+        screenNumber: 19,
         type: 'knowledge_quiz',
         question: 'Which food is MOST likely to cause bloating?',
         backgroundColor: '#f0f9f4',
@@ -352,10 +374,10 @@ const quizContent = {
         correctAnswer: 'apple'
       },
 
-      // Screen 19: Knowledge FODMAP Response (CONDITIONAL INFO)
+      // Screen 20: Knowledge FODMAP Response (CONDITIONAL INFO)
       {
         id: 'knowledge_fodmap_response',
-        screenNumber: 19,
+        screenNumber: 20,
         type: 'knowledge_response',
         backgroundColor: '#f0f9f4',
         content: {
@@ -378,16 +400,16 @@ const quizContent = {
   },
 
   // =================================================
-  // PHASE 5: GUT-BRAIN CONNECTION (Screens 20-21)
+  // PHASE 5: GUT-BRAIN CONNECTION (Screens 21-22)
   // =================================================
   phase5: {
     id: 'gut_brain',
     label: 'Your Profile',
     screens: [
-      // Screen 20: Stress Connection
+      // Screen 21: Stress Connection
       {
         id: 'stress_connection',
-        screenNumber: 20,
+        screenNumber: 21,
         type: 'single_select',
         questionTemplate: "{firstName}, do you notice your symptoms get worse when you're stressed or anxious?",
         options: [
@@ -399,10 +421,10 @@ const quizContent = {
         storeAs: 'stress_connection'
       },
 
-      // Screen 21: Stress Validation (CONDITIONAL INFO)
+      // Screen 22: Stress Validation (CONDITIONAL INFO)
       {
         id: 'stress_validation',
-        screenNumber: 21,
+        screenNumber: 22,
         type: 'info_conditional',
         content: {
           stress_connected: {
@@ -425,16 +447,16 @@ const quizContent = {
   },
 
   // =================================================
-  // PHASE 6: SAFETY CHECK (Screens 22-23)
+  // PHASE 6: SAFETY CHECK (Screens 23-24)
   // =================================================
   phase6: {
     id: 'safety_check',
     label: 'Final Questions',
     screens: [
-      // Screen 22: Safety - Blood
+      // Screen 23: Safety - Blood
       {
         id: 'safety_blood',
-        screenNumber: 22,
+        screenNumber: 23,
         type: 'single_select',
         question: 'Have you noticed any blood in your stool recently?',
         subtitle: 'This helps us ensure you\'re getting the right support',
@@ -446,10 +468,10 @@ const quizContent = {
         storeAs: 'safety_blood'
       },
 
-      // Screen 23: Safety - Weight
+      // Screen 24: Safety - Weight
       {
         id: 'safety_weight',
-        screenNumber: 23,
+        screenNumber: 24,
         type: 'single_select',
         question: 'Have you lost weight without trying in the past few months?',
         options: [
@@ -477,16 +499,16 @@ const quizContent = {
   },
 
   // =================================================
-  // PHASE 7: EMAIL CAPTURE (Screens 24-26)
+  // PHASE 7: EMAIL CAPTURE (Screens 25-27)
   // =================================================
   phase7: {
     id: 'email_capture_phase',
     label: 'Your Results',
     screens: [
-      // Screen 24: Life Impact
+      // Screen 25: Life Impact
       {
         id: 'life_impact',
-        screenNumber: 24,
+        screenNumber: 25,
         type: 'single_select',
         questionTemplate: "{firstName}, how much has this taken from your life?",
         options: [
@@ -497,10 +519,10 @@ const quizContent = {
         storeAs: 'life_impact'
       },
 
-      // Screen 25: Email Capture
+      // Screen 26: Email Capture
       {
         id: 'email_capture',
-        screenNumber: 25,
+        screenNumber: 26,
         type: 'email_input',
         headlineTemplate: 'Your personalized protocol is ready, {firstName}.',
         valueList: [
@@ -516,10 +538,10 @@ const quizContent = {
         buttonText: 'See My Results'
       },
 
-      // Screen 26: Vision Optional
+      // Screen 27: Vision Optional
       {
         id: 'vision_optional',
-        screenNumber: 26,
+        screenNumber: 27,
         type: 'text_input_optional',
         question: "One last thing — if your gut worked perfectly, what's the FIRST thing you'd do?",
         subtitle: null,
@@ -533,11 +555,11 @@ const quizContent = {
   },
 
   // =================================================
-  // LOADING SEQUENCE (Screen 27)
+  // LOADING SEQUENCE (Screen 28)
   // =================================================
   loadingSequence: {
     id: 'loading_sequence',
-    screenNumber: 27,
+    screenNumber: 28,
     type: 'loading',
     headlineTemplate: 'Analyzing your profile, {firstName}...',
     subtext: 'Please wait while we create your personalized protocol',
@@ -571,11 +593,11 @@ const quizContent = {
   },
 
   // =================================================
-  // RESULTS PAGE (Screen 28)
+  // RESULTS PAGE (Screen 29)
   // =================================================
   resultsPage: {
     id: 'results_page',
-    screenNumber: 28,
+    screenNumber: 29,
     type: 'results'
   },
 
@@ -787,7 +809,7 @@ const quizContent = {
   // PHASES FOR PROGRESS BAR
   // =================================================
   phases: [
-    { id: 1, label: 'Your Goals', screens: ['future_vision', 'timeline', 'primary_complaint', 'duration', 'validation_duration'] },
+    { id: 1, label: 'Your Goals', screens: ['future_vision', 'timeline', 'primary_complaint', 'secondary_symptoms', 'duration', 'validation_duration'] },
     { id: 2, label: 'Your Symptoms', screens: ['bm_relief', 'flare_frequency', 'stool_changes', 'progress_validation', 'treatments_tried', 'diagnosis_history', 'name_capture'] },
     { id: 3, label: 'Why This Works', screens: ['why_different', 'testimonial'] },
     { id: 4, label: 'Quick Gut Check', screens: ['knowledge_intro', 'knowledge_eating_speed', 'knowledge_eating_response', 'knowledge_fodmap', 'knowledge_fodmap_response'] },

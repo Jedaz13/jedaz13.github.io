@@ -238,7 +238,231 @@ p:last-child {
 }
 
 /* =====================================================
-   Section 3: What's Inside
+   Section 3: Secondary Symptoms ("Your protocol also addresses...")
+   ===================================================== */
+.secondary-symptoms-section {
+  padding: 40px 0;
+  background-color: var(--white);
+}
+
+.secondary-symptoms-section h2 {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.secondary-symptoms-section h2::after {
+  content: '';
+  display: block;
+  width: 60px;
+  height: 3px;
+  background: var(--citrus);
+  border-radius: 2px;
+  margin: 12px auto 0;
+}
+
+.secondary-symptoms-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.symptom-addressed {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+  background: var(--bg-sage-subtle);
+  border-radius: var(--radius-lg);
+  padding: 16px 18px;
+  border-left: 4px solid var(--leaf);
+}
+
+.symptom-check {
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--leaf);
+  color: var(--white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 700;
+  margin-top: 2px;
+}
+
+.symptom-detail strong {
+  display: block;
+  font-size: 0.9375rem;
+  color: var(--text-forest);
+  margin-bottom: 4px;
+}
+
+.symptom-detail p {
+  font-size: 0.875rem;
+  color: var(--text-olive);
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* =====================================================
+   Section 4: Why This Works
+   ===================================================== */
+.why-works-section {
+  padding: 40px 0;
+  background-color: var(--bg-cream);
+}
+
+.why-works-section h2 {
+  margin-bottom: 20px;
+}
+
+.why-works-section h2::after {
+  content: '';
+  display: block;
+  width: 60px;
+  height: 3px;
+  background: var(--citrus);
+  border-radius: 2px;
+  margin: 12px 0 0;
+}
+
+.why-works-section p {
+  font-size: 1rem;
+  line-height: 1.7;
+  color: var(--text-olive);
+  margin-bottom: 16px;
+}
+
+.why-works-section p:last-child {
+  margin-bottom: 0;
+}
+
+.why-works-section strong {
+  color: var(--text-forest);
+}
+
+/* =====================================================
+   Section 6: Practitioner Credentials
+   ===================================================== */
+.credentials-section {
+  padding: 40px 0;
+  background-color: var(--white);
+}
+
+.credentials-section h2 {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.credentials-section h2::after {
+  content: '';
+  display: block;
+  width: 60px;
+  height: 3px;
+  background: var(--citrus);
+  border-radius: 2px;
+  margin: 12px auto 0;
+}
+
+.credential-card {
+  display: flex;
+  gap: 16px;
+  background: var(--bg-cream);
+  border-radius: var(--radius-lg);
+  padding: 20px;
+  margin-bottom: 16px;
+  border: 1px solid var(--divider);
+}
+
+.credential-card:last-child {
+  margin-bottom: 0;
+}
+
+.credential-photo {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid var(--citrus);
+  flex-shrink: 0;
+}
+
+.credential-info h3 {
+  font-family: var(--font-family);
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-forest);
+  margin-bottom: 2px;
+}
+
+.credential-title {
+  font-size: 0.8125rem;
+  color: var(--leaf);
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.credential-info p:last-child {
+  font-size: 0.875rem;
+  color: var(--text-olive);
+  line-height: 1.6;
+}
+
+/* =====================================================
+   Section 7: Key Objection Answers
+   ===================================================== */
+.objection-answers-section {
+  padding: 40px 0;
+  background-color: var(--bg-cream);
+}
+
+.objection-card {
+  display: flex;
+  gap: 16px;
+  background: var(--white);
+  border-radius: var(--radius-lg);
+  padding: 20px;
+  margin-bottom: 16px;
+  box-shadow: var(--shadow-card);
+  align-items: flex-start;
+}
+
+.objection-card:last-child {
+  margin-bottom: 0;
+}
+
+.objection-icon {
+  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--citrus-pale);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.objection-icon svg {
+  stroke: var(--forest);
+}
+
+.objection-content h3 {
+  font-family: var(--font-family);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--text-forest);
+  margin-bottom: 6px;
+}
+
+.objection-content p {
+  font-size: 0.875rem;
+  color: var(--text-olive);
+  line-height: 1.6;
+}
+
+/* =====================================================
+   Section 5: What's Inside (Protocol Features)
    ===================================================== */
 .inside-section {
   padding: 40px 0;
@@ -326,7 +550,7 @@ p:last-child {
 }
 
 /* =====================================================
-   Section 3.5: Testimonial
+   Section 8: Testimonial
    ===================================================== */
 .testimonial-section {
   padding: 40px 0;
@@ -391,29 +615,7 @@ p:last-child {
   color: var(--text-muted);
 }
 
-/* =====================================================
-   Section 4: What's at Stake
-   ===================================================== */
-.stakes-section {
-  padding: 40px 0;
-  background-color: var(--bg-cream);
-}
-
-.stakes-section p {
-  font-size: 1rem;
-  line-height: 1.7;
-  color: var(--text-olive);
-  margin-bottom: 16px;
-}
-
-.stakes-section p:last-child {
-  margin-bottom: 0;
-}
-
-.stakes-section strong {
-  color: var(--text-forest);
-  font-weight: 600;
-}
+/* (Stakes section removed — replaced by "Why this works" section above) */
 
 /* =====================================================
    Section 5: Pricing & Checkout
@@ -1042,16 +1244,37 @@ p:last-child {
     height: 56px;
   }
 
+  .secondary-symptoms-section {
+    padding: 48px 0;
+  }
+
+  .why-works-section {
+    padding: 48px 0;
+  }
+
+  .credentials-section {
+    padding: 48px 0;
+  }
+
+  .credential-card {
+    padding: 24px;
+  }
+
+  .credential-photo {
+    width: 72px;
+    height: 72px;
+  }
+
+  .objection-answers-section {
+    padding: 48px 0;
+  }
+
   .testimonial-section {
     padding: 48px 0;
   }
 
   .testimonial-card {
     padding: 28px;
-  }
-
-  .stakes-section {
-    padding: 48px 0;
   }
 
   .pricing-section {

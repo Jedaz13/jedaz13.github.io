@@ -1,6 +1,6 @@
 /* =====================================================
    Quiz v4 Script - Gut Healing Academy
-   28 Screens - Updated Structure
+   29 Screens - Updated Structure (added secondary symptoms)
    ===================================================== */
 
 // =================================================
@@ -13,7 +13,7 @@ const CONFIG = {
   SUPABASE_URL: 'https://mwabljnngygkmahjgvps.supabase.co',
   SUPABASE_ANON_KEY: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im13YWJsam5uZ3lna21haGpndnBzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU1MjQ3MzgsImV4cCI6MjA4MTEwMDczOH0.rbZYj1aXui_xZ0qkg7QONdHppnJghT2r0ycZwtr3a-E',
   AUTO_ADVANCE_DELAY: 400,
-  TOTAL_SCREENS: 28,
+  TOTAL_SCREENS: 29,
   TOTAL_PHASES: 7
 };
 
@@ -84,13 +84,14 @@ try {
 
 // Screen order mapping (28 screens)
 const screenOrder = [
-  // Phase 1: Emotional Hook (Screens 1-5)
+  // Phase 1: Emotional Hook (Screens 1-6)
   { phase: 0, screenKey: 'future_vision' },
   { phase: 0, screenKey: 'timeline' },
   { phase: 0, screenKey: 'primary_complaint' },
+  { phase: 0, screenKey: 'secondary_symptoms' },
   { phase: 0, screenKey: 'duration' },
   { phase: 0, screenKey: 'validation_duration' },
-  // Phase 2: Clinical Assessment (Screens 6-12)
+  // Phase 2: Clinical Assessment (Screens 7-13)
   { phase: 1, screenKey: 'bm_relief' },
   { phase: 1, screenKey: 'flare_frequency' },
   { phase: 1, screenKey: 'stool_changes' },
@@ -145,7 +146,7 @@ const SECTION_LABELS = [
 ];
 
 // Questions per section for progress calculation (7 phases)
-const QUESTIONS_PER_PHASE = [5, 7, 2, 5, 2, 2, 5];
+const QUESTIONS_PER_PHASE = [6, 7, 2, 5, 2, 2, 5];
 
 // DOM Elements
 let contentEl;
@@ -243,6 +244,9 @@ function renderCurrentScreen() {
       break;
     case 'multi_select':
       renderMultiSelect(contentEl, screen);
+      break;
+    case 'multi_select_dynamic':
+      renderMultiSelectDynamic(contentEl, screen);
       break;
     case 'info':
       renderInfoScreen(contentEl, screen);
@@ -477,6 +481,90 @@ function renderMultiSelect(container, screen) {
       state.treatmentsTried = selectedValues;
       state.treatmentsCount = selectedValues.filter(t => t !== 'nothing').length;
     }
+
+    // Track answer
+    trackAnswer(screen, selectedValues, selectedValues.join(', '));
+
+    advanceToNextScreen();
+  });
+}
+
+// =================================================
+// MULTI SELECT DYNAMIC RENDERER (excludes primary complaint)
+// =================================================
+function renderMultiSelectDynamic(container, screen) {
+  // Get the primary complaint answer to exclude it
+  const primaryValue = state.answers[screen.excludeBasedOn] || '';
+
+  // Filter options: exclude the one matching primary complaint
+  const filteredOptions = screen.options.filter(option => {
+    if (option.excludeWhenPrimary && option.excludeWhenPrimary === primaryValue) {
+      return false;
+    }
+    return true;
+  });
+
+  let html = `
+    <div class="question-container">
+      <h2 class="question-text">${screen.question}</h2>
+      ${screen.subtitle ? `<p class="question-subtitle">${screen.subtitle}</p>` : ''}
+      <div class="options-container">
+  `;
+
+  filteredOptions.forEach((option, index) => {
+    html += `
+      <button class="option-button multi-select" data-value="${option.value}" data-index="${index}" ${option.exclusive ? 'data-exclusive="true"' : ''}>
+        ${option.text}
+      </button>
+    `;
+  });
+
+  html += `
+      </div>
+      <button class="btn-primary" id="continueBtn">Continue</button>
+    </div>
+  `;
+
+  container.innerHTML = html;
+
+  const selectedValues = [];
+
+  // Add click handlers
+  container.querySelectorAll('.option-button.multi-select').forEach(option => {
+    option.addEventListener('click', () => {
+      const value = option.dataset.value;
+      const isExclusive = option.dataset.exclusive === 'true';
+
+      if (isExclusive) {
+        // "None of these" — deselect all others
+        selectedValues.length = 0;
+        container.querySelectorAll('.option-button.multi-select').forEach(o => o.classList.remove('selected'));
+        option.classList.add('selected');
+        selectedValues.push(value);
+      } else {
+        // Remove exclusive option ("none") if selecting something else
+        const exclusiveIndex = selectedValues.indexOf('none');
+        if (exclusiveIndex > -1) {
+          selectedValues.splice(exclusiveIndex, 1);
+          container.querySelector('[data-value="none"]')?.classList.remove('selected');
+        }
+
+        // Toggle selection
+        if (option.classList.contains('selected')) {
+          option.classList.remove('selected');
+          const idx = selectedValues.indexOf(value);
+          if (idx > -1) selectedValues.splice(idx, 1);
+        } else {
+          option.classList.add('selected');
+          selectedValues.push(value);
+        }
+      }
+    });
+  });
+
+  // Continue button
+  document.getElementById('continueBtn').addEventListener('click', () => {
+    state.answers[screen.storeAs] = selectedValues;
 
     // Track answer
     trackAnswer(screen, selectedValues, selectedValues.join(', '));
@@ -1102,9 +1190,9 @@ async function startComparisonAnimation(bars, colors) {
     // Submit final data
     submitFinalData();
 
-    // Start animated reveal sequence after brief delay
+    // Skip summary — redirect directly to offer after brief delay
     setTimeout(() => {
-      startAnimatedReveal();
+      redirectToOffer();
     }, 1200);
   }, 500);
 }
@@ -1325,7 +1413,7 @@ function renderNormalResults(container) {
         <ul class="personalization-list">
           <li><span class="pers-bullet">•</span> Your primary concern: <strong>${quizContent.complaintLabels[state.answers.primary_complaint] || 'gut issues'}</strong></li>
           <li><span class="pers-bullet">•</span> ${quizContent.durationLabels[state.answers.symptom_duration] || 'Your history'} of dealing with this</li>
-          <li><span class="pers-bullet">•</span> The <strong>${state.treatmentsCount}</strong> approaches you've already tried</li>
+          ${state.treatmentsCount > 0 ? `<li><span class="pers-bullet">•</span> The <strong>${state.treatmentsCount}</strong> approaches you've already tried</li>` : ''}
           ${state.hasGutBrainOverlay ? `<li><span class="pers-bullet">•</span> Your gut-brain connection (nervous system support included)</li>` : ''}
         </ul>
       </div>
@@ -1783,6 +1871,9 @@ function buildUserRecord(isPartial) {
     hardest_part: null,
     dream_outcome: state.answers.user_vision || null,
 
+    // Secondary symptoms
+    secondary_symptoms: state.answers.secondary_symptoms || [],
+
     // Quiz-4 specific fields
     user_timeline: state.answers.user_timeline || null,
     knowledge_score: state.knowledgeScore || 0,
@@ -1843,6 +1934,9 @@ async function sendWebhook(eventType) {
     // Red flags
     had_red_flags: state.hasRedFlags || false,
     red_flag_evaluated_cleared: state.answers.red_flag_evaluated_cleared || false,
+
+    // Secondary symptoms
+    secondary_symptoms: (state.answers.secondary_symptoms || []).join(','),
 
     // Quiz-4 specific fields
     user_timeline: state.answers.user_timeline || '',
@@ -1948,6 +2042,16 @@ function redirectToOffer() {
     params.set('vision', encodeURIComponent(state.answers.user_vision.substring(0, 200)));
   }
 
+  // Secondary symptoms
+  if (state.answers.secondary_symptoms && state.answers.secondary_symptoms.length > 0) {
+    const secondaryValues = state.answers.secondary_symptoms;
+    if (secondaryValues.length === 1 && secondaryValues[0] === 'none') {
+      params.set('secondary_symptoms', 'none');
+    } else {
+      params.set('secondary_symptoms', secondaryValues.filter(v => v !== 'none').join(','));
+    }
+  }
+
   // Referral tracking - pass ref code through to offer page
   var offerUrl = `${CONFIG.OFFER_URL}?${params.toString()}`;
   window.location.href = typeof GHA_Referral !== 'undefined' ? GHA_Referral.buildUrl(offerUrl) : offerUrl;
@@ -2003,7 +2107,8 @@ function getTrackingSectionName() {
     'future_vision': 'phase1_q1_future_vision',
     'timeline': 'phase1_q2_timeline',
     'primary_complaint': 'phase1_q3_complaint',
-    'duration': 'phase1_q4_duration',
+    'secondary_symptoms': 'phase1_q4_secondary_symptoms',
+    'duration': 'phase1_q5_duration',
     'validation_duration': 'phase1_validation',
 
     // Phase 2: Clinical Assessment (YOUR SYMPTOMS)
