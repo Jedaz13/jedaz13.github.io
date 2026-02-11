@@ -24,6 +24,7 @@
   <script>
     // Read purchase data from URL params or localStorage
     var urlParams = new URLSearchParams(window.location.search);
+    var sessionId = urlParams.get('session_id') || '';
     var purchaseName = urlParams.get('name') || '';
     var purchaseEmail = urlParams.get('email') || '';
     var purchaseProtocol = urlParams.get('protocol_name') || '';
@@ -35,34 +36,40 @@
       if (storedTotal) purchaseValue = parseFloat(storedTotal);
     } catch (e) {}
 
-    // Meta Pixel purchase event
-    if (typeof fbq !== 'undefined') {
-      fbq('track', 'Purchase', {
-        value: purchaseValue,
-        currency: 'USD',
-        content_name: purchaseProtocol + ' Protocol',
-        content_type: 'product'
-      });
-    }
+    // Fire purchase events only if redirected from Stripe (session_id present)
+    if (sessionId) {
+      // Meta Pixel purchase event
+      if (typeof fbq !== 'undefined') {
+        fbq('track', 'Purchase', {
+          value: purchaseValue,
+          currency: 'USD',
+          content_name: purchaseProtocol + ' Protocol',
+          content_type: 'product'
+        });
+      }
 
-    // GTM dataLayer purchase event
-    dataLayer.push({
-      'event': 'purchase',
-      'ecommerce': {
-        'transaction_id': 'txn_' + Date.now(),
-        'currency': 'USD',
-        'value': purchaseValue,
-        'items': [{
-          'item_id': 'protocol',
-          'item_name': purchaseProtocol + ' Protocol',
-          'item_category': 'protocol',
-          'price': purchaseValue,
-          'quantity': 1
-        }]
-      },
-      'protocol': purchaseProtocol,
-      'purchaseType': 'protocol'
-    });
+      // GTM dataLayer purchase event
+      dataLayer.push({
+        'event': 'purchase',
+        'ecommerce': {
+          'transaction_id': sessionId,
+          'currency': 'USD',
+          'value': purchaseValue,
+          'items': [{
+            'item_id': 'protocol',
+            'item_name': purchaseProtocol + ' Protocol',
+            'item_category': 'protocol',
+            'price': purchaseValue,
+            'quantity': 1
+          }]
+        },
+        'protocol': purchaseProtocol,
+        'purchaseType': 'protocol'
+      });
+      console.log('Protocol purchase tracked:', purchaseProtocol, purchaseValue);
+    } else {
+      console.log('No session_id — skipping purchase event');
+    }
   </script>
 
   <!-- Google Tag Manager -->

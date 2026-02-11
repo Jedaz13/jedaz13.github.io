@@ -103,6 +103,7 @@ module.exports = async function handler(req, res) {
       }
     }
 
+    successParams.set('session_id', '{CHECKOUT_SESSION_ID}');
     var successUrl = 'https://www.guthealingacademy.com/thank-you-protocol/?' + successParams.toString();
 
     // Build cancel URL — preserve all original params
