@@ -315,6 +315,233 @@ p:last-child {
 }
 
 /* =====================================================
+   Day Comparison ("Your day now vs. your day on protocol")
+   ===================================================== */
+.day-comparison-section {
+  padding: 40px 0;
+  background-color: var(--bg-cream);
+}
+
+.day-comparison-section h2 {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.day-comparison-section h2::after {
+  content: '';
+  display: block;
+  width: 60px;
+  height: 3px;
+  background: var(--citrus);
+  border-radius: 2px;
+  margin: 12px auto 0;
+}
+
+.dc-columns {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.dc-column {
+  border-radius: var(--radius-lg);
+  padding: 20px;
+}
+
+.dc-before {
+  background-color: #FFF5F3;
+  border: 1px solid #F5DDD8;
+}
+
+.dc-after {
+  background-color: #F2F8F4;
+  border: 1px solid #D4E8D9;
+}
+
+.dc-label {
+  font-family: var(--font-family);
+  font-size: 0.6875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  margin-bottom: 14px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgba(0,0,0,0.06);
+}
+
+.dc-before .dc-label { color: #B85C4A; }
+.dc-after .dc-label { color: #3D8B5C; }
+
+.dc-item {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  margin-bottom: 12px;
+}
+
+.dc-item:last-child {
+  margin-bottom: 0;
+}
+
+.dc-icon {
+  flex-shrink: 0;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 1px;
+}
+
+.dc-icon-x {
+  background: #FDEAE6;
+}
+
+.dc-icon-x svg { stroke: #C0614A; }
+
+.dc-icon-check {
+  background: #E2F2E6;
+}
+
+.dc-icon-check svg { stroke: #3D8B5C; }
+
+.dc-item p {
+  font-size: 0.9375rem;
+  line-height: 1.5;
+  color: var(--text-olive);
+  margin: 0;
+}
+
+/* =====================================================
+   Dream Outcome Callback (hero section)
+   ===================================================== */
+.dream-callback {
+  margin-top: 20px;
+  padding: 16px 20px;
+  background: rgba(249, 199, 79, 0.12);
+  border-radius: var(--radius);
+  border-left: 3px solid var(--citrus);
+}
+
+.dream-callback p {
+  font-size: 1rem;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.95);
+  margin: 0;
+}
+
+.dream-text {
+  font-style: italic;
+  color: var(--citrus);
+  font-weight: 500;
+}
+
+/* =====================================================
+   Duration Empathy (inside protocol headline copy)
+   ===================================================== */
+.duration-empathy {
+  font-size: 0.9375rem;
+  line-height: 1.7;
+  color: rgba(255, 255, 255, 0.9);
+  font-style: italic;
+  margin-bottom: 16px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+/* =====================================================
+   Treatments Validation (inside "Why this works")
+   ===================================================== */
+.treatments-validation {
+  margin-bottom: 24px;
+}
+
+.treatments-validation h3 {
+  font-family: var(--font-family);
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-forest);
+  margin-bottom: 14px;
+}
+
+.treatment-item {
+  background: var(--white);
+  border-radius: var(--radius);
+  padding: 14px 16px;
+  margin-bottom: 10px;
+  border-left: 3px solid var(--citrus);
+  box-shadow: var(--shadow-card);
+}
+
+.treatment-item:last-child {
+  margin-bottom: 0;
+}
+
+.treatment-name {
+  display: block;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  color: var(--leaf);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 4px;
+}
+
+.treatment-item p {
+  font-size: 0.875rem;
+  color: var(--text-olive);
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* =====================================================
+   Stress-Gut Acknowledgment (inside protocol features)
+   ===================================================== */
+.stress-acknowledgment-card {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  background: var(--citrus-pale);
+  border-radius: var(--radius-lg);
+  padding: 16px 18px;
+  margin-top: 16px;
+  border-left: 3px solid var(--citrus);
+}
+
+.stress-acknowledgment-card svg {
+  flex-shrink: 0;
+  stroke: var(--forest);
+  margin-top: 2px;
+}
+
+.stress-acknowledgment-card p {
+  font-size: 0.9375rem;
+  color: var(--text-olive);
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* =====================================================
+   Life Impact Urgency (above commitment strip)
+   ===================================================== */
+.life-impact-card {
+  max-width: var(--max-content-width);
+  margin: 0 auto;
+  padding: 20px 20px 0;
+}
+
+.life-impact-card p {
+  font-size: 1rem;
+  line-height: 1.7;
+  color: var(--text-forest);
+  font-weight: 500;
+  text-align: center;
+  font-style: italic;
+  margin: 0;
+}
+
+/* =====================================================
    Section 4: Why This Works
    ===================================================== */
 .why-works-section {
@@ -1331,6 +1558,20 @@ p:last-child {
   .practitioner-photo {
     width: 56px;
     height: 56px;
+  }
+
+  .day-comparison-section {
+    padding: 48px 0;
+  }
+
+  .dc-columns {
+    flex-direction: row;
+    gap: 20px;
+  }
+
+  .dc-column {
+    flex: 1;
+    padding: 24px;
   }
 
   .secondary-symptoms-section {

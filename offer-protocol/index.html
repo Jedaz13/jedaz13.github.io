@@ -57,6 +57,8 @@
           </div>
         </div>
 
+        <div id="dreamCallback" class="dream-callback" style="display:none;"></div>
+
         <div id="personalizedParagraph" class="personalized-paragraph">
           <!-- Populated by JS with duration, primary_complaint, vision -->
         </div>
@@ -72,6 +74,11 @@
       </div>
     </section>
 
+    <!-- ===== DAY COMPARISON ("Your day now vs. your day on protocol") ===== -->
+    <section class="day-comparison-section" id="dayComparison" style="display:none;">
+      <!-- Populated by JS based on protocol + secondary_symptoms -->
+    </section>
+
     <!-- ===== SECTION 3: SECONDARY SYMPTOMS ("Your protocol also addresses...") ===== -->
     <section class="secondary-symptoms-section" id="secondarySymptomsSection" style="display:none;">
       <!-- Populated by JS based on secondary_symptoms URL param -->
@@ -81,6 +88,7 @@
     <section class="why-works-section">
       <div class="container">
         <h2>Why this works when other things didn't</h2>
+        <div id="treatmentsValidation" style="display:none;"></div>
         <p>You've tried the generic programs. The "eat more fiber" advice. The probiotics everyone raves about. The elimination diets that left you eating five foods and still feeling terrible.</p>
         <p>They didn't work because they weren't built for <strong>your</strong> gut. They treated all digestive issues as the same problem — but your symptom pattern has specific triggers, specific timing, and specific solutions.</p>
         <p>Your protocol is different because it starts with your dominant pattern and works outward. Instead of throwing everything at the wall, it targets the mechanism driving YOUR symptoms — which is why women typically notice their first shift within the first week.</p>
@@ -95,6 +103,8 @@
         <div class="content-cards" id="contentCards">
           <!-- 4 cards populated by JS based on protocol -->
         </div>
+
+        <div id="stressAcknowledgment" style="display:none;"></div>
       </div>
     </section>
 
@@ -163,6 +173,9 @@
         </div>
       </div>
     </section>
+
+    <!-- Life Impact Urgency (dynamic, hidden if mild/missing) -->
+    <div id="lifeImpactUrgency" style="display:none;"></div>
 
     <!-- ===== COMMITMENT STRIP (above pricing) ===== -->
     <section class="commitment-strip">

@@ -1087,6 +1087,27 @@ function renderLoadingScreen(container) {
   const name = state.userData.name || 'Friend';
   const headline = loading.headlineTemplate.replace('{firstName}', name);
 
+  // Personalize loading bar labels with quiz answers
+  const complaint = state.answers.primary_complaint || '';
+  const complaintLabel = (quizContent.complaintLabels[complaint] || 'symptom').toLowerCase();
+  const durationVal = state.answers.symptom_duration || '';
+  const durationText = { '3_6_months': 'months', '6_12_months': 'months', '1_3_years': 'years', '3_5_years': 'years', '5_plus_years': 'years' }[durationVal] || 'time';
+  const treatments = state.treatmentsTried || [];
+  const treatmentLabels = { probiotics: 'probiotics', elimination: 'elimination diet', low_fodmap: 'Low FODMAP', fiber: 'fiber supplements', otc_meds: 'OTC medications', prescription: 'prescription meds', testing: 'GI testing', practitioner: 'practitioner advice' };
+  let treatmentBarLabel = 'Matching with protocol database...';
+  if (treatments.length >= 2) {
+    treatmentBarLabel = 'Checking ' + (treatmentLabels[treatments[0]] || treatments[0]) + ' and ' + (treatmentLabels[treatments[1]] || treatments[1]) + ' interactions...';
+  } else if (treatments.length === 1) {
+    treatmentBarLabel = 'Checking ' + (treatmentLabels[treatments[0]] || treatments[0]) + ' interactions...';
+  }
+  const personalizedLabels = [
+    'Analyzing your ' + complaintLabel + ' pattern...',
+    treatmentBarLabel,
+    'Cross-referencing with ' + durationText + ' of symptoms...',
+    'Calculating improvement timeline...',
+    'Building your personalized protocol...'
+  ];
+
   let html = `
     <div class="comparison-popup-overlay">
       <div class="comparison-popup comparison-popup-large">
@@ -1100,10 +1121,11 @@ function renderLoadingScreen(container) {
   const colors = ['#F59E0B', '#10B981', '#3B82F6', '#8B5CF6', '#2ECC71'];
 
   loading.progressBars.forEach((bar, index) => {
+    const label = personalizedLabels[index] || bar.label;
     html += `
       <div class="comparison-item" id="comparisonItem${index}" data-color="${colors[index]}">
         <div class="comparison-item-header">
-          <span class="comparison-item-text">${bar.label}</span>
+          <span class="comparison-item-text">${label}</span>
           <span class="comparison-item-percent" id="comparisonPercent${index}">0%</span>
         </div>
         <div class="comparison-bar">
@@ -2031,6 +2053,9 @@ function redirectToOffer() {
 
   // Stress level
   params.set('stress_level', state.hasGutBrainOverlay ? 'significant' : 'none');
+  if (state.answers.stress_connection) {
+    params.set('stress_connection', state.answers.stress_connection);
+  }
 
   // Life impact
   if (state.answers.life_impact) {

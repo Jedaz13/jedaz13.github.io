@@ -178,6 +178,11 @@ document.addEventListener('DOMContentLoaded', function() {
   populatePage();
   populateTestimonial();
   populateSecondarySymptoms();
+  populateDayComparison();
+  populateDreamOutcome();
+  populateTreatmentsValidation();
+  populateStressAcknowledgment();
+  populateLifeImpact();
   initStickyCta();
   trackPageView();
 });
@@ -213,7 +218,7 @@ function loadParams() {
     'gut_brain', 'gut_brain_score', 'gut_type', 'primary_complaint',
     'primary_complaint_label', 'duration', 'diagnoses',
     'treatments', 'treatments_formatted', 'treatments_tried_count',
-    'stress_level', 'life_impact', 'vision',
+    'stress_level', 'stress_connection', 'life_impact', 'vision',
     'goal_selection', 'journey_stage', 'secondary_symptoms'
   ];
 
@@ -500,7 +505,14 @@ function populatePage() {
   // Section 1: Headline
   document.getElementById('userName').textContent = name;
   document.getElementById('protocolNameHeadline').textContent = protocolName;
-  document.getElementById('protocolHeadlineCopy').innerHTML = '<p>' + content.headline + '</p>';
+
+  // Duration empathy line (prepended before protocol headline copy)
+  var durationEmpathyHtml = '';
+  var durationEmpathy = DURATION_EMPATHY[pageParams.duration];
+  if (durationEmpathy) {
+    durationEmpathyHtml = '<p class="duration-empathy">' + durationEmpathy + '</p>';
+  }
+  document.getElementById('protocolHeadlineCopy').innerHTML = durationEmpathyHtml + '<p>' + content.headline + '</p>';
 
   // Hero protocol image
   var heroImg = document.getElementById('heroProtocolImg');
@@ -525,9 +537,14 @@ function populatePage() {
     'understanding': 'finally understand what\'s going on in your gut'
   };
   var visionText = pageParams.vision || GOAL_MAP[pageParams.goal_selection] || 'eat without fear';
+  var hasDreamCallback = pageParams.vision && pageParams.vision.length >= 5;
 
-  var personalizedHtml = '<p>After ' + durationText + ' of ' + complaintText + ' — the restrictive diets that stole your social life, the doctors who said it\'s nothing, the supplements sitting half-empty in your cabinet — you deserve something that actually works for YOUR body.</p>';
-  personalizedHtml += '<p>You told us you want to <strong>' + visionText + '</strong>. That\'s not too much to ask. And it starts with understanding exactly what\'s happening in YOUR gut — not someone else\'s.</p>';
+  var personalizedHtml = '<p>After ' + durationText + ' of ' + complaintText + ' \u2014 the restrictive diets that stole your social life, the doctors who said it\'s nothing, the supplements sitting half-empty in your cabinet \u2014 you deserve something that actually works for YOUR body.</p>';
+  if (!hasDreamCallback) {
+    personalizedHtml += '<p>You told us you want to <strong>' + visionText + '</strong>. That\'s not too much to ask. And it starts with understanding exactly what\'s happening in YOUR gut \u2014 not someone else\'s.</p>';
+  } else {
+    personalizedHtml += '<p>It starts with understanding exactly what\'s happening in YOUR gut \u2014 not someone else\'s.</p>';
+  }
   personalizedHtml += '<p class="hero-guarantee-line">If you don\'t feel a difference in 60 days, you\'ll get a full refund and a free personal case review with Rebecca. But most women won\'t need either.</p>';
   document.getElementById('personalizedParagraph').innerHTML = personalizedHtml;
 
@@ -885,6 +902,334 @@ function populateSecondarySymptoms() {
   }
 
   container.innerHTML = '<div class="container"><h2>Your protocol also addresses:</h2><div class="secondary-symptoms-list">' + itemsHtml + '</div></div>';
+  container.style.display = '';
+}
+
+// =================================================
+// DAY COMPARISON DATA
+// =================================================
+
+var DAY_COMPARISON_POOLS = {
+  bloating: [
+    { before: "You wake up flat but dread what happens after lunch", after: "You eat lunch and your jeans still fit by dinner" },
+    { before: "You cancel plans because \u2018today is a bad belly day\u2019", after: "You say yes to dinner without checking how your stomach looks first" },
+    { before: "You carry a loose top in your bag \u2014 just in case", after: "Your wardrobe isn\u2019t dictated by your bloating schedule" },
+    { before: "You mentally calculate every bite at restaurants", after: "You order what sounds good and enjoy the meal" }
+  ],
+  constipation: [
+    { before: "Your mornings start with anxiety about whether today will \u2018work\u2019", after: "Your body has a predictable routine you can count on" },
+    { before: "You feel heavy and sluggish by mid-afternoon", after: "Afternoons feel lighter because your system is actually moving" },
+    { before: "You avoid travel because it makes everything worse", after: "You have a travel protocol that keeps things consistent" }
+  ],
+  diarrhea: [
+    { before: "You map every bathroom before leaving the house", after: "You leave home without a backup plan because you don\u2019t need one" },
+    { before: "You skip meals before important events \u2018just in case\u2019", after: "You eat before going out because you trust your body\u2019s response" },
+    { before: "Morning coffee is a gamble you lose more than you win", after: "You know exactly what your gut can handle first thing" }
+  ],
+  alternating: [
+    { before: "You never know which version of your gut will show up today", after: "Your gut has settled into a predictable pattern" },
+    { before: "No advice works because your symptoms keep changing", after: "You have one approach that works for both directions" },
+    { before: "Every meal feels like a coin flip", after: "Meals are calmer because you know what your gut needs right now" }
+  ],
+  pain: [
+    { before: "You tense up before every meal, waiting for the cramping to start", after: "You sit down to eat without bracing yourself" },
+    { before: "Pain after eating makes you want to skip meals entirely", after: "You know which foods your gut handles comfortably" },
+    { before: "You can\u2019t focus at work because your stomach won\u2019t settle", after: "Your afternoons are productive instead of painful" }
+  ],
+  gas: [
+    { before: "You avoid close spaces because you can\u2019t control the gas", after: "You\u2019ve identified the 2-3 foods causing it and cut the problem at the source" },
+    { before: "Meetings, flights, and dates come with background anxiety", after: "You\u2019re focused on the moment, not your stomach" },
+    { before: "You\u2019ve stopped eating certain food groups \u2018just to be safe\u2019", after: "You know exactly what triggers it \u2014 and everything else is back on the menu" }
+  ],
+  brain_fog: [
+    { before: "By 2pm your brain feels like it\u2019s wading through fog", after: "Your thinking stays clear because your gut isn\u2019t hijacking your energy" },
+    { before: "You blamed aging, stress, or sleep \u2014 but it\u2019s worse after eating", after: "You\u2019ve connected the dots between food and focus" },
+    { before: "You can\u2019t remember the last time you felt mentally sharp all day", after: "Mental clarity improves as gut inflammation goes down" }
+  ],
+  anxiety_food: [
+    { before: "You dread the question \u2018where should we eat tonight?\u2019", after: "You suggest restaurants because you know what\u2019s safe for you" },
+    { before: "Every meal is a risk calculation, not an enjoyment", after: "You eat with confidence because you know your triggers" },
+    { before: "You\u2019ve turned down invitations because you can\u2019t control the menu", after: "You go out and navigate any menu with your personal safe-food framework" }
+  ]
+};
+
+var PROTOCOL_PRIMARY_SYMPTOM = {
+  'bloat_reset': 'bloating',
+  'regularity': 'constipation',
+  'calm_gut': 'diarrhea',
+  'stability': 'alternating',
+  'rebuild': 'bloating'
+};
+
+// =================================================
+// DAY COMPARISON RENDERER
+// =================================================
+
+function populateDayComparison() {
+  var container = document.getElementById('dayComparison');
+  if (!container) return;
+
+  var protocolKey = resolveProtocolKey();
+  var primarySymptom = PROTOCOL_PRIMARY_SYMPTOM[protocolKey];
+  if (!primarySymptom || !DAY_COMPARISON_POOLS[primarySymptom]) {
+    container.style.display = 'none';
+    return;
+  }
+
+  // Get secondary symptoms
+  var raw = pageParams.secondary_symptoms || '';
+  var secondaries = (raw && raw !== 'none') ? raw.split(',').filter(function(s) { return s && s !== 'none' && DAY_COMPARISON_POOLS[s]; }) : [];
+
+  // Build item list: interleave primary and secondary, max 4
+  var items = [];
+  var primaryPool = DAY_COMPARISON_POOLS[primarySymptom].slice();
+  var primaryIdx = 0;
+
+  if (secondaries.length === 0) {
+    // All 4 from primary
+    for (var i = 0; i < 4 && i < primaryPool.length; i++) {
+      items.push(primaryPool[i]);
+    }
+  } else if (secondaries.length === 1) {
+    // 2 primary, 1 secondary, 1 primary (interleaved)
+    items.push(primaryPool[0]);
+    var sec1Pool = DAY_COMPARISON_POOLS[secondaries[0]];
+    if (sec1Pool && sec1Pool[0]) items.push(sec1Pool[0]); else items.push(primaryPool[2]);
+    if (primaryPool[1]) items.push(primaryPool[1]);
+    if (primaryPool[2] && items.length < 4) items.push(primaryPool[2]);
+  } else if (secondaries.length === 2) {
+    // 2 primary, 1 each secondary
+    items.push(primaryPool[0]);
+    var s1Pool = DAY_COMPARISON_POOLS[secondaries[0]];
+    if (s1Pool && s1Pool[0]) items.push(s1Pool[0]); else items.push(primaryPool[2]);
+    var s2Pool = DAY_COMPARISON_POOLS[secondaries[1]];
+    if (s2Pool && s2Pool[0]) items.push(s2Pool[0]); else items.push(primaryPool[2]);
+    if (primaryPool[1]) items.push(primaryPool[1]);
+  } else {
+    // 3+ secondaries: 1 primary, first 3 secondaries
+    items.push(primaryPool[0]);
+    for (var j = 0; j < 3 && j < secondaries.length; j++) {
+      var sPool = DAY_COMPARISON_POOLS[secondaries[j]];
+      if (sPool && sPool[0]) items.push(sPool[0]); else if (primaryPool[j + 1]) items.push(primaryPool[j + 1]);
+    }
+  }
+
+  // Cap at 4
+  items = items.slice(0, 4);
+  if (items.length === 0) {
+    container.style.display = 'none';
+    return;
+  }
+
+  // Render
+  var beforeHtml = '';
+  var afterHtml = '';
+  for (var k = 0; k < items.length; k++) {
+    beforeHtml += '<div class="dc-item"><span class="dc-icon dc-icon-x"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></span><p>' + items[k].before + '</p></div>';
+    afterHtml += '<div class="dc-item"><span class="dc-icon dc-icon-check"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></span><p>' + items[k].after + '</p></div>';
+  }
+
+  container.innerHTML = '<div class="container"><h2>Your day now vs. your day on protocol</h2><div class="dc-columns"><div class="dc-column dc-before"><div class="dc-label">Right now</div>' + beforeHtml + '</div><div class="dc-column dc-after"><div class="dc-label">4 weeks from now</div>' + afterHtml + '</div></div></div>';
+  container.style.display = '';
+}
+
+// =================================================
+// DURATION EMPATHY DATA
+// =================================================
+
+var DURATION_EMPATHY = {
+  '3_6_months': "Your symptoms are relatively new \u2014 and that\u2019s actually good news. The sooner you address the right triggers, the faster your gut responds. Most women wish they\u2019d found this earlier.",
+  '6_12_months': "You\u2019ve been dealing with this for over six months now. Long enough to know it\u2019s not going away on its own \u2014 but early enough that your gut can still reset quickly once you target the right triggers.",
+  '1_3_years': "After years of dealing with this, you\u2019ve probably started to accept it as \u2018just how your body is.\u2019 It\u2019s not. Your gut adapted to the wrong patterns \u2014 and it can adapt back.",
+  '3_5_years': "You\u2019ve been living with this for years. Not weeks, not months \u2014 years of planning around your symptoms, years of trying things that didn\u2019t stick, years of wondering if this is just your life now. It doesn\u2019t have to be.",
+  '5_plus_years': "You\u2019ve been living with this for years. Not weeks, not months \u2014 years of planning around your symptoms, years of trying things that didn\u2019t stick, years of wondering if this is just your life now. It doesn\u2019t have to be."
+};
+
+// =================================================
+// DREAM OUTCOME CALLBACK
+// =================================================
+
+function populateDreamOutcome() {
+  var container = document.getElementById('dreamCallback');
+  if (!container) return;
+
+  var vision = pageParams.vision || '';
+  if (vision.length < 5) {
+    container.style.display = 'none';
+    return;
+  }
+
+  // Truncate if too long
+  var displayText = vision;
+  if (displayText.length > 100) {
+    displayText = displayText.substring(0, 97) + '...';
+  }
+
+  container.innerHTML = '<p>You told us the first thing you\u2019d do is <span class="dream-text">' + displayText + '</span>. Let\u2019s make that happen.</p>';
+  container.style.display = '';
+}
+
+// =================================================
+// TREATMENTS VALIDATION DATA
+// =================================================
+
+var TREATMENT_LABELS = {
+  'elimination': 'Elimination diets',
+  'low_fodmap': 'Low FODMAP diet',
+  'probiotics': 'Probiotics',
+  'otc_meds': 'Over-the-counter medications',
+  'prescription': 'Prescription medications',
+  'fiber': 'Fiber supplements',
+  'testing': 'Doctor visits & testing',
+  'practitioner': 'Working with a practitioner'
+};
+
+var TREATMENT_DISPLAY_ORDER = ['elimination', 'low_fodmap', 'probiotics', 'otc_meds', 'prescription', 'fiber', 'testing', 'practitioner'];
+
+var TREATMENT_EXPLANATIONS = {
+  elimination: {
+    bloat_reset: "Elimination diets cast too wide a net. You removed 50 foods when only 3-4 were causing your bloating. Your protocol identifies your specific FODMAP triggers \u2014 so you ADD foods back instead of removing everything.",
+    regularity: "Most elimination diets accidentally remove the fiber and fermentable carbs your gut needs to stay regular. You were solving one problem by creating another.",
+    calm_gut: "Elimination diets often work temporarily for diarrhea \u2014 then fail when you try to reintroduce. Your protocol gives you a systematic reintroduction timeline so you don\u2019t yo-yo.",
+    stability: "With alternating symptoms, elimination diets are especially frustrating \u2014 what helps on a constipation day makes a diarrhea day worse. Your protocol adapts to whichever pattern shows up.",
+    rebuild: "Post-SIBO, your gut needs strategic reintroduction, not continued restriction. Staying on a restricted diet too long can actually slow recovery by starving beneficial bacteria."
+  },
+  low_fodmap: {
+    bloat_reset: "Low FODMAP is a useful diagnostic tool, but it\u2019s not meant to be a permanent diet. Your protocol uses the trigger data to build a sustainable plan \u2014 not just another restriction list.",
+    regularity: "Low FODMAP often worsens constipation by removing the fermentable fibers your gut needs. Your protocol re-introduces the right fibers in the right amounts.",
+    calm_gut: "Low FODMAP may have helped temporarily, but without structured reintroduction you\u2019re stuck avoiding foods forever. Your protocol builds you back to eating normally.",
+    stability: "Low FODMAP assumes your symptoms are consistent \u2014 yours aren\u2019t. Your protocol adjusts daily based on which direction your gut is trending.",
+    rebuild: "Post-SIBO, staying on low FODMAP too long starves the good bacteria trying to recolonize. Your protocol uses strategic reintroduction to rebuild your microbiome."
+  },
+  probiotics: {
+    bloat_reset: "Most probiotics are generic \u2014 random strains at random doses. For your bloating pattern, the issue isn\u2019t \u2018more bacteria.\u2019 It\u2019s identifying which specific triggers are causing fermentation. Probiotics can\u2019t fix that.",
+    regularity: "Most probiotics are generic \u2014 random strains at random doses. For your constipation, the issue isn\u2019t bacteria \u2014 it\u2019s motility and fiber balance. Probiotics can\u2019t fix that.",
+    calm_gut: "Most probiotics are generic \u2014 random strains at random doses. For your diarrhea pattern, the issue isn\u2019t \u2018more bacteria.\u2019 It\u2019s calming the gut-transit speed and identifying triggers. Probiotics alone can\u2019t fix that.",
+    stability: "Most probiotics are generic \u2014 random strains at random doses. For alternating symptoms, the issue isn\u2019t bacteria balance \u2014 it\u2019s motility regulation. Probiotics can\u2019t fix that.",
+    rebuild: "Most probiotics are generic \u2014 random strains at random doses. Post-SIBO, your gut needs specific prebiotic support (like PHGG) to rebuild \u2014 not random bacteria that may re-trigger overgrowth."
+  },
+  otc_meds: {
+    _default: "Medications manage symptoms \u2014 they don\u2019t address what\u2019s driving them. Your protocol targets the underlying pattern so you\u2019re not dependent on daily pills to feel normal."
+  },
+  prescription: {
+    _default: "Prescription medications manage symptoms \u2014 they don\u2019t address what\u2019s driving them. Your protocol targets the underlying pattern so you\u2019re not dependent on medication to feel normal."
+  },
+  fiber: {
+    bloat_reset: "The wrong type of fiber actually makes bloating worse. Your protocol specifies exactly which fiber sources work for your pattern and which ones to avoid.",
+    regularity: "The wrong type of fiber actually makes bloating worse. Your protocol specifies exactly which fiber sources help motility without causing more discomfort.",
+    calm_gut: "Fiber supplements are tricky with diarrhea \u2014 some bulk up stool (helpful), others ferment and make things worse. Your protocol uses the right type at the right time.",
+    stability: "Fiber is a double-edged sword with alternating symptoms. Your protocol tells you exactly which type to use based on which direction your gut is trending.",
+    rebuild: "Post-SIBO, the wrong fiber feeds the bacteria you\u2019re trying to control. Your protocol uses PHGG specifically because it feeds good bacteria without feeding SIBO."
+  },
+  testing: {
+    _default: "Your doctor likely ran tests, found nothing \u2018wrong,\u2019 and said \u2018it\u2019s IBS, manage your stress.\u2019 That\u2019s not wrong \u2014 but it\u2019s not a solution. Your protocol gives you the specific daily actions your doctor didn\u2019t have time to build for you."
+  },
+  practitioner: {
+    _default: "Working with a practitioner gave you information \u2014 but not a daily system. Your protocol translates clinical knowledge into a step-by-step plan you can follow every day."
+  }
+};
+
+function populateTreatmentsValidation() {
+  var container = document.getElementById('treatmentsValidation');
+  if (!container) return;
+
+  var raw = pageParams.treatments || '';
+  if (!raw || raw === 'nothing') {
+    container.style.display = 'none';
+    return;
+  }
+
+  var treatments = raw.split(',').filter(function(t) { return t && t !== 'nothing'; });
+  if (treatments.length === 0) {
+    container.style.display = 'none';
+    return;
+  }
+
+  var protocolKey = resolveProtocolKey();
+
+  // Sort by display order, max 3
+  var ordered = [];
+  for (var i = 0; i < TREATMENT_DISPLAY_ORDER.length && ordered.length < 3; i++) {
+    var key = TREATMENT_DISPLAY_ORDER[i];
+    if (treatments.indexOf(key) !== -1 && TREATMENT_LABELS[key]) {
+      ordered.push(key);
+    }
+  }
+
+  if (ordered.length === 0) {
+    container.style.display = 'none';
+    return;
+  }
+
+  var html = '<div class="treatments-validation"><h3>You\u2019ve already tried. Here\u2019s why it didn\u2019t stick.</h3>';
+  for (var j = 0; j < ordered.length; j++) {
+    var tKey = ordered[j];
+    var explanations = TREATMENT_EXPLANATIONS[tKey];
+    var copy = '';
+    if (explanations) {
+      copy = explanations[protocolKey] || explanations['_default'] || '';
+    }
+    if (copy) {
+      html += '<div class="treatment-item"><span class="treatment-name">' + TREATMENT_LABELS[tKey] + '</span><p>' + copy + '</p></div>';
+    }
+  }
+  html += '</div>';
+
+  container.innerHTML = html;
+  container.style.display = '';
+}
+
+// =================================================
+// STRESS-GUT ACKNOWLEDGMENT
+// =================================================
+
+function populateStressAcknowledgment() {
+  var container = document.getElementById('stressAcknowledgment');
+  if (!container) return;
+
+  var stressLevel = pageParams.stress_level || '';
+  var stressRaw = pageParams.stress_connection || '';
+
+  // Determine if we should show this
+  var copy = '';
+  if (stressLevel === 'significant' || stressRaw === 'yes_definitely') {
+    copy = 'Your quiz showed a clear stress-gut pattern. Your protocol includes daily vagus nerve techniques that interrupt this cycle \u2014 most women notice the connection weakening within the first week.';
+  } else if (stressRaw === 'sometimes') {
+    copy = 'Your quiz suggests stress plays a role in your symptoms. Your protocol includes simple nervous system techniques alongside the food-based approach \u2014 addressing both sides of the equation.';
+  }
+
+  if (!copy) {
+    container.style.display = 'none';
+    return;
+  }
+
+  container.innerHTML = '<div class="stress-acknowledgment-card"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg><p>' + copy + '</p></div>';
+  container.style.display = '';
+}
+
+// =================================================
+// LIFE IMPACT URGENCY
+// =================================================
+
+function populateLifeImpact() {
+  var container = document.getElementById('lifeImpactUrgency');
+  if (!container) return;
+
+  var impact = pageParams.life_impact || '';
+  var copy = '';
+
+  if (impact === 'severe') {
+    copy = "This isn\u2019t a minor inconvenience for you. Your quiz showed this is affecting your daily life \u2014 what you eat, where you go, how you feel. That\u2019s not something to \u2018manage\u2019 indefinitely. That\u2019s something to fix.";
+  } else if (impact === 'moderate') {
+    copy = "Your symptoms are already shaping your daily decisions \u2014 what to eat, whether to go out, how to plan your day. It doesn\u2019t have to stay that way.";
+  }
+
+  if (!copy) {
+    container.style.display = 'none';
+    return;
+  }
+
+  container.innerHTML = '<div class="life-impact-card"><p>' + copy + '</p></div>';
   container.style.display = '';
 }
 
