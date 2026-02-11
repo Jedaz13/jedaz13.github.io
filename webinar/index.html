@@ -459,9 +459,12 @@
       form.addEventListener('submit', async function(e) {
         e.preventDefault();
 
-        var email = form.email.value.trim();
-        var name = form.name.value.trim();
-        var question = form.question.value.trim();
+        // Use FormData to safely read form values
+        // (form.name is a built-in HTMLFormElement property and does not return the input)
+        var formData = new FormData(form);
+        var email = (formData.get('email') || '').trim();
+        var name = (formData.get('name') || '').trim();
+        var question = (formData.get('question') || '').trim();
 
         if (!email) return;
 
