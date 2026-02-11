@@ -189,6 +189,20 @@ p:last-child {
   color: var(--citrus);
 }
 
+.hero-subtitle {
+  font-family: var(--font-family);
+  font-size: 1.0625rem;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.85);
+  margin-bottom: 20px;
+  line-height: 1.5;
+}
+
+.hero-subtitle strong {
+  color: var(--citrus);
+  font-weight: 600;
+}
+
 .protocol-headline-copy {
   font-size: 1.0625rem;
   line-height: 1.7;
@@ -411,6 +425,24 @@ p:last-child {
   line-height: 1.5;
   color: var(--text-olive);
   margin: 0;
+}
+
+.dc-dream-spacer {
+  height: 1px;
+  margin-top: 8px;
+  border-top: 1px dashed rgba(184, 92, 74, 0.2);
+}
+
+.dc-dream-capstone {
+  margin-top: 8px;
+  padding-top: 10px;
+  border-top: 1px dashed rgba(61, 139, 92, 0.3);
+}
+
+.dc-dream-capstone p {
+  font-style: italic;
+  color: var(--text-forest);
+  font-weight: 500;
 }
 
 /* =====================================================
