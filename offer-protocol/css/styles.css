@@ -210,27 +210,61 @@ p:last-child {
   margin-bottom: 20px;
 }
 
-.personalized-paragraph {
+/* =====================================================
+   Bridge Section — Below fold, before Imagine block
+   ===================================================== */
+.bridge-section {
+  padding: 40px 0;
+  background: linear-gradient(135deg, var(--forest) 0%, var(--forest-light) 100%);
+}
+
+.bridge-section .personalized-paragraph {
   font-size: 1rem;
   line-height: 1.7;
   color: rgba(255, 255, 255, 0.85);
-  margin-top: 24px;
-  padding-top: 24px;
-  border-top: 1px solid rgba(255, 255, 255, 0.15);
+  margin: 0;
+  padding: 0;
 }
 
-.personalized-paragraph strong {
+.bridge-section .personalized-paragraph p {
+  margin-bottom: 16px;
+}
+
+.bridge-section .personalized-paragraph p:last-child {
+  margin-bottom: 0;
+}
+
+.bridge-section .personalized-paragraph strong {
   color: var(--white);
   font-weight: 600;
 }
 
-.hero-guarantee-line {
-  margin-top: 16px;
-  padding-top: 16px;
-  border-top: 1px solid rgba(255, 255, 255, 0.15);
+.bridge-section .duration-empathy {
   font-size: 0.9375rem;
-  font-style: italic;
+  line-height: 1.7;
   color: rgba(255, 255, 255, 0.9);
+  font-style: italic;
+  margin-bottom: 16px;
+}
+
+.bridge-section .dream-callback {
+  margin-top: 20px;
+  padding: 16px 20px;
+  background: rgba(249, 199, 79, 0.12);
+  border-radius: var(--radius);
+  border-left: 3px solid var(--citrus);
+}
+
+.bridge-section .dream-callback p {
+  font-size: 1rem;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.95);
+  margin: 0;
+}
+
+.bridge-section .dream-callback .dream-text {
+  color: var(--citrus);
+  font-weight: 600;
 }
 
 /* =====================================================
@@ -445,42 +479,7 @@ p:last-child {
   font-weight: 500;
 }
 
-/* =====================================================
-   Dream Outcome Callback (hero section)
-   ===================================================== */
-.dream-callback {
-  margin-top: 20px;
-  padding: 16px 20px;
-  background: rgba(249, 199, 79, 0.12);
-  border-radius: var(--radius);
-  border-left: 3px solid var(--citrus);
-}
-
-.dream-callback p {
-  font-size: 1rem;
-  line-height: 1.6;
-  color: rgba(255, 255, 255, 0.95);
-  margin: 0;
-}
-
-.dream-text {
-  font-style: italic;
-  color: var(--citrus);
-  font-weight: 500;
-}
-
-/* =====================================================
-   Duration Empathy (inside protocol headline copy)
-   ===================================================== */
-.duration-empathy {
-  font-size: 0.9375rem;
-  line-height: 1.7;
-  color: rgba(255, 255, 255, 0.9);
-  font-style: italic;
-  margin-bottom: 16px;
-  padding-bottom: 16px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
-}
+/* Dream/duration styles now scoped under .bridge-section above */
 
 /* =====================================================
    Treatments Validation (inside "Why this works")
