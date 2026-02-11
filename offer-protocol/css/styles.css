@@ -215,13 +215,13 @@ p:last-child {
    ===================================================== */
 .bridge-section {
   padding: 40px 0;
-  background: linear-gradient(135deg, var(--forest) 0%, var(--forest-light) 100%);
+  background-color: var(--white);
 }
 
 .bridge-section .personalized-paragraph {
   font-size: 1rem;
   line-height: 1.7;
-  color: rgba(255, 255, 255, 0.85);
+  color: var(--text-olive);
   margin: 0;
   padding: 0;
 }
@@ -235,22 +235,21 @@ p:last-child {
 }
 
 .bridge-section .personalized-paragraph strong {
-  color: var(--white);
+  color: var(--text-forest);
   font-weight: 600;
 }
 
 .bridge-section .duration-empathy {
   font-size: 0.9375rem;
   line-height: 1.7;
-  color: rgba(255, 255, 255, 0.9);
-  font-style: italic;
+  color: var(--text-olive);
   margin-bottom: 16px;
 }
 
 .bridge-section .dream-callback {
   margin-top: 20px;
   padding: 16px 20px;
-  background: rgba(249, 199, 79, 0.12);
+  background: var(--citrus-pale);
   border-radius: var(--radius);
   border-left: 3px solid var(--citrus);
 }
@@ -258,12 +257,12 @@ p:last-child {
 .bridge-section .dream-callback p {
   font-size: 1rem;
   line-height: 1.6;
-  color: rgba(255, 255, 255, 0.95);
+  color: var(--text-olive);
   margin: 0;
 }
 
 .bridge-section .dream-callback .dream-text {
-  color: var(--citrus);
+  color: var(--text-forest);
   font-weight: 600;
 }
 
@@ -677,62 +676,145 @@ p:last-child {
 }
 
 /* =====================================================
-   Section 7: Key Objection Answers
+   Section 7: Key Objection Answers — Pattern Breaker
    ===================================================== */
 .objection-answers-section {
-  padding: 40px 0;
-  background-color: var(--bg-cream);
+  padding: 48px 0;
+  background: linear-gradient(135deg, var(--forest) 0%, var(--forest-light) 100%);
+}
+
+/* --- Lead card: timeline highlight --- */
+.objection-lead {
+  display: flex;
+  gap: 24px;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: var(--radius-lg);
+  padding: 28px 24px;
+  margin-bottom: 20px;
+  backdrop-filter: blur(4px);
+}
+
+.objection-lead-stat {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: var(--citrus);
+  box-shadow: 0 0 24px rgba(249, 199, 79, 0.35);
+}
+
+.objection-lead-stat .stat-number {
+  font-family: var(--heading-font);
+  font-size: 1.75rem;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--forest);
+}
+
+.objection-lead-stat .stat-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--forest);
+  opacity: 0.8;
+}
+
+.objection-lead-content h3 {
+  font-family: var(--font-family);
+  font-size: 1.0625rem;
+  font-weight: 600;
+  color: var(--white);
+  margin-bottom: 8px;
+}
+
+.objection-lead-content p {
+  font-size: 0.9375rem;
+  color: rgba(255, 255, 255, 0.8);
+  line-height: 1.65;
+}
+
+/* --- Two-up cards --- */
+.objection-duo {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 }
 
 .objection-card {
-  display: flex;
-  gap: 16px;
-  background: var(--white);
+  position: relative;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: var(--radius-lg);
-  padding: 20px;
-  margin-bottom: 16px;
-  box-shadow: var(--shadow-card);
-  align-items: flex-start;
+  padding: 24px 24px 24px 28px;
+  backdrop-filter: blur(4px);
 }
 
-.objection-card:last-child {
-  margin-bottom: 0;
+.objection-card-accent {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  border-radius: 4px 0 0 4px;
 }
 
-.objection-icon {
-  flex-shrink: 0;
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  background: var(--citrus-pale);
+.objection-card--safety .objection-card-accent {
+  background: var(--spring);
+}
+
+.objection-card--symptoms .objection-card-accent {
+  background: var(--citrus);
+}
+
+.objection-card .objection-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
   display: flex;
   align-items: center;
   justify-content: center;
+  margin-bottom: 14px;
 }
 
-.objection-icon svg {
-  stroke: var(--forest);
+.objection-card--safety .objection-icon {
+  background: rgba(127, 176, 105, 0.2);
 }
 
-.objection-content h3 {
+.objection-card--symptoms .objection-icon {
+  background: rgba(249, 199, 79, 0.15);
+}
+
+.objection-card .objection-icon svg {
+  stroke: rgba(255, 255, 255, 0.9);
+}
+
+.objection-card h3 {
   font-family: var(--font-family);
   font-size: 0.9375rem;
   font-weight: 600;
-  color: var(--text-forest);
-  margin-bottom: 6px;
+  color: var(--white);
+  margin-bottom: 8px;
 }
 
-.objection-content p {
+.objection-card p {
   font-size: 0.875rem;
-  color: var(--text-olive);
-  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.75);
+  line-height: 1.65;
 }
 
 /* =====================================================
    Section 5: What's Inside (Protocol Features)
    ===================================================== */
 .inside-section {
-  padding: 40px 0;
+  padding: 0 0 40px;
   background-color: var(--bg-cream);
 }
 
@@ -1571,7 +1653,7 @@ p:last-child {
   }
 
   .inside-section {
-    padding: 48px 0;
+    padding: 0 0 48px;
   }
 
   .content-cards {
