@@ -555,7 +555,8 @@ function populatePage() {
     // Hide the paragraph that mentions "0 approaches"
     if (stakesFirstP) stakesFirstP.style.display = 'none';
   } else {
-    document.getElementById('treatmentsCount').textContent = countRaw;
+    var treatmentsCountEl = document.getElementById('treatmentsCount');
+    if (treatmentsCountEl) treatmentsCountEl.textContent = countRaw;
   }
 
   // Section 5: Pricing
