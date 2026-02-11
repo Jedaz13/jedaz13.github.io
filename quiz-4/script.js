@@ -1096,6 +1096,9 @@ async function startComparisonAnimation(bars, colors) {
       popup.appendChild(completionDiv);
     }
 
+    // Track loading animation complete
+    trackQuizStep('loading_animation_complete');
+
     // Submit final data
     submitFinalData();
 
@@ -1153,7 +1156,7 @@ function startAnimatedReveal() {
       <!-- Step 5: Let's Begin -->
       <div class="reveal-step reveal-begin" id="revealStep5">
         <p class="reveal-begin-text">Let's see what we built for you.</p>
-        <button class="btn-primary reveal-cta" id="revealContinueBtn">Show My Results</button>
+        <button class="btn-primary reveal-cta" id="revealContinueBtn">See My Protocol →</button>
       </div>
     </div>
   `;
@@ -1171,16 +1174,12 @@ function startAnimatedReveal() {
     }, delay);
   });
 
-  // Add click handler to continue button
+  // Add click handler to continue button — redirect directly to offer
   setTimeout(() => {
     const continueBtn = document.getElementById('revealContinueBtn');
     if (continueBtn) {
       continueBtn.addEventListener('click', () => {
-        // Show header again
-        if (quizHeader) quizHeader.style.display = '';
-        if (progressContainer) progressContainer.style.display = '';
-
-        advanceToNextScreen();
+        redirectToOffer();
       });
     }
   }, 7000);

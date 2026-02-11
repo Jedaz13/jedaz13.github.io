@@ -798,4 +798,11 @@ function trackPageView() {
     'source': pageParams.source,
     'primary_complaint': pageParams.primary_complaint
   });
+
+  // Track as quiz funnel step so admin dashboard can see offer page arrivals
+  window.dataLayer.push({
+    'event': 'quiz_step',
+    'quiz_section': 'offer_page_view',
+    'quiz_source': pageParams.source || ''
+  });
 }
