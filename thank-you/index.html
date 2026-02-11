@@ -37,30 +37,33 @@
       'previousDiagnoses': []
     });
 
-    // Fire purchase event
-    dataLayer.push({
-      'event': 'purchase',
-      'ecommerce': {
-        'transaction_id': sessionId || 'txn_' + Date.now(),
-        'currency': 'USD',
-        'value': purchaseValue,
-        'tax': 0,
-        'items': [{
-          'item_id': itemId,
-          'item_name': itemName,
-          'item_category': 'subscription',
-          'price': purchaseValue,
-          'quantity': 1
-        }]
-      },
-      'purchaseType': purchaseType,
-      'userId': '',
-      'gutPattern': gutPattern,
-      'trialDaysUsed': 0,
-      'discountApplied': false
-    });
-
-    console.log('Trial purchase tracked:', purchaseType, purchaseValue);
+    // Fire purchase event only if redirected from Stripe (session_id present)
+    if (sessionId) {
+      dataLayer.push({
+        'event': 'purchase',
+        'ecommerce': {
+          'transaction_id': sessionId,
+          'currency': 'USD',
+          'value': purchaseValue,
+          'tax': 0,
+          'items': [{
+            'item_id': itemId,
+            'item_name': itemName,
+            'item_category': 'subscription',
+            'price': purchaseValue,
+            'quantity': 1
+          }]
+        },
+        'purchaseType': purchaseType,
+        'userId': '',
+        'gutPattern': gutPattern,
+        'trialDaysUsed': 0,
+        'discountApplied': false
+      });
+      console.log('Trial purchase tracked:', purchaseType, purchaseValue);
+    } else {
+      console.log('No session_id — skipping purchase event');
+    }
   </script>
 
   <!-- Google Tag Manager -->
