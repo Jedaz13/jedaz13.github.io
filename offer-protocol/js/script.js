@@ -173,9 +173,11 @@ var checkoutInProgress = false;
 document.addEventListener('DOMContentLoaded', function() {
   pageParams = loadParams();
   storeData(pageParams);
-  restoreBumpState();
+  clearBumpState();
+  updateOrderSummary();
   populatePage();
   populateTestimonial();
+  populateSecondarySymptoms();
   initStickyCta();
   trackPageView();
 });
@@ -212,7 +214,7 @@ function loadParams() {
     'primary_complaint_label', 'duration', 'diagnoses',
     'treatments', 'treatments_formatted', 'treatments_tried_count',
     'stress_level', 'life_impact', 'vision',
-    'goal_selection', 'journey_stage'
+    'goal_selection', 'journey_stage', 'secondary_symptoms'
   ];
 
   var data = {};
@@ -314,18 +316,15 @@ function saveBumpState() {
   } catch (e) {}
 }
 
-function restoreBumpState() {
+function clearBumpState() {
+  // Bumps should NOT be pre-selected by default
+  bumpState[1] = false;
+  bumpState[2] = false;
+  document.getElementById('bump1').classList.remove('checked');
+  document.getElementById('bump2').classList.remove('checked');
   try {
-    var b1 = localStorage.getItem('gha_bump1');
-    var b2 = localStorage.getItem('gha_bump2');
-    if (b1 === '1') {
-      bumpState[1] = true;
-      document.getElementById('bump1').classList.add('checked');
-    }
-    if (b2 === '1') {
-      bumpState[2] = true;
-      document.getElementById('bump2').classList.add('checked');
-    }
+    localStorage.removeItem('gha_bump1');
+    localStorage.removeItem('gha_bump2');
   } catch (e) {}
 }
 
@@ -386,6 +385,70 @@ function resolveProtocolKey() {
   // 5. Fallback
   return 'bloat_reset';
 }
+
+// =================================================
+// SECONDARY SYMPTOMS COPY DATA
+// =================================================
+
+var SECONDARY_SYMPTOM_LABELS = {
+  'bloating': 'Bloating & distension',
+  'constipation': 'Constipation',
+  'diarrhea': 'Diarrhea or urgency',
+  'alternating': 'Alternating patterns',
+  'pain': 'Abdominal pain or cramping',
+  'gas': 'Excessive gas',
+  'brain_fog': 'Brain fog or fatigue',
+  'anxiety_food': 'Anxiety around food or eating out'
+};
+
+var SECONDARY_SYMPTOM_COPY = {
+  'bloat_reset': {
+    'constipation': "Bloating and constipation share the same gut motility triggers. When we fix your meal timing and FODMAP triggers, bowel regularity typically improves within the first 2 weeks.",
+    'diarrhea': "Reactive bloating and loose stools often come from the same FODMAP triggers. Your protocol identifies which specific carbs are causing both responses.",
+    'alternating': "The alternating pattern means your gut motility is dysregulated. The meal spacing protocol directly targets this by activating your MMC (migrating motor complex).",
+    'pain': "Abdominal cramping with bloating usually signals fermentation from specific trigger foods. Your FODMAP identification process targets exactly this.",
+    'gas': "Excessive gas and bloating are two sides of the same coin \u2014 both caused by fermentation of undigested carbs. Your trigger identification resolves both simultaneously.",
+    'brain_fog': "Gut-brain axis disruption from bloating directly causes brain fog. Women on this protocol typically report clearer thinking within the first week of reducing their triggers.",
+    'anxiety_food': "Food anxiety is a natural response to unpredictable symptoms. As you identify your specific triggers, you\u2019ll rebuild confidence because you\u2019ll know exactly what\u2019s safe for YOUR gut."
+  },
+  'regularity': {
+    'bloating': "Constipation-related bloating happens because food sits too long in your gut and ferments. As your motility improves, the bloating resolves naturally.",
+    'diarrhea': "Overflow diarrhea after constipation is more common than you\u2019d think. Regulating your motility stabilizes both ends of the spectrum.",
+    'alternating': "Your gut is swinging between extremes because motility is dysregulated. The hydration and fiber protocol stabilizes this pattern.",
+    'pain': "Cramping with constipation is your gut trying to move things that aren\u2019t moving. Improving motility reduces the cramping within days.",
+    'gas': "Gas buildup from slow transit is common with constipation. As things start moving, gas reduces significantly.",
+    'brain_fog': "Slow gut transit means toxins stay in your system longer, directly causing brain fog. Most women report mental clarity improving alongside regularity.",
+    'anxiety_food': "When you can\u2019t predict how your body will respond, eating becomes stressful. Your protocol gives you a clear framework so you know what to expect."
+  },
+  'calm_gut': {
+    'bloating': "Diarrhea-related bloating comes from gut inflammation and malabsorption. Your binding food protocol addresses both the urgency and the bloating.",
+    'constipation': "Swinging from diarrhea to constipation means your gut motility needs stabilizing, not just slowing down. Your protocol addresses the underlying pattern.",
+    'alternating': "The alternating pattern responds well to the binding foods and probiotic approach in your protocol \u2014 it regulates in both directions.",
+    'pain': "Urgency-related cramping reduces as your gut lining calms down. S. boulardii in your protocol specifically targets this inflammation.",
+    'gas': "Diarrhea and excessive gas both signal malabsorption. As your gut heals and absorption improves, gas reduces naturally.",
+    'brain_fog': "Nutrient malabsorption from frequent diarrhea directly causes brain fog and fatigue. As absorption improves, energy and clarity follow.",
+    'anxiety_food': "The fear of urgency after eating is one of the most isolating parts of this condition. Your protocol\u2019s trigger elimination map gives you back control over meals."
+  },
+  'stability': {
+    'bloating': "Alternating patterns almost always come with bloating because your gut motility is unpredictable. Stabilizing the pattern resolves the bloating.",
+    'constipation': "The constipation phases of your pattern respond to the middle-ground foods in your protocol \u2014 not too stimulating, not too binding.",
+    'diarrhea': "The diarrhea phases are addressed through the same motility regulation \u2014 your protocol targets the underlying instability, not just one direction.",
+    'pain': "Cramping happens when your gut rapidly switches between modes. The middle-foods approach reduces these transitions.",
+    'gas': "Gas fluctuations match your alternating pattern. As motility stabilizes, gas normalizes too.",
+    'brain_fog': "The unpredictability of alternating symptoms creates chronic stress on your gut-brain axis. Stabilizing your pattern directly improves mental clarity.",
+    'anxiety_food': "Not knowing which version of your gut will show up today is exhausting. Your protocol creates predictability so you can plan meals with confidence."
+  },
+  'rebuild': {
+    'bloating': "Post-treatment bloating usually means your gut flora hasn\u2019t fully stabilized. The PHGG protocol specifically rebuilds the balance that prevents fermentation-driven bloating.",
+    'constipation': "After SIBO treatment, motility often slows as your gut recalibrates. The MMC activation protocol directly addresses this.",
+    'diarrhea': "Post-treatment loose stools signal your gut is still healing. The gentle reintroduction plan avoids overwhelming your recovering system.",
+    'alternating': "Instability after treatment is common. Your protocol\u2019s structured reintroduction creates the predictability your gut needs to stabilize.",
+    'pain': "Post-treatment sensitivity means your gut is still inflamed. The gentle food reintroduction protocol minimizes irritation while healing continues.",
+    'gas': "Residual gas after treatment often means bacterial balance isn\u2019t fully restored. PHGG feeds the right bacteria to crowd out the gas-producers.",
+    'brain_fog': "Post-treatment brain fog is usually from incomplete gut flora restoration. As your microbiome rebuilds, mental clarity returns.",
+    'anxiety_food': "Fear of relapse makes every meal stressful. Your relapse early warning system removes the guesswork so you can eat with confidence."
+  }
+};
 
 // =================================================
 // PAGE POPULATION
@@ -484,9 +547,16 @@ function populatePage() {
   }
   document.getElementById('contentCards').innerHTML = cardsHtml;
 
-  // Section 4: Treatments count
-  var countText = pageParams.treatments_tried_count || 'several';
-  document.getElementById('treatmentsCount').textContent = countText;
+  // Section 4: Treatments count — hide entire first paragraph if count is 0 or missing
+  var countRaw = pageParams.treatments_tried_count;
+  var countNum = parseInt(countRaw, 10);
+  var stakesFirstP = document.getElementById('treatmentsCount')?.closest('p');
+  if (!countRaw || countRaw === '0' || countNum === 0 || isNaN(countNum)) {
+    // Hide the paragraph that mentions "0 approaches"
+    if (stakesFirstP) stakesFirstP.style.display = 'none';
+  } else {
+    document.getElementById('treatmentsCount').textContent = countRaw;
+  }
 
   // Section 5: Pricing
   document.getElementById('protocolNameOffer').textContent = protocolName + ' Protocol';
@@ -760,6 +830,63 @@ function populateTestimonial() {
 }
 
 // =================================================
+// SECONDARY SYMPTOMS SECTION
+// =================================================
+
+function populateSecondarySymptoms() {
+  var container = document.getElementById('secondarySymptomsSection');
+  if (!container) return;
+
+  var raw = pageParams.secondary_symptoms || '';
+  if (!raw || raw === 'none') {
+    container.style.display = 'none';
+    return;
+  }
+
+  var symptoms = raw.split(',').filter(function(s) { return s && s !== 'none'; });
+  if (symptoms.length === 0) {
+    container.style.display = 'none';
+    return;
+  }
+
+  // Get the protocol key
+  var protocolKey = resolveProtocolKey();
+  var copySet = SECONDARY_SYMPTOM_COPY[protocolKey];
+
+  if (!copySet) {
+    container.style.display = 'none';
+    return;
+  }
+
+  var itemsHtml = '';
+  var validCount = 0;
+
+  for (var i = 0; i < symptoms.length; i++) {
+    var symptom = symptoms[i].trim();
+    var label = SECONDARY_SYMPTOM_LABELS[symptom];
+    var copy = copySet[symptom];
+
+    if (label && copy) {
+      itemsHtml += '<div class="symptom-addressed">';
+      itemsHtml += '<span class="symptom-check">&#10003;</span>';
+      itemsHtml += '<div class="symptom-detail">';
+      itemsHtml += '<strong>' + label + '</strong>';
+      itemsHtml += '<p>' + copy + '</p>';
+      itemsHtml += '</div></div>';
+      validCount++;
+    }
+  }
+
+  if (validCount === 0) {
+    container.style.display = 'none';
+    return;
+  }
+
+  container.innerHTML = '<div class="container"><h2>Your protocol also addresses:</h2><div class="secondary-symptoms-list">' + itemsHtml + '</div></div>';
+  container.style.display = '';
+}
+
+// =================================================
 // STICKY CTA
 // =================================================
 
@@ -768,7 +895,37 @@ function initStickyCta() {
   var ctaButton = document.getElementById('ctaButton');
   if (!stickyCta || !ctaButton) return;
 
+  var stickyUnlocked = false;
+  var pageLoadTime = Date.now();
+
+  function unlockSticky() {
+    if (stickyUnlocked) return;
+    stickyUnlocked = true;
+    checkScroll();
+  }
+
+  // Unlock after 30 seconds
+  setTimeout(unlockSticky, 30000);
+
   function checkScroll() {
+    // Check 40% scroll threshold to unlock
+    if (!stickyUnlocked) {
+      var scrollPercent = window.scrollY / (document.documentElement.scrollHeight - window.innerHeight);
+      if (scrollPercent >= 0.4) {
+        stickyUnlocked = true;
+      }
+      // Also unlock after 30s even if scroll check fires first
+      if (Date.now() - pageLoadTime >= 30000) {
+        stickyUnlocked = true;
+      }
+    }
+
+    if (!stickyUnlocked) {
+      stickyCta.classList.remove('visible');
+      document.body.classList.remove('has-sticky-cta');
+      return;
+    }
+
     var ctaRect = ctaButton.getBoundingClientRect();
     var windowHeight = window.innerHeight;
 
