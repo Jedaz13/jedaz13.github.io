@@ -528,6 +528,7 @@ function populatePage() {
 
   var personalizedHtml = '<p>After ' + durationText + ' of ' + complaintText + ' — the restrictive diets that stole your social life, the doctors who said it\'s nothing, the supplements sitting half-empty in your cabinet — you deserve something that actually works for YOUR body.</p>';
   personalizedHtml += '<p>You told us you want to <strong>' + visionText + '</strong>. That\'s not too much to ask. And it starts with understanding exactly what\'s happening in YOUR gut — not someone else\'s.</p>';
+  personalizedHtml += '<p class="hero-guarantee-line">If you don\'t feel a difference in 60 days, you\'ll get a full refund and a free personal case review with Rebecca. But most women won\'t need either.</p>';
   document.getElementById('personalizedParagraph').innerHTML = personalizedHtml;
 
   // Section 2: Outcome painting
