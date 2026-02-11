@@ -158,6 +158,40 @@ var COMPLAINT_MAP = {
   'reflux': 'reflux'
 };
 
+// Friendly protocol display names (no "Diarrhea-Dominant" etc.)
+var FRIENDLY_PROTOCOL_NAMES = {
+  'bloat_reset': 'Bloat Reset Protocol',
+  'regularity': 'Constipation Relief Protocol',
+  'calm_gut': 'Calm Gut Protocol',
+  'stability': 'Gut Balance Protocol',
+  'rebuild': 'Post-SIBO Recovery Protocol'
+};
+
+function getFriendlyProtocolName(protocolKey, isGutBrain) {
+  if (isGutBrain) return 'Gut-Brain Reset Protocol';
+  return FRIENDLY_PROTOCOL_NAMES[protocolKey] || 'Personalized Gut Healing Protocol';
+}
+
+function processDreamOutcome(vision) {
+  if (!vision || vision.length < 4) return null;
+  var throwaway = ['idk', 'yes', 'no', 'na', 'n/a', 'none', 'nothing', 'dunno', 'not sure', 'dont know', "don't know", 'no idea', 'idc', 'ok', 'okay'];
+  var trimmed = vision.trim().toLowerCase();
+  if (throwaway.indexOf(trimmed) !== -1) return null;
+  var text = vision.replace(/<[^>]*>/g, '').trim();
+  text = text.replace(/\.+$/, '');
+  if (text.length > 0) {
+    text = text.charAt(0).toLowerCase() + text.substring(1);
+  }
+  if (text.length > 80) {
+    var cut = text.substring(0, 80);
+    var lastSpace = cut.lastIndexOf(' ');
+    if (lastSpace > 40) cut = cut.substring(0, lastSpace);
+    text = cut + '...';
+  }
+  if (text.length < 4) return null;
+  return text;
+}
+
 // =================================================
 // STATE
 // =================================================
@@ -504,7 +538,16 @@ function populatePage() {
 
   // Section 1: Headline
   document.getElementById('userName').textContent = name;
-  document.getElementById('protocolNameHeadline').textContent = protocolName;
+
+  // Friendly protocol display name (no "Diarrhea-Dominant" etc.)
+  var friendlyName = getFriendlyProtocolName(content.key, pageParams.gut_brain);
+  var friendlyShort = friendlyName.replace(' Protocol', '');
+
+  // Subtitle with friendly protocol name
+  var subtitleEl = document.getElementById('heroSubtitle');
+  if (subtitleEl) {
+    subtitleEl.innerHTML = 'Your <strong>' + friendlyName + '</strong> is ready \u2014 built by registered practitioners for your specific symptom pattern.';
+  }
 
   // Duration empathy line (prepended before protocol headline copy)
   var durationEmpathyHtml = '';
@@ -556,7 +599,7 @@ function populatePage() {
   document.getElementById('outcomeCard').innerHTML = outcomeHtml;
 
   // Section 3: What's inside
-  document.getElementById('protocolNameInside').textContent = protocolName + ' Protocol';
+  document.getElementById('protocolNameInside').textContent = friendlyName;
 
   var cardsHtml = '';
   for (var j = 0; j < content.cards.length; j++) {
@@ -578,13 +621,13 @@ function populatePage() {
   }
 
   // Section 5: Pricing
-  document.getElementById('protocolNameOffer').textContent = protocolName + ' Protocol';
-  document.getElementById('protocolNameBump').textContent = protocolName;
-  document.getElementById('summaryProtocolName').textContent = 'Your ' + protocolName + ' Protocol';
+  document.getElementById('protocolNameOffer').textContent = friendlyName;
+  document.getElementById('protocolNameBump').textContent = friendlyShort;
+  document.getElementById('summaryProtocolName').textContent = 'Your ' + friendlyName;
 
   // FAQ: personalize answers
-  document.getElementById('faqMultipleAnswer').innerHTML = 'Your quiz identified <strong>' + protocolName + '</strong> as your PRIMARY pattern. The protocol addresses your dominant symptoms first — because trying to fix everything at once is exactly why generic programs fail.';
-  document.getElementById('faqDifferentAnswer').innerHTML = 'Those programs give everyone the same advice. You get a protocol built specifically for <strong>' + protocolName + '</strong> patterns — not bloating advice when your problem is diarrhea, not fiber recommendations when fiber makes you worse. Rebecca and Paulina have built this from clinical practice, not a Google search.';
+  document.getElementById('faqMultipleAnswer').innerHTML = 'Your quiz identified your primary pattern and built the <strong>' + friendlyName + '</strong> around it. The protocol addresses your dominant symptoms first \u2014 because trying to fix everything at once is exactly why generic programs fail.';
+  document.getElementById('faqDifferentAnswer').innerHTML = 'Those programs give everyone the same advice. Your <strong>' + friendlyName + '</strong> is built specifically for your symptom pattern \u2014 not bloating advice when your problem is diarrhea, not fiber recommendations when fiber makes you worse. Rebecca and Paulina have built this from clinical practice, not a Google search.';
 
   updateOrderSummary();
 }
@@ -1029,6 +1072,13 @@ function populateDayComparison() {
     afterHtml += '<div class="dc-item"><span class="dc-icon dc-icon-check"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></span><p>' + items[k].after + '</p></div>';
   }
 
+  // Dream outcome capstone row (Task 4)
+  var dreamText = processDreamOutcome(pageParams.vision);
+  if (dreamText) {
+    beforeHtml += '<div class="dc-item dc-dream-spacer"></div>';
+    afterHtml += '<div class="dc-item dc-dream-capstone"><span class="dc-icon dc-icon-check"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></span><p><em>You ' + dreamText + ' \u2014 and you mean it.</em></p></div>';
+  }
+
   container.innerHTML = '<div class="container"><h2>Your day now vs. your day on protocol</h2><div class="dc-columns"><div class="dc-column dc-before"><div class="dc-label">Right now</div>' + beforeHtml + '</div><div class="dc-column dc-after"><div class="dc-label">4 weeks from now</div>' + afterHtml + '</div></div></div>';
   container.style.display = '';
 }
@@ -1092,21 +1142,24 @@ var TREATMENT_EXPLANATIONS = {
     regularity: "Most elimination diets accidentally remove the fiber and fermentable carbs your gut needs to stay regular. You were solving one problem by creating another.",
     calm_gut: "Elimination diets often work temporarily for diarrhea \u2014 then fail when you try to reintroduce. Your protocol gives you a systematic reintroduction timeline so you don\u2019t yo-yo.",
     stability: "With alternating symptoms, elimination diets are especially frustrating \u2014 what helps on a constipation day makes a diarrhea day worse. Your protocol adapts to whichever pattern shows up.",
-    rebuild: "Post-SIBO, your gut needs strategic reintroduction, not continued restriction. Staying on a restricted diet too long can actually slow recovery by starving beneficial bacteria."
+    rebuild: "Post-SIBO, your gut needs strategic reintroduction, not continued restriction. Staying on a restricted diet too long can actually slow recovery by starving beneficial bacteria.",
+    gut_brain: "Elimination diets added food anxiety on top of your existing stress-gut connection. Your protocol focuses on the nervous system trigger first \u2014 because when stress is driving symptoms, food isn\u2019t the primary problem."
   },
   low_fodmap: {
     bloat_reset: "Low FODMAP is a useful diagnostic tool, but it\u2019s not meant to be a permanent diet. Your protocol uses the trigger data to build a sustainable plan \u2014 not just another restriction list.",
     regularity: "Low FODMAP often worsens constipation by removing the fermentable fibers your gut needs. Your protocol re-introduces the right fibers in the right amounts.",
     calm_gut: "Low FODMAP may have helped temporarily, but without structured reintroduction you\u2019re stuck avoiding foods forever. Your protocol builds you back to eating normally.",
     stability: "Low FODMAP assumes your symptoms are consistent \u2014 yours aren\u2019t. Your protocol adjusts daily based on which direction your gut is trending.",
-    rebuild: "Post-SIBO, staying on low FODMAP too long starves the good bacteria trying to recolonize. Your protocol uses strategic reintroduction to rebuild your microbiome."
+    rebuild: "Post-SIBO, staying on low FODMAP too long starves the good bacteria trying to recolonize. Your protocol uses strategic reintroduction to rebuild your microbiome.",
+    gut_brain: "Low FODMAP added more food rules to an already anxious relationship with eating. Your protocol addresses the nervous system trigger driving your symptoms \u2014 not just the foods."
   },
   probiotics: {
     bloat_reset: "Most probiotics are generic \u2014 random strains at random doses. For your bloating pattern, the issue isn\u2019t \u2018more bacteria.\u2019 It\u2019s identifying which specific triggers are causing fermentation. Probiotics can\u2019t fix that.",
     regularity: "Most probiotics are generic \u2014 random strains at random doses. For your constipation, the issue isn\u2019t bacteria \u2014 it\u2019s motility and fiber balance. Probiotics can\u2019t fix that.",
     calm_gut: "Most probiotics are generic \u2014 random strains at random doses. For your diarrhea pattern, the issue isn\u2019t \u2018more bacteria.\u2019 It\u2019s calming the gut-transit speed and identifying triggers. Probiotics alone can\u2019t fix that.",
     stability: "Most probiotics are generic \u2014 random strains at random doses. For alternating symptoms, the issue isn\u2019t bacteria balance \u2014 it\u2019s motility regulation. Probiotics can\u2019t fix that.",
-    rebuild: "Most probiotics are generic \u2014 random strains at random doses. Post-SIBO, your gut needs specific prebiotic support (like PHGG) to rebuild \u2014 not random bacteria that may re-trigger overgrowth."
+    rebuild: "Most probiotics are generic \u2014 random strains at random doses. Post-SIBO, your gut needs specific prebiotic support (like PHGG) to rebuild \u2014 not random bacteria that may re-trigger overgrowth.",
+    gut_brain: "Most probiotics are generic \u2014 random strains at random doses. For your stress-gut pattern, the issue isn\u2019t bacteria \u2014 it\u2019s your nervous system driving the symptoms. Probiotics can\u2019t calm your vagus nerve."
   },
   otc_meds: {
     _default: "Medications manage symptoms \u2014 they don\u2019t address what\u2019s driving them. Your protocol targets the underlying pattern so you\u2019re not dependent on daily pills to feel normal."
@@ -1119,7 +1172,8 @@ var TREATMENT_EXPLANATIONS = {
     regularity: "The wrong type of fiber actually makes bloating worse. Your protocol specifies exactly which fiber sources help motility without causing more discomfort.",
     calm_gut: "Fiber supplements are tricky with diarrhea \u2014 some bulk up stool (helpful), others ferment and make things worse. Your protocol uses the right type at the right time.",
     stability: "Fiber is a double-edged sword with alternating symptoms. Your protocol tells you exactly which type to use based on which direction your gut is trending.",
-    rebuild: "Post-SIBO, the wrong fiber feeds the bacteria you\u2019re trying to control. Your protocol uses PHGG specifically because it feeds good bacteria without feeding SIBO."
+    rebuild: "Post-SIBO, the wrong fiber feeds the bacteria you\u2019re trying to control. Your protocol uses PHGG specifically because it feeds good bacteria without feeding SIBO.",
+    gut_brain: "Fiber supplements don\u2019t address the nervous system component driving your symptoms. Your protocol targets the stress-gut connection that fiber can\u2019t touch."
   },
   testing: {
     _default: "Your doctor likely ran tests, found nothing \u2018wrong,\u2019 and said \u2018it\u2019s IBS, manage your stress.\u2019 That\u2019s not wrong \u2014 but it\u2019s not a solution. Your protocol gives you the specific daily actions your doctor didn\u2019t have time to build for you."
@@ -1147,6 +1201,11 @@ function populateTreatmentsValidation() {
 
   var protocolKey = resolveProtocolKey();
 
+  // Use gut-brain specific copy when applicable
+  if (pageParams.gut_brain === true) {
+    protocolKey = 'gut_brain';
+  }
+
   // Sort by display order, max 3
   var ordered = [];
   for (var i = 0; i < TREATMENT_DISPLAY_ORDER.length && ordered.length < 3; i++) {
@@ -1161,7 +1220,7 @@ function populateTreatmentsValidation() {
     return;
   }
 
-  var html = '<div class="treatments-validation"><h3>You\u2019ve already tried. Here\u2019s why it didn\u2019t stick.</h3>';
+  var html = '<div class="treatments-validation"><h3>What you\u2019ve already tried \u2014 and why it didn\u2019t stick</h3>';
   for (var j = 0; j < ordered.length; j++) {
     var tKey = ordered[j];
     var explanations = TREATMENT_EXPLANATIONS[tKey];
@@ -1218,10 +1277,10 @@ function populateLifeImpact() {
   var impact = pageParams.life_impact || '';
   var copy = '';
 
-  if (impact === 'severe') {
-    copy = "This isn\u2019t a minor inconvenience for you. Your quiz showed this is affecting your daily life \u2014 what you eat, where you go, how you feel. That\u2019s not something to \u2018manage\u2019 indefinitely. That\u2019s something to fix.";
-  } else if (impact === 'moderate') {
-    copy = "Your symptoms are already shaping your daily decisions \u2014 what to eat, whether to go out, how to plan your day. It doesn\u2019t have to stay that way.";
+  if (impact === 'severe' || impact === 'high') {
+    copy = "This isn\u2019t a minor inconvenience. It\u2019s shaping what you eat, where you go, and how you live. That\u2019s not something to manage \u2014 it\u2019s something to fix.";
+  } else if (impact === 'moderate' || impact === 'medium') {
+    copy = "Your symptoms are already shaping your daily decisions \u2014 what to eat, whether to go out, how to plan your week. It doesn\u2019t have to stay that way.";
   }
 
   if (!copy) {
