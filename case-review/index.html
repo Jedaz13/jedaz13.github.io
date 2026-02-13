@@ -41,20 +41,26 @@
         return;
       }
 
+      var mappedItems = data.items.map(function(item) {
+        return {
+          item_name: item.name,
+          price: item.price,
+          quantity: item.quantity
+        };
+      });
+
       window.dataLayer = window.dataLayer || [];
       window.dataLayer.push({
         event: 'purchase',
+        value: data.value || 0,
+        currency: data.currency || 'USD',
+        transaction_id: data.transaction_id || sessionId,
+        items: JSON.stringify(mappedItems),
         ecommerce: {
-          transaction_id: data.transaction_id,
-          value: data.value,
-          currency: data.currency,
-          items: data.items.map(function(item) {
-            return {
-              item_name: item.name,
-              price: item.price,
-              quantity: item.quantity
-            };
-          })
+          transaction_id: data.transaction_id || sessionId,
+          value: data.value || 0,
+          currency: data.currency || 'USD',
+          items: mappedItems
         }
       });
 
@@ -67,11 +73,15 @@
       window.dataLayer = window.dataLayer || [];
       window.dataLayer.push({
         event: 'purchase',
+        value: 0,
+        currency: 'USD',
+        transaction_id: sessionId,
+        items: '[]',
         ecommerce: {
           transaction_id: sessionId,
           value: 0,
           currency: 'USD',
-          items: [{ item_name: 'protocol', price: 0, quantity: 1 }]
+          items: []
         }
       });
       sessionStorage.setItem('tracked_' + sessionId, 'true');
