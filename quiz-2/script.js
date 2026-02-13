@@ -81,9 +81,6 @@ document.addEventListener('DOMContentLoaded', () => {
   progressEl = document.getElementById('progressContainer');
   contentEl = document.getElementById('contentArea');
 
-  // Track Meta Pixel PageView
-  trackPixelEvent('PageView');
-
   // Set up start button
   const startBtn = document.getElementById('startQuizBtn');
   if (startBtn) {
@@ -963,9 +960,13 @@ function showEmailCapture() {
       state.userData.name = nameInput.value.trim();
       state.userData.email = emailInput.value.trim();
 
-      trackPixelEvent('Lead', {
-        content_name: CONFIG.SOURCE_TRACKING,
-        content_category: 'quiz'
+      // Push generate_lead for GTM → Meta CAPI Lead event
+      window.dataLayer = window.dataLayer || [];
+      window.dataLayer.push({
+        'event': 'generate_lead',
+        'quiz_source': CONFIG.SOURCE_TRACKING,
+        'user_email': state.userData.email,
+        'user_name': state.userData.name
       });
 
       // Fire webhook for email capture
@@ -1208,12 +1209,6 @@ function showFinalCalculation() {
       }, 300);
     }
   }, CONFIG.LOADING_MESSAGE_INTERVAL);
-
-  // Track completion
-  trackPixelEvent('CompleteRegistration', {
-    content_name: CONFIG.SOURCE_TRACKING,
-    status: state.calculatedProtocol
-  });
 
   // Send completion webhook
   sendWebhook('quiz_completed');
@@ -1519,15 +1514,6 @@ async function sendWebhook(eventType) {
 function isValidEmail(email) {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   return emailRegex.test(email);
-}
-
-/**
- * Track Meta Pixel events
- */
-function trackPixelEvent(event, params = {}) {
-  if (typeof fbq === 'function') {
-    fbq('track', event, params);
-  }
 }
 
 // Expose handleBack for back button

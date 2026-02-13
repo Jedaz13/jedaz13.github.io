@@ -924,10 +924,11 @@
         }
 
         // Fire tracking events
-        if (typeof fbq !== 'undefined') {
-          fbq('track', 'Lead');
-        }
         window.dataLayer = window.dataLayer || [];
+        window.dataLayer.push({
+          'event': 'generate_lead',
+          'source': LEAD_SOURCE
+        });
         window.dataLayer.push({
           'event': 'toolkit_signup',
           'source': LEAD_SOURCE

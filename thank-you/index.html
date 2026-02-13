@@ -1,71 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <!-- Data Layer Initialization -->
-  <script>
-    window.dataLayer = window.dataLayer || [];
-
-    // Get URL parameters (Stripe can pass these)
-    var urlParams = new URLSearchParams(window.location.search);
-    var sessionId = urlParams.get('session_id') || '';
-    var gutPattern = urlParams.get('pattern') || '';
-
-    // Trial purchase data
-    var purchaseValue = 1.00;
-    var itemId = 'trial_membership';
-    var itemName = '7-Day Trial';
-    var purchaseType = 'trial';
-
-    // Base page data
-    dataLayer.push({
-      'pageType': 'thank-you',
-      'pageName': document.title,
-      'pageUrl': window.location.href,
-      'pagePath': window.location.pathname,
-
-      // User data
-      'userId': '',
-      'userEmail': '',
-      'userStatus': 'trial',
-      'trialDaysRemaining': 7,
-
-      // Quiz/Protocol data
-      'gutPattern': gutPattern,
-      'hasStressComponent': null,
-      'symptomDuration': '',
-      'previousTreatments': [],
-      'previousDiagnoses': []
-    });
-
-    // Fire purchase event only if redirected from Stripe (session_id present)
-    if (sessionId) {
-      dataLayer.push({
-        'event': 'purchase',
-        'ecommerce': {
-          'transaction_id': sessionId,
-          'currency': 'USD',
-          'value': purchaseValue,
-          'tax': 0,
-          'items': [{
-            'item_id': itemId,
-            'item_name': itemName,
-            'item_category': 'subscription',
-            'price': purchaseValue,
-            'quantity': 1
-          }]
-        },
-        'purchaseType': purchaseType,
-        'userId': '',
-        'gutPattern': gutPattern,
-        'trialDaysUsed': 0,
-        'discountApplied': false
-      });
-      console.log('Trial purchase tracked:', purchaseType, purchaseValue);
-    } else {
-      console.log('No session_id — skipping purchase event');
-    }
-  </script>
-
   <!-- Google Tag Manager -->
   <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
   new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
@@ -73,6 +8,50 @@
   'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
   })(window,document,'script','dataLayer','GTM-KQ3LKTBL');</script>
   <!-- End Google Tag Manager -->
+
+  <script>
+    // Fire purchase event after GTM is initialized
+    (function() {
+      var urlParams = new URLSearchParams(window.location.search);
+      var sessionId = urlParams.get('session_id') || '';
+      var gutPattern = urlParams.get('pattern') || '';
+
+      // Trial purchase data
+      var purchaseValue = 1.00;
+      var itemId = 'trial_membership';
+      var itemName = '7-Day Trial';
+      var purchaseType = 'trial';
+
+      // Only fire if session_id present AND not already tracked (prevent duplicate on refresh)
+      if (sessionId && !sessionStorage.getItem('purchase_tracked_' + sessionId)) {
+        window.dataLayer = window.dataLayer || [];
+        window.dataLayer.push({
+          'event': 'purchase',
+          'ecommerce': {
+            'transaction_id': sessionId,
+            'currency': 'USD',
+            'value': purchaseValue,
+            'tax': 0,
+            'items': [{
+              'item_id': itemId,
+              'item_name': itemName,
+              'item_category': 'subscription',
+              'price': purchaseValue,
+              'quantity': 1
+            }]
+          },
+          'purchaseType': purchaseType,
+          'gutPattern': gutPattern
+        });
+        sessionStorage.setItem('purchase_tracked_' + sessionId, 'true');
+        console.log('Trial purchase tracked:', purchaseType, purchaseValue);
+      } else if (!sessionId) {
+        console.log('No session_id — skipping purchase event');
+      } else {
+        console.log('Purchase already tracked for session:', sessionId);
+      }
+    })();
+  </script>
 
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">

@@ -180,9 +180,6 @@ function initQuiz() {
   trackQuizStep('quiz_start');
   trackQuizEvent('quiz_start');
 
-  // Track page view
-  trackPixelEvent('PageView');
-
   // Set up back button
   backButtonEl.addEventListener('click', handleBack);
 
@@ -903,14 +900,15 @@ function renderEmailInput(container, screen) {
       screen_number: screen.screenNumber
     });
 
+    // Push generate_lead for GTM → Meta CAPI Lead event
+    trackEvent('generate_lead', {
+      quiz_source: CONFIG.SOURCE_TRACKING,
+      user_email: email,
+      user_name: state.userData.name || ''
+    });
+
     // Track email capture to Supabase
     trackQuizEvent('email_capture');
-
-    // Track pixel lead event
-    trackPixelEvent('Lead', {
-      content_name: CONFIG.SOURCE_TRACKING,
-      content_category: 'quiz'
-    });
 
     // Submit partial data
     submitPartialData();
@@ -2296,17 +2294,6 @@ function trackQuizComplete() {
   // Track to Supabase
   trackQuizEvent('quiz_complete');
 
-  // Track pixel complete registration
-  trackPixelEvent('CompleteRegistration', {
-    content_name: CONFIG.SOURCE_TRACKING,
-    status: state.calculatedProtocol
-  });
-}
-
-function trackPixelEvent(event, params = {}) {
-  if (typeof fbq === 'function') {
-    fbq('track', event, params);
-  }
 }
 
 function handlePageUnload() {
