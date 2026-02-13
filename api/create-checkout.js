@@ -85,7 +85,7 @@ module.exports = async function handler(req, res) {
       lineItems.push({ price: STRIPE_PRICE_MEALPLAN, quantity: 1 });
     }
 
-    // Build success URL with params for personalization on case-review
+    // Build success URL with params for personalization on case-review upsell page
     var successParams = new URLSearchParams();
     if (name) successParams.set('name', name);
     if (email) successParams.set('email', email);
@@ -103,8 +103,9 @@ module.exports = async function handler(req, res) {
       }
     }
 
+    // {CHECKOUT_SESSION_ID} is a Stripe template literal — Stripe replaces it with the real ID
     successParams.set('session_id', '{CHECKOUT_SESSION_ID}');
-    var successUrl = 'https://www.guthealingacademy.com/thank-you-protocol/?' + successParams.toString();
+    var successUrl = 'https://www.guthealingacademy.com/case-review/?' + successParams.toString();
 
     // Build cancel URL — preserve all original params
     var cancelParams = new URLSearchParams();
