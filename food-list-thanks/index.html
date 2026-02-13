@@ -227,9 +227,6 @@
 
     // Track clicks
     document.getElementById('quiz-btn').addEventListener('click', function() {
-      if (typeof fbq !== 'undefined') {
-        fbq('trackCustom', 'QuizStartFromThankYou');
-      }
       window.dataLayer = window.dataLayer || [];
       window.dataLayer.push({
         'event': 'quiz_start',
@@ -238,9 +235,6 @@
     });
 
     document.getElementById('foods-btn').addEventListener('click', function() {
-      if (typeof fbq !== 'undefined') {
-        fbq('trackCustom', 'FoodGuideDirectAccess');
-      }
       window.dataLayer = window.dataLayer || [];
       window.dataLayer.push({
         'event': 'food_guide_access',

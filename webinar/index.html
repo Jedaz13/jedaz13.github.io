@@ -487,6 +487,10 @@
           // GTM tracking
           window.dataLayer = window.dataLayer || [];
           window.dataLayer.push({
+            'event': 'generate_lead',
+            'source': 'webinar'
+          });
+          window.dataLayer.push({
             'event': 'webinar_registration',
             'webinar_source': 'webinar-registration'
           });

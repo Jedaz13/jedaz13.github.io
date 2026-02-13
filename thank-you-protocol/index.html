@@ -1,63 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <!-- Data Layer Initialization -->
-  <script>
-    window.dataLayer = window.dataLayer || [];
-  </script>
-
-
-  <script>
-    // Read purchase data from URL params or localStorage
-    var urlParams = new URLSearchParams(window.location.search);
-    var sessionId = urlParams.get('session_id') || '';
-    var purchaseName = urlParams.get('name') || '';
-    var purchaseEmail = urlParams.get('email') || '';
-    var purchaseProtocol = urlParams.get('protocol_name') || '';
-    var purchaseValue = 47; // Base protocol price
-
-    // Try localStorage for total value
-    try {
-      var storedTotal = localStorage.getItem('gha_purchase_total');
-      if (storedTotal) purchaseValue = parseFloat(storedTotal);
-    } catch (e) {}
-
-    // Fire purchase events only if redirected from Stripe (session_id present)
-    if (sessionId) {
-      // Meta Pixel purchase event
-      if (typeof fbq !== 'undefined') {
-        fbq('track', 'Purchase', {
-          value: purchaseValue,
-          currency: 'USD',
-          content_name: purchaseProtocol + ' Protocol',
-          content_type: 'product'
-        });
-      }
-
-      // GTM dataLayer purchase event
-      dataLayer.push({
-        'event': 'purchase',
-        'ecommerce': {
-          'transaction_id': sessionId,
-          'currency': 'USD',
-          'value': purchaseValue,
-          'items': [{
-            'item_id': 'protocol',
-            'item_name': purchaseProtocol + ' Protocol',
-            'item_category': 'protocol',
-            'price': purchaseValue,
-            'quantity': 1
-          }]
-        },
-        'protocol': purchaseProtocol,
-        'purchaseType': 'protocol'
-      });
-      console.log('Protocol purchase tracked:', purchaseProtocol, purchaseValue);
-    } else {
-      console.log('No session_id — skipping purchase event');
-    }
-  </script>
-
   <!-- Google Tag Manager -->
   <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
   new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
@@ -65,6 +8,50 @@
   'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
   })(window,document,'script','dataLayer','GTM-KQ3LKTBL');</script>
   <!-- End Google Tag Manager -->
+
+  <script>
+    // Fire purchase event after GTM is initialized
+    (function() {
+      var urlParams = new URLSearchParams(window.location.search);
+      var sessionId = urlParams.get('session_id') || '';
+      var purchaseProtocol = urlParams.get('protocol_name') || '';
+      var purchaseValue = 47; // Base protocol price
+
+      // Try localStorage for total value (set by offer-protocol checkout)
+      try {
+        var storedTotal = localStorage.getItem('gha_purchase_total');
+        if (storedTotal) purchaseValue = parseFloat(storedTotal);
+      } catch (e) {}
+
+      // Only fire if session_id present AND not already tracked (prevent duplicate on refresh)
+      if (sessionId && !sessionStorage.getItem('purchase_tracked_' + sessionId)) {
+        window.dataLayer = window.dataLayer || [];
+        window.dataLayer.push({
+          'event': 'purchase',
+          'ecommerce': {
+            'transaction_id': sessionId,
+            'currency': 'USD',
+            'value': purchaseValue,
+            'items': [{
+              'item_id': 'protocol',
+              'item_name': purchaseProtocol + ' Protocol',
+              'item_category': 'protocol',
+              'price': purchaseValue,
+              'quantity': 1
+            }]
+          },
+          'protocol': purchaseProtocol,
+          'purchaseType': 'protocol'
+        });
+        sessionStorage.setItem('purchase_tracked_' + sessionId, 'true');
+        console.log('Protocol purchase tracked:', purchaseProtocol, purchaseValue);
+      } else if (!sessionId) {
+        console.log('No session_id — skipping purchase event');
+      } else {
+        console.log('Purchase already tracked for session:', sessionId);
+      }
+    })();
+  </script>
 
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">

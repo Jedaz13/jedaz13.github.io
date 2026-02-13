@@ -253,9 +253,6 @@
 
     // Track clicks
     document.getElementById('quiz-btn').addEventListener('click', function() {
-      if (typeof fbq !== 'undefined') {
-        fbq('trackCustom', 'QuizStartFromToolkitThankYou');
-      }
       window.dataLayer = window.dataLayer || [];
       window.dataLayer.push({
         'event': 'quiz_start',
@@ -264,9 +261,6 @@
     });
 
     document.getElementById('tools-btn').addEventListener('click', function() {
-      if (typeof fbq !== 'undefined') {
-        fbq('trackCustom', 'ToolkitDirectAccess');
-      }
       window.dataLayer = window.dataLayer || [];
       window.dataLayer.push({
         'event': 'toolkit_access',
