@@ -2115,16 +2115,6 @@ p:last-child {
   font-weight: 600;
 }
 
-.trust-icons-row {
-  display: flex;
-  justify-content: center;
-  gap: 8px;
-  flex-wrap: wrap;
-  margin-top: 16px;
-  font-size: 0.8125rem;
-  color: var(--text-muted);
-}
-
 /* =====================================================
    Utility
    ===================================================== */
