@@ -217,6 +217,8 @@ document.addEventListener('DOMContentLoaded', function() {
   populateTreatmentsValidation();
   populateStressAcknowledgment();
   populateLifeImpact();
+  highlightProtocolCard();
+  personalizeValueSection();
   initStickyCta();
   trackPageView();
 });
@@ -676,6 +678,16 @@ function updateOrderSummary() {
   var stickyBtn = document.getElementById('stickyCtaButton');
   if (stickyBtn) {
     stickyBtn.textContent = 'Get My Protocol \u2014 $' + total;
+  }
+
+  // Sync value stack CTA (Section C)
+  var valueStackCta = document.getElementById('valueStackCta');
+  if (valueStackCta) {
+    valueStackCta.textContent = 'Get My Protocol \u2014 $' + total;
+  }
+  var valueStackPrice = document.getElementById('valueStackPrice');
+  if (valueStackPrice) {
+    valueStackPrice.textContent = '$' + total;
   }
 }
 
@@ -1369,4 +1381,52 @@ function trackPageView() {
     'quiz_section': 'offer_page_view',
     'quiz_source': pageParams.source || ''
   });
+}
+
+// =================================================
+// PROTOCOL GRID HIGHLIGHTING (Section A)
+// =================================================
+
+function highlightProtocolCard() {
+  var protocolKey = resolveProtocolKey();
+
+  // Map protocol keys to grid card data-protocol slugs
+  var keyToSlug = {
+    'bloat_reset': 'bloat',
+    'regularity': 'ibs_c',
+    'calm_gut': 'ibs_d',
+    'stability': 'ibs_m',
+    'rebuild': 'rebuild'
+  };
+
+  var slug = keyToSlug[protocolKey] || protocolKey;
+
+  // Override for gut-brain
+  if (pageParams.gut_brain === true) {
+    slug = 'brain';
+  }
+
+  // Find and highlight the matching card
+  var cards = document.querySelectorAll('.protocol-grid-card');
+  for (var i = 0; i < cards.length; i++) {
+    if (cards[i].getAttribute('data-protocol') === slug) {
+      cards[i].classList.add('highlighted');
+    }
+  }
+}
+
+// =================================================
+// VALUE SECTION PERSONALIZATION (Section C)
+// =================================================
+
+function personalizeValueSection() {
+  var subEl = document.getElementById('priceComparisonSubheading');
+  if (!subEl) return;
+
+  var complaint = COMPLAINT_MAP[pageParams.primary_complaint];
+  var duration = DURATION_MAP[pageParams.duration];
+
+  if (complaint && duration) {
+    subEl.innerHTML = "Most women who\u2019ve been dealing with <strong>" + complaint + "</strong> for <strong>" + duration + "</strong> have spent $2,000\u2013$10,000 on appointments, tests, and supplements that didn\u2019t work.";
+  }
 }
