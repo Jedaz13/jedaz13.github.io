@@ -1091,7 +1091,7 @@ function renderLoadingScreen(container) {
   const durationVal = state.answers.symptom_duration || '';
   const durationText = { '3_6_months': 'months', '6_12_months': 'months', '1_3_years': 'years', '3_5_years': 'years', '5_plus_years': 'years' }[durationVal] || 'time';
   const treatments = state.treatmentsTried || [];
-  const treatmentLabels = { probiotics: 'probiotics', elimination: 'elimination diet', low_fodmap: 'Low FODMAP', fiber: 'fiber supplements', otc_meds: 'OTC medications', prescription: 'prescription meds', testing: 'GI testing', practitioner: 'practitioner advice' };
+  const treatmentLabels = { probiotics: 'probiotics', elimination: 'elimination diet', low_fodmap: 'Low FODMAP', fiber: 'fiber supplements', otc_meds: 'OTC medications', prescription: 'prescription meds', sibo_antibiotics: 'SIBO antibiotics', testing: 'GI testing', practitioner: 'practitioner advice' };
   let treatmentBarLabel = 'Matching with protocol database...';
   if (treatments.length >= 2) {
     treatmentBarLabel = 'Checking ' + (treatmentLabels[treatments[0]] || treatments[0]) + ' and ' + (treatmentLabels[treatments[1]] || treatments[1]) + ' interactions...';
@@ -1610,8 +1610,8 @@ function calculateProtocol() {
   const diagnoses = answers.diagnoses || [];
   const treatments = state.treatmentsTried || [];
 
-  // Priority 1: Post-SIBO (requires both diagnosis AND treatment)
-  if (diagnoses.includes('sibo') && treatments.includes('prescription')) {
+  // Priority 1: Post-SIBO (requires both diagnosis AND completed SIBO antibiotics)
+  if (diagnoses.includes('sibo') && treatments.includes('sibo_antibiotics')) {
     state.calculatedProtocol = 'rebuild';
     return;
   }

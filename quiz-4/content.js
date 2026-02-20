@@ -212,6 +212,7 @@ const quizContent = {
           { text: 'Fiber supplements', value: 'fiber' },
           { text: 'Over-the-counter medications', value: 'otc_meds' },
           { text: 'Prescription medications', value: 'prescription' },
+          { text: 'Antibiotics for SIBO (Rifaximin, etc.)', value: 'sibo_antibiotics' },
           { text: 'Functional testing (SIBO, stool tests)', value: 'testing' },
           { text: 'Worked with a practitioner', value: 'practitioner' },
           { text: "I haven't tried much yet", value: 'nothing', exclusive: true }
@@ -770,6 +771,7 @@ const quizContent = {
     fiber: 'fiber supplements',
     otc_meds: 'OTC medications',
     prescription: 'prescription medications',
+    sibo_antibiotics: 'SIBO antibiotics',
     testing: 'functional testing',
     practitioner: 'practitioner guidance',
     nothing: 'none'
