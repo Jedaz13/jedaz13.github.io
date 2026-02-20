@@ -31,6 +31,7 @@
   <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
 
   <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/cro-elements.css">
   <link rel="stylesheet" href="/css/support-widget.css">
 </head>
 <body>
@@ -38,6 +39,29 @@
   <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KQ3LKTBL"
   height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <!-- End Google Tag Manager (noscript) -->
+
+  <!-- CRO Element 8: Progress Indicator -->
+  <div class="gha-cro-progress" id="gha-cro-progress">
+    <div class="gha-cro-progress-inner">
+      <div class="gha-cro-progress-steps">
+        <span class="gha-cro-progress-step gha-cro-step-done">
+          <span class="gha-cro-progress-label-short">Quiz &#10003;</span>
+          <span class="gha-cro-progress-label">&#10003; Quiz Complete</span>
+        </span>
+        <span class="gha-cro-progress-line"></span>
+        <span class="gha-cro-progress-step gha-cro-step-done">
+          <span class="gha-cro-progress-label-short">Matched &#10003;</span>
+          <span class="gha-cro-progress-label">&#10003; Protocol Matched</span>
+        </span>
+        <span class="gha-cro-progress-line"></span>
+        <span class="gha-cro-progress-step gha-cro-step-active">
+          <span class="gha-cro-progress-label-short">Get Protocol &rarr;</span>
+          <span class="gha-cro-progress-label">&rarr; Get Your Protocol</span>
+        </span>
+      </div>
+      <div class="gha-cro-progress-subtitle">Almost there, <span class="gha-cro-progress-name">friend</span>. Your <span class="gha-cro-progress-protocol">personalized</span> protocol is ready.</div>
+    </div>
+  </div>
 
   <main>
 
@@ -60,6 +84,11 @@
 
       </div>
     </section>
+
+    <!-- CRO Element 6: Protocols Sold Counter -->
+    <div class="gha-cro-counter" id="gha-cro-counter">
+      <span class="gha-cro-counter-pill"><span class="gha-cro-counter-number">47</span> women have started their protocol this month</span>
+    </div>
 
     <!-- ===== BRIDGE: Duration empathy, dream callback, treatments — just below fold ===== -->
     <section class="bridge-section">
@@ -227,6 +256,12 @@
       </div>
     </section>
 
+    <!-- CRO Element 4: Inline CTA #1 -->
+    <div class="gha-cro-inline-cta">
+      <a href="#checkout" class="gha-cro-cta-button">Get My <span class="gha-cro-cta-protocol-name">Personalized</span> Protocol</a>
+      <p class="gha-cro-cta-sub">Built by Rebecca &amp; Paulina for your specific pattern</p>
+    </div>
+
     <!-- ===== SECTION 7: KEY OBJECTION ANSWERS ===== -->
     <section class="objection-answers-section">
       <div class="container">
@@ -280,6 +315,12 @@
       </div>
     </section>
 
+    <!-- CRO Element 4: Inline CTA #2 -->
+    <div class="gha-cro-inline-cta">
+      <a href="#checkout" class="gha-cro-cta-button">Get Started &mdash; $47</a>
+      <p class="gha-cro-cta-sub">Secure checkout &middot; Instant access &middot; 60-day guarantee</p>
+    </div>
+
     <!-- ===== SECTION B: BONUS STACK ===== -->
     <section class="bonus-section">
       <div class="container">
@@ -327,8 +368,16 @@
       </div>
     </section>
 
+    <!-- CRO Element 2: Countdown Timer -->
+    <div class="gha-cro-countdown" id="gha-cro-countdown">
+      <div class="gha-cro-countdown-inner">
+        <span class="gha-cro-countdown-lock">&#128274;</span>
+        <span class="gha-cro-countdown-text">Your personalized protocol is reserved for: <span class="gha-cro-countdown-time">15:00</span></span>
+      </div>
+    </div>
+
     <!-- ===== SECTION 9: PRICING & CHECKOUT ===== -->
-    <section class="pricing-section">
+    <section class="pricing-section" id="checkout">
       <div class="container">
 
         <!-- Main Offer -->
@@ -610,7 +659,30 @@
     <button class="btn-cta-sticky" onclick="handleCheckout()" id="stickyCtaButton">Get My Protocol — $47</button>
   </div>
 
+  <!-- CRO Element 3: Exit-Intent Popup -->
+  <div class="gha-cro-exit-popup" id="gha-cro-exit-popup" role="dialog" aria-modal="true">
+    <div class="gha-cro-exit-overlay"></div>
+    <div class="gha-cro-exit-modal">
+      <button class="gha-cro-exit-close" aria-label="Close">&times;</button>
+      <h2>What happens if you don&rsquo;t start, <span class="gha-cro-exit-name">friend</span>?</h2>
+      <p>You go back to Googling symptoms at midnight. Another week of guessing which foods are safe. Another month wondering if this will ever get better.</p>
+      <p>Your <span class="gha-cro-exit-protocol">personalized gut health</span> protocol was matched to your specific symptom pattern. It takes 10 minutes a day. And if it doesn&rsquo;t work within 60 days &mdash; you don&rsquo;t pay.</p>
+      <a href="#checkout" class="gha-cro-exit-cta">Get My Protocol &mdash; $47</a>
+      <button class="gha-cro-exit-dismiss">I&rsquo;ll keep figuring it out on my own</button>
+    </div>
+  </div>
+
+  <!-- CRO Element 5: Toast Container -->
+  <div class="gha-cro-toast" id="gha-cro-toast"></div>
+
+  <!-- CRO Element 1: Sticky Mobile CTA Bar -->
+  <div class="gha-cro-sticky" id="gha-cro-sticky">
+    <button class="gha-cro-sticky-dismiss" aria-label="Dismiss">&times;</button>
+    <span class="gha-cro-sticky-text">Get My Protocol &mdash; $47</span>
+  </div>
+
   <script src="js/script.js"></script>
+  <script src="js/cro-elements.js"></script>
   <script src="/js/support-widget.js"></script>
 </body>
 </html>
