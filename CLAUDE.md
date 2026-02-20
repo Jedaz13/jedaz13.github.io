@@ -2,6 +2,62 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## MVP Builder Instructions
+
+### Who I Am
+I'm a coding beginner. My goal is to test product ideas as fast as possible by building working MVPs. Optimize for speed to a working prototype, not perfect code.
+
+### Workflow Orchestration
+
+#### 1. Plan Before Building
+* Enter plan mode for ANY non-trivial task (3+ steps or decisions)
+* If something goes sideways, STOP and re-plan immediately — don't keep pushing
+* Write a short spec before coding: what does the MVP need to do?
+* Always suggest the fastest path to a working prototype
+
+#### 2. Explain As You Go
+* Explain what you're doing and why in plain, beginner-friendly language
+* Don't silently make changes — walk me through the reasoning
+* When there are multiple approaches, explain the trade-offs simply
+* If I need to understand a concept to make a decision, teach me briefly
+
+#### 3. Self-Improvement Loop
+* After ANY correction from me: update tasks/lessons.md with the pattern
+* Write rules for yourself that prevent the same mistake
+* Review lessons at session start for the relevant project
+* Track what tech/tools I'm comfortable with so you don't over-complicate things
+
+#### 4. Verify It Works
+* Never mark a task complete without proving it works
+* Show me how to test it myself (give me the URL, the command, or the steps)
+* If something looks broken, just fix it — don't ask me to debug
+* Ask yourself: "Can Gedas see this working in his browser right now?"
+
+### Task Management
+1. **Plan First**: Write plan to tasks/todo.md with checkable items
+2. **Check In**: Confirm the plan with me before building
+3. **Track Progress**: Mark items complete as you go
+4. **Summarize Changes**: Give me a plain-English summary at each step
+5. **Document Results**: Add a review section to tasks/todo.md
+6. **Capture Lessons**: Update tasks/lessons.md after any corrections
+
+### Core Principles
+* **Ship Fast, Iterate Later**: The goal is a testable MVP, not production-grade code. Get it working first.
+* **Simplicity First**: Use the simplest tech stack possible. Default to basic, well-known tools. Don't add complexity unless absolutely needed.
+* **Working Beats Perfect**: A hacky prototype that works is better than elegant code that's half-finished. Save refactoring for ideas that are validated.
+* **Minimal Impact**: Changes should only touch what's necessary. Avoid introducing bugs.
+* **No Rabbit Holes**: If a feature is taking too long, suggest a simpler alternative. Flag scope creep early.
+* **Ask Before Assuming**: If a decision could go multiple ways, ask me rather than guessing. I'd rather answer a quick question than undo wrong work.
+
+### Tech Stack Preferences
+* Keep it simple: HTML, CSS, JavaScript, or whatever gets to a working demo fastest
+* Prefer no-code/low-code solutions when they're faster than custom code
+* Avoid complex architectures, build systems, or frameworks unless the project demands it
+* If you need a backend, use the simplest option (serverless functions, simple APIs)
+* Default to free/cheap hosting and tools for testing phase
+
+---
+
 ## Project Overview
 
 A landing page for the Gut Healing Academy gut health quiz. The page promotes the quiz and directs users to take the full assessment on the main site.

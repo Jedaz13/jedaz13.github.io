@@ -40,7 +40,7 @@ function determineProtocol(answers) {
   }
 
   // Protocol 5: Post-SIBO Recovery
-  // Check if diagnosis includes SIBO or if they've tried SIBO antibiotics
+  // Requires BOTH SIBO diagnosis AND completed SIBO antibiotics treatment
   const hasSIBO = Array.isArray(q11_diagnosis)
     ? q11_diagnosis.includes('sibo')
     : q11_diagnosis === 'sibo';
@@ -48,7 +48,7 @@ function determineProtocol(answers) {
     ? q12_tried.includes('sibo_antibiotics')
     : q12_tried === 'sibo_antibiotics';
 
-  if (hasSIBO || triedSIBOAntibiotics) {
+  if (hasSIBO && triedSIBOAntibiotics) {
     return {
       protocol: 5,
       name: 'The Rebuild Protocol',
