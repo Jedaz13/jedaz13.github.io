@@ -9,14 +9,12 @@
 
 /* ===== ELEMENT 6: Protocols Sold Counter ===== */
 .gha-cro-counter {
-  text-align: center;
-  padding: 8px 20px 4px;
-  font-family: var(--font-family);
-  font-size: 0.8125rem;
+  margin-top: 20px;
+  font-size: 0.875rem;
   color: var(--text-muted);
-  letter-spacing: 0.01em;
+  font-style: italic;
 }
-.gha-cro-counter-number { font-weight: 600; color: var(--leaf); }
+.gha-cro-counter-number { font-weight: 600; color: var(--text-olive); font-style: normal; }
 
 /* ===== Collapsible Protocols Grid ===== */
 .protocols-grid-section .protocol-grid-card {
