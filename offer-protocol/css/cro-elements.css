@@ -9,8 +9,10 @@
 
 /* ===== ELEMENT 6: Protocols Sold Counter ===== */
 .gha-cro-counter {
-  margin-top: 20px;
-  font-size: 0.875rem;
+  margin-top: 12px;
+  margin-bottom: 0;
+  font-size: 1rem;
+  line-height: 1.7;
   color: var(--text-muted);
   font-style: italic;
 }
@@ -66,13 +68,13 @@
 /* ===== ELEMENT 2: Countdown Timer ===== */
 .gha-cro-countdown { padding: 0 20px 16px; }
 .gha-cro-countdown-inner {
-  max-width: 640px; margin: 0 auto;
-  background: #F7F3EB; border-radius: 8px; padding: 10px 16px;
-  display: flex; align-items: center; justify-content: center; gap: 8px;
-  font-family: var(--font-family); font-size: 14px; color: var(--text-forest);
+  max-width: var(--max-content-width); margin: 0 auto;
+  background: none; padding: 0;
+  display: flex; align-items: center; justify-content: center; gap: 6px;
+  font-family: var(--font-family); font-size: 0.875rem; color: var(--text-muted);
 }
-.gha-cro-countdown-lock { font-size: 14px; flex-shrink: 0; }
-.gha-cro-countdown-time { font-weight: 700; font-variant-numeric: tabular-nums; }
+.gha-cro-countdown-lock { font-size: 13px; flex-shrink: 0; }
+.gha-cro-countdown-time { font-weight: 600; color: var(--text-olive); font-variant-numeric: tabular-nums; }
 
 /* ===== ELEMENT 1: Sticky Mobile CTA Bar ===== */
 .gha-cro-sticky {
