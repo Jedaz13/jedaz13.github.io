@@ -1,58 +1,49 @@
 /* CRO Conversion Elements — offer-protocol page
    All classes prefixed with .gha-cro- to avoid conflicts */
 
-/* ===== Body adjustments ===== */
-body { padding-top: 44px; }
-@media (min-width: 769px) { body { padding-top: 38px; } }
-
 /* Hide existing sticky CTA on mobile — CRO sticky bar replaces it */
 @media (max-width: 768px) {
   .sticky-cta { display: none !important; }
   body.has-sticky-cta { padding-bottom: 0; }
 }
 
-/* ===== ELEMENT 8: Progress Bar ===== */
-.gha-cro-progress {
-  position: fixed; top: 0; left: 0; right: 0; z-index: 998;
-  background: #fff; border-bottom: 1px solid rgba(27,51,41,0.08);
-  transition: transform 0.2s ease;
-  height: 44px; display: flex; align-items: center;
-}
-.gha-cro-progress-hidden { transform: translateY(-100%); }
-.gha-cro-progress-inner {
-  max-width: 640px; margin: 0 auto; padding: 0 16px;
-  text-align: center; width: 100%;
-}
-.gha-cro-progress-steps {
-  display: flex; align-items: center; justify-content: center; gap: 6px;
-  font-family: var(--font-family); font-size: 13px; font-weight: 500;
-}
-.gha-cro-progress-step { color: #4A7C59; }
-.gha-cro-step-active {
-  color: #D4832E; font-weight: 600;
-  animation: gha-cro-pulse 2s ease-in-out infinite;
-}
-@keyframes gha-cro-pulse { 0%,100%{opacity:1} 50%{opacity:0.8} }
-.gha-cro-progress-line { width: 20px; height: 1px; background: rgba(27,51,41,0.15); }
-.gha-cro-progress-subtitle {
-  font-size: 11px; color: #3D5245; margin-top: 1px;
-  font-family: var(--font-family);
-}
-/* Mobile: short labels */
-.gha-cro-progress-label { display: none; }
-.gha-cro-progress-label-short { display: inline; }
-@media (min-width: 769px) {
-  .gha-cro-progress { height: 38px; }
-  .gha-cro-progress-label { display: inline; }
-  .gha-cro-progress-label-short { display: none; }
-}
-
 /* ===== ELEMENT 6: Protocols Sold Counter ===== */
-.gha-cro-counter { text-align: center; padding: 12px 20px 0; }
-.gha-cro-counter-pill {
-  display: inline-block; font-size: 13px; color: #4A7C59;
-  background: #F7FAF7; padding: 6px 14px; border-radius: 6px;
+.gha-cro-counter {
+  text-align: center;
+  padding: 8px 20px 4px;
   font-family: var(--font-family);
+  font-size: 0.8125rem;
+  color: var(--text-muted);
+  letter-spacing: 0.01em;
+}
+.gha-cro-counter-number { font-weight: 600; color: var(--leaf); }
+
+/* ===== Collapsible Protocols Grid ===== */
+.protocols-grid-section .protocol-grid-card {
+  display: none;
+}
+.protocols-grid-section .protocol-grid-card.highlighted {
+  display: block;
+}
+.protocols-grid-section.gha-cro-grid-expanded .protocol-grid-card {
+  display: block;
+}
+.gha-cro-grid-toggle {
+  display: flex; align-items: center; justify-content: center; gap: 6px;
+  margin: 16px auto 12px; padding: 8px 20px;
+  background: none; border: 1px solid var(--divider);
+  border-radius: 100px; cursor: pointer;
+  font-family: var(--font-family); font-size: 0.8125rem;
+  color: var(--text-muted); transition: all 0.2s ease;
+}
+.gha-cro-grid-toggle:hover {
+  border-color: var(--leaf); color: var(--leaf);
+}
+.gha-cro-grid-toggle-arrow {
+  transition: transform 0.2s ease; flex-shrink: 0;
+}
+.protocols-grid-section.gha-cro-grid-expanded .gha-cro-grid-toggle-arrow {
+  transform: rotate(180deg);
 }
 
 /* ===== ELEMENT 4: Inline CTAs ===== */
@@ -61,16 +52,16 @@ body { padding-top: 44px; }
   display: inline-block; width: 100%; max-width: 480px;
   padding: 18px 32px; font-family: var(--font-family);
   font-size: 1.125rem; font-weight: 600; text-align: center;
-  color: #fff; background-color: #1B3329; border: none; border-radius: 100px;
+  color: #fff; background-color: var(--forest); border: none; border-radius: 100px;
   cursor: pointer; transition: all 0.3s ease; text-decoration: none;
   box-shadow: 0 4px 20px rgba(27,51,41,0.2); line-height: 1.2;
 }
 .gha-cro-cta-button:hover {
-  background-color: #F9C74F; color: #1B3329;
+  background-color: var(--citrus); color: var(--forest);
   box-shadow: 0 6px 24px rgba(249,199,79,0.4); transform: translateY(-2px);
 }
 .gha-cro-cta-sub {
-  font-size: 12px; color: #8A9A8E; margin-top: 8px;
+  font-size: 12px; color: var(--text-light); margin-top: 8px;
   font-family: var(--font-family);
 }
 
@@ -80,7 +71,7 @@ body { padding-top: 44px; }
   max-width: 640px; margin: 0 auto;
   background: #F7F3EB; border-radius: 8px; padding: 10px 16px;
   display: flex; align-items: center; justify-content: center; gap: 8px;
-  font-family: var(--font-family); font-size: 14px; color: #1B3329;
+  font-family: var(--font-family); font-size: 14px; color: var(--text-forest);
 }
 .gha-cro-countdown-lock { font-size: 14px; flex-shrink: 0; }
 .gha-cro-countdown-time { font-weight: 700; font-variant-numeric: tabular-nums; }
@@ -88,7 +79,7 @@ body { padding-top: 44px; }
 /* ===== ELEMENT 1: Sticky Mobile CTA Bar ===== */
 .gha-cro-sticky {
   position: fixed; bottom: 0; left: 0; right: 0; z-index: 1000;
-  height: 64px; background: #1B3329; display: none;
+  height: 64px; background: var(--forest); display: none;
   align-items: center; justify-content: center;
   box-shadow: 0 -2px 12px rgba(27,51,41,0.15);
   transform: translateY(100%); transition: transform 0.3s ease;
@@ -114,7 +105,6 @@ body { padding-top: 44px; }
   pointer-events: none;
 }
 .gha-cro-toast-visible { opacity: 1; transform: translateY(0); pointer-events: auto; }
-/* Adjust when sticky bar is visible */
 .gha-cro-has-sticky .gha-cro-toast { bottom: 84px; }
 .gha-cro-toast-card {
   background: #fff; border-radius: 12px; padding: 12px 14px;
@@ -123,14 +113,14 @@ body { padding-top: 44px; }
 }
 .gha-cro-toast-close {
   position: absolute; top: 4px; right: 8px;
-  background: none; border: none; font-size: 16px; color: #8A9A8E;
+  background: none; border: none; font-size: 16px; color: var(--text-light);
   cursor: pointer; padding: 2px 4px; line-height: 1;
 }
 .gha-cro-toast-content { display: flex; align-items: flex-start; gap: 8px; }
 .gha-cro-toast-icon { font-size: 14px; flex-shrink: 0; margin-top: 2px; }
-.gha-cro-toast-text { font-size: 13px; color: #3D5245; line-height: 1.4; padding-right: 16px; }
-.gha-cro-toast-protocol { color: #4A7C59; font-weight: 600; }
-.gha-cro-toast-time { font-size: 11px; color: #8A9A8E; margin-top: 2px; }
+.gha-cro-toast-text { font-size: 13px; color: var(--text-olive); line-height: 1.4; padding-right: 16px; }
+.gha-cro-toast-protocol { color: var(--leaf); font-weight: 600; }
+.gha-cro-toast-time { font-size: 11px; color: var(--text-light); margin-top: 2px; }
 
 /* ===== ELEMENT 3: Exit-Intent Popup ===== */
 .gha-cro-exit-popup {
@@ -152,29 +142,29 @@ body { padding-top: 44px; }
 }
 .gha-cro-exit-modal h2 {
   font-family: var(--font-display); font-size: 1.5rem;
-  color: #1B3329; margin-bottom: 16px;
+  color: var(--text-forest); margin-bottom: 16px;
 }
 .gha-cro-exit-modal p {
-  font-size: 0.9375rem; color: #3D5245;
+  font-size: 0.9375rem; color: var(--text-olive);
   line-height: 1.6; margin-bottom: 12px;
 }
 .gha-cro-exit-close {
   position: absolute; top: 12px; right: 16px;
-  background: none; border: none; font-size: 24px; color: #8A9A8E;
+  background: none; border: none; font-size: 24px; color: var(--text-light);
   cursor: pointer; line-height: 1; padding: 4px;
 }
 .gha-cro-exit-cta {
   display: inline-block; width: 100%; padding: 16px 32px;
-  background: #1B3329; color: #fff; border-radius: 100px;
+  background: var(--forest); color: #fff; border-radius: 100px;
   font-size: 1.0625rem; font-weight: 600; text-decoration: none;
   margin-top: 8px; transition: all 0.3s ease; cursor: pointer; border: none;
   box-shadow: 0 4px 20px rgba(27,51,41,0.2);
 }
 .gha-cro-exit-cta:hover {
-  background: #F9C74F; color: #1B3329;
+  background: var(--citrus); color: var(--forest);
 }
 .gha-cro-exit-dismiss {
   display: block; margin: 12px auto 0; background: none; border: none;
-  font-size: 13px; color: #8A9A8E; cursor: pointer;
+  font-size: 13px; color: var(--text-light); cursor: pointer;
   text-decoration: underline; font-family: var(--font-family);
 }

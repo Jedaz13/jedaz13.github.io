@@ -42,19 +42,19 @@
       if (el) el.textContent = c;
     })();
 
-    // ===== ELEMENT 8: Progress Bar =====
+    // ===== Collapsible Protocols Grid =====
     (function() {
-      var bar = document.getElementById('gha-cro-progress');
-      if (!bar) return;
-      var ne = bar.querySelector('.gha-cro-progress-name');
-      var pe = bar.querySelector('.gha-cro-progress-protocol');
-      if (ne) ne.textContent = userName;
-      if (pe) pe.textContent = protocolName.replace(' Protocol','').toLowerCase();
-      var vis = true;
-      window.addEventListener('scroll', function() {
-        if (window.scrollY > 400 && vis) { bar.classList.add('gha-cro-progress-hidden'); vis = false; }
-        else if (window.scrollY < 100 && !vis) { bar.classList.remove('gha-cro-progress-hidden'); vis = true; }
-      }, {passive:true});
+      var section = document.querySelector('.protocols-grid-section');
+      var toggle = document.getElementById('gha-cro-grid-toggle');
+      if (!section || !toggle) return;
+      var textEl = toggle.querySelector('.gha-cro-grid-toggle-text');
+      var expanded = false;
+
+      toggle.addEventListener('click', function() {
+        expanded = !expanded;
+        section.classList.toggle('gha-cro-grid-expanded', expanded);
+        if (textEl) textEl.textContent = expanded ? 'Show less' : 'See all 6 protocols';
+      });
     })();
 
     // ===== ELEMENT 2: Countdown =====
