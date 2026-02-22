@@ -1177,13 +1177,15 @@ p:last-child {
 
 .guarantee-card {
   display: flex;
-  gap: 20px;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
   background: var(--white);
   border: 2px solid var(--citrus);
   border-radius: var(--radius-lg);
   padding: 24px;
   box-shadow: var(--shadow-card);
-  text-align: left;
+  text-align: center;
 }
 
 .guarantee-badge {
@@ -1227,6 +1229,7 @@ p:last-child {
   font-size: 0.9375rem;
   color: var(--text-olive);
   line-height: 1.7;
+  text-align: left;
 }
 
 .guarantee-items {
@@ -1234,6 +1237,7 @@ p:last-child {
   flex-direction: column;
   gap: 12px;
   margin: 16px 0;
+  text-align: left;
 }
 
 .guarantee-item {
@@ -1637,6 +1641,9 @@ p:last-child {
   }
 
   .guarantee-card {
+    flex-direction: row;
+    align-items: flex-start;
+    text-align: left;
     padding: 32px;
   }
 
