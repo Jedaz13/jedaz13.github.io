@@ -652,13 +652,13 @@ function toggleBump(num) {
 }
 
 function updateOrderSummary() {
-  var total = 47;
+  var total = 27;
 
   var bump1Line = document.getElementById('summaryBump1');
   var bump2Line = document.getElementById('summaryBump2');
 
   if (bumpState[1]) {
-    total += 19;
+    total += 9;
     bump1Line.classList.add('visible');
   } else {
     bump1Line.classList.remove('visible');
@@ -718,7 +718,7 @@ function handleCheckout() {
   bumpState[1] = bump1Active;
   bumpState[2] = bump2Active;
 
-  var totalValue = 47 + (bump1Active ? 19 : 0) + (bump2Active ? 37 : 0);
+  var totalValue = 27 + (bump1Active ? 9 : 0) + (bump2Active ? 37 : 0);
 
   // Track checkout click
   window.dataLayer = window.dataLayer || [];
