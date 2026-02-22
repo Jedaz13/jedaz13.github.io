@@ -34,14 +34,6 @@
       if (el) el.scrollIntoView({ behavior: 'smooth' });
     }
 
-    // ===== ELEMENT 6: Counter =====
-    (function() {
-      var c = ss.getItem('gha_protocols_count');
-      if (!c) { c = Math.floor(Math.random()*21)+40; ss.setItem('gha_protocols_count',c); }
-      var el = document.querySelector('.gha-cro-counter-number');
-      if (el) el.textContent = c;
-    })();
-
     // ===== Collapsible Protocols Grid =====
     (function() {
       var section = document.querySelector('.protocols-grid-section');
@@ -55,29 +47,6 @@
         section.classList.toggle('gha-cro-grid-expanded', expanded);
         if (textEl) textEl.textContent = expanded ? 'Show less' : 'See all 6 protocols';
       });
-    })();
-
-    // ===== ELEMENT 2: Countdown =====
-    (function() {
-      var el = document.getElementById('gha-cro-countdown');
-      if (!el) return;
-      var timeEl = el.querySelector('.gha-cro-countdown-time');
-      var textEl = el.querySelector('.gha-cro-countdown-text');
-      if (!timeEl || !textEl) return;
-      var DUR = 15*60*1000;
-      var start = ss.getItem('gha_timer_start');
-      if (!start) { start = Date.now(); ss.setItem('gha_timer_start', start.toString()); }
-      else start = parseInt(start,10);
-      var iv = setInterval(function() {
-        var rem = Math.max(0, DUR-(Date.now()-start));
-        if (rem <= 0) {
-          clearInterval(iv);
-          textEl.textContent = "Your protocol is still available \u2014 we just can\u2019t guarantee this introductory price.";
-          timeEl.style.display = 'none'; return;
-        }
-        var m = Math.floor(rem/60000), s = Math.floor((rem%60000)/1000);
-        timeEl.textContent = m+':'+(s<10?'0':'')+s;
-      }, 1000);
     })();
 
     // ===== ELEMENT 1: Sticky Mobile CTA =====
