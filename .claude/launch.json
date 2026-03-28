@@ -1,0 +1,11 @@
+{
+  "previews": [
+    {
+      "name": "local-server",
+      "program": "python3",
+      "args": ["-m", "http.server", "8000"],
+      "port": 8000,
+      "cwd": "${workspaceFolder}"
+    }
+  ]
+}
